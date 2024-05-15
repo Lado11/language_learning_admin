@@ -1,0 +1,17 @@
+.customAddNewMainDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 24px;
+}
+
+.customAddNewPlusIcon {
+    margin-right: 14px;
+}
+
+.customAddNewTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+}

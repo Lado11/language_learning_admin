@@ -1,0 +1,18 @@
+.searchInputMainDiv {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid;
+    padding: 0 20px;
+}
+
+.searchInput {
+    border: none;
+}
+
+.searchInput::placeholder {
+    font-family: 'Roboto';
+    font-size: 12px;
+    font-weight: 700;
+    color: #ADB8CC
+}

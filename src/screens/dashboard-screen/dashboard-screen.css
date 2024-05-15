@@ -1,0 +1,52 @@
+.dashboardCardsMainDiv {
+  width: 52%;
+}
+
+.dashboardScreen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 60px 45px 0 45px;
+  background-color: #ffffff;
+  border-radius: 50px;
+}
+
+.dashboardTitle {
+  margin-bottom: 23px;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 30px;
+}
+
+.dashboardScreenItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboardScreenFirstLine {
+  display: flex;
+  flex-direction: row;
+}
+
+@media only screen and (max-width: 1440px) {
+  .dashboardCardsMainDiv {
+    width: 60%;
+  }
+
+  .dashboardScreenItem {
+    flex-direction: column;
+
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .dashboardCardsMainDiv {
+    width: 100%;
+  }
+
+  .dashboardScreenItem {
+    flex-direction: column;
+    padding-bottom: 60px;
+  }
+}

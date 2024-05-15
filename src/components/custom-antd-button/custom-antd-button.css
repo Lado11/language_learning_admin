@@ -1,0 +1,10 @@
+.antd-custom-button{
+
+}
+.ant-btn{
+    min-width: 420px !important;
+    padding:  15px 0 !important;
+    height: auto !important;
+    border-radius: 10px !important;
+}
+

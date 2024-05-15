@@ -1,0 +1,9 @@
+.react-drawer-drawer {
+    background-color: white;
+    padding: 20px;
+}
+
+.customDrawerItem {
+    display: flex;
+    padding: 20px;
+}

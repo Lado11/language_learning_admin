@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap");
+
+.customCardTileMainItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 255px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 25px 36px;
+  border-radius: 25px;
+  border: 1px solid rgb(221, 221, 221);
+}
+
+.customCardTileImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #33BFFF; */
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.customCardTileTitleDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.customCardTileTitle {
+  font-family: "Inter";
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.customCardCount {
+  font-family: "Inter";
+  font-weight: 600;
+  font-size: 25px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .customCardTileMainItem {
+    min-width: 190px;
+    padding: 15px 20px;
+  }
+  
+  .customCardTileTitle {
+    font-size: 12px;
+  }
+
+  .customCardCount {
+    font-size: 18px;
+  }
+  
+  .customCardTileImage {
+    width: 50px;
+    height: 50px;
+  }
+}

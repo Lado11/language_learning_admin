@@ -1,0 +1,64 @@
+.learningLanguageScreenMainDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 50px;
+  padding: 60px 82px 30px 82px;
+}
+
+.learningLanguageScreenAddNewDiv {
+  margin-bottom: 28px;
+}
+
+.learningLanguageCardItems {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.learningLanguageScreenPaginationDiv {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1024px) {
+  .learningLanguageScreenMainDiv {
+    padding: 60px 40px 30px 40px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .learningLanguageScreenMainDiv {
+    padding: 60px 40px 30px 40px;
+  }
+  .learningLanguageScreenSubDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .learningLanguageCardItems {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .learningLanguageScreenMainDiv {
+    padding: 60px 40px 30px 40px;
+  }
+  .learningLanguageScreenSubDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .learningLanguageCardItems {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .learningLanguageScreenMainDiv {
+    padding: 60px 10px 30px 10px;
+  }
+}

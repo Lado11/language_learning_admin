@@ -1,0 +1,79 @@
+.ant-select{
+    /* width: auto !important; */
+    height: 48px !important;
+    border-radius: 10px !important;
+}
+
+.categoryScreenMainDiv{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 60px 82px 30px 82px;
+    background-color: white;
+    border-radius: 50px;
+}
+
+.ant-select-selector{
+    padding: 25px 15px !important;
+    background: #F7F8FA !important;
+    border: none !important;
+}
+
+.ant-select-selection-item{
+    padding-inline-end: 14px !important;  
+    color: #7D8FB3  !important; 
+    font-size: 13px !important;
+}
+
+.select-row{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 28px;
+}
+
+.category-title{
+    margin:  24px 0 16px 0;
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 30px;
+}
+.select-middle{
+    margin: 0px 16px;
+}
+
+.custom-card-item{
+    /* width: 100%; */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category-item-pagination{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 60%;
+}
+
+.category-table-title{
+    margin-bottom: 8px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB3;
+}
+
+.category-pagination{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.category_row_input{
+    display: flex;
+    flex-direction: row;
+    width: 420px;
+    justify-content: space-between;
+}
