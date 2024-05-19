@@ -1,0 +1,29 @@
+.selectLanguageTitle {
+  margin-bottom: 20px;
+}
+
+.selectLanguageMainDiv .ant-select {
+  width: 100% !important;
+}
+
+.selectLanguageValuesDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+.selectLanguageValuesDivItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 206px;
+  height: 60px;
+  margin-top: 13px;
+  border-radius: 10px;
+  margin-right: 9px;
+}
+
+.deleteIcon {
+  position: absolute;
+  top: 10;
+  background-color: red;
+}

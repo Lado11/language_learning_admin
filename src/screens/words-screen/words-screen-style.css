@@ -1,0 +1,15 @@
+.wordsScreenAddFields {
+    display: flex;
+}
+
+.wordsScreenTitle {
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 500;
+    color: '#000000'
+}
+
+.wordScreenSelectsDiv {
+    display: flex;
+    justify-content: space-between;
+}

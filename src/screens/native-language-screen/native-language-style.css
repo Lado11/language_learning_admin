@@ -1,0 +1,90 @@
+.nativeLanguageScreenMainDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    padding: 60px 82px 30px 82px;
+    background-color: white;
+    border-radius: 50px;
+}
+.nativeLanguageCreateScreenMainDiv{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 60px 82px 30px 82px;
+    background-color: white;
+    border-radius: 50px;
+}
+.pointer{
+    cursor: pointer;
+    width: 100%;
+    max-width: 25%;
+}
+
+.nativeScreenPaginationDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.nativeLanguageTitle {
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 30px 0;
+}
+
+.nativeLanguageCountryItems {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ant-input{
+    max-width: 420px !important;
+    min-height: 60px;
+    border-radius: 10px;
+}
+
+.upload{
+    cursor: pointer;
+}
+
+.ant-upload-list-item{
+    width: 420px;
+}
+
+.ant-upload-list-item-name{
+    overflow:visible !important;
+}
+
+.ant-upload-list-item-action{
+    align-items: start !important;
+    justify-content: start !important;
+    background: none !important;
+    margin-left: 15px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .nativeLanguageScreenMainDiv {
+        padding: 60px 25px 30px 25px;
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
+    .nativeLanguageScreenMainDiv {
+        padding: 60px 25px 30px 25px;
+        justify-content: center;
+        align-items: center;
+    }
+    .nativeScreenPaginationDiv {
+        margin-top: 20px;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .nativeLanguageScreenMainDiv {
+        padding: 60px 25px 30px 25px;
+        justify-content: center;
+        align-items: center;
+    }
+}

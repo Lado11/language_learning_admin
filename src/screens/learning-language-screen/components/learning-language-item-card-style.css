@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Roboto:wght@500&display=swap');
+
+.learningLanguageCard {
+  display: flex;
+  flex-direction: column;
+  /* min-width: 225px; */
+  border-radius: 25px;
+  padding: 20px;
+  margin: 0 15px 15px 0;
+}
+
+.learningLanguageCardFirstLine {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.learningLanguageItemAvatarGroup {
+  margin-top: 29px;
+}
+
+.learningLanguageCardTitle {
+  font-family: DM Sans;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 28.64px;
+  text-align: left;
+}
+
+.learningLanguageCardUsersCount {
+  padding: 0 10px;
+  background-color: white;
+  border-radius: 50px;
+}
+
+.learningLanguageCardUsersCountText {
+  font-family: Roboto;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  color: #29cc39;
+}
+
+.css-1pssjw0 {
+  border: 3px solid white;
+  box-shadow: none !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .learningLanguageCard {
+    margin: 10px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .learningLanguageCard {
+    margin: 10px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .learningLanguageCard {
+    min-width: 165px;
+  }
+  .learningLanguageCardTitle {
+    font-family: DM Sans;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 28.64px;
+    text-align: left;
+  }
+  .css-1pssjw0 {
+    width: 20px !important;
+    height: 20px !important;
+    border-width: 2px;
+  }
+  .css-1ioce3q {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}

@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap");
+
+.tableSubscribeButton {
+  padding: 10px 15px 10px 15px;
+  border-radius: 15px;
+  border: none;
+  font-size: 10px;
+}

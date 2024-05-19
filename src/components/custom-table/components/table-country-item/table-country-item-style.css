@@ -1,0 +1,9 @@
+.tableCountryItemMainDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.tableCountryItemImg {
+    margin-right: 14px;
+}
