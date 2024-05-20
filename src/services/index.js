@@ -34,28 +34,15 @@ api.interceptors.request.use(async (config) => {
 });
 
 
-// api.interceptors.response.use(response => {
-//   return response;
-// }, error => {
-//  if (error.response.status === 401) {
-//   LogOut()
 
-//   //place your reentry code
-//   console.log("error")
-//  }
-//  return error;
-// });
 
 api.interceptors.response.use((response) => {
-
   return response
 }, error => {
   if(error.response.status === 401){
-    // console.log("fffffff")
-    // localStorage.clear();
-    // window.location.reload()
-    return Promise.reject(error);
-    
+    localStorage.clear();
+    window.location = '/';
+    return <redirect to="/login"/>;
   }
 })
 
