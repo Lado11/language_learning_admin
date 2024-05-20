@@ -1,16 +1,16 @@
-.ant-pagination-options{
-    display: none !important;
+.ant-pagination-options {
+  display: none !important;
 }
 
 .ant-pagination-item-active {
-    color: white !important;
-    background-color:#8833FF !important;
-    border: none !important;
+  color: white !important;
+  background-color: #8833ff !important;
+  border: none !important;
 }
-.ant-pagination-item-active a{
-    color:  white !important;
+.ant-pagination-item-active a {
+  color: white !important;
 }
 
-.ant-pagination .ant-pagination-item{
-    border: 1px solid #F1F1F1 ;
+.ant-pagination .ant-pagination-item {
+  border: 1px solid #f1f1f1;
 }

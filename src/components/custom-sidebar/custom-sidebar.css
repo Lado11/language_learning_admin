@@ -1,27 +1,27 @@
-.sideBarComponent {
+.projectOutlet {
+  display: flex;
+  flex-direction: row;
+}
+
+.customSideBar {
   padding: 15px;
   background-color: white;
   border-radius: 20px;
   margin-right: 28px;
 }
 
-
-
 .css-3dcfwk-MuiBarElement-root,
 .css-1qdzy9k-MuiBarElement-root,
 .css-adnr9q-MuiBarElement-root {
   fill: #edf0f7 !important;
 }
+
 .css-1k2u9zb-MuiChartsAxis-root {
   display: none;
 }
-.projectOutlet {
-  display: flex;
-  flex-direction: row;
-}
 
 @media screen and (max-width: 768px) {
-  .sideBarComponent{
+  .customSideBar {
     display: none;
   }
 }

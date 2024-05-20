@@ -1,21 +1,33 @@
-import React from 'react';
-import { Pagination } from 'antd';
-import "./custom-pagination.css"
-
+import React from "react";
+import { Pagination } from "antd";
+import { useDispatch } from "react-redux";
+import { nativeLanguageGetThunk } from "../../store/slices/native-language/native-language-get";
+import "./custom-pagination.css";
 
 export const CustomPagination = (length) => {
-    console.log(length.length,"log length");
+  const onShowSizeChange = (current, pageSize) => {};
+  const dispatch = useDispatch();
 
-    const onShowSizeChange = (current, pageSize) => {
+  const onChange = (current) => {
+    const skip = 1 ? current - 1 : current + 10;
+
+    const data = {
+      skip: skip,
+      limit: 12,
     };
-    return (
-        <div>
-            <Pagination
-                showSizeChanger
-                onShowSizeChange={onShowSizeChange}
-                defaultCurrent={1}
-                total={length?.length}
-            />
-        </div>
-    )
-}
+
+    dispatch(nativeLanguageGetThunk(data));
+  };
+
+  return (
+    <div>
+      <Pagination
+        onChange={onChange}
+        showSizeChanger
+        onShowSizeChange={onShowSizeChange}
+        defaultCurrent={1}
+        total={length?.length}
+      />
+    </div>
+  );
+};

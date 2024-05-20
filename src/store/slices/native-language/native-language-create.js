@@ -11,7 +11,6 @@ const initialState = {
 export const nativeLanguageCreateThunk = createAsyncThunk(
   "nativeCreate",
   async (formData, { rejectWithValue }) => {
-    
     try {
       const response = await nativeLanguageCreateService(formData);
       return response.data;
@@ -33,21 +32,25 @@ export const nativeLanguageCreateSlice = createSlice({
     builder.addCase(nativeLanguageCreateThunk.pending, (state) => {
       state.nativeCreateloading = true;
     });
-    builder.addCase(nativeLanguageCreateThunk.fulfilled, (state, { payload }) => {
-      state.nativeCreateloading = false;
-      state.nativeCreateResponse = payload;
-      state.nativeCreateBool = true;
-    });
-    builder.addCase(nativeLanguageCreateThunk.rejected, (state, { payload }) => {
-      state.nativeCreateloading = false;
-      state.nativeCreateErrors = payload;
-    });
+    builder.addCase(
+      nativeLanguageCreateThunk.fulfilled,
+      (state, { payload }) => {
+        state.nativeCreateloading = false;
+        state.nativeCreateResponse = payload;
+        state.nativeCreateBool = true;
+      }
+    );
+    builder.addCase(
+      nativeLanguageCreateThunk.rejected,
+      (state, { payload }) => {
+        state.nativeCreateloading = false;
+        state.nativeCreateErrors = payload;
+      }
+    );
   },
 });
 
-
 export const { deleteNativeCreateBool } = nativeLanguageCreateSlice.actions;
-
 
 export const getNativeCreateLoading = (state) => {
   return state.createNativeSlice.nativeCreateloading;

@@ -6,6 +6,7 @@ import { CustomAntdButton } from "../../components";
 import { Colors } from "../../assets/colors";
 import { CustomAntdInput } from "../../components";
 import { categoryCreateThunk } from "../../store/slices/category/category-create";
+import { useTranslation } from "react-i18next";
 
 export const CategoryCretae = () => {
   const [form] = Form.useForm();
@@ -14,14 +15,13 @@ export const CategoryCretae = () => {
   const [categoryFileList, setCategoryFileList] = useState([]);
   const [categoryShow, setCategoryShow] = useState();
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
+  const { t } = useTranslation();
 
   const onFinish = (values) => {
-    console.log(values, "values");
     if (values.category_image.file != "") {
       formData.append("name", values.category_name);
       formData.append("localization", values.category_string);
       formData.append("image", categoryShow);
-      console.log(categoryShow, "logg");
       dispatch(categoryCreateThunk(formData));
       form.resetFields();
       setCategoryShow("");
@@ -31,7 +31,6 @@ export const CategoryCretae = () => {
   };
 
   const handleChange = (info) => {
-    console.log(info, "info");
     setCategoryShow(info.file);
     setCatgeoryShowUpload(info.fileList[0]);
     if (!info.fileList[0]) {
@@ -46,7 +45,6 @@ export const CategoryCretae = () => {
   const props = {
     accept: ".png",
     onRemove: (file) => {
-      console.log(file, "logg");
       const index = categoryFileList.indexOf(file);
       const newFileList = categoryFileList.slice();
       newFileList.splice(index, 1);
@@ -96,7 +94,7 @@ export const CategoryCretae = () => {
         </Form.Item>
 
         <Form.Item>
-          <CustomAntdButton title="Add" background={Colors.PURPLE} />
+          <CustomAntdButton title={t("ADD")} background={Colors.PURPLE} />
         </Form.Item>
       </Form>
     </div>

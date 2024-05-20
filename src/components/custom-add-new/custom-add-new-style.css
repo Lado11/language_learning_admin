@@ -1,17 +1,24 @@
 .customAddNewMainDiv {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-    margin-right: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 24px;
+  margin-bottom: 24px;
+}
+
+.customAddSubDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
 }
 
 .customAddNewPlusIcon {
-    margin-right: 14px;
+  margin-right: 14px;
 }
 
 .customAddNewTitle {
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 18px;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 18px;
 }

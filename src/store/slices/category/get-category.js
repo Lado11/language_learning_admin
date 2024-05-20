@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { categoryGetService } from "../../../services/category/get-category-service";
 
 const initialState = {
-    categoryGetloading: false,
-    categoryGetBool: false,
-    categoryGetResponse: null,
-    categoryGetErrors: null,
+  categoryGetloading: false,
+  categoryGetBool: false,
+  categoryGetResponse: null,
+  categoryGetErrors: null,
 };
 
 export const categoryGetThunk = createAsyncThunk(
@@ -44,9 +44,7 @@ export const categoryGetSlice = createSlice({
   },
 });
 
-
 export const { deleteGetBool } = categoryGetSlice.actions;
-
 
 export const getCategoryGetLoading = (state) => {
   return state.categoryGetSlice.categoryGetloading;

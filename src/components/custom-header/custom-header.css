@@ -5,7 +5,7 @@
   padding: 45px 0 60px 0;
 }
 
-.customHeaderApp {
+.customHeaderMainDiv {
   padding: 0 60px 45px 60px;
 }
 
@@ -29,7 +29,8 @@
   flex-direction: row;
   align-items: center;
 }
-.headerIconFirst {
+
+.headerLeftIcon {
   cursor: pointer;
 }
 
@@ -56,7 +57,23 @@
   height: 20px;
 }
 
+@media screen and (max-width: 1024px) {
+  .customHeaderMainDiv {
+    padding: 0 30px 45px 30px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .customHeaderMainDiv {
+    padding: 0 30px 45px 30px;
+  }
+}
+
 @media only screen and (max-width: 425px) {
+  .customHeaderMainDiv {
+    padding: 0 15px 45px 15px;
+  }
+
   .headertitle {
     font-family: Roboto;
     font-size: 12px;
@@ -65,9 +82,5 @@
   .headerIcon {
     margin-left: 15px;
     cursor: pointer;
-  }
-
-  .customHeaderApp {
-    padding: 0 15px 45px 15px;
   }
 }

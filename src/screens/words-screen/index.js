@@ -1,1 +1,1 @@
-export * from './words-screen';
+export * from "./words-screen";

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { SideBarItem } from "./components/side-bar-item";
-import "./custom-sidebar.css";
 import { customSideBarData } from "../../data";
 import { Colors } from "../../assets/colors/colors";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "./custom-sidebar.css";
 
 export const CustomSidebar = () => {
   const [select, setSelect] = useState(false);
@@ -26,7 +26,7 @@ export const CustomSidebar = () => {
 
   return (
     <div className="projectOutlet">
-      <div className="sideBarComponent">
+      <div className="customSideBar">
         {customSideBarData.map((item, ind) => {
           return (
             <div

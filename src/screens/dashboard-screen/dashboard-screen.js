@@ -5,7 +5,6 @@ import { CustomTable, StatisticsScreen } from "../../components";
 
 export const DashboardScreen = () => {
   const { t } = useTranslation();
-  
 
   return (
     <div className="dashboardScreen">

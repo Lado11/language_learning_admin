@@ -1,1 +1,1 @@
-export * from "./custom-pagination"
+export * from "./custom-pagination";

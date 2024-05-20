@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Upload } from "antd";
 import { useDispatch } from "react-redux";
 import uploadImage from "../../assets/images/uploadImg.png";
@@ -6,6 +6,7 @@ import { CustomAntdButton, CustomAntdInput } from "../../components";
 import { Colors } from "../../assets/colors";
 import "../../global-styles/global-styles.css";
 import { SelectLanguage } from "./components/";
+import { nativeLanguageGetThunk } from "../../store/slices/native-language/native-language-get";
 
 export const LearningLanguageCreateScreen = () => {
   const [form] = Form.useForm();
@@ -15,6 +16,14 @@ export const LearningLanguageCreateScreen = () => {
   const [learningLanguageFile, setLearningLanguageFile] = useState();
   const [showLearningLanguageUpload, setShowLearningLanguageUpload] =
     useState();
+
+  useEffect(() => {
+    const data = {
+      skip: 0,
+      limit: 12,
+    };
+    dispatch(nativeLanguageGetThunk(data));
+  }, []);
 
   const onFinish = (values) => {
     if (values.learningLanguageImg.file != "") {

@@ -7,7 +7,7 @@ export const CustomButton = ({ handleSubmit, buttonTitle, buttonIcon }) => {
     <div className="customButtonMainDiv">
       <button
         style={{ backgroundColor: Colors.PURPLE, color: Colors.WHITE }}
-        className="customButtonStyle"
+        className="customButton"
         onClick={handleSubmit}
         type="submit"
       >

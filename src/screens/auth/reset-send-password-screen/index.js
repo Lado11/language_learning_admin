@@ -1,1 +1,1 @@
-export * from './reset-send-password-screen';
+export * from "./reset-send-password-screen";

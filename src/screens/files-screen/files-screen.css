@@ -1,35 +1,35 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 
 .filesScreenMainDiv {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    border-radius: 50px;
-    padding: 60px 82px 30px 82px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 50px;
+  padding: 60px 82px 30px 82px;
+}
+
 .filesTitle {
   font-family: Roboto;
   font-size: 18px;
   font-weight: 500;
   line-height: 30px;
 }
-.filesDirectionTitle{
-    font-family: Roboto;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 30px;
-    margin-left: 10px;
+.filesDirectionTitle {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 30px;
+  margin-left: 10px;
 }
-.filesItemDiv{
-    display: flex;
-    flex-direction: row;
-    margin: 27px 0 57px 0;
+.filesItemDiv {
+  display: flex;
+  flex-direction: row;
+  margin: 27px 0 57px 0;
 }
 
-.filesDirection{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 15px;
+.filesDirection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
 }

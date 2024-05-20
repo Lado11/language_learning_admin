@@ -1,9 +1,7 @@
-
-
-.authScreenFilesDiv{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    border-radius: 50px;
-    padding: 47px  94px 47px 94px;
+.authScreenFilesDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 50px;
+  padding: 47px 94px 47px 94px;
 }

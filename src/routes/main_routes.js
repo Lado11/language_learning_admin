@@ -12,19 +12,18 @@ import {
   FeedbackScreen,
   NotificationScreen,
   LearningLanguageCreateScreen,
+  DashboardScreen,
+  NativeLanguageScreen,
+  NativeLanguageCretae,
+  CategoryCretae,
+  FilesScreen,
+  UserCreateScreen,
+  UpdateNativeLanguage,
+  LearningLanguageUpdate,
 } from "../screens";
-import { StatisticsScreen } from "../components";
+import { CustomHeader, CustomSidebar, StatisticsScreen } from "../components";
 import { getLoginData } from "../store/slices/auth/login-slice";
 import { useSelector } from "react-redux";
-import { CustomHeader } from "../components/custom-header/custom-header";
-import { CustomSidebar } from "../components/custom-sidebar/custom-sidebar";
-import { DashboardScreen } from "../screens/dashboard-screen/dashboard-screen";
-import { NativeLanguageScreen } from "../screens/native-language-screen/native-language-screen";
-import { NativeLanguageCretae } from "../screens/native-language-screen/native-language-cretae-form";
-import { CategoryCretae } from "../screens/category-screen/category-screen-create-from";
-import { FilesScreen } from "../screens/files-screen/files-screen";
-import { UserCreateScreen } from "../screens/user-screen/user-create-screen";
-import { UpdateNativeLanguage } from "../screens/native-language-screen/update-native-language";
 
 export const MyRoutes = () => {
   const token = localStorage.getItem("token");
@@ -32,7 +31,7 @@ export const MyRoutes = () => {
 
   return (
     <>
-      {token && loginData?.token ? (
+      {!token && !loginData?.token ? (
         <Routes>
           <Route path="/" element={<LoginScreen />} />
           <Route path="/sendEmail" element={<ResetPasswordEmail />} />
@@ -81,6 +80,10 @@ export const MyRoutes = () => {
                 element={<LearningLanguageCreateScreen />}
               />
               <Route path="/native-update" element={<UpdateNativeLanguage />} />
+              <Route
+                path="/learning-update"
+                element={<LearningLanguageUpdate />}
+              />
             </Route>
           </Route>
         </Routes>

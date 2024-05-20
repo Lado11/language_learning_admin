@@ -1,38 +1,31 @@
 import { Select } from "antd";
+import { customSelectOptions } from "../../data/custom-select-data";
 
-export const CustomSelect = ({title}) => {
-    const handleChange = (value) => {};
+export const CustomSelect = ({
+  title,
+  optionsData,
+  setLanguage,
+  languages,
+}) => {
+  const handleChange = (value) => {
+    console.log(value);
+    setLanguage([
+      ...languages,
+      {
+        id: value.id,
+        label: value,
+      },
+    ]);
+  };
 
-    const options = [
-        {
-            value: 'jack',
-            label: 'Jack',
-        },
-        {
-            value: 'lucy',
-            label: 'Lucy',
-        },
-        {
-            value: 'Yiminghe',
-            label: 'yiminghe',
-        },
-        {
-            value: 'disabled',
-            label: 'Disabled',
-            disabled: true,
-        },
-    ]
-    
-    return (
-        <div>
-            <Select
-                defaultValue={title}
-                style={{
-                width:177
-                }}
-                onChange={handleChange}
-                options={options}
-            />
-        </div>
-    )
-}
+  return (
+    <div>
+      <Select
+        defaultValue={title}
+        className="customSelect"
+        onChange={handleChange}
+        options={optionsData}
+      />
+    </div>
+  );
+};

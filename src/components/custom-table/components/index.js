@@ -1,2 +1,2 @@
-export * from './table-country-itemk';
-export * from './table-subscribe-button';
+export * from "./table-country-item";
+export * from "./table-subscribe-button";

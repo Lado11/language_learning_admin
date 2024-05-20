@@ -9,7 +9,7 @@ export const CustomCardTile = ({ icon, title, count, backgroundColor }) => {
         className="customCardTileImage"
         style={{ backgroundColor: backgroundColor }}
       >
-        <img src={icon} alt=""/>
+        <img src={icon} alt="" />
       </div>
       <div className="customCardTileTitleDiv">
         <p className="customCardTileTitle" style={{ color: Colors.LIGHT_BLUE }}>

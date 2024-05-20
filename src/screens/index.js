@@ -9,3 +9,4 @@ export * from "./feedback-screen";
 export * from "./words-screen";
 export * from "./feedback-screen";
 export * from "./notification-screen";
+export * from "./files-screen";

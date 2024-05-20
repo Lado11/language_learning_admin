@@ -3,11 +3,12 @@ import "./learning-language-item-card-style.css";
 import { Colors } from "../../../assets/colors/colors";
 import AvatarGroup from "react-avatar-group";
 
-export const LearningLanguageItemCard = ({ title, count }) => {
+export const LearningLanguageItemCard = ({ title, count, onTap }) => {
   return (
     <div
       className="learningLanguageCard"
       style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
+      onClick={onTap}
     >
       <div className="learningLanguageCardFirstLine">
         <p className="learningLanguageCardTitle">{title}</p>

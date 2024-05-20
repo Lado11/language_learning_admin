@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { categoryDeleteService } from "../../../services/category/delete-category-service";
 
 const initialState = {
-    categoryCreateloading: false,
-    categoryCreateBool: false,
-    categoryCreateResponse: null,
-    categoryCreateErrors: null,
+  categoryCreateloading: false,
+  categoryCreateBool: false,
+  categoryCreateResponse: null,
+  categoryCreateErrors: null,
 };
 
 export const categoryDeleteThunk = createAsyncThunk(
@@ -44,9 +44,7 @@ export const categoryDeleteSlice = createSlice({
   },
 });
 
-
 export const { deleteCategoryDeleteBool } = categoryDeleteSlice.actions;
-
 
 export const getCategoryDeleteLoading = (state) => {
   return state.categoryDeleteSlice.categoryDeleteloading;

@@ -7,6 +7,18 @@
   padding: 60px 82px 30px 82px;
 }
 
+.learnLanguageUpdateScreenMainDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 50px;
+  padding: 47px 94px 47px 94px;
+}
+
+.learningLanguageUpdateFormDiv {
+  width: 50%;
+}
+
 .learningLanguageScreenAddNewDiv {
   margin-bottom: 28px;
 }

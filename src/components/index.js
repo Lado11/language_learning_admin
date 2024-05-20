@@ -12,6 +12,6 @@ export * from "./custom-card-item";
 export * from "./custom-pagination";
 export * from "./custom-antd-input";
 export * from "./custom-add-new";
-export * from "./my-custom-table";
 export * from "./custom-search-input";
 export * from "./custom-antd-button";
+export * from "./custom-antd-delete-button";
