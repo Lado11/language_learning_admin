@@ -1,5 +1,5 @@
-export * from "./create-learn-language";
+export * from "./create-learn-language-slice";
 export * from "./delete-learn-language";
 export * from "./get-id-learn-language";
-export * from "./get-learn-languages";
+export * from "./learn-languages-slice";
 export * from "./update-learn-language";

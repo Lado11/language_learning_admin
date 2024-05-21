@@ -38,7 +38,7 @@ export const nativeLanguageUpdateSlice = createSlice({
       (state, { payload }) => {
         state.nativeUpdateloading = false;
         state.nativeUpdateResponse = payload;
-        state.nativeCreateBool = true;
+        state.nativeUpdateBool = true;
       }
     );
     builder.addCase(

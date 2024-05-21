@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Form, Upload } from "antd";
+import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteNativeCreateBool,
+  deleteNativeCreateResponse,
   getNativeCreateBool,
+  getNativeCreateData,
+  getNativeCreateLoading,
   nativeLanguageCreateThunk,
 } from "../../store/slices/native-language/native-language-create";
 import uploadImage from "../../assets/images/uploadImg.png";
@@ -11,6 +14,7 @@ import { CustomAntdButton } from "../../components/custom-antd-button/custom-ant
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
 import { CustomAntdInput } from "../../components";
+import { Error, Success } from "../../components/custom-message/custom-message";
 
 export const NativeLanguageCretae = () => {
   const [form] = Form.useForm();
@@ -21,8 +25,12 @@ export const NativeLanguageCretae = () => {
   const [fileList, setFileList] = useState([]);
   const [categoryShow, setCategoryShow] = useState();
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
+  const nativeLanguageData = useSelector(getNativeCreateData);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = (values) => {
+  const craeteLoading = useSelector(getNativeCreateLoading);
+  console.log(craeteLoading,"loading")
+  const onFinish = (values) => { 
     if (values.image.file != "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
@@ -51,6 +59,15 @@ export const NativeLanguageCretae = () => {
   const beforeUpload = () => {
     return false;
   };
+  const messageError = nativeLanguageData?.message
+
+  useEffect(()=>{
+    console.log(nativeLanguageData,"88888")
+    nativeLanguageData?.success === true  && Success({messageApi})
+    nativeLanguageData?.success === false && Error({messageApi,messageError})
+    dispatch(deleteNativeCreateResponse())
+
+  },[ nativeLanguageData?.success])
 
   const props = {
     accept: ".png",
@@ -61,6 +78,9 @@ export const NativeLanguageCretae = () => {
     },
   };
 
+
+
+ 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
       <p className="nativeLanguageTitle">Add Native Language</p>
@@ -99,7 +119,8 @@ export const NativeLanguageCretae = () => {
         </Form.Item>
 
         <Form.Item>
-          <CustomAntdButton title="Add" background={Colors.PURPLE} />
+         {contextHolder}
+          <CustomAntdButton title="Add" background={Colors.PURPLE} loading={craeteLoading}/>
         </Form.Item>
       </Form>
     </div>

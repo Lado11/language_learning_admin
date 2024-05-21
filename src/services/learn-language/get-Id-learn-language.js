@@ -1,5 +1,5 @@
 import { api } from "..";
 
-export const lernLanguageGetIdService = (data) => {
+export const learnLanguageGetIdService = (data) => {
   return api.put(`api/admin/language/learn/${data}`);
 };

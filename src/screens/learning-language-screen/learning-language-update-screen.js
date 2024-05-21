@@ -20,7 +20,7 @@ import {
 import remove_icon from "../../assets/images/remove_icon.png";
 import { nativeLanguageUpdateThunk } from "../../store/slices";
 import { useTranslation } from "react-i18next";
-import { learningLanguages } from "../../store/slices/lern-language/learn-languages-slice";
+import { learningLanguages } from "../../store/slices/learn-language/learn-languages-slice";
 import { SelectLanguage } from "./components";
 
 export const LearningLanguageUpdate = () => {
@@ -36,12 +36,7 @@ export const LearningLanguageUpdate = () => {
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const learningLanguageData = useSelector(learningLanguages);
   const learningData = learningLanguageData?.data?.list?.[0];
-  console.log(
-    learningLanguageData?.data?.list?.[0].imageFile.path,
-    "native data"
-  );
   const baseUrl = process.env.REACT_APP_BASE_URL;
-  console.log(`${baseUrl}${learningData?.imageFile?.path}`, "baseUrl");
 
   const onFinish = (values) => {
     if (values.image.file != "") {
@@ -67,7 +62,6 @@ export const LearningLanguageUpdate = () => {
   }, [nativeCreateBool]);
 
   const handleChange = (info) => {
-    console.log(info, "imahee info");
     setCategoryShow(info.file);
     setCatgeoryShowUpload(info.fileList[0]);
     if (!info.fileList[0]) {

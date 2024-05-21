@@ -15,21 +15,23 @@ export const FilesScreen = () => {
     >
       <p className="filesTitle">Files</p>
       <div className="filesItemDiv">
-        {customFilesData.map((item) => {
+        {customFilesData.map((item,index) => {
           return (
-            <CustomCardTile
+          <div  key={index+1}>
+              <CustomCardTile
               icon={item.icon}
               title={t(`${item.title}`)}
               count={item.count}
               backgroundColor={item.backgroundColor}
             />
+          </div>
           );
         })}
       </div>
       <div>
-        {customFilesDirectoryData.map((item) => {
+        {customFilesDirectoryData.map((item,index) => {
           return (
-            <div className="filesDirection">
+            <div className="filesDirection" key={index+1}>
               <img src={item.icon} />
               <p className="filesDirectionTitle">{item.title}</p>
             </div>

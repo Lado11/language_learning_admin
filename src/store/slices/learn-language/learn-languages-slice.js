@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { lernLanguageGetService } from "../../../services/learn-language/get-learn-languages-service";
+import { learnLanguageGetService } from "../../../services/learn-language/get-learn-languages-service";
 
 const initialState = {
   getLearningLanguagesLoading: false,
@@ -11,8 +11,7 @@ export const learningLanguagesThunk = createAsyncThunk(
   "getLearningLanguages",
   async (_, { rejectWithValues }) => {
     try {
-      const response = await lernLanguageGetService();
-      console.log(response.data.data, "learning language response");
+      const response = await learnLanguageGetService();
       return response.data;
     } catch (error) {
       return rejectWithValues(error.message);

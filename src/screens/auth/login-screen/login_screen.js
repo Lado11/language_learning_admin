@@ -1,18 +1,19 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
 import "../../../global-styles";
 import "./login_style.css";
 import { useTranslation } from "react-i18next";
 import { CustomInputField, CustomButton } from "../../../components";
 import { Colors } from "../../../assets/colors/colors";
-import { loginThunk } from "../../../store/slices/auth/login-slice";
+import { getLoginData, getLoginError, getLoginMessage, loginThunk } from "../../../store/slices/auth/login-slice";
 import { loginValidatoinSchema } from "../../../validations/login-validations";
 
 export const LoginScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
+  const error = useSelector(getLoginMessage)
+  console.log(error,"error")
   return (
     <div
       className="authScreenMainDiv"

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import {
   CategoryScreen,
   HomeScreen,
@@ -43,6 +43,7 @@ export const MyRoutes = () => {
           <Route path="/" element={<LoginScreen />} />
           <Route path="/resetPassword" element={<ResetSendPasswordScreen />} />
           <Route path="/sendEmail" element={<ResetSendPasswordScreen />} />
+          <Route path="*" element={<Navigate to={"/"} />} />
         </Routes>
       ) : (
         <Routes>

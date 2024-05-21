@@ -8,7 +8,6 @@ export const CustomSelect = ({
   languages,
 }) => {
   const handleChange = (value) => {
-    console.log(value);
     setLanguage([
       ...languages,
       {

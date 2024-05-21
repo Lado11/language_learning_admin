@@ -16,7 +16,7 @@ export const CustomAntdInput = ({ name, placeholder }) => {
           message: t("INPUT_MIN_LENGTH_ERROR"),
         },
       ]}
-      normalize={(value) => value.trim()}
+      normalize={(value) => value.trimStart()}
     >
       <Input placeholder={placeholder} />
     </Form.Item>

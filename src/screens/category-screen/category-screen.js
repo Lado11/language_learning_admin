@@ -34,9 +34,9 @@ export const CategoryScreen = () => {
       <p className="category-table-title">Category</p>
       <div className="category-item-pagination">
         <div className="custom-card-item">
-          {countryData.map((countryItem) => {
+          {countryData.map((countryItem,index) => {
             return (
-              <div className="pointer">
+              <div className="pointer" key={index+1}>
                 <CustomCardItem
                   icon={countryItem.icon}
                   title={countryItem.title}

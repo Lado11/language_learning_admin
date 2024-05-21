@@ -24,6 +24,9 @@ export const nativeLanguageCreateSlice = createSlice({
   name: "nativeCreate",
   initialState,
   reducers: {
+    deleteNativeCreateResponse: (state) => {
+      state.nativeCreateResponse = "";
+    },
     deleteNativeCreateBool: (state) => {
       state.nativeCreateBool = false;
     },
@@ -50,7 +53,7 @@ export const nativeLanguageCreateSlice = createSlice({
   },
 });
 
-export const { deleteNativeCreateBool } = nativeLanguageCreateSlice.actions;
+export const { deleteNativeCreateBool ,deleteNativeCreateResponse } = nativeLanguageCreateSlice.actions;
 
 export const getNativeCreateLoading = (state) => {
   return state.createNativeSlice.nativeCreateloading;
