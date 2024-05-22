@@ -25,6 +25,9 @@ export const categoryCreateSlice = createSlice({
   name: "categoryCreate",
   initialState,
   reducers: {
+    deleteCategoryCreateResponse: (state) => {
+      state.categoryCreateResponse = "";
+    },
     deleteCategoryCreateBool: (state) => {
       state.categoryCreateBool = false;
     },
@@ -45,7 +48,7 @@ export const categoryCreateSlice = createSlice({
   },
 });
 
-export const { deleteCategoryCreateBool } = categoryCreateSlice.actions;
+export const { deleteCategoryCreateBool,deleteCategoryCreateResponse } = categoryCreateSlice.actions;
 
 export const getCategoryCreateLoading = (state) => {
   return state.categoryCreateSlice.categoryCreateloading;

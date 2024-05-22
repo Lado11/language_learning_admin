@@ -1,60 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { Form, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteNativeCreateBool,
-  getNativeCreateBool,
-} from "../../store/slices/native-language/native-language-create";
 import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
 import { CustomAntdButtonDelete, CustomAntdInput } from "../../components";
-import {
-  deleteNativeDeleteBool,
-  getNativeDeleteBool,
-  getNativeDeleteloading,
-  nativeLanguageDeleteThunk,
-} from "../../store/slices/native-language/native-language-delete";
 import remove_icon from "../../assets/images/remove_icon.png";
 import {
+  categoryDeleteThunk,
+  categoryUpdateThunk,
+  deleteCategoryDeleteBool,
+  deleteCategoryUpdateBool,
   deleteNativeUpdateBool,
-  getNativeUpdateBool,
-  getNativeUpdateLoading,
-  nativeLanguageUpdateThunk,
+  getCategoryDeleteBool,
+  getCategoryDeleteLoading,
+  getCategoryUpdateBool,
+  getCategoryUpdateLoading,
 } from "../../store/slices";
-import {
-  getNativeGetIdResponse,
-  nativeLanguageGetIdThunk,
-} from "../../store/slices/native-language/get-id-native-language";
+
+import { categoryGetIdThunk, getCategoryGetIdResponse } from "../../store/slices/category/get-id-category";
 import CustomModal from "../../components/custom-modal/custom-modal";
 
-export const UpdateNativeLanguage = () => {
+export const CategoryUpdate = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const nativeId = localStorage.getItem("nativeId");
+  const categoryId = localStorage.getItem("categoryId");
   const formData = new FormData();
-  const nativeCreateBool = useSelector(getNativeCreateBool);
-  const deleteBool = useSelector(getNativeDeleteBool);
   const [fileList, setFileList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryShow, setCategoryShow] = useState();
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
-  const nativeLanguageData = useSelector(getNativeGetIdResponse)?.data;
-  const nativeUpdateLoading = useSelector(getNativeUpdateLoading);
-  const nativeDeleteLoading = useSelector(getNativeDeleteloading);
-  const nativeUpdateBool = useSelector(getNativeUpdateBool);
+  const nativeLanguageData = useSelector(getCategoryGetIdResponse)?.data;
+  const catgeoryUpdateLoading = useSelector(getCategoryDeleteLoading);
+  const categoryUpdateBool = useSelector(getCategoryUpdateBool);
+  const categoryDeleteBool = useSelector(getCategoryDeleteBool);
+  const categoryUpdateLoading = useSelector(getCategoryUpdateLoading);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const onFinish = (values) => {
     if (values.image.file != "") {
-      formData.append("nameEng", values.nameEng);
+      formData.append("localization", values.localization);
       formData.append("name", values.name);
       categoryShow && formData.append("image", categoryShow);
       formData.append("id", nativeLanguageData.id);
       formData.append("active", nativeLanguageData?.active);
-      dispatch(nativeLanguageUpdateThunk(formData));
+      dispatch(categoryUpdateThunk(formData));
       form.resetFields();
       setCategoryShow("");
     } else {
@@ -63,11 +55,9 @@ export const UpdateNativeLanguage = () => {
   };
 
   useEffect(() => {
-    dispatch(nativeLanguageGetIdThunk(nativeId));
+    dispatch(categoryGetIdThunk(categoryId));
   }, []);
-  const showModal = () => {
-    setIsModalOpen(true);
-};
+
   const handleChange = (info) => {
     setCategoryShow(info.file);
     setCatgeoryShowUpload(info.fileList[0]);
@@ -91,26 +81,30 @@ export const UpdateNativeLanguage = () => {
 
   useEffect(() => {
     form.setFieldsValue({
-      nameEng: nativeLanguageData?.nameEng,
+      localization: nativeLanguageData?.localization,
       name: nativeLanguageData?.name,
       image: nativeLanguageData?.imageFile?.path,
     });
   }, [nativeLanguageData]);
 
   useEffect(() => {
-    if (deleteBool === true || nativeUpdateBool === true) {
-      navigate("/native-language");
+    if (categoryUpdateBool === true || categoryDeleteBool === true ) {
+      navigate("/category");
     }
-    dispatch(deleteNativeDeleteBool());
-    dispatch(deleteNativeUpdateBool());
-  }, [deleteBool, nativeUpdateBool]);
+    dispatch(deleteCategoryDeleteBool());
+    dispatch(deleteCategoryUpdateBool());
+  }, [categoryUpdateBool,categoryDeleteBool]);
 
+  const showModal = () => {
+    setIsModalOpen(true);
+};
   const onTab = () => {
-    dispatch(nativeLanguageDeleteThunk(nativeLanguageData?.id))
+    dispatch(categoryDeleteThunk(categoryId))
   }
+
   return (
     <div className="nativeLanguageScreenMainDiv">
-      <p className="nativeLanguageTitle">Update Native Language</p>
+      <p className="nativeLanguageTitle">Update Category</p>
       <CustomModal isModalOpen={isModalOpen}  setIsModalOpen={setIsModalOpen} onTab={onTab}/>
 
       <Form
@@ -122,11 +116,11 @@ export const UpdateNativeLanguage = () => {
           maxWidth: 600,
         }}
       >
-        <p>Language english name</p>
-        <CustomAntdInput name="nameEng" placeholder=" Language English Name*" />
-        <p>Native Name</p>
-        <CustomAntdInput name="name" placeholder="Native Name*" />
-        <p>Language Icon</p>
+        <p>Category Name</p>
+        <CustomAntdInput name="localization" placeholder="Food" />
+        <p>localication string*</p>
+        <CustomAntdInput name="name" placeholder="localication string*" />
+        <p>Category Icon</p>
         <Form.Item
           name="image"
           rules={[
@@ -172,11 +166,11 @@ export const UpdateNativeLanguage = () => {
           <CustomAntdButton
             title="Update"
             background={Colors.PURPLE}
-            loading={nativeUpdateLoading}
+            loading={categoryUpdateLoading}
           />
           <div className="deleteButton">
             <CustomAntdButtonDelete
-              loading={nativeDeleteLoading}
+              loading={catgeoryUpdateLoading}
               title="Delete"
               background={Colors.GRAY_COLOR}
               onClick={() => {

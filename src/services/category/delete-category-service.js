@@ -1,5 +1,5 @@
 import { api } from "..";
 
-export const categoryDeleteService = (formData) => {
-  return api.put("api/admin/words/category", formData);
+export const categoryDeleteService = (id) => {
+  return api.delete(`api/admin/words/category?id=${id}`);
 };

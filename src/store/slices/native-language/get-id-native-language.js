@@ -32,11 +32,14 @@ export const nativeLanguageGetIdSlice = createSlice({
     builder.addCase(nativeLanguageGetIdThunk.pending, (state) => {
       state.nativeGetIdloading = true;
     });
-    builder.addCase(nativeLanguageGetIdThunk.fulfilled, (state, { payload }) => {
-      state.nativeGetIdloading = false;
-      state.nativeGetIdResponse = payload;
-      state.nativeGetIdBool = true;
-    });
+    builder.addCase(
+      nativeLanguageGetIdThunk.fulfilled,
+      (state, { payload }) => {
+        state.nativeGetIdloading = false;
+        state.nativeGetIdResponse = payload;
+        state.nativeGetIdBool = true;
+      }
+    );
     builder.addCase(nativeLanguageGetIdThunk.rejected, (state, { payload }) => {
       state.nativeGetIdloading = false;
       state.nativeGetIdErrors = payload;

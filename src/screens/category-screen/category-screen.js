@@ -5,13 +5,29 @@ import {
   CustomSelect,
 } from "../../components";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
-import { countryData } from "../../data/custom-data-table";
 import "./category-screen.css";
+import { useDispatch, useSelector } from "react-redux";
+import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from "../../store/slices/category/get-category";
+import { useEffect } from "react";
+import { CustomSpin } from "../../components/custom-spin/custom-spin";
 
 export const CategoryScreen = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const categoryLoading = useSelector(getCategoryGetLoading);
+  const categoryData = useSelector(getCategoryGetData)?.data?.list;
+  console.log(categoryData, "data")
+  const data = {
+    skip: 0,
+    limit: 12,
+  };
 
-  const navigateUpdate = () => {
+  useEffect(() => {
+    dispatch(categoryGetThunk(data));
+  }, [])
+
+  const categoryUpdate = (id) => {
+    localStorage.setItem("categoryId",id,)
     navigate("/category-update");
   };
 
@@ -33,21 +49,23 @@ export const CategoryScreen = () => {
       </div>
       <p className="category-table-title">Category</p>
       <div className="category-item-pagination">
-        <div className="custom-card-item">
-          {countryData.map((countryItem,index) => {
+        {categoryLoading ? <div className="nativeLanguageScreenMainDiv"> <CustomSpin size={64} color="gray" /> </div> : <div className="custom-card-item">
+          {categoryData?.map((countryItem, index) => {
             return (
-              <div className="pointer" key={index+1}>
+              <div className="pointer" key={index + 1}  onClick={()=>{
+                categoryUpdate(countryItem?.id)
+              }}>
                 <CustomCardItem
-                  icon={countryItem.icon}
-                  title={countryItem.title}
-                  onClick={navigateUpdate}
+                  icon={countryItem?.imageFile?.path}
+                  title={countryItem.name}
+                 
                 />
               </div>
             );
           })}
-        </div>
+        </div>}
         <div className="category-pagination">
-          <CustomPagination />
+          <CustomPagination length={categoryData?.length} />
         </div>
       </div>
     </div>

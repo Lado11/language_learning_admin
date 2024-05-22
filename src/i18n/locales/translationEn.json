@@ -42,5 +42,6 @@
   "NATIVE_NAME": "Native Name",
   "LANGUAGE_ICON": "Language Icon",
 
-  "INPUT_MIN_LENGTH_ERROR": "The input must be at least 3 characters long."
+  "INPUT_MIN_LENGTH_ERROR": "The input must be at least 3 characters long.",
+  "INVALID_USERNAME_OR_PASSWORD": "Invalid username/password"
 }

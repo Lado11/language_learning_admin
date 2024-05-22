@@ -5,6 +5,7 @@ const initialState = {
   learnLanguageDeleteLoading: false,
   learnLanguageDeleteResponse: null,
   learnLanguageDeleteError: null,
+  learnBool:false
 };
 
 export const learnLanguageDeleteThunk = createAsyncThunk(
@@ -22,7 +23,11 @@ export const learnLanguageDeleteThunk = createAsyncThunk(
 export const learnLanguageDeleteSlice = createSlice({
   name: "learnLanguageDelete",
   initialState,
-  reducers: {},
+  reducers: {
+    deleteLearnBool: (state) => {
+      state.learnBool = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(learnLanguageDeleteThunk.pending, (state) => {
       state.learnLanguageDeleteLoading = true;
@@ -32,6 +37,7 @@ export const learnLanguageDeleteSlice = createSlice({
       (state, { payload }) => {
         state.learnLanguageDeleteLoading = false;
         state.learnLanguageDeleteResponse = payload;
+        state.learnBool = true
       }
     );
     builder.addCase(learnLanguageDeleteThunk.rejected, (state, { payload }) => {
@@ -40,6 +46,13 @@ export const learnLanguageDeleteSlice = createSlice({
     });
   },
 });
+
+
+export const { deleteLearnBool  } = learnLanguageDeleteSlice.actions;
+
+export const learnLangBool = (state) => {
+  return state.learnLanguageDeleteSlice.learnBool;
+};
 
 export const learnLanguageDeleteLoading = (state) => {
   return state.learnLanguageDeleteSlice.learnLanguageDeleteLoading;

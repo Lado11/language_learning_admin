@@ -3,17 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
 import "../../../global-styles";
 import "./login_style.css";
+import "../../../global-styles/global-styles.css";
 import { useTranslation } from "react-i18next";
 import { CustomInputField, CustomButton } from "../../../components";
 import { Colors } from "../../../assets/colors/colors";
-import { getLoginData, getLoginError, getLoginMessage, loginThunk } from "../../../store/slices/auth/login-slice";
+import {
+  getLoginError,
+  loginThunk,
+} from "../../../store/slices/auth/login-slice";
 import { loginValidatoinSchema } from "../../../validations/login-validations";
 
 export const LoginScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const error = useSelector(getLoginMessage)
-  console.log(error,"error")
+  const error = useSelector(getLoginError);
+
   return (
     <div
       className="authScreenMainDiv"
@@ -37,6 +41,11 @@ export const LoginScreen = () => {
             handleSubmit,
           }) => (
             <form onSubmit={handleSubmit} autoComplete="off">
+              {error != null ? (
+                <p className="errorMessage">
+                  {t("INVALID_USERNAME_OR_PASSWORD")}
+                </p>
+              ) : null}
               <CustomInputField
                 type="text"
                 name="email"

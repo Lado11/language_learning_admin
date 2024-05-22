@@ -29,8 +29,7 @@ export const NativeLanguageCretae = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const craeteLoading = useSelector(getNativeCreateLoading);
-  console.log(craeteLoading,"loading")
-  const onFinish = (values) => { 
+  const onFinish = (values) => {
     if (values.image.file != "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
@@ -59,15 +58,14 @@ export const NativeLanguageCretae = () => {
   const beforeUpload = () => {
     return false;
   };
-  const messageError = nativeLanguageData?.message
+  const messageError = nativeLanguageData?.message;
 
-  useEffect(()=>{
-    console.log(nativeLanguageData,"88888")
-    nativeLanguageData?.success === true  && Success({messageApi})
-    nativeLanguageData?.success === false && Error({messageApi,messageError})
-    dispatch(deleteNativeCreateResponse())
-
-  },[ nativeLanguageData?.success])
+  useEffect(() => {
+    nativeLanguageData?.success === true && Success({ messageApi });
+    nativeLanguageData?.success === false &&
+      Error({ messageApi, messageError });
+    dispatch(deleteNativeCreateResponse());
+  }, [nativeLanguageData?.success]);
 
   const props = {
     accept: ".png",
@@ -78,9 +76,6 @@ export const NativeLanguageCretae = () => {
     },
   };
 
-
-
- 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
       <p className="nativeLanguageTitle">Add Native Language</p>
@@ -119,8 +114,12 @@ export const NativeLanguageCretae = () => {
         </Form.Item>
 
         <Form.Item>
-         {contextHolder}
-          <CustomAntdButton title="Add" background={Colors.PURPLE} loading={craeteLoading}/>
+          {contextHolder}
+          <CustomAntdButton
+            title="Add"
+            background={Colors.PURPLE}
+            loading={craeteLoading}
+          />
         </Form.Item>
       </Form>
     </div>

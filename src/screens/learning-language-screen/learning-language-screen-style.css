@@ -7,6 +7,12 @@
   padding: 60px 82px 30px 82px;
 }
 
+.learningLanguageScreenLoadingDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .learnLanguageUpdateScreenMainDiv {
   display: flex;
   justify-content: space-between;

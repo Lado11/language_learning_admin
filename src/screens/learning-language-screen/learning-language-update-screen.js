@@ -2,25 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Form, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import "./learning-language-screen-style.css";
-import {
-  deleteNativeCreateBool,
-  getNativeCreateBool,
-} from "../../store/slices/native-language/native-language-create";
 import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
 import { CustomAntdButtonDelete, CustomAntdInput } from "../../components";
-import { getNativeGetResponse } from "../../store/slices/native-language/native-language-get";
-import {
-  deleteNativeDeleteBool,
-  getNativeDeleteBool,
-  nativeLanguageDeleteThunk,
-} from "../../store/slices/native-language/native-language-delete";
 import remove_icon from "../../assets/images/remove_icon.png";
-import { nativeLanguageUpdateThunk } from "../../store/slices";
+import {  deleteLearnBool, deleteLearnUpdateBool, getLearnLanguageByIdResponse, getUpdatedLearnLanguageBool, getUpdatedLearnLanguageLoading, learnLangBool, learnLanguageByIdThunk, learnLanguageDeleteLoading, learnLanguageDeleteThunk, learnLanguageUpdateThunk, nativeLanguageUpdateThunk, } from "../../store/slices";
 import { useTranslation } from "react-i18next";
-import { learningLanguages } from "../../store/slices/learn-language/learn-languages-slice";
 import { SelectLanguage } from "./components";
 
 export const LearningLanguageUpdate = () => {
@@ -29,25 +18,26 @@ export const LearningLanguageUpdate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = new FormData();
-  const nativeCreateBool = useSelector(getNativeCreateBool);
-  const deleteBool = useSelector(getNativeDeleteBool);
-  const [fileList, setFileList] = useState([]);
-  const [categoryShow, setCategoryShow] = useState();
-  const [showCategoryUpload, setCatgeoryShowUpload] = useState();
-  const learningLanguageData = useSelector(learningLanguages);
-  const learningData = learningLanguageData?.data?.list?.[0];
   const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [fileList, setFileList] = useState([]);
+  const [showCategoryUpload, setCatgeoryShowUpload] = useState();
+  const [categoryShow, setCategoryShow] = useState();
+  const learningId = localStorage.getItem("learningId");
+  const deleteBool = useSelector(learnLangBool);
+  const updateBool = useSelector(getUpdatedLearnLanguageBool);
+  const learningLanguageData = useSelector(getLearnLanguageByIdResponse);
+  const deleteLerningLoading = useSelector(learnLanguageDeleteLoading);
+  const updateLearningLoading = useSelector(getUpdatedLearnLanguageLoading);
+  const learningData = learningLanguageData?.data;
 
   const onFinish = (values) => {
     if (values.image.file != "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
-      categoryShow
-        ? formData.append("image", categoryShow)
-        : formData.append("image", learningData?.imageFile);
+      categoryShow  && formData.append("image", categoryShow)
       formData.append("id", learningData.id);
       formData.append("active", learningData?.active);
-      dispatch(nativeLanguageUpdateThunk(formData));
+      dispatch(learnLanguageUpdateThunk(formData));
       form.resetFields();
       setCategoryShow("");
     } else {
@@ -55,12 +45,7 @@ export const LearningLanguageUpdate = () => {
     }
   };
 
-  useEffect(() => {
-    if (nativeCreateBool === true) {
-    }
-    dispatch(deleteNativeCreateBool());
-  }, [nativeCreateBool]);
-
+  
   const handleChange = (info) => {
     setCategoryShow(info.file);
     setCatgeoryShowUpload(info.fileList[0]);
@@ -82,7 +67,11 @@ export const LearningLanguageUpdate = () => {
     },
   };
 
-  const defaultImgae = {};
+
+
+  useEffect(() => {
+    dispatch(learnLanguageByIdThunk(learningId));
+  }, [])
 
   useEffect(() => {
     form.setFieldsValue({
@@ -93,17 +82,19 @@ export const LearningLanguageUpdate = () => {
   }, [learningData]);
 
   useEffect(() => {
-    if (deleteBool === true) {
-      navigate("/native-language");
+    if (deleteBool === true || updateBool === true) {
+      navigate("/learning-language");
     }
-    dispatch(deleteNativeDeleteBool());
-  }, [deleteBool]);
+    dispatch(deleteLearnBool());
+    dispatch(deleteLearnUpdateBool());
+  }, [deleteBool,updateBool]);
+
+
+
+
 
   return (
-    <div
-      className="learnLanguageUpdateScreenMainDiv"
-      style={{ backgroundColor: Colors.WHITE }}
-    >
+    <div className="learnLanguageUpdateScreenMainDiv" style={{ backgroundColor: Colors.WHITE }}>
       <div className="learningLanguageUpdateFormDiv">
         <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
         <Form
@@ -116,14 +107,10 @@ export const LearningLanguageUpdate = () => {
           }}
         >
           <p>{t("LANGUAGE_ENGLISH_NAME")}</p>
-          <CustomAntdInput
-            name="nameEng"
-            placeholder=" Language English Name*"
-          />
+          <CustomAntdInput name="nameEng" placeholder=" Language English Name*" />
           <p>{t("NATIVE_NAME")}</p>
 
           <CustomAntdInput name="name" placeholder="Native Name*" />
-
           <p>{t("LANGUAGE_ICON")}</p>
 
           <Form.Item
@@ -152,7 +139,6 @@ export const LearningLanguageUpdate = () => {
               </div>
             ) : (
               <Upload
-                // defaultFileList={[nativeData?.imageFile]}
                 onChange={handleChange}
                 beforeUpload={beforeUpload}
                 {...props}
@@ -168,13 +154,14 @@ export const LearningLanguageUpdate = () => {
           </Form.Item>
 
           <Form.Item>
-            <CustomAntdButton title="Update" background={Colors.PURPLE} />
+            <CustomAntdButton title="Update" background={Colors.PURPLE} loading={updateLearningLoading}/>
             <div className="deleteButton">
               <CustomAntdButtonDelete
+                loading={deleteLerningLoading}
                 title="Delete"
                 background={Colors.GRAY_COLOR}
                 onClick={() => {
-                  dispatch(nativeLanguageDeleteThunk(learningData?.id));
+                  dispatch(learnLanguageDeleteThunk(learningData?.id));
                 }}
               />
             </div>

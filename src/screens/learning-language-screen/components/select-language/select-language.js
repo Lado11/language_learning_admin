@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CustomSelect } from "../../../../components";
 import "./select-language-style.css";
 import { Colors } from "../../../../assets/colors";
@@ -38,6 +38,7 @@ export const SelectLanguage = () => {
         {languages.map((lang) => {
           return (
             <div
+              key={lang.id}
               className="selectLanguageValuesDivItem"
               style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
             >

@@ -5,10 +5,13 @@ import messageIcon from "../../assets/images/messageIcon.svg";
 import membersIcon from "../../assets/images/membersIcon.svg";
 import statisticIcon from "../../assets/images/statisticsIcon.svg";
 import logOutIcon from "../../assets/images/logout-svgrepo-com.svg";
-import { deleteReduxToken } from "../../store/slices/auth/login-slice";
+import {
+  deleteReduxToken,
+  getToken,
+} from "../../store/slices/auth/login-slice";
 import { useMediaQuery } from "react-responsive";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CustomDrawer } from "../custom-drawer/custom-drawer";
 import "./custom-header.css";
 
@@ -17,11 +20,14 @@ export const CustomHeader = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery({ maxWidth: 768 });
+  const reduxToken = useSelector(getToken);
+  const token = localStorage.getItem("token");
 
   const logOut = () => {
     localStorage.clear();
     dispatch(deleteReduxToken());
-    navigate("/");
+    // navigate("/");
+    window.location.reload();
   };
 
   return (

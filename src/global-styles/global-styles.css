@@ -54,3 +54,7 @@
   width: 420px;
   justify-content: space-between;
 }
+
+.errorMessage {
+  color: red;
+}

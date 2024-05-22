@@ -27,10 +27,10 @@ export const CustomSidebar = () => {
   return (
     <div className="projectOutlet">
       <div className="customSideBar">
-        {customSideBarData.map((item, ind) => {
+        {customSideBarData.map((item) => {
           return (
             <div
-              key={ind}
+              key={item.id}
               onClick={() => {
                 setSelect(!select);
                 localStorage.setItem("item", item.title);

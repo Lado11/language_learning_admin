@@ -1,5 +1,5 @@
 import { api } from "..";
 
-export const categoryGetService = (formData) => {
-  return api.put("api/admin/words/category", formData);
+export const categoryGetService = (data) => {
+  return api.get(`api/admin/words/category?skip=${data.skip}&limit=${data.limit}`);
 };

@@ -8,21 +8,33 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   learningLanguagesThunk,
   learningLanguages,
+  getLearnLanguagesLoading,
 } from "../../store/slices/learn-language/learn-languages-slice";
+import { CustomSpin } from "../../components/custom-spin/custom-spin";
+import { learnLanguageByIdThunk } from "../../store/slices";
 
 export const LearningLanguageScreen = () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8];
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
+  const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
 
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
   };
+  const learningUpdate = (id) => {
+    console.log(id,"id")
+    dispatch(learnLanguageByIdThunk(id));
+    localStorage.setItem("learningId",id)
+    navigate("/learning-update");
+  }
 
   useEffect(() => {
     dispatch(learningLanguagesThunk());
   }, []);
+
+
 
   return (
     <div
@@ -36,21 +48,21 @@ export const LearningLanguageScreen = () => {
             onClick={navigateToCreateScreen}
           />
         </div>
-        <div className="learningLanguageCardItems">
+        {learnLanguagesLoading ?   <div className="learningLanguageScreenLoadingDiv"> <CustomSpin size={64} color="gray" /> </div>: <div className="learningLanguageCardItems">
           {learningLanguagesData?.data?.list.map((lang) => {
             return (
               <div className="pointer" key={lang?.id}>
                 <LearningLanguageItemCard
                   title={lang.name}
                   count={learningLanguagesData?.data?.total}
-                  onTap={() => {
-                    navigate("/learning-update");
+                  onTap={()=>{
+                    learningUpdate(lang?.id)
                   }}
                 />
               </div>
             );
           })}
-        </div>
+        </div>}
       </div>
       <div className="learningLanguageScreenPaginationDiv">
         <CustomPagination />

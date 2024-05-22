@@ -1,21 +1,25 @@
-import React, { useState } from "react";
-import { Form, Upload } from "antd";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Form, Upload,message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import uploadImage from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components";
 import { Colors } from "../../assets/colors";
 import { CustomAntdInput } from "../../components";
-import { categoryCreateThunk } from "../../store/slices/category/category-create";
+import { categoryCreateThunk, deleteCategoryCreateResponse, getCategoryCreateData } from "../../store/slices/category/category-create";
 import { useTranslation } from "react-i18next";
+import { Error, Success } from "../../components/custom-message/custom-message";
 
 export const CategoryCretae = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const formData = new FormData();
+  const [messageApi, contextHolder] = message.useMessage();
   const [categoryFileList, setCategoryFileList] = useState([]);
   const [categoryShow, setCategoryShow] = useState();
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const { t } = useTranslation();
+
+  const categoryCreateData = useSelector(getCategoryCreateData);
 
   const onFinish = (values) => {
     if (values.category_image.file != "") {
@@ -41,6 +45,16 @@ export const CategoryCretae = () => {
   const beforeUpload = () => {
     return false;
   };
+
+  const messageError = categoryCreateData?.message;
+
+  useEffect(() => {
+    categoryCreateData?.success === true && Success({ messageApi });
+    categoryCreateData?.success === false &&
+      Error({ messageApi, messageError });
+    dispatch(deleteCategoryCreateResponse());
+  }, [categoryCreateData?.success]);
+
 
   const props = {
     accept: ".png",
@@ -92,7 +106,7 @@ export const CategoryCretae = () => {
             )}
           </Upload>
         </Form.Item>
-
+        {contextHolder}
         <Form.Item>
           <CustomAntdButton title={t("ADD")} background={Colors.PURPLE} />
         </Form.Item>

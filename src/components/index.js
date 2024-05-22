@@ -15,3 +15,4 @@ export * from "./custom-add-new";
 export * from "./custom-search-input";
 export * from "./custom-antd-button";
 export * from "./custom-antd-delete-button";
+export * from "./custom-modal"

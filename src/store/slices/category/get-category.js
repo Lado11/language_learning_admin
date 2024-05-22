@@ -10,9 +10,9 @@ const initialState = {
 
 export const categoryGetThunk = createAsyncThunk(
   "categoryGet",
-  async (formData, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await categoryGetService(formData);
+      const response = await categoryGetService(data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);

@@ -10,9 +10,9 @@ const initialState = {
 
 export const categoryDeleteThunk = createAsyncThunk(
   "categoryCreate",
-  async (formData, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await categoryDeleteService(formData);
+      const response = await categoryDeleteService(id);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);

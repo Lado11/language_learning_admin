@@ -41,3 +41,7 @@ export const learningLanguagesSlice = createSlice({
 export const learningLanguages = (state) => {
   return state.learningLanguagesSlice.getLearningLanguagesResponse;
 };
+
+export const getLearnLanguagesLoading = (state) => {
+  return state.learningLanguagesSlice.getLearningLanguagesLoading;
+};

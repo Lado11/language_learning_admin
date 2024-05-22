@@ -34,10 +34,10 @@ export const CustomDrawer = ({ open, setOpen }) => {
         position="left"
         modalElementClass="modal"
       >
-        {customSideBarData.map((item, ind) => {
+        {customSideBarData.map((item) => {
           return (
             <div
-              key={ind}
+              key={item.id}
               onClick={() => {
                 setSelect(!select);
                 localStorage.setItem("item", item.title);
