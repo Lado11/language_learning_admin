@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
 import { CustomCountryItem } from "../../components/custom-country-item/custom-country-item";
 import "./native-language-style.css";
+import "../../global-styles/global-styles.css";
 import { CustomPagination } from "../../components";
 import { useNavigate } from "react-router-dom";
 import {
@@ -34,7 +35,6 @@ export const NativeLanguageScreen = () => {
     dispatch(nativeLanguageGetThunk(data));
   }, []);
 
-
   return (
     <>
       <div className="nativeLanguageScreenMainDiv">
@@ -46,24 +46,31 @@ export const NativeLanguageScreen = () => {
             }}
           />
           <p className="nativeLanguageTitle">Native Language</p>
-          {nativeLoading ? <div className="nativeLanguageScreenMainDiv"> <CustomSpin size={64} color="gray" /> </div> : <div className="nativeLanguageCountryItems">
-            {nativeData?.map((countryItem) => {
-              return (
-                <div
-                  key={countryItem?.id}
-                  onClick={() => {
-                    navigateNativeUpdate(countryItem);
-                  }}
-                  className="pointer"
-                >
-                  <CustomCountryItem
-                    icon={countryItem.imageFile.path}
-                    title={countryItem.name}
-                  />
-                </div>
-              );
-            })}
-          </div>}
+          {nativeLoading ? (
+            <div className="loadingDiv nativeLanguageScreenMainDiv">
+              {" "}
+              <CustomSpin size={64} color="gray" />{" "}
+            </div>
+          ) : (
+            <div className="nativeLanguageCountryItems">
+              {nativeData?.map((countryItem) => {
+                return (
+                  <div
+                    key={countryItem?.id}
+                    onClick={() => {
+                      navigateNativeUpdate(countryItem);
+                    }}
+                    className="pointer"
+                  >
+                    <CustomCountryItem
+                      icon={countryItem.imageFile.path}
+                      title={countryItem.name}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
         <div className="nativeScreenPaginationDiv">
           <CustomPagination length={nativeLanguageData?.data?.total} />

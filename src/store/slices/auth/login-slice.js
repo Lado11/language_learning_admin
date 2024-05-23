@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { sendLoginInfo } from "../../../services/auth/login-service";
 
 const initialState = {
-  loading: false,
+  loginLoading: false,
   loginResponse: null,
   loginErrors: null,
   loginMessage: "",
@@ -35,16 +35,16 @@ export const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(loginThunk.pending, (state, { payload }) => {
-      state.loading = true;
+      state.loginLoading = true;
     });
     builder.addCase(loginThunk.fulfilled, (state, { payload }) => {
-      state.loading = false;
+      state.loginLoading = false;
       state.loginResponse = payload;
       state.loginMessage = payload.data.message;
       state.token = payload.data.authToken;
     });
     builder.addCase(loginThunk.rejected, (state, { payload }) => {
-      state.loading = false;
+      state.loginLoading = false;
       state.loginErrors = payload;
     });
   },
@@ -53,7 +53,7 @@ export const loginSlice = createSlice({
 export const { deleteReduxToken, deleteErrorMessage } = loginSlice.actions;
 
 export const getLoginLoading = (state) => {
-  return state.loginSlice.loading;
+  return state.loginSlice.loginLoading;
 };
 export const getLoginData = (state) => {
   return state.loginSlice.loginResponse;

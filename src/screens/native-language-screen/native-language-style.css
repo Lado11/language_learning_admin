@@ -67,12 +67,24 @@
   display: flex;
   flex-wrap: wrap;
 }
-
+.nativeInput{
+  display: flex;
+  flex-direction: column;
+}
 .ant-input {
   width: 100% !important;
   max-width: 420px !important;
   min-height: 60px;
   border-radius: 10px;
+  border: 1px solid #7D8FB326;
+}
+
+::placeholder {
+  color: #7D8FB359 !important;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
 }
 
 .upload {

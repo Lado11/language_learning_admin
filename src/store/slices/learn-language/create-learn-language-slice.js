@@ -5,6 +5,8 @@ const initialState = {
   createLearnLanguageLoading: false,
   createLearnLanguageResponse: null,
   createLearnLanguageError: null,
+  createLearnLanguageSuccess: false,
+  selectedLanguages: [],
 };
 
 export const createLearnLanguageThunk = createAsyncThunk(
@@ -22,34 +24,68 @@ export const createLearnLanguageThunk = createAsyncThunk(
 export const createLearnLanguageSlice = createSlice({
   name: "createLearnLanguage",
   initialState,
-  reducers: {},
+  reducers: {
+    deleteLerningCreateResponse: (state) => {
+      state.createLearnLanguageResponse = "";
+    },
+    addLanguages: (state, { payload }) => {
+      state.selectedLanguages.push(payload);
+    },
+    removeLanguagesItem: (state, action) => {
+      state.selectedLanguages = state.selectedLanguages.filter(
+        (item) => item.key !== action.payload
+      );
+    },
+    removeAllLanguages: (state) => {
+      state.selectedLanguages = [];
+    },
+    changeLearnLanguageCreateSuccess: (state) => {
+      state.createLearnLanguageSuccess = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(createLearnLanguageThunk.pending, (state) => {
-      state.nativeCreateloading = true;
+      state.createLearnLanguageLoading = true;
     });
     builder.addCase(
       createLearnLanguageThunk.fulfilled,
       (state, { payload }) => {
-        state.nativeCreateloading = false;
-        state.nativeCreateResponse = payload;
-        state.nativeCreateBool = true;
+        state.createLearnLanguageSuccess = true;
+        state.createLearnLanguageLoading = false;
+        state.createLearnLanguageResponse = payload;
       }
     );
     builder.addCase(createLearnLanguageThunk.rejected, (state, { payload }) => {
-      state.nativeCreateloading = false;
-      state.nativeCreateErrors = payload;
+      state.createLearnLanguageLoading = false;
+      state.createLearnLanguageError = payload;
     });
   },
 });
+
+export const {
+  addLanguages,
+  removeLanguagesItem,
+  changeLearnLanguageCreateSuccess,
+  removeAllLanguages,
+  deleteLerningCreateResponse,
+} = createLearnLanguageSlice.actions;
 
 export const learnLanguageCreateLoading = (state) => {
   return state.createLearnLanguageSlice.createLearnLanguageLoading;
 };
 
 export const learnLanguageCreateResponse = (state) => {
-  return state.createLearnLanguageSlice.learnLanguageCreateResponse;
+  return state.createLearnLanguageSlice.createLearnLanguageResponse;
 };
 
 export const learnLanguageCreateError = (state) => {
   return state.createLearnLanguageSlice.createLearnLanguageError;
+};
+
+export const learnLanguageSelectedLanguages = (state) => {
+  return state.createLearnLanguageSlice.selectedLanguages;
+};
+
+export const learnLanguagesCreateSuccess = (state) => {
+  return state.createLearnLanguageSlice.createLearnLanguageSuccess;
 };

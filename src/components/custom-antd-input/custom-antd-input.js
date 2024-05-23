@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
 
-export const CustomAntdInput = ({ name, placeholder }) => {
+export const CustomAntdInput = ({ name, placeholder,min,type,message }) => {
   const { t } = useTranslation();
 
   return (
@@ -9,10 +9,15 @@ export const CustomAntdInput = ({ name, placeholder }) => {
       name={name}
       rules={[
         {
+          type:type,
+          message: t(`${message}`),
+        },
+        {
+        
           required: true,
         },
         {
-          min: 3,
+          min: min,
           message: t("INPUT_MIN_LENGTH_ERROR"),
         },
       ]}

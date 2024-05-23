@@ -1,5 +1,5 @@
 import { api } from "..";
 
 export const userCreateService = (data) => {
-  return api.put("api/admin/user", data);
+  return api.post("api/admin/user", data);
 };

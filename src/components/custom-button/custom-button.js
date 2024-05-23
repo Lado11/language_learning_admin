@@ -1,8 +1,14 @@
 import React from "react";
 import "./custom-button.css";
 import { Colors } from "../../assets/colors/colors";
+import { CustomSpin } from "../custom-spin/custom-spin";
 
-export const CustomButton = ({ handleSubmit, buttonTitle, buttonIcon }) => {
+export const CustomButton = ({
+  handleSubmit,
+  buttonTitle,
+  buttonIcon,
+  loading,
+}) => {
   return (
     <div className="customButtonMainDiv">
       <button
@@ -11,7 +17,8 @@ export const CustomButton = ({ handleSubmit, buttonTitle, buttonIcon }) => {
         onClick={handleSubmit}
         type="submit"
       >
-        {buttonTitle}
+        <p>{buttonTitle}</p>
+        {loading && <CustomSpin color={Colors.WHITE} size={20} />}
         {buttonIcon ? (
           <img src={buttonIcon} className="custtomButtonIcon" />
         ) : null}

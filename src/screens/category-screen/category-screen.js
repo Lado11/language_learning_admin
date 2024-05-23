@@ -16,7 +16,6 @@ export const CategoryScreen = () => {
   const dispatch = useDispatch();
   const categoryLoading = useSelector(getCategoryGetLoading);
   const categoryData = useSelector(getCategoryGetData)?.data?.list;
-  console.log(categoryData, "data")
   const data = {
     skip: 0,
     limit: 12,

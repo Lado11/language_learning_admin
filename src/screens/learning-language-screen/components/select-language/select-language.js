@@ -1,29 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomSelect } from "../../../../components";
 import "./select-language-style.css";
 import { Colors } from "../../../../assets/colors";
-import britishIcon from "../../../../assets/images/britishCountryIcon.svg.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getNativeGetResponse } from "../../../../store/slices/native-language/native-language-get";
 
-export const SelectLanguage = () => {
+import {
+  addLanguages,
+  getUpdatedLanguages,
+  learnLanguageSelectedLanguages,
+  removeSelectedLanguagesItem,
+} from "../../../../store/slices";
+
+export const SelectLanguage = ({ dataLanguages }) => {
   const dispatch = useDispatch();
-  const [languages, setLanguages] = useState([]);
+  const [newLanguages, setNewLanguages] = useState();
+  // const languages = useSelector(learnLanguageSelectedLanguages);
+  // console.log(languages,"lang")
   const nativeLanguagesResponse = useSelector(getNativeGetResponse);
+  
   const filteredResponse = nativeLanguagesResponse?.data?.list.map((lang) => {
     return {
-      id: lang.id,
-      value: lang.name.toLowerCase(),
-      label: lang.name,
+      _id: lang.id,
+      name: lang.name.toLowerCase(),
+      nameEng: lang.name,
     };
   });
 
-  const onDelete = (searchItem) => {
-    const newLangsArr = languages.filter((lang) => {
-      return lang.label != searchItem;
-    });
-    setLanguages(newLangsArr);
+  const onDelete = (id) => {
+    dispatch(removeSelectedLanguagesItem(id));
   };
+
+  // useEffect(() => {
+  //   dispatch(addLanguages(filteredResponse));
+  // }, [nativeLanguagesResponse?.nativeLanguages]);
 
   return (
     <div className="selectLanguageMainDiv">
@@ -31,23 +41,21 @@ export const SelectLanguage = () => {
       <CustomSelect
         title="Choose Native Language *"
         optionsData={filteredResponse}
-        setLanguage={setLanguages}
-        languages={languages}
       />
       <div className="selectLanguageValuesDiv">
-        {languages.map((lang) => {
+        {dataLanguages?.map((lang) => {
           return (
             <div
-              key={lang.id}
+              key={lang._id}
               className="selectLanguageValuesDivItem"
               style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
             >
-              <span>{lang.label}</span>
+              <span>{lang.name}</span>
               <img src={lang.image} />
               <div
                 className="deleteIcon"
                 onClick={() => {
-                  onDelete(lang.label);
+                  onDelete(lang._id);
                 }}
               >
                 <span>x</span>

@@ -9,14 +9,14 @@ export const customTableCountryData = {
 export const customTableColumns = [
   {
     title: "ID",
-    dataIndex: "key",
-    key: "key",
+    dataIndex: "_id",
+    key: "_id",
     render: (text) => <a>{text}</a>,
   },
   {
     title: "User",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "firstName",
+    key: "firstName",
   },
   {
     title: "Email",
@@ -25,13 +25,13 @@ export const customTableColumns = [
   },
   {
     title: "Phone",
-    dataIndex: "phone",
-    key: "phone",
+    dataIndex: "phoneNumber",
+    key: "phoneNumber",
   },
   {
     title: "Device ID",
-    dataIndex: "deviceId",
-    key: "deviceId",
+    dataIndex: "devices",
+    key: "devices",
   },
   {
     title: "Country",
@@ -47,7 +47,7 @@ export const customTableColumns = [
     ),
   },
   {
-    title: "Action",
+    title: "Status",
     key: "action",
     render: () => (
       <>

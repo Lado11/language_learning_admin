@@ -9,6 +9,7 @@ import { CustomInputField, CustomButton } from "../../../components";
 import { Colors } from "../../../assets/colors/colors";
 import {
   getLoginError,
+  getLoginLoading,
   loginThunk,
 } from "../../../store/slices/auth/login-slice";
 import { loginValidatoinSchema } from "../../../validations/login-validations";
@@ -17,10 +18,11 @@ export const LoginScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const error = useSelector(getLoginError);
+  const loginLoading = useSelector(getLoginLoading);
 
   return (
     <div
-      className="authScreenMainDiv"
+      className="loginScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div className="authScreenSubDiv">
@@ -72,7 +74,10 @@ export const LoginScreen = () => {
               <p style={{ color: Colors.RED }}>
                 {errors.password && touched.password && errors.password}
               </p>
-              <CustomButton buttonTitle={t("LOGIN_NOW")} />
+              <CustomButton
+                buttonTitle={t("LOGIN_NOW")}
+                loading={loginLoading}
+              />
             </form>
           )}
         </Formik>

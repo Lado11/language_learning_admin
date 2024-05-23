@@ -6,10 +6,12 @@ import {
   customTableColumns,
 } from "../../data/custom-table-data";
 
-export const CustomTable = () => (
-  <Table
+export const CustomTable = ({tableData}) => {
+  return(
+    <Table
     columns={customTableColumns}
-    dataSource={customTableData}
+    dataSource={tableData}
     className="customTable"
   />
-);
+  )
+};

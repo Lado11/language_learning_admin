@@ -5,3 +5,27 @@
   border-radius: 50px;
   padding: 47px 94px 47px 94px;
 }
+
+.category_row_input_user{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 420px;
+}
+
+.category_row_input_user .ant-form-item {
+  width: 100% !important;
+  max-width: 206px;
+}
+
+.category_row_input_user  .ant-input{
+  width: 206px !important;
+}
+
+.left{
+  margin-left: 8px;
+}
+
+.ant-form-item-explain-error{
+  width: 220px !important;
+}

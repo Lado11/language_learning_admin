@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./learning-language-screen-style.css";
+import "../../global-styles/global-styles.css";
 import { Colors } from "../../assets/colors/colors";
 import { CustomAddNew, CustomPagination } from "../../components";
 import { LearningLanguageItemCard } from "./components";
@@ -11,7 +12,11 @@ import {
   getLearnLanguagesLoading,
 } from "../../store/slices/learn-language/learn-languages-slice";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
-import { learnLanguageByIdThunk } from "../../store/slices";
+import {
+  changeLearnLanguageCreateSuccess,
+  learnLanguageByIdThunk,
+  removeAllLanguages,
+} from "../../store/slices";
 
 export const LearningLanguageScreen = () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -24,17 +29,14 @@ export const LearningLanguageScreen = () => {
     navigate("/learning-language-create");
   };
   const learningUpdate = (id) => {
-    console.log(id,"id")
     dispatch(learnLanguageByIdThunk(id));
-    localStorage.setItem("learningId",id)
+    localStorage.setItem("learningId", id);
     navigate("/learning-update");
-  }
+  };
 
   useEffect(() => {
     dispatch(learningLanguagesThunk());
   }, []);
-
-
 
   return (
     <div
@@ -48,21 +50,28 @@ export const LearningLanguageScreen = () => {
             onClick={navigateToCreateScreen}
           />
         </div>
-        {learnLanguagesLoading ?   <div className="learningLanguageScreenLoadingDiv"> <CustomSpin size={64} color="gray" /> </div>: <div className="learningLanguageCardItems">
-          {learningLanguagesData?.data?.list.map((lang) => {
-            return (
-              <div className="pointer" key={lang?.id}>
-                <LearningLanguageItemCard
-                  title={lang.name}
-                  count={learningLanguagesData?.data?.total}
-                  onTap={()=>{
-                    learningUpdate(lang?.id)
-                  }}
-                />
-              </div>
-            );
-          })}
-        </div>}
+        {learnLanguagesLoading ? (
+          <div className="learningLanguageScreenLoadingDiv loadingDiv">
+            {" "}
+            <CustomSpin size={64} color="gray" />{" "}
+          </div>
+        ) : (
+          <div className="learningLanguageCardItems">
+            {learningLanguagesData?.data?.list.map((lang) => {
+              return (
+                <div className="pointer" key={lang?.id}>
+                  <LearningLanguageItemCard
+                    title={lang.name}
+                    count={learningLanguagesData?.data?.total}
+                    onTap={() => {
+                      learningUpdate(lang?.id);
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       <div className="learningLanguageScreenPaginationDiv">
         <CustomPagination />
