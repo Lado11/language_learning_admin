@@ -73,16 +73,14 @@ export const CategoryCretae = () => {
         form={form}
         name="category_create"
         onFinish={onFinish}
-        style={{
-          maxWidth: 600,
-        }}
+        className="formAntd"
+
       >
-        <div className="category_row_input">
-          <CustomAntdInput name="category_name" placeholder="Category Name*" />
-          <CustomAntdInput
-            name="category_string"
-            placeholder="localication string*"
-          />
+        <div className="category_row_input_user">
+          <CustomAntdInput name="category_name" placeholder="Category Name*" min={3}/>
+        <div className="left">
+        <CustomAntdInput min={3} name="category_string" placeholder="localication string*" />
+        </div>
         </div>
 
         <Form.Item

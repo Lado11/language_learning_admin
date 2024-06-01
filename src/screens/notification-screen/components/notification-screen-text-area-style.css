@@ -3,7 +3,8 @@
 .notificationScreenTextArea {
   background-color: aliceblue;
   /* height: 120px !important; */
-  padding: 30px;
+  /* padding: 16px; */
+  resize: none !important;
 }
 
 .notificationScreenTextArea::placeholder {
@@ -11,8 +12,8 @@
   font-size: 14px;
   font-weight: 300;
   line-height: 14px;
-  text-align: left;
-  /* padding: 30px; */
+  padding-left: 16px;
+  padding-top: 16px;
 }
 
 .notificationScreenTextArea:hover {

@@ -9,9 +9,9 @@ const initialState = {
 
 export const learningLanguagesThunk = createAsyncThunk(
   "getLearningLanguages",
-  async (_, { rejectWithValues }) => {
+  async (data, { rejectWithValues }) => {
     try {
-      const response = await learnLanguageGetService();
+      const response = await learnLanguageGetService(data);
       return response.data;
     } catch (error) {
       return rejectWithValues(error.message);

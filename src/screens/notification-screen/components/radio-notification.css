@@ -1,0 +1,25 @@
+.ant-radio-inner{
+border-color: #29CC39 !important;
+}
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+    background-color: #29CC39 !important;
+
+}
+
+.customSelectNoth{
+    border: 1px solid #7D8FB326 !important;
+    border-radius: 10px !important;
+}
+.customSelectNoth .ant-select-selector{
+    background-color: white !important;
+}
+
+.ant-select-selection-item{
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB359 !important;
+    margin-left: 10px;
+}

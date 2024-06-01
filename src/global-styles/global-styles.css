@@ -19,8 +19,10 @@
 .authScreenMainDiv {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 100vh;
   border-radius: 50px;
   padding: 47px 94px 47px 94px;
 }
@@ -51,7 +53,6 @@
 }
 
 .createScreenRowInputs {
-  width: 420px;
   justify-content: space-between;
 }
 

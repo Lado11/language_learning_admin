@@ -4,6 +4,8 @@
   border-radius: 10px;
   border: 1px solid;
   padding: 0 20px;
+  margin-left: 10px;
+height: 60px;
 }
 
 .customSearchInput {
@@ -11,8 +13,9 @@
 }
 
 .customSearchInput::placeholder {
-  font-family: "Roboto";
+  font-family: Roboto;
   font-size: 12px;
   font-weight: 700;
-  color: #adb8cc;
+  line-height: 20px;
+color: #ADB8CC;  
 }

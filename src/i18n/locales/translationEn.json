@@ -41,6 +41,7 @@
   "LANGUAGE_ENGLISH_NAME": "Language english name",
   "NATIVE_NAME": "Native Name",
   "LANGUAGE_ICON": "Language Icon",
+  "LEVEL": "Level",
 
   "INPUT_MIN_LENGTH_ERROR": "The input must be at least 3 characters long.",
   "INVALID_USERNAME_OR_PASSWORD": "Invalid username/password"

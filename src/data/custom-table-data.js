@@ -6,35 +6,44 @@ export const customTableCountryData = {
   title: "England",
 };
 
+let num = 1;
+
 export const customTableColumns = [
   {
-    title: "ID",
+    title: "Word",
     dataIndex: "_id",
     key: "_id",
-    render: (text) => <a>{text}</a>,
+    render: (text) => {
+      const newTag = <a>{num}</a>;
+      num++;
+      return newTag;
+    },
+    className: "column-id",
   },
   {
-    title: "User",
+    title: "Language",
     dataIndex: "firstName",
     key: "firstName",
   },
   {
-    title: "Email",
+    title: "Translate",
     dataIndex: "email",
     key: "email",
+    className: "column-email",
   },
   {
-    title: "Phone",
+    title: "Category",
     dataIndex: "phoneNumber",
     key: "phoneNumber",
   },
   {
-    title: "Device ID",
+    title: "Level",
     dataIndex: "devices",
     key: "devices",
+    className: "column-device-id",
   },
   {
-    title: "Country",
+    title: "Status",
     key: "country",
     dataIndex: "country",
     render: () => (
@@ -82,4 +91,43 @@ export const customTableData = [
     deviceId: "123456789",
     tags: ["cool", "teacher"],
   },
+];
+
+
+export const columns = [
+  {
+    id: "_id",
+    text: "Id",
+  },
+  {
+    text: "User",
+    id: "firstName",
+    key: "firstName",
+  },
+  {
+    text: "Email",
+    id: "email",
+    key: "email",
+  },
+  {
+    text: "Phone",
+    id: "phoneNumber",
+    key: "phoneNumber",
+  },
+  {
+    text: "Device ID",
+    id: "phoneNumber",
+    key: "devices",
+  },
+  {
+    text: "Country",
+    id: "phoneNumber",
+    key: "devices",
+  },
+  {
+    text: "Status",
+    id: "phoneNumber",
+    key: "devices",
+  },
+  
 ];

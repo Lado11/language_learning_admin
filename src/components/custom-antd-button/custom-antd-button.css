@@ -4,6 +4,7 @@
   padding: 15px 0 !important;
   height: auto !important;
   border-radius: 10px !important;
+  font-size: 18px !important;
 }
 .loadingButtonDiv {
   display: flex;

@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "../../assets/colors/colors";
 import "./notification-screen-style.css";
-import { NotificationScreenTextArea } from "./components/notification-screen-text-area/notification-screen-text-area";
-import { NotificationScreenInput } from "./components";
 import { CustomButton } from "../../components/custom-button/custom-button";
 import icSendIcon from "../../assets/images/ic_send.svg";
 import { Form } from "antd";
+import { NotificationScreenInput } from "./components/notification-screen-input";
+import { NotificationScreenTextArea } from "./components";
+import { CustomAntdButton } from "../../components";
+import { SelectNotification } from "./components/select-notification";
+import { dataUser, devicesData } from "../../data/radio-data";
 
 export const NotificationScreen = () => {
+  const [device, setDevice] = useState();
+  const [user, setUser] = useState();
+
   const onFinish = (values) => {
     console.log("Success:", values);
   };
@@ -18,7 +24,7 @@ export const NotificationScreen = () => {
 
   return (
     <div
-      className="authScreenMainDiv"
+      className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
       <Form
@@ -28,12 +34,24 @@ export const NotificationScreen = () => {
       >
         <div className="notificationScreenSendFieldsDiv">
           <p className="notificationScreenSendFieldsTitle">Send Notification</p>
+
+         <div className="nothSection">
+         <SelectNotification data={devicesData} defaultValue={"User Device"} />
+          <div className="notificationMiddle">
+            <SelectNotification data={dataUser} defaultValue={"User Subscription "} />
+          </div>
           <NotificationScreenInput name={"id"} placeholder={"User ID*"} />
           <NotificationScreenTextArea
             name={"message"}
             placeholder={"Message Here..."}
           />
-          <CustomButton buttonTitle="Send" buttonIcon={icSendIcon} />
+         
+         </div>
+         <CustomAntdButton
+            title="Send"
+            background={Colors.PURPLE}
+          // loading={nativeUpdateLoading}
+          />
         </div>
       </Form>
     </div>

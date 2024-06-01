@@ -78,7 +78,9 @@
   border-radius: 10px;
   border: 1px solid #7D8FB326;
 }
-
+.formAntd{
+  max-width: 600px;
+}
 ::placeholder {
   color: #7D8FB359 !important;
   font-family: Roboto;
@@ -145,14 +147,20 @@
   .nativeLanguageScreenMainDiv {
     padding: 60px 20px 30px 20px;
     justify-content: center;
-    align-items: center;
+    align-items: start;
   }
   .nativeScreenPaginationDiv {
     margin-top: 20px;
   }
+  .formAntd{
+    width: 100% !important;
+  }
 }
 
 @media only screen and (max-width: 425px) {
+  .formAntd{
+    width: 100% !important;
+  }
   .pointer {
     max-width: 100%;
   }

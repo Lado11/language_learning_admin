@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./learning-language-screen-style.css";
 import "../../global-styles/global-styles.css";
 import { Colors } from "../../assets/colors/colors";
-import { CustomAddNew, CustomPagination } from "../../components";
+import { CustomAddNew, CustomPagination, CustomSpin } from "../../components";
 import { LearningLanguageItemCard } from "./components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,13 +10,9 @@ import {
   learningLanguagesThunk,
   learningLanguages,
   getLearnLanguagesLoading,
-} from "../../store/slices/learn-language/learn-languages-slice";
-import { CustomSpin } from "../../components/custom-spin/custom-spin";
-import {
-  changeLearnLanguageCreateSuccess,
   learnLanguageByIdThunk,
-  removeAllLanguages,
 } from "../../store/slices";
+import {} from "../../components/custom-spin/custom-spin";
 
 export const LearningLanguageScreen = () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -24,6 +20,7 @@ export const LearningLanguageScreen = () => {
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
+  const pageLength = 12;
 
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
@@ -33,14 +30,17 @@ export const LearningLanguageScreen = () => {
     localStorage.setItem("learningId", id);
     navigate("/learning-update");
   };
-
+  const data = {
+    skip: 0,
+    limit: 12,
+  };
   useEffect(() => {
-    dispatch(learningLanguagesThunk());
+    dispatch(learningLanguagesThunk(data));
   }, []);
 
   return (
     <div
-      className="learningLanguageScreenMainDiv"
+      className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div className="learningLanguageScreenSubDiv">
@@ -50,6 +50,7 @@ export const LearningLanguageScreen = () => {
             onClick={navigateToCreateScreen}
           />
         </div>
+        <p className="nativeLanguageTitle">Learning Language</p>
         {learnLanguagesLoading ? (
           <div className="learningLanguageScreenLoadingDiv loadingDiv">
             {" "}
@@ -74,7 +75,7 @@ export const LearningLanguageScreen = () => {
         )}
       </div>
       <div className="learningLanguageScreenPaginationDiv">
-        <CustomPagination />
+        <CustomPagination length={learningLanguagesData?.data?.total} pageLength={pageLength}/>
       </div>
     </div>
   );

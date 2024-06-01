@@ -63,7 +63,24 @@
   line-height: 25px;
   color: #7d8fb3;
 }
+.no_data{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}
+.ant-form-item-explain-error{
+  width: 100% !important;
+}
+.remove_button{
+  cursor: pointer;
+}
 
+.no_data_title{
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 400;
+}
 .category-pagination {
   display: flex;
   width: 100%;
@@ -76,4 +93,25 @@
   flex-direction: row;
   width: 420px;
   justify-content: space-between;
+}
+
+
+.category_row_input_user .ant-form-item {
+  width: 100% !important;
+  max-width: 206px;
+}
+.update_category_input{
+  display: flex;
+  flex-direction: column;
+}
+.category_row_input_user  .ant-input{
+  width: 206px !important;
+}
+
+.left{
+  margin-left: 8px;
+}
+
+.ant-form-item-explain-error{
+  width: 220px !important;
 }

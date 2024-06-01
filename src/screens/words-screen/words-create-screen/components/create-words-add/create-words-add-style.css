@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+
+.addWords {
+  font-family: "Roboto";
+  font-size: 18px;
+  line-height: 30px;
+  text-align: left;
+}
+
+.createWordsAdd {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+}
+
+.addWordsFirstSelect .antd_custom_select {
+  margin: 0;
+}
+
+.addWordsFirstSelect .ant-space,
+.addWordsFirstSelect .ant-space-item,
+.addWordsFirstSelect .ant-select {
+  width: 100% !important;
+}
+
+.createWordsAddInputs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.createWordsAddInputs .antd_custom_select {
+  margin: 0;
+}
+.createWordsAddInputs .ant-select-selector {
+  background-color: white !important;
+  border: 1px solid #eaecf0 !important;
+}
+
+.createWordsAddInputs .ant-select {
+  width: 174px;
+}
+
+.createWordsAdd .createWordsAddSelects .ant-select-selector {
+  background-color: white !important;
+  border: 1px solid #eaecf0 !important;
+}
+
+.createWordsAdd .ant-form-item {
+  width: 47% !important;
+}
+
+.createWordsAdd .ant-input {
+  height: 50px !important;
+}

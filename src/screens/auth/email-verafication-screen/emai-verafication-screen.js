@@ -1,11 +1,31 @@
-import React from "react";
-import "./email-verafication-screen-style.css";
+import React, { useEffect } from "react";
 import { Colors } from "../../../assets/colors/colors";
 import { useTranslation } from "react-i18next";
 import PinInput from "react-pin-input";
+import "./email-verafication-screen-style.css";
+import {
+  saveCode,
+  savedEmail,
+  sendCodeResponseData,
+  sendCodeThunk,
+} from "../../../store/slices";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const EmailVeraficationScreen = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const reduxEmail = useSelector(savedEmail);
+  const storageEmail = localStorage.getItem("email");
+  const sendCodeResponse = useSelector(sendCodeResponseData);
+  const email = reduxEmail ? reduxEmail : storageEmail;
+
+  useEffect(() => {
+    if (sendCodeResponse?.success) {
+      navigate("/resetPassword");
+    }
+  }, [sendCodeResponse?.success]);
 
   return (
     <div
@@ -44,7 +64,11 @@ export const EmailVeraficationScreen = () => {
             borderRadius: 8,
             margin: "0 6px",
           }}
-          onComplete={(value, index) => {}}
+          onComplete={(value) => {
+            dispatch(saveCode(value));
+            localStorage.setItem("code", "112233");
+            dispatch(sendCodeThunk({ email, value }));
+          }}
           autoSelect={true}
           regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
         />

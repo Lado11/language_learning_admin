@@ -8,25 +8,25 @@ export const customCardTileData = [
   {
     icon: userCardIcon,
     title: "SUBSCRIPTION",
-    count: 125,
+    count: "",
     backgroundColor: Colors.LIGHT_GREEN,
   },
   {
     icon: cardCanceledIcon,
     title: "CANCELED",
-    count: 25,
+    count: "",
     backgroundColor: Colors.LIGHT_ORANGE,
   },
   {
     icon: addressCardSolid,
     title: "REGISTERED",
-    count: 25,
+    count: "",
     backgroundColor: Colors.LIGHT_BLUE_SECOND,
   },
   {
     icon: graphIcon,
     title: "ACTIVE_USER",
-    count: 35,
+    count: "",
     backgroundColor: Colors.LIGHT_PURPLE,
   },
 ];

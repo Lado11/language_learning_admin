@@ -5,7 +5,7 @@ const initialState = {
   learnLanguageByIdLoading: false,
   learnLanguageByIdResponse: null,
   learnLanguageByIdError: null,
-  learnUpdatedLanguages: [],
+  learnLanguageUpdateSelectedLanguages: [],
 };
 
 export const learnLanguageByIdThunk = createAsyncThunk(
@@ -25,17 +25,26 @@ export const learnLanguageByIdSlice = createSlice({
   initialState,
   reducers: {
     removeSelectedLanguagesItem: (state, action) => {
+      state.learnLanguageUpdateSelectedLanguages =
+        state.learnLanguageUpdateSelectedLanguages.filter(
+          (item) => item._id !== action.payload
+        );
+    },
+    addLearnLanguageSelectedLanguages: (state, { payload }) => {
+      if (payload) {
+        state.learnLanguageUpdateSelectedLanguages = state.learnLanguageUpdateSelectedLanguages?.filter(
+          (item) => item._id !==payload._id 
+        );
+        state.learnLanguageUpdateSelectedLanguages.push(payload);
+      } else {
+        state.learnLanguageUpdateSelectedLanguages =
+          state.learnLanguageByIdResponse?.data?.nativeLanguages;
+      }
+    },
+    removeUpdateLanguagesItem: (state, action) => {
       state.learnUpdatedLanguages = state.learnUpdatedLanguages.filter(
         (item) => item._id !== action.payload
       );
-    },
-    getNewArr: (state, { payload }) => {
-      if (payload) {
-        state.learnUpdatedLanguages.push(payload);
-      } else {
-        state.learnUpdatedLanguages =
-          state.learnLanguageByIdResponse?.data?.nativeLanguages;
-      }
     },
   },
   extraReducers: (builder) => {
@@ -53,7 +62,10 @@ export const learnLanguageByIdSlice = createSlice({
   },
 });
 
-export const { getNewArr,removeSelectedLanguagesItem } = learnLanguageByIdSlice.actions;
+export const {
+  addLearnLanguageSelectedLanguages,
+  removeSelectedLanguagesItem,
+} = learnLanguageByIdSlice.actions;
 
 export const getLearnLanguageByIdLoading = (state) => {
   return state.learnLanguageByIdSlice.learnLanguageByIdLoading;
@@ -68,5 +80,5 @@ export const getLearnLanguageByIdError = (state) => {
 };
 
 export const getUpdatedLanguages = (state) => {
-  return state.learnLanguageByIdSlice.learnUpdatedLanguages;
+  return state.learnLanguageByIdSlice.learnLanguageUpdateSelectedLanguages;
 };

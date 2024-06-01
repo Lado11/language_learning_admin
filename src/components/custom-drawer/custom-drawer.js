@@ -23,6 +23,7 @@ export const CustomDrawer = ({ open, setOpen }) => {
   useEffect(() => {
     if (!itemName) {
       localStorage.setItem("item", customSideBarData[0].title);
+      navigate("/");
     }
   }, [itemName]);
 

@@ -15,4 +15,8 @@ export * from "./custom-add-new";
 export * from "./custom-search-input";
 export * from "./custom-antd-button";
 export * from "./custom-antd-delete-button";
-export * from "./custom-modal"
+export * from "./custom-modal";
+export * from "./custom-message";
+export * from "./custom-spin";
+export * from "./custom-antd-select";
+export * from "./custom-upload";

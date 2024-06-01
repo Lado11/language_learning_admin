@@ -27,6 +27,9 @@ export const categoryUpdateSlice = createSlice({
     deleteCategoryUpdateBool: (state) => {
       state.categoryUpdateBool = false;
     },
+    deleteCategoryUpdateResponse: (state) => {
+      state.categoryUpdateResponse = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(categoryUpdateThunk.pending, (state) => {
@@ -45,7 +48,7 @@ export const categoryUpdateSlice = createSlice({
 });
 
 
-export const { deleteCategoryUpdateBool } = categoryUpdateSlice.actions;
+export const { deleteCategoryUpdateBool,deleteCategoryUpdateResponse } = categoryUpdateSlice.actions;
 
 
 export const getCategoryUpdateLoading = (state) => {

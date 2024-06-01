@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Colors } from "../../assets/colors/colors";
 import eyeIcon from "../../assets/images/eyeIcon.svg";
 import { useDispatch } from "react-redux";
-import { deleteErrorMessage } from "../../store/slices/auth/login-slice";
 
 export const CustomInputField = ({
   name,
@@ -15,6 +14,7 @@ export const CustomInputField = ({
   onBlur,
   type,
   isPassword,
+  onFocus
 }) => {
   const { t } = useTranslation();
   const [isDisplayed, setIsDisplayed] = useState(false);
@@ -30,7 +30,7 @@ export const CustomInputField = ({
         <p className="customInputLabel">{label}</p>
         {isForgot ? (
           <a
-            href="#"
+            href="/sendEmail"
             style={{ color: Colors.PURPLE }}
             className="customInputLabel customInputForgotLabel"
           >
@@ -49,7 +49,7 @@ export const CustomInputField = ({
           onChange={onChange}
           onBlur={onBlur}
           className="customInput"
-          onFocus={() => dispatch(deleteErrorMessage())}
+          onFocus={onFocus}
           style={{ backgroundColor: Colors.INPUT_BACKGROUND }}
         />
         {isPassword ? (

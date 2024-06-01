@@ -8,7 +8,7 @@ export const Success = ({ messageApi }) => {
 };
 
 export const Error = ({ messageApi, messageError }) => {
-  messageApi.open({
+  messageApi?.open({
     type: "error",
     content: messageError,
   });

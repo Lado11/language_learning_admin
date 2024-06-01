@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
+import "./learning-language-screen-style.css";
 import { Form, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import "./learning-language-screen-style.css";
 import uploadIcon from "../../assets/images/uploadImg.png";
-import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
+import remove_icon from "../../assets/images/remove_icon.png";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput } from "../../components";
-import remove_icon from "../../assets/images/remove_icon.png";
 import {
+  CustomAntdButtonDelete,
+  CustomAntdInput,
+  CustomAntdButton,
+} from "../../components";
+import {
+  addLearnLanguageSelectedLanguages,
   deleteLearnBool,
   deleteLearnUpdateBool,
   getLearnLanguageByIdResponse,
-  getNewArr,
+  getNativeGetloading,
   getUpdatedLanguages,
   getUpdatedLearnLanguageBool,
   getUpdatedLearnLanguageLoading,
@@ -22,36 +26,38 @@ import {
   learnLanguageDeleteThunk,
   learnLanguageUpdateThunk,
   nativeLanguageGetThunk,
+  removeSelectedLanguagesItem,
+  removeUpdateLanguagesItem,
 } from "../../store/slices";
 import { useTranslation } from "react-i18next";
 import { SelectLanguage } from "./components";
+import CustomModal from "../../components/custom-modal/custom-modal";
+import { SelectLearningLang } from "./select-learning-lang";
 
 export const LearningLanguageUpdate = () => {
+  const fileList = [];
   const [form] = Form.useForm();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = new FormData();
+  const deleteBool = useSelector(learnLangBool);
+  const learningId = localStorage.getItem("learningId");
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const [learningLanguageFileList, setLearningLanguageFileList] = useState([]);
   const [learningLanguageFile, setLearningLanguageFile] = useState();
   const [showLearningLanguageUpload, setShowLearningLanguageUpload] =
     useState();
-  const [fileList, setFileList] = useState([]);
-  const [categoryShow, setCategoryShow] = useState();
-  const learningId = localStorage.getItem("learningId");
-  const deleteBool = useSelector(learnLangBool);
   const updateBool = useSelector(getUpdatedLearnLanguageBool);
   const learningLanguageData = useSelector(getLearnLanguageByIdResponse);
-  console.log(learningLanguageData, "log new dtata");
   const deleteLerningLoading = useSelector(learnLanguageDeleteLoading);
   const updateLearningLoading = useSelector(getUpdatedLearnLanguageLoading);
   const learningData = learningLanguageData?.data;
-  const languagesData = learningLanguageData?.data?.nativeLanguages;
   const lerningLangAllData = useSelector(getUpdatedLanguages);
-  console.log(updateBool, "updateBool");
   const updateSelect = useSelector(getUpdatedLanguages);
-
+  const updateSelectedLanguages = useSelector(getUpdatedLanguages);
+  const nativeLanguagesLoading = useSelector(getNativeGetloading);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onFinish = (values) => {
     if (values.image.file != "") {
@@ -71,12 +77,20 @@ export const LearningLanguageUpdate = () => {
     }
   };
 
+  const onDelete = () => {
+    dispatch(learnLanguageDeleteThunk(learningData?.id));
+  };
+
   const handleChange = (info) => {
     setLearningLanguageFile(info.file);
     setShowLearningLanguageUpload(info.fileList[0]);
     if (!info.fileList[0]) {
       info.file = "";
     }
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
   };
 
   const beforeUpload = () => {
@@ -101,7 +115,7 @@ export const LearningLanguageUpdate = () => {
 
   useEffect(() => {
     dispatch(learnLanguageByIdThunk(learningId));
-    dispatch(getNewArr());
+    dispatch(addLearnLanguageSelectedLanguages());
   }, [learningLanguageData?.data?.nativeLanguages?.length]);
 
   useEffect(() => {
@@ -126,15 +140,18 @@ export const LearningLanguageUpdate = () => {
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div className="learningLanguageUpdateFormDiv">
+        <CustomModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          onTab={onDelete}
+        />
         <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
         <Form
           autoComplete="off"
           form={form}
           name="control-hooks"
           onFinish={onFinish}
-          style={{
-            maxWidth: 600,
-          }}
+          className="formAntd"
         >
           <p>{t("LANGUAGE_ENGLISH_NAME")}</p>
           <CustomAntdInput
@@ -198,15 +215,25 @@ export const LearningLanguageUpdate = () => {
                 title="Delete"
                 background={Colors.GRAY_COLOR}
                 onClick={() => {
-                  dispatch(learnLanguageDeleteThunk(learningData?.id));
+                  showModal();
                 }}
               />
             </div>
           </Form.Item>
         </Form>
       </div>
-      <div style={{ width: "44%" }}>
-        <SelectLanguage dataLanguages={updateSelect} />
+      <div className="learnLanguageSelectedLanguages">
+      <SelectLearningLang dataLanguages={updateSelect} onDelete={(id) => {
+          dispatch(removeSelectedLanguagesItem(id));
+        }} />
+        {/* <SelectLanguage dataLanguages={updateSelect} />
+        <SelectLanguage
+          languages={updateSelectedLanguages}
+          onDelete={(id) => {
+            dispatch(removeUpdateLanguagesItem(id));
+          }}
+          loading={nativeLanguagesLoading}
+        /> */}
       </div>
     </div>
   );

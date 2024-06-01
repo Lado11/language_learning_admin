@@ -21,6 +21,8 @@ export const NativeLanguageScreen = () => {
   const nativeLanguageData = useSelector(getNativeGetResponse);
   const token = localStorage.getItem("token");
   const nativeData = nativeLanguageData?.data?.list;
+  const pageLength = 12;
+
 
   const navigateNativeUpdate = (countryItem) => {
     localStorage.setItem("nativeId", countryItem?.id);
@@ -46,10 +48,12 @@ export const NativeLanguageScreen = () => {
             }}
           />
           <p className="nativeLanguageTitle">Native Language</p>
+          {!nativeData?.length ? <div>
+            <p>No data</p>
+          </div>:null}
           {nativeLoading ? (
             <div className="loadingDiv nativeLanguageScreenMainDiv">
-              {" "}
-              <CustomSpin size={64} color="gray" />{" "}
+              <CustomSpin size={64} color="gray" />
             </div>
           ) : (
             <div className="nativeLanguageCountryItems">
@@ -73,7 +77,9 @@ export const NativeLanguageScreen = () => {
           )}
         </div>
         <div className="nativeScreenPaginationDiv">
-          <CustomPagination length={nativeLanguageData?.data?.total} />
+          <CustomPagination length={nativeLanguageData?.data?.total}pageLength={pageLength}  func={()=>{
+            nativeLanguageGetThunk()
+          }}/>
         </div>
       </div>
     </>

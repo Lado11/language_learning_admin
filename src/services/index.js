@@ -45,3 +45,6 @@ api.interceptors.response.use(
 
 export * from "./learn-language/update-learn-language-service";
 export * from "./learn-language/get-learn-language-byId-service";
+export * from "./words";
+export * from "./auth/send-email-service";
+export * from "./auth/send-code-service";

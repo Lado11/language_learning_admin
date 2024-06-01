@@ -27,6 +27,11 @@ export const learnLanguageUpdateSlice = createSlice({
     deleteLearnUpdateBool: (state) => {
       state.learnLanguageBool = false;
     },
+    removeUpdateLanguagesItem: (state, action) => {
+      state.selectedLanguages = state.selectedLanguages.filter(
+        (item) => item._id !== action.payload
+      );
+    },
   
   },
   extraReducers: (builder) => {

@@ -1,15 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CustomInputField, CustomButton } from "../../../components";
 import { Colors } from "../../../assets/colors/index";
 import { useTranslation } from "react-i18next";
-import { resetPasswordThunk } from "../../../store/slices/auth";
+import {
+  deleteResponse,
+  resetPasswordLoading,
+  resetPasswordResponse,
+  resetPasswordThunk,
+  savedCode,
+  savedEmail,
+} from "../../../store/slices";
 import "../../../global-styles/global-styles.css";
+import { resetPasswordValidation } from "../../../validations";
+import { useNavigate } from "react-router-dom";
 
 export const ResetSendPasswordScreen = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { t } = useTranslation();
+  const reduxCode = useSelector(savedCode);
+  const storageCode = localStorage.getItem("code");
+  const code = reduxCode ? reduxCode : storageCode;
+  const reduxEmail = useSelector(savedEmail);
+  const storageEmail = localStorage.getItem("email");
+  const email = reduxEmail ? reduxEmail : storageEmail;
+  const resetPasswordLoadingData = useSelector(resetPasswordLoading);
+  const responseResetPassword = useSelector(resetPasswordResponse);
+
+
+useEffect(()=>{
+if(responseResetPassword?.success === true){
+  navigate("/")
+}
+},[responseResetPassword])
 
   return (
     <div
@@ -21,9 +46,10 @@ export const ResetSendPasswordScreen = () => {
         <Formik
           initialValues={{ username: "", password: "" }}
           onSubmit={(values) => {
-            dispatch(resetPasswordThunk(values));
+            const password = values.password;
+            dispatch(resetPasswordThunk({ email, code, password }));
           }}
-          // validationSchema={loginValidatoinSchema}
+          validationSchema={resetPasswordValidation}
         >
           {({
             values,
@@ -34,7 +60,11 @@ export const ResetSendPasswordScreen = () => {
             handleSubmit,
           }) => (
             <form onSubmit={handleSubmit} autoComplete="off">
+              <p className="errorMessage">{responseResetPassword?.message}</p>
               <CustomInputField
+              onFocus={()=>{
+                dispatch(deleteResponse())
+              }}
                 type="password"
                 name="password"
                 placeholder={t("NEW_PASSWORD")}
@@ -43,7 +73,13 @@ export const ResetSendPasswordScreen = () => {
                 value={values.email}
                 isPassword={true}
               />
+              <p style={{ color: Colors.RED }}>
+                {errors.password && touched.password && errors.password}
+              </p>
               <CustomInputField
+               onFocus={()=>{
+                dispatch(deleteResponse())
+              }}
                 type="password"
                 name="confirmPassword"
                 placeholder={t("CONFIRM_PASSWORD")}
@@ -53,9 +89,14 @@ export const ResetSendPasswordScreen = () => {
                 isPassword={true}
               />
               <p style={{ color: Colors.RED }}>
-                {errors.username && touched.username && errors.username}
+                {errors.confirmPassword &&
+                  touched.confirmPassword &&
+                  errors.confirmPassword}
               </p>
-              <CustomButton buttonTitle={t("SEND_CODE")} />
+              <CustomButton
+                buttonTitle={t("SEND_CODE")}
+                loading={resetPasswordLoadingData}
+              />
             </form>
           )}
         </Formik>

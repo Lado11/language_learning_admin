@@ -2,6 +2,7 @@ import React from "react";
 import "./learning-language-item-card-style.css";
 import { Colors } from "../../../assets/colors/colors";
 import AvatarGroup from "react-avatar-group";
+import { sliceText } from "../../utils/helper";
 
 export const LearningLanguageItemCard = ({ title, count, onTap }) => {
   return (
@@ -11,7 +12,7 @@ export const LearningLanguageItemCard = ({ title, count, onTap }) => {
       onClick={onTap}
     >
       <div className="learningLanguageCardFirstLine">
-        <p className="learningLanguageCardTitle">{title}</p>
+        <p className="learningLanguageCardTitle">{sliceText(title)}</p>
         <div className="learningLanguageCardUsersCount">
           <p className="learningLanguageCardUsersCountText">{count} Users</p>
         </div>

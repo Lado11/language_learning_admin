@@ -1,5 +1,5 @@
 import { api } from "..";
 
-export const userDeleteService = (data) => {
-  return api.put("api/admin/user", data);
+export const userDeleteService = (id) => {
+  return api.delete(`api/admin/user?id=${id}`);
 };

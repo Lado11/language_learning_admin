@@ -10,15 +10,15 @@ import remove_icon from "../../assets/images/remove_icon.png";
 import {
   categoryDeleteThunk,
   categoryUpdateThunk,
-  deleteCategoryDeleteBool,
-  deleteCategoryUpdateBool,
-  deleteNativeUpdateBool,
+  deleteCategoryDeleteResponse,
+  deleteCategoryUpdateResponse,
   getCategoryDeleteBool,
+  getCategoryDeleteData,
   getCategoryDeleteLoading,
   getCategoryUpdateBool,
+  getCategoryUpdateData,
   getCategoryUpdateLoading,
 } from "../../store/slices";
-
 import { categoryGetIdThunk, getCategoryGetIdResponse } from "../../store/slices/category/get-id-category";
 import CustomModal from "../../components/custom-modal/custom-modal";
 
@@ -37,6 +37,8 @@ export const CategoryUpdate = () => {
   const categoryUpdateBool = useSelector(getCategoryUpdateBool);
   const categoryDeleteBool = useSelector(getCategoryDeleteBool);
   const categoryUpdateLoading = useSelector(getCategoryUpdateLoading);
+  const categoryDeleteResponse = useSelector(getCategoryDeleteData);
+  const categoryUpdateResponse = useSelector(getCategoryUpdateData);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const onFinish = (values) => {
@@ -88,38 +90,45 @@ export const CategoryUpdate = () => {
   }, [nativeLanguageData]);
 
   useEffect(() => {
-    if (categoryUpdateBool === true || categoryDeleteBool === true ) {
+    if (categoryUpdateResponse?.success === true || categoryDeleteResponse?.success === true) {
       navigate("/category");
     }
-    dispatch(deleteCategoryDeleteBool());
-    dispatch(deleteCategoryUpdateBool());
-  }, [categoryUpdateBool,categoryDeleteBool]);
+    dispatch(deleteCategoryDeleteResponse());
+    dispatch(deleteCategoryUpdateResponse());
+  }, [categoryUpdateResponse?.success, categoryDeleteResponse?.success]);
 
   const showModal = () => {
     setIsModalOpen(true);
-};
+  };
   const onTab = () => {
     dispatch(categoryDeleteThunk(categoryId))
   }
 
   return (
     <div className="nativeLanguageScreenMainDiv">
-      <p className="nativeLanguageTitle">Update Category</p>
-      <CustomModal isModalOpen={isModalOpen}  setIsModalOpen={setIsModalOpen} onTab={onTab}/>
+     <div>
+     <p className="nativeLanguageTitle">Update Category</p>
+      <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} onTab={onTab} />
 
       <Form
         autoComplete="off"
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-        style={{
-          maxWidth: 600,
-        }}
+        className="formAntd"
+
       >
-        <p>Category Name</p>
-        <CustomAntdInput name="localization" placeholder="Food" />
-        <p>localication string*</p>
-        <CustomAntdInput name="name" placeholder="localication string*" />
+        <div className="category_row_input_user">
+          <div className="update_category_input">
+            <p>Category Name</p>
+            <CustomAntdInput name="localization" placeholder="Category Name*" min={3} />
+          </div>
+          <div className="update_category_input left">
+            <p>localication string*</p>
+            <CustomAntdInput min={3} name="name" placeholder="localication string*" />
+          </div>
+        </div>
+      
         <p>Category Icon</p>
         <Form.Item
           name="image"
@@ -133,10 +142,11 @@ export const CategoryUpdate = () => {
             <div className="imgae_upload_design">
               <div className="remove_icon_div">
                 <img
+                  className="remove_button"
                   src={remove_icon}
                   onClick={() => {
-                    setFileList(null);
-                    setCategoryShow(null);
+                    setFileList();
+                    setCategoryShow();
                   }}
                 />
               </div>
@@ -147,7 +157,6 @@ export const CategoryUpdate = () => {
             </div>
           ) : (
             <Upload
-              // defaultFileList={[nativeData?.imageFile]}
               onChange={handleChange}
               beforeUpload={beforeUpload}
               {...props}
@@ -180,6 +189,7 @@ export const CategoryUpdate = () => {
           </div>
         </Form.Item>
       </Form>
+     </div>
     </div>
   );
 };

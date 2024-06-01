@@ -24,6 +24,9 @@ export const nativeLanguageDeleteSlice = createSlice({
   name: "nativeDelete",
   initialState,
   reducers: {
+    deleteNativeDeleteResponse: (state) => {
+      state.nativeDeleteResponse = "";
+    },
     deleteNativeDeleteBool: (state) => {
       state.nativeDeleteBool = false;
     },
@@ -50,7 +53,7 @@ export const nativeLanguageDeleteSlice = createSlice({
   },
 });
 
-export const { deleteNativeDeleteBool } = nativeLanguageDeleteSlice.actions;
+export const { deleteNativeDeleteBool ,deleteNativeDeleteResponse} = nativeLanguageDeleteSlice.actions;
 
 export const getNativeDeleteloading = (state) => {
   return state.nativeLanguageDeleteSlice.nativeDeleteloading;

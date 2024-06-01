@@ -1,5 +1,5 @@
 import { api } from "..";
 
-export const learnLanguageGetService = () => {
-  return api.get("api/admin/language/learn?skip=0&limit=10");
+export const learnLanguageGetService = (data) => {
+  return api.get(`api/admin/language/learn?skip=${data.skip}&limit=${data.limit}`);
 };

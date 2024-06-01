@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "antd";
 import "./notification-screen-text-area-style.css";
-import { Colors } from "../../../../assets/colors/colors";
+import { Colors } from "../../../assets/colors/colors";
 import { Form } from "antd";
 
 const { TextArea } = Input;
@@ -22,7 +22,7 @@ export const NotificationScreenTextArea = ({ name, placeholder }) => (
         rows={4}
         placeholder={placeholder}
         className="notificationScreenTextArea"
-        style={{ backgroundColor: Colors.INPUT_BACKGROUND }}
+        style={{ backgroundColor: Colors.WHITE }}
       />
     </Form.Item>
   </>

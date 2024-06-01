@@ -1,3 +1,8 @@
+.learnLanguageCreateScreenMainDiv {
+  justify-content: space-between;
+  align-items: start;
+}
+
 .learningLanguageScreenMainDiv {
   display: flex;
   flex-direction: column;
@@ -39,15 +44,19 @@
   justify-content: center;
 }
 
-@media screen and (max-width: 1024px) {
-  .learningLanguageScreenMainDiv {
+.learnLanguageSelectedLanguages {
+  width: 44%;
+}
+
+@media screen and (max-width: 1440px) {
+  .learnLanguageUpdateScreenMainDiv {
     padding: 60px 40px 30px 40px;
   }
 }
 
 @media screen and (max-width: 1024px) {
-  .learningLanguageScreenMainDiv {
-    padding: 60px 40px 30px 40px;
+  .learnLanguageUpdateScreenMainDiv {
+    padding: 60px 20px 30px 20px;
   }
   .learningLanguageScreenSubDiv {
     display: flex;
@@ -55,7 +64,6 @@
     align-items: center;
   }
   .learningLanguageCardItems {
-    justify-content: center;
     margin-bottom: 10px;
   }
 }
@@ -70,13 +78,28 @@
     align-items: center;
   }
   .learningLanguageCardItems {
-    justify-content: center;
     margin-bottom: 10px;
   }
 }
 
-@media screen and (max-width: 1024px) {
-  .learningLanguageScreenMainDiv {
+@media screen and (max-width: 425px) {
+  .learnLanguageUpdateScreenMainDiv {
+    display: flex;
+    /* flex-direction: column !important; */
+    flex-flow: column-reverse !important;
+    align-items: center;
     padding: 60px 10px 30px 10px;
+  }
+  .learningLanguageUpdateFormDiv {
+    width: 80%;
+  }
+  .learnLanguageSelectedLanguages {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+  }
+  .selectLanguageMainDiv {
+    width: 100%;
+    margin-bottom: 20px;
   }
 }

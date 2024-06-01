@@ -9,7 +9,7 @@ export const FeedbackScreen = () => {
 
   return (
     <div
-      className="authScreenMainDiv"
+      className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div>

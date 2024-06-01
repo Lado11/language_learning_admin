@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
 import "../../../global-styles";
@@ -11,14 +11,21 @@ import {
   getLoginError,
   getLoginLoading,
   loginThunk,
-} from "../../../store/slices/auth/login-slice";
-import { loginValidatoinSchema } from "../../../validations/login-validations";
+} from "../../../store/slices";
+import { loginValidatoinSchema } from "../../../validations";
+import { useNavigate } from "react-router-dom";
+import { deleteErrorMessage } from "../../../store/slices";
 
 export const LoginScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const error = useSelector(getLoginError);
   const loginLoading = useSelector(getLoginLoading);
+
+  useEffect(() => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("code");
+  }, []);
 
   return (
     <div
@@ -56,6 +63,7 @@ export const LoginScreen = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
+                onFocus={() => dispatch(deleteErrorMessage())}
               />
               <p style={{ color: Colors.RED }}>
                 {errors.email && touched.email && errors.email}
@@ -70,6 +78,7 @@ export const LoginScreen = () => {
                 onBlur={handleBlur}
                 value={values.password}
                 isPassword={true}
+                onFocus={() => dispatch(deleteErrorMessage())}
               />
               <p style={{ color: Colors.RED }}>
                 {errors.password && touched.password && errors.password}

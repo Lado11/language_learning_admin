@@ -1,15 +1,32 @@
-import React from "react";
-import "../../../global-styles/global-styles.css";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { CustomInputField, CustomButton } from "../../../components";
+import { sendEmailValidatoinSchema } from "../../../validations";
 import { Colors } from "../../../assets/colors/index";
 import { useTranslation } from "react-i18next";
-import { sendEmailThunk } from "../../../store/slices/auth/send-email-slice";
+import {
+  sendEmailResponse,
+  sendEmailThunk,
+  deleteSendEmailResponse,
+  saveSendedEmail,
+  sendEmailLoading,
+} from "../../../store/slices";
+import "../../../global-styles/global-styles.css";
 
 export const ResetPasswordEmail = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const sendEmailResponseData = useSelector(sendEmailResponse);
+  const sendEmailLoadingData = useSelector(sendEmailLoading);
+
+  useEffect(() => {
+    if (sendEmailResponseData?.success) {
+      navigate("/emailVerafication");
+    }
+  }, [sendEmailResponseData?.success]);
 
   return (
     <div
@@ -21,9 +38,11 @@ export const ResetPasswordEmail = () => {
         <Formik
           initialValues={{ username: "", password: "" }}
           onSubmit={(values) => {
+            dispatch(saveSendedEmail(values.email));
+            localStorage.setItem("email", values.email);
             dispatch(sendEmailThunk(values));
           }}
-          // validationSchema={loginValidatoinSchema}
+          validationSchema={sendEmailValidatoinSchema}
         >
           {({
             values,
@@ -35,17 +54,27 @@ export const ResetPasswordEmail = () => {
           }) => (
             <form onSubmit={handleSubmit} autoComplete="off">
               <CustomInputField
-                type="text"
+                type="email"
                 name="email"
                 placeholder={t("EMAIL")}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
+                onFocus={() => dispatch(deleteSendEmailResponse())}
               />
               <p style={{ color: Colors.RED }}>
-                {errors.username && touched.username && errors.username}
+                {errors.email && touched.email && errors.email}
               </p>
-              <CustomButton buttonTitle={t("SEND_CODE")} />
+              {sendEmailResponseData?.message &&
+                sendEmailResponseData?.success === false && (
+                  <p className="errorMessage">
+                    {sendEmailResponseData?.message}
+                  </p>
+                )}
+              <CustomButton
+                buttonTitle={t("SEND_CODE")}
+                loading={sendEmailLoadingData}
+              />
             </form>
           )}
         </Formik>

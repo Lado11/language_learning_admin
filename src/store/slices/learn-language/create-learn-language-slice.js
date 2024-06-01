@@ -29,13 +29,18 @@ export const createLearnLanguageSlice = createSlice({
       state.createLearnLanguageResponse = "";
     },
     addLanguages: (state, { payload }) => {
-      state.selectedLanguages.push(payload);
+      state.selectedLanguages = state.selectedLanguages.filter(
+        (item) => item._id !== payload._id 
+      );
+      state.selectedLanguages.push(payload) 
     },
     removeLanguagesItem: (state, action) => {
       state.selectedLanguages = state.selectedLanguages.filter(
-        (item) => item.key !== action.payload
+        (item) => item._id !== action.payload
       );
     },
+    removeAllCreateSelectedLanguages: (state) => {},
+
     removeAllLanguages: (state) => {
       state.selectedLanguages = [];
     },
@@ -63,10 +68,11 @@ export const createLearnLanguageSlice = createSlice({
 });
 
 export const {
+  removeAllLanguages,
   addLanguages,
   removeLanguagesItem,
   changeLearnLanguageCreateSuccess,
-  removeAllLanguages,
+  removeAllCreateSelectedLanguages,
   deleteLerningCreateResponse,
 } = createLearnLanguageSlice.actions;
 

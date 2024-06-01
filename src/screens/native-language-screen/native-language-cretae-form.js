@@ -80,13 +80,12 @@ export const NativeLanguageCretae = () => {
     <div className="nativeLanguageCreateScreenMainDiv">
       <p className="nativeLanguageTitle">Add Native Language</p>
       <Form
+      className="formAntd"
         autoComplete="off"
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-        style={{
-          maxWidth: 600,
-        }}
+      
       >
         <div className="nativeInput">
           <CustomAntdInput name="nameEng" placeholder=" Language English Name*" />

@@ -24,6 +24,9 @@ export const categoryDeleteSlice = createSlice({
   name: "categoryDelete",
   initialState,
   reducers: {
+    deleteCategoryDeleteResponse: (state) => {
+      state.categoryDeleteResponse = false;
+    },
     deleteCategoryDeleteBool: (state) => {
       state.categoryDeleteBool = false;
     },
@@ -44,7 +47,7 @@ export const categoryDeleteSlice = createSlice({
   },
 });
 
-export const { deleteCategoryDeleteBool } = categoryDeleteSlice.actions;
+export const { deleteCategoryDeleteBool ,deleteCategoryDeleteResponse} = categoryDeleteSlice.actions;
 
 export const getCategoryDeleteLoading = (state) => {
   return state.categoryDeleteSlice.categoryDeleteloading;

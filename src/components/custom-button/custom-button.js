@@ -19,9 +19,9 @@ export const CustomButton = ({
       >
         <p>{buttonTitle}</p>
         {loading && <CustomSpin color={Colors.WHITE} size={20} />}
-        {buttonIcon ? (
+        {/* {buttonIcon ? (
           <img src={buttonIcon} className="custtomButtonIcon" />
-        ) : null}
+        ) : null} */}
       </button>
     </div>
   );

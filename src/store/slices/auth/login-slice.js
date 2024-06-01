@@ -63,7 +63,6 @@ export const getLoginError = (state) => {
 };
 
 export const getLoginMessage = (state) => {
-  console.log(state.loginSlice.loginMessage, "state.loginSlice.loginMessage");
   return state.loginSlice.loginMessage;
 };
 

@@ -24,6 +24,9 @@ export const nativeLanguageUpdateSlice = createSlice({
   name: "nativeUpdate",
   initialState,
   reducers: {
+    deleteNativeUpdateResponse: (state) => {
+      state.nativeUpdateResponse = "";
+    },
     deleteNativeUpdateBool: (state) => {
       state.nativeUpdateBool = false;
     },
@@ -50,7 +53,7 @@ export const nativeLanguageUpdateSlice = createSlice({
   },
 });
 
-export const { deleteNativeUpdateBool } = nativeLanguageUpdateSlice.actions;
+export const { deleteNativeUpdateBool,deleteNativeUpdateResponse } = nativeLanguageUpdateSlice.actions;
 
 export const getNativeUpdateLoading = (state) => {
   return state.nativeLanguageUpdateSlice.nativeUpdateloading;
