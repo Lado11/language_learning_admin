@@ -7,11 +7,14 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { SideBarItem } from "../custom-sidebar/components/side-bar-item";
 import { Colors } from "../../assets/colors/colors";
+import { removeAllLanguages } from "../../store/slices";
+import { useDispatch } from "react-redux";
 
 export const CustomDrawer = ({ open, setOpen }) => {
   const { t } = useTranslation();
   const [select, setSelect] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   let itemName;
 
   if (localStorage.getItem("item")) {

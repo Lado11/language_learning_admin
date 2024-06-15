@@ -1,7 +1,8 @@
 import { Form, Input } from "antd";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export const CustomAntdInput = ({ name, placeholder,min,type,message }) => {
+export const CustomAntdInput = ({rules, disabled,defaultValue,name, placeholder,min,type,message }) => {
   const { t } = useTranslation();
 
   return (
@@ -14,7 +15,7 @@ export const CustomAntdInput = ({ name, placeholder,min,type,message }) => {
         },
         {
         
-          required: true,
+          required: rules,
         },
         {
           min: min,
@@ -23,7 +24,7 @@ export const CustomAntdInput = ({ name, placeholder,min,type,message }) => {
       ]}
       normalize={(value) => value.trimStart()}
     >
-      <Input placeholder={placeholder} />
+      <Input disabled={disabled}  defaultValue={defaultValue}  placeholder={placeholder} />
     </Form.Item>
   );
 };

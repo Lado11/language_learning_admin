@@ -42,13 +42,13 @@ export const CategoryScreen = () => {
         }}
       />
       <p className="category-title">Category</p>
-      <div className="select-row">
+      {/* <div className="select-row">
         <CustomSelect title={"Learning Language"} />
         <div className="select-middle">
           <CustomSelect title={"Neative Language"} />
         </div>
         <CustomSelect title={"Category Name"} />
-      </div>
+      </div> */}
       <p className="category-table-title">Category</p>
       <div className="category-item-pagination">
         {!categoryData?.length && !categoryLoading ? <div className="no_data">

@@ -5,7 +5,7 @@ import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin } from "../../components";
 import remove_icon from "../../assets/images/remove_icon.png";
 import {
   categoryDeleteThunk,
@@ -19,8 +19,9 @@ import {
   getCategoryUpdateData,
   getCategoryUpdateLoading,
 } from "../../store/slices";
-import { categoryGetIdThunk, getCategoryGetIdResponse } from "../../store/slices/category/get-id-category";
+import { categoryGetIdThunk, getCategoryGetIdResponse, getCategoryGetIdloading } from "../../store/slices/category/get-id-category";
 import CustomModal from "../../components/custom-modal/custom-modal";
+import { beforeUpload, props } from "../utils/helper";
 
 export const CategoryUpdate = () => {
   const [form] = Form.useForm();
@@ -39,6 +40,7 @@ export const CategoryUpdate = () => {
   const categoryUpdateLoading = useSelector(getCategoryUpdateLoading);
   const categoryDeleteResponse = useSelector(getCategoryDeleteData);
   const categoryUpdateResponse = useSelector(getCategoryUpdateData);
+  const catgeoryLoadingId = useSelector(getCategoryGetIdloading);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const onFinish = (values) => {
@@ -68,18 +70,7 @@ export const CategoryUpdate = () => {
     }
   };
 
-  const beforeUpload = () => {
-    return false;
-  };
 
-  const props = {
-    accept: ".png",
-    onRemove: (file) => {
-      const index = fileList?.indexOf(file);
-      const newFileList = fileList?.slice();
-      newFileList?.splice(index, 1);
-    },
-  };
 
   useEffect(() => {
     form.setFieldsValue({
@@ -109,7 +100,9 @@ export const CategoryUpdate = () => {
      <div>
      <p className="nativeLanguageTitle">Update Category</p>
       <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} onTab={onTab} />
-
+{catgeoryLoadingId ? <div className="CustomSpinUpdate">
+       <CustomSpin size={120} color={Colors.GRAY_COLOR} />
+        </div>:
       <Form
         autoComplete="off"
         form={form}
@@ -188,7 +181,7 @@ export const CategoryUpdate = () => {
             />
           </div>
         </Form.Item>
-      </Form>
+      </Form>}
      </div>
     </div>
   );

@@ -15,11 +15,11 @@ import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
 import { CustomAntdInput } from "../../components";
 import { Error, Success } from "../../components/custom-message/custom-message";
+import { beforeUpload, props } from "../utils/helper";
 
 export const NativeLanguageCretae = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const formData = new FormData();
   const nativeCreateBool = useSelector(getNativeCreateBool);
   const [fileList, setFileList] = useState([]);
@@ -27,24 +27,21 @@ export const NativeLanguageCretae = () => {
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const nativeLanguageData = useSelector(getNativeCreateData);
   const [messageApi, contextHolder] = message.useMessage();
-
   const craeteLoading = useSelector(getNativeCreateLoading);
+  const messageError = nativeLanguageData?.message;
+
   const onFinish = (values) => {
     if (values.image.file != "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
       formData.append("image", categoryShow);
       dispatch(nativeLanguageCreateThunk(formData));
-      form.resetFields();
-      setCategoryShow("");
     } else {
       console.log(values, "values");
     }
   };
 
   useEffect(() => {
-    if (nativeCreateBool === true) {
-    }
     dispatch(deleteNativeCreateBool());
   }, [nativeCreateBool]);
 
@@ -55,10 +52,15 @@ export const NativeLanguageCretae = () => {
       info.file = "";
     }
   };
-  const beforeUpload = () => {
-    return false;
-  };
-  const messageError = nativeLanguageData?.message;
+
+
+  useEffect(() => {
+    if (nativeLanguageData?.success === true) {
+      form.resetFields();
+      setCategoryShow("");
+      dispatch(deleteNativeCreateResponse());
+    }
+  }, [nativeLanguageData?.success])
 
   useEffect(() => {
     nativeLanguageData?.success === true && Success({ messageApi });
@@ -67,31 +69,22 @@ export const NativeLanguageCretae = () => {
     dispatch(deleteNativeCreateResponse());
   }, [nativeLanguageData?.success]);
 
-  const props = {
-    accept: ".png",
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-    },
-  };
+
 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
       <p className="nativeLanguageTitle">Add Native Language</p>
       <Form
-      className="formAntd"
+        className="formAntd"
         autoComplete="off"
         form={form}
         name="control-hooks"
         onFinish={onFinish}
-      
       >
         <div className="nativeInput">
-          <CustomAntdInput name="nameEng" placeholder=" Language English Name*" />
-          <CustomAntdInput name="name" placeholder="Native Name*" />
+          <CustomAntdInput rules={true} name="nameEng" placeholder=" Language English Name*" />
+          <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
         </div>
-
         <Form.Item
           name="image"
           rules={[
@@ -113,7 +106,6 @@ export const NativeLanguageCretae = () => {
             )}
           </Upload>
         </Form.Item>
-
         <Form.Item>
           {contextHolder}
           <CustomAntdButton

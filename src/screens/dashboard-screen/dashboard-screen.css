@@ -1,12 +1,13 @@
 .dashboardCardsMainDiv {
-  width: 52%;
+display: flex;
+flex-wrap: wrap;
 }
 
 .dashboardScreen {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 60px 45px 0 45px;
+  padding:60px 82px 30px 82px;
   background-color: #ffffff;
   border-radius: 50px;
 }
@@ -28,11 +29,30 @@
   display: flex;
   flex-direction: row;
 }
+.dashboardButtonDiv{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
+  
+}
+
+.dashboardButton{
+  background-color: white ;
+
+  color: #8833FF;
+  border: none;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  
+  cursor: pointer;
+}
 
 @media only screen and (max-width: 1440px) {
-  .dashboardCardsMainDiv {
-    width: 60%;
-  }
+  
 
   .dashboardScreenItem {
     flex-direction: column;
@@ -40,9 +60,7 @@
 }
 
 @media only screen and (max-width: 1024px) {
-  .dashboardCardsMainDiv {
-    width: 100%;
-  }
+  
 
   .dashboardScreenItem {
     flex-direction: column;

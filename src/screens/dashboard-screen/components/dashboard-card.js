@@ -8,7 +8,7 @@ import cardCanceledIcon from "../../../assets/images/cardCanceledIcon.svg";
 import addressCardSolid from "../../../assets/images/addressCardSolid.svg";
 import graphIcon from "../../../assets/images/graphIcon.svg";
 
-export const DashboardCard = ({ data }) => {
+export const DashboardCard = ({ data,loading }) => {
   const { t } = useTranslation();
 
   const customCardTileData = [
@@ -40,10 +40,10 @@ export const DashboardCard = ({ data }) => {
 
   return (
     <div className="dashboardCardsMainDiv">
-      <div className="customCardTileMainDiv">
         {customCardTileData?.map((cardInfo, ind) => {
           return (
             <CustomCardTile
+            loading={loading}
               key={ind}
               icon={cardInfo.icon}
               title={t(`${cardInfo.title}`)}
@@ -52,7 +52,6 @@ export const DashboardCard = ({ data }) => {
             />
           );
         })}
-      </div>
     </div>
   );
 };

@@ -12,10 +12,8 @@ import {
   getLearnLanguagesLoading,
   learnLanguageByIdThunk,
 } from "../../store/slices";
-import {} from "../../components/custom-spin/custom-spin";
 
 export const LearningLanguageScreen = () => {
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8];
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
@@ -53,19 +51,19 @@ export const LearningLanguageScreen = () => {
         <p className="nativeLanguageTitle">Learning Language</p>
         {learnLanguagesLoading ? (
           <div className="learningLanguageScreenLoadingDiv loadingDiv">
-            {" "}
-            <CustomSpin size={64} color="gray" />{" "}
+            <CustomSpin size={64} color="gray" />
           </div>
         ) : (
           <div className="learningLanguageCardItems">
-            {learningLanguagesData?.data?.list.map((lang) => {
+            {learningLanguagesData?.data?.list.map((lang, index) => {
               return (
-                <div className="pointer" key={lang?.id}>
+                <div className="pointer" key={index}>
                   <LearningLanguageItemCard
+                    data={lang?.nativeLanguages}
                     title={lang.name}
                     count={learningLanguagesData?.data?.total}
                     onTap={() => {
-                      learningUpdate(lang?.id);
+                      learningUpdate(lang?._id);
                     }}
                   />
                 </div>
@@ -75,7 +73,7 @@ export const LearningLanguageScreen = () => {
         )}
       </div>
       <div className="learningLanguageScreenPaginationDiv">
-        <CustomPagination length={learningLanguagesData?.data?.total} pageLength={pageLength}/>
+        <CustomPagination length={learningLanguagesData?.data?.total} pageLength={pageLength} />
       </div>
     </div>
   );

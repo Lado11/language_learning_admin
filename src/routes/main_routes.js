@@ -28,6 +28,10 @@ import { useSelector } from "react-redux";
 import { CategoryUpdate } from "../screens/category-screen/category-update";
 import { UserScreenUpdate } from "../screens/user-screen/user-screen-update";
 import { AddWordExel } from "../screens/words-screen/add-word-exel/add-word-exel";
+import { UpdateExelFromWord } from "../screens/words-screen/add-word-exel/update-word-from-exel";
+import { WordsUpdate } from "../screens/words-screen/words-update/words-update";
+import { UplaodScreen } from "../screens/upload/upload-screen";
+import { WordsProcess } from "../screens/upload/upload-proccessing";
 
 export const MyRoutes = () => {
   const token = localStorage.getItem("token");
@@ -64,7 +68,6 @@ export const MyRoutes = () => {
                 path="/native-language-create"
                 element={<NativeLanguageCretae />}
               />
-
               <Route
                 path="/learning-language"
                 element={<LearningLanguageScreen />}
@@ -82,7 +85,6 @@ export const MyRoutes = () => {
               <Route path="/files" element={<FilesScreen />} />
               <Route path="/user-create" element={<UserCreateScreen />} />
               <Route path="/user-update" element={<UserScreenUpdate />} />
-
               <Route
                 path="/learning-language-create"
                 element={<LearningLanguageCreateScreen />}
@@ -93,9 +95,12 @@ export const MyRoutes = () => {
                 element={<LearningLanguageUpdate />}
               />
               <Route path="/words" element={<WordsScreen />} />
+              <Route path="/upload" element={<UplaodScreen />} />
               <Route path="/create-word" element={<WordsCreateScreen />} />
               <Route path="/create-word-exel" element={<AddWordExel />} />
-              
+              <Route path="/update-word-exel" element={<UpdateExelFromWord />}/>
+              <Route path="/update-word" element={<WordsUpdate />}/>
+              <Route path="/words-exel-process" element={<WordsProcess/>}/>
             </Route>
           </Route>
         </Routes>

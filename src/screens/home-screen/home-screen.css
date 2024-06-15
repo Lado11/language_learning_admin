@@ -1,14 +1,13 @@
 .dashboardMainDiv {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 
 .dashboardInfo {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
 }
 .customCardTileMainDiv {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
 }

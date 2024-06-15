@@ -24,6 +24,9 @@ export const learnLanguageDeleteSlice = createSlice({
   name: "learnLanguageDelete",
   initialState,
   reducers: {
+    deleteLearnResponse: (state) => {
+      state.learnLanguageDeleteResponse = "";
+    },
     deleteLearnBool: (state) => {
       state.learnBool = false;
     },
@@ -48,7 +51,7 @@ export const learnLanguageDeleteSlice = createSlice({
 });
 
 
-export const { deleteLearnBool  } = learnLanguageDeleteSlice.actions;
+export const { deleteLearnBool ,deleteLearnResponse } = learnLanguageDeleteSlice.actions;
 
 export const learnLangBool = (state) => {
   return state.learnLanguageDeleteSlice.learnBool;

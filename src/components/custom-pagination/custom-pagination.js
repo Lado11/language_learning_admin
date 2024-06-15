@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { nativeLanguageGetThunk } from "../../store/slices/native-language/native-language-get";
 import "./custom-pagination.css";
 import { categoryGetThunk } from "../../store/slices/category/get-category";
-import { learningLanguagesThunk, userGetAllThunk } from "../../store/slices";
+import { getWordsThunk, learningLanguagesThunk, userGetAllThunk } from "../../store/slices";
 
-export const CustomPagination = ({length , func ,pageLength}) => {
+export const CustomPagination = ({length  ,pageLength}) => {
   const dispatch = useDispatch();
   const pageCount = (length / pageLength) * 10
   const roundNumber = Math.ceil(pageCount)
@@ -21,7 +21,7 @@ export const CustomPagination = ({length , func ,pageLength}) => {
       skip: skip,
       limit: 5,
     };
-
+    dispatch(getWordsThunk(dataUser));
     dispatch(userGetAllThunk(dataUser));
     dispatch(learningLanguagesThunk(data));
     dispatch(categoryGetThunk(data));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./words-screen-style.css";
 import { Colors } from "../../assets/colors";
-import { CustomPagination, CustomSpin, CustomTable } from "../../components";
+import { CustomPagination, CustomSpin } from "../../components";
 import { useTranslation } from "react-i18next";
 import { WordsScreenAddFields, WordsScreenSelects } from "./components";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,20 +10,39 @@ import {
   wordsLoadingData,
   wordsResponseData,
 } from "../../store/slices";
-import { columns, customTableColumns } from "../../data";
+import { customTableColumns } from "../../data";
+import { Avatar } from 'antd';
+import { useNavigate } from "react-router-dom";
+import { getIdWordsThunk } from "../../store/slices/words/getId-words";
+import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 
 export const WordsScreen = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [learningLanguageWordSelectedValue, setLearningLanguageWordSelectedValue] = useState();
+  const [wordsNativeLanguageSelectValue, setWordsNativeLanguageSelectValue] = useState();
+  const [wordsLevelSelectedValue, setWordsLevelSelectedValue] = useState();
+  const [wordsCategorySelecteValue, setWordsCategorySelectValue] = useState();
+  const [searchValue,setSearchValue ] = useState();
   const wordsResponse = useSelector(wordsResponseData);
-  console.log(wordsResponse,"log")
   const wordsLoading = useSelector(wordsLoadingData);
-  const pageLength = 12;
+  const updateWords = ( id) => {
+    localStorage.setItem("wordId",id)
+    navigate("/update-word")
+    dispatch(getIdWordsThunk(id));
+  }
 
-  useEffect(() => {
+   useEffect(() => {
     const data = {
       skip: 0,
-      limit: 12,
+      limit: 5,
+      language: learningLanguageWordSelectedValue?._id ?
+       learningLanguageWordSelectedValue?._id  : "",
+       level:wordsLevelSelectedValue?.value ? wordsLevelSelectedValue?.value : "",
+       category:wordsCategorySelecteValue?._id ? wordsCategorySelecteValue?._id : "",
+       translateLanguage:wordsNativeLanguageSelectValue?._id ? wordsNativeLanguageSelectValue?._id : "",
+       search:searchValue ? searchValue : ""
     };
     dispatch(getWordsThunk(data));
   }, []);
@@ -33,44 +52,65 @@ export const WordsScreen = () => {
       className="screensMainDiv wordsScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
-      <WordsScreenAddFields />
-      <p className="wordsScreenTitle">{t("WORDS")}</p>
-      <WordsScreenSelects />
-      <div  className="wordsScreenTable">
-
-      { <div class="container">
-          <ul class="responsive-table">
-            <li class="table-header">
-              {customTableColumns?.map((item) => {
+      <div>
+        <WordsScreenAddFields />
+        <p className="wordsScreenTitle">{t("WORDS")}</p>
+        <WordsScreenSelects
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          setWordsCategorySelectValue={setWordsCategorySelectValue}
+          setWordsLevelSelectedValue={setWordsLevelSelectedValue}
+          setWordsNativeLanguageSelectValue={setWordsNativeLanguageSelectValue}
+          setLearningLanguageWordSelectedValue={setLearningLanguageWordSelectedValue}
+          wordsCategorySelecteValue={wordsCategorySelecteValue}
+          wordsLevelSelectedValue={wordsLevelSelectedValue}
+          wordsNativeLanguageSelectValue={wordsNativeLanguageSelectValue}
+          learningLanguageWordSelectedValue={learningLanguageWordSelectedValue}
+        />
+        <div className="wordsScreenTable">
+          <div class="container">
+            <ul class="responsive-table">
+              <TableHeader data={customTableColumns} />
+              {!wordsResponse?.data?.list?.length && !wordsLoading ? <p>No Data</p> : null}
+              {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
+                <CustomSpin size={64} color="gray" />
+              </div> : wordsResponse?.data?.list?.map((val, index) => {
                 return (
-                  <div class="col col-1 label">{item?.title}</div>
+                  <li class="table-row" key={val._id} onClick={()=>{
+                    updateWords(val?._id)
+                  }}>
+                    <div class="col col-1 desc" data-label="Job Id">{val?.word}</div>
+                    <div class="col col-1 desc" data-label="Job Id">{val?.language?.name}</div>
+                    <div class="col col-1 desc" data-label="Job Id">
+                      <Avatar.Group
+                        maxCount={4}
+                        maxStyle={{
+                          color: '#f56a00',
+                          backgroundColor: '#fde3cf',
+                        }}
+                      >
+                        {val?.translates.map((item, index) => {
+                          return <div key={index}>
+                            <Avatar src={item?.nativeLanguageDetails?.imageFile} />
+                          </div>
+                        })}
+
+                      </Avatar.Group>
+                    </div>
+                    <div class="col col-1 desc" data-label="Job Id">{val?.transcription}</div>
+                    <div class="col col-1 desc" data-label="Job Id">{val?.level === 0 ? "beginner" : val?.level === 1 ? "intermediate" : val?.level === 2 ? "advanced" : null}</div>
+                    <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.active).toString()}</p></div>
+                  </li>
                 )
               })}
-            </li>
-            {!wordsResponse?.data?.list?.length &&   !wordsLoading ? <p>No Data</p> : null}
-            {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
-         <CustomSpin size={64} color="gray" /> 
-         </div>: wordsResponse?.data?.list?.map((val, index) => {
-              return (
-                <li class="table-row" >
-                  <div class="col col-1 desc" data-label="Job Id">{index + 1}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.email}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                </li>
-              )
-            })}
-          </ul>
-        </div>}
+            </ul>
 
- 
-        {/* <CustomTable /> */}
+          </div>
+
+        </div>
       </div>
-      <div className="wordsPagination">
-        <CustomPagination pageLength={pageLength}/>
+      <div className="nativeScreenPaginationDiv">
+        <CustomPagination length={wordsResponse?.data?.total} pageLength={5} />
       </div>
     </div>
   );

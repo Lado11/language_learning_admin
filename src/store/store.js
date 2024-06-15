@@ -22,11 +22,22 @@ import {
   sendEmailSlice,
   sendCodeSlice,
   resetPasswordSlice,
+  createWordsSlice,
 } from "./slices";
 import { categoryUpdateSlice } from "./slices/category/update-category";
 import { nativeLanguageGetIdSlice } from "./slices/native-language/get-id-native-language";
 import { categoryGetIdSlice } from "./slices/category/get-id-category";
 import { dashboardGetSlice } from "./slices/dashboard/get-dashboard";
+import { craeteExelWordsSlice } from "./slices/words/post-exel-word";
+import { updateExelWordsSlice } from "./slices/words/put-exel-word";
+import { sendPushNotificationSlice } from "./slices/notification/send_push_notification";
+import { sendEmailNotificationSlice } from "./slices/notification/send_email_notification";
+import { getWordsIdSlice } from "./slices/words/getId-words";
+import { getWordsDeleteSlice } from "./slices/words/delete_words-slice";
+import { wordsUpdateSlice } from "./slices/words/update-words-slice";
+import { feedBackGetSlice } from "./slices/feedBack/get-feedback";
+import { wordsExelDeleteSlice } from "./slices/words/delete-exel-words";
+import { wordsExelGetSlice } from "./slices/words/get-exel-words";
 
 export const store = configureStore({
   reducer: {
@@ -55,6 +66,17 @@ export const store = configureStore({
     learnLanguageByIdSlice: learnLanguageByIdSlice.reducer,
     learnLanguageUpdateSlice: learnLanguageUpdateSlice.reducer,
     getWordsSlice: getWordsSlice.reducer,
-    dashboardGetSlice:dashboardGetSlice.reducer
+    craeteExelWordsSlice:craeteExelWordsSlice.reducer,
+    dashboardGetSlice:dashboardGetSlice.reducer,
+    updateExelWordsSlice:updateExelWordsSlice.reducer,
+    createWordsSlice:createWordsSlice.reducer,
+    getWordsIdSlice:getWordsIdSlice.reducer,
+    wordsExelGetSlice:wordsExelGetSlice.reducer,
+    getWordsDeleteSlice:getWordsDeleteSlice.reducer,
+    wordsExelDeleteSlice:wordsExelDeleteSlice.reducer,
+    wordsUpdateSlice:wordsUpdateSlice.reducer,
+    sendPushNotificationSlice:sendPushNotificationSlice.reducer,
+    sendEmailNotificationSlice:sendEmailNotificationSlice.reducer,
+    feedBackGetSlice:feedBackGetSlice.reducer
   },
 });

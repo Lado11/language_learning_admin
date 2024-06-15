@@ -6,7 +6,6 @@ import { CustomAntdButton, CustomAntdInput } from "../../components";
 import { Colors } from "../../assets/colors";
 import "../../global-styles/global-styles.css";
 import "./learning-language-screen-style.css";
-import { SelectLanguage } from "./components/";
 import {
   createLearnLanguageThunk,
   deleteLerningCreateResponse,
@@ -15,12 +14,12 @@ import {
   nativeLanguageGetThunk,
   learnLanguageSelectedLanguages,
   removeLanguagesItem,
-  getNativeGetResponse,
   removeAllLanguages,
+  learnLanguageCreateLoading,
 } from "../../store/slices";
 import { Error, Success } from "../../components";
-import { useNavigate } from "react-router-dom";
 import { SelectLearningLang } from "./select-learning-lang";
+import { beforeUpload } from "../utils/helper";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
@@ -30,7 +29,8 @@ export const LearningLanguageCreateScreen = () => {
   const [learningLanguageFile, setLearningLanguageFile] = useState();
   const [showLearningLanguageUpload, setShowLearningLanguageUpload] = useState();
   const languages = useSelector(learnLanguageSelectedLanguages);
-  const nativeLanguageData = useSelector(getNativeGetResponse);
+  console.log(languages,"log languages");
+  const languageLoading = useSelector(learnLanguageCreateLoading);
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
   const messageError = createLearnLanguageResponse?.message;
   const [messageApi, contextHolder] = message.useMessage();
@@ -52,25 +52,29 @@ export const LearningLanguageCreateScreen = () => {
         formData.append(`nativeLanguages[${ind}]`, item._id);
       });
       dispatch(createLearnLanguageThunk(formData));
-      form.resetFields();
-      setLearningLanguageFile("");
-      dispatch(removeAllLanguages())
+
     } else {
       console.log(values);
     }
   };
 
+  useEffect(() => {
+    if (createLearnLanguageResponse?.success === true) {
+      form.resetFields();
+      setLearningLanguageFile("");
+      dispatch(removeAllLanguages())
+      dispatch(deleteLerningCreateResponse());
+    }
+  }, [createLearnLanguageResponse?.success])
+
   const handleChange = (info) => {
     setLearningLanguageFile(info.file);
-    setShowLearningLanguageUpload(info.fileList[0]);
-    if (!info.fileList[0]) {
+    setShowLearningLanguageUpload(info.fileList?.[0]);
+    if (!info.fileList?.[0]) {
       info.file = "";
     }
   };
 
-  const beforeUpload = () => {
-    return false;
-  };
 
   useEffect(() => {
     createLearnLanguageResponse?.success === true && Success({ messageApi });
@@ -81,7 +85,7 @@ export const LearningLanguageCreateScreen = () => {
   }, [createLearnLanguageResponse?.success]);
 
   const props = {
-    accept: ".png",
+    accept: ".png,.svg,.jpg",
     onRemove: (file) => {
       const index = learningLanguageFileList.indexOf(file);
       const newFileList = learningLanguageFileList.slice();
@@ -95,17 +99,20 @@ export const LearningLanguageCreateScreen = () => {
       style={{ backgroundColor: Colors.WHITE, flexDirection: "row" }}
     >
       <div className="learningLanguageUpdateFormDiv">
-        <p className="nativeLanguageTitle">Add Learning Language</p>
         <Form
           autoComplete="off"
           form={form}
           name="createLearningLanguage"
           onFinish={onFinish}
-          className="formAntd"
+          // className="formAntd"
         >
-          <div className="createScreenRowInputs">
-            <CustomAntdInput name="name" placeholder="Language English Name*" />
-            <CustomAntdInput name="nameEng" placeholder=" Native Name*" />
+        <div className="createLearningLangRow">
+        <div>
+        <p className="nativeLanguageTitle">Add Learning Language</p>
+
+         <div className="createScreenRowInputs">
+            <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
+            <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
           </div>
 
           <Form.Item
@@ -129,19 +136,24 @@ export const LearningLanguageCreateScreen = () => {
               )}
             </Upload>
           </Form.Item>
-
           <Form.Item>
             {contextHolder}
-            <CustomAntdButton title="Add" background={Colors.PURPLE} />
+            <CustomAntdButton loading={languageLoading} title="Add" background={Colors.PURPLE} />
           </Form.Item>
-        </Form>
-      </div>
-      <div className="learnLanguageSelectedLanguages">
+
+         </div>
+          <div className="learnLanguageSelectedLanguages">
         <p className="selectLanguageTitle">Native Language</p>
-        <SelectLearningLang dataLanguages={languages} onDelete={(id) => {
+        <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
           dispatch(removeLanguagesItem(id));
         }} />
       </div>
+        </div>
+
+        
+        </Form>
+      </div>
+      
     </div>
   );
 };

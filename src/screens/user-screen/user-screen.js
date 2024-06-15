@@ -3,6 +3,7 @@ import { Colors } from "../../assets/colors/colors";
 import "../../global-styles/index";
 import {
   CustomAddNew,
+  CustomFilterSeelct,
   CustomPagination,
   CustomSelect,
   CustomSpin,
@@ -12,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
 import { columns } from "../../data";
+import { dataUserSub, phoneSelect, emailSelect } from "../../data";
+import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
+import filterIcon from "../../assets/images/filter.png"
 
 export const UserScreen = () => {
   const { t } = useTranslation();
@@ -21,7 +25,7 @@ export const UserScreen = () => {
   const userGetLoading = useSelector(getUserGetAllLoading);
   const userData = useSelector(getUserGetAllData)?.data;
   const dataList = userData?.list;
-  
+
   const data = {
     skip: 0,
     limit: 5,
@@ -31,16 +35,15 @@ export const UserScreen = () => {
   }, []);
 
   const userUpdate = (id) => {
-    localStorage.setItem("userId",id);
+    localStorage.setItem("userId", id);
     dispatch(userGetByIdThunk(id));
     navigate("/user-update");
   }
 
- 
- 
+
   return (
     <div
-      className="nativeLanguageScreenMainDiv"
+      className="nativeLanguageScreenMainDiv "
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div>
@@ -51,28 +54,24 @@ export const UserScreen = () => {
           }}
         />
         <p className="screensTitleStyle">{t("USER")}</p>
-        <div className="select-row">
-          <CustomSelect title={t("SUBSCRIPTION")} />
+        {/* <img src={filterIcon}/> */}
+        {/* <CustomFilterSeelct/> */}
+        {/* <div className="select-row words_select">
+          <CustomSelect data={dataUserSub} optionsData={dataUserSub} title={t("SUBSCRIPTION")} />
           <div className="select_middle">
-            <CustomSelect title={t("VERIFED_BY_PHONE")} />
+            <CustomSelect data={phoneSelect} title={t("VERIFED_BY_PHONE")} />
           </div>
-          <CustomSelect title={t("VERIFED_BY_EMAIL")} />
-        </div>
+          <CustomSelect data={emailSelect} title={t("VERIFED_BY_EMAIL")} />
+        </div> */}
 
-       {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
-         <CustomSpin size={64} color="gray" /> 
-         </div>: <div class="container">
+        {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
+          <CustomSpin size={64} color="gray" />
+        </div> : <div class="container">
           <ul class="responsive-table">
-            <li class="table-header">
-              {columns?.map((item) => {
-                return (
-                  <div class="col col-1 label">{item?.text}</div>
-                )
-              })}
-            </li>
+            <TableHeader data={columns} />
             {dataList?.map((val, index) => {
               return (
-                <li class="table-row" onClick={()=>{
+                <li class="table-row" key={index} onClick={() => {
                   userUpdate(val?._id)
                 }}>
                   <div class="col col-1 desc" data-label="Job Id">{index + 1}</div>
@@ -81,13 +80,12 @@ export const UserScreen = () => {
                   <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
                   <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
                   <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
+                  <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString()}</p></div>
                 </li>
               )
             })}
           </ul>
         </div>}
-
       </div>
       <div className="nativeScreenPaginationDiv">
         <CustomPagination length={userData?.total} pageLength={pageLength} />

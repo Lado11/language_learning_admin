@@ -20,3 +20,4 @@ export * from "./custom-message";
 export * from "./custom-spin";
 export * from "./custom-antd-select";
 export * from "./custom-upload";
+export * from "./custom-filter-select"

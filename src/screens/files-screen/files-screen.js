@@ -17,14 +17,12 @@ export const FilesScreen = () => {
       <div className="filesItemDiv">
         {customFilesData.map((item,index) => {
           return (
-          <div  key={index+1}>
               <CustomCardTile
               icon={item.icon}
               title={t(`${item.title}`)}
               count={item.count}
               backgroundColor={item.backgroundColor}
             />
-          </div>
           );
         })}
       </div>

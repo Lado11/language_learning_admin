@@ -1,4 +1,4 @@
-export  const TableColumn = [
+export  const UserValue = [
     {
         value: "1",
         label: "admin",

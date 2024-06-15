@@ -29,6 +29,7 @@ export const NativeLanguageScreen = () => {
     dispatch(nativeLanguageGetIdThunk(countryItem?.id));
     navigate("/native-update");
   };
+  
   const data = {
     skip: 0,
     limit: 12,
@@ -48,7 +49,7 @@ export const NativeLanguageScreen = () => {
             }}
           />
           <p className="nativeLanguageTitle">Native Language</p>
-          {!nativeData?.length ? <div>
+          {!nativeData?.length && !nativeLoading ? <div>
             <p>No data</p>
           </div>:null}
           {nativeLoading ? (

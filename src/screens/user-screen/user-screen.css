@@ -175,8 +175,21 @@ td:nth-child(n) {
   color: black;
 }
 .container {
-  max-width: 1000px;
+  max-width: 100%;
 
+}
+.titleCol{
+  color: white;
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 20px;
+
+}
+.buttonCol{
+  background-color: #8833FF;
+  border-radius: 15px;
+  padding: 5px 15px;
 }
 
 h2 {
@@ -217,13 +230,15 @@ h2 {
   }
 
   .table-header {
-    background-color: white;
+    background-color: #F7F8FA;
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
 
   .table-row {
+    display: flex;
+    align-items: center;
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0px 0px 9px 0px #7D8FB326;
@@ -270,6 +285,9 @@ h2 {
 
   }
 
+  
+
+
   @media all and (max-width: 767px) {
     .table-header {
       display: none;
@@ -298,5 +316,20 @@ h2 {
         text-align: right;
       }
     }
+  }
+}
+@media  screen and (max-width: 425px) {
+  
+  .category_row_input_user{
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .nativeLanguageScreenMainDiv {
+    padding: 60px 20px 30px 20px;
+    justify-content: center;
+    align-items: stretch;
   }
 }

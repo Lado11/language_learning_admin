@@ -24,6 +24,9 @@ export const learnLanguageUpdateSlice = createSlice({
   name: "updateLearnLanguage",
   initialState,
   reducers: {
+    deleteLearnUpdateResponse: (state) => {
+      state.learnLanguageUpdateResponse = null;
+    },
     deleteLearnUpdateBool: (state) => {
       state.learnLanguageBool = false;
     },
@@ -53,7 +56,7 @@ export const learnLanguageUpdateSlice = createSlice({
   },
 });
 
-export const { deleteLearnUpdateBool,removeUpdateLanguagesItem } = learnLanguageUpdateSlice.actions;
+export const { deleteLearnUpdateBool,removeUpdateLanguagesItem,deleteLearnUpdateResponse } = learnLanguageUpdateSlice.actions;
 
 export const getUpdatedLearnLanguageBool = (state) => {
   return state.learnLanguageUpdateSlice.learnLanguageBool;

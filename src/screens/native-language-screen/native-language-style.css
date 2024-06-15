@@ -8,6 +8,7 @@
   border-radius: 50px;
 }
 
+
 .nativeLanguageCreateScreenMainDiv {
   display: flex;
   flex-direction: column;
@@ -24,6 +25,18 @@
   width: 100%;
   max-width: 420px;
   height: 120px;
+  border: 1px solid #7d8fb326;
+  border-radius: 10px;
+}
+
+.imgae_upload_design_voice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  /* height: 120px; */
   border: 1px solid #7d8fb326;
   border-radius: 10px;
 }
@@ -49,6 +62,13 @@
   cursor: pointer;
   width: 100%;
   max-width: 25%;
+}
+
+.CustomSpinUpdate{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .nativeScreenPaginationDiv {

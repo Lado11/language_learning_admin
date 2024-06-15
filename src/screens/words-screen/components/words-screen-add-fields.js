@@ -18,8 +18,23 @@ export const WordsScreenAddFields = () => {
         title={t("ADD_NEW_WORDS")}
         onClick={() => onNavigate("/create-word")}
       />
+      {/* <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/create-word-exel")} />
+      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() =>onNavigate("/update-word-exel") }/> */}
+    </div>
+  );
+};
+export const UploadScreenAddFields = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const onNavigate = (path) => {
+    navigate(path);
+  };
+
+  return (
+    <div className="wordsScreenAddFields">
       <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/create-word-exel")} />
-      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} />
+      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/update-word-exel")} />
     </div>
   );
 };

@@ -1,11 +1,13 @@
-import { useSelector } from "react-redux";
-import { getNativeGetResponse } from "../../store/slices";
+import { useDispatch, useSelector } from "react-redux";
+import { getNativeGetResponse, nativeLanguageGetThunk } from "../../store/slices";
 import { CustomSelect } from "../../components";
 import { Colors } from "../../assets/colors";
+import { useEffect } from "react";
 
-export const SelectLearningLang = ({ dataLanguages, onDelete, loading }) => {
+export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, name }) => {
+    const dispatch = useDispatch();
     const nativeLanguagesResponse = useSelector(getNativeGetResponse);
-
+    console.log( nativeLanguagesResponse?.data?.total,"log");
     const filteredResponse = nativeLanguagesResponse?.data?.list.map((lang) => {
         return {
             _id: lang.id,
@@ -13,6 +15,15 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading }) => {
             nameEng: lang.name,
         };
     });
+    useEffect(() => {
+        const data = {
+          skip: 0,
+          limit: 12,
+        };
+        dispatch(nativeLanguageGetThunk(data));
+      }, []);
+    
+
 
     // const onDelete = (id) => {
     //   dispatch(removeSelectedLanguagesItem(id));
@@ -25,34 +36,36 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading }) => {
     return (
         <div>
             <CustomSelect
-            width={"418px"}
+                rules={rules}
+                name={name}
+                width={"418px"}
                 data={filteredResponse}
                 title="Choose Native Language *"
                 optionsData={filteredResponse}
             />
             <div className="selectedNativeItem">
-            {
-                dataLanguages?.map((lang) => {
-                    return (
-                        <div
-                            key={lang._id}
-                            className="selectLanguageValuesDivItem"
-                            style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
-                        >
-                            <span>{lang.name}</span>
-                            <img src={lang.image} />
+                {
+                    dataLanguages?.map((lang) => {
+                        return (
                             <div
-                                className="deleteIcon"
-                                onClick={() => {
-                                    selectedDelete(lang._id);
-                                }}
+                                key={lang._id}
+                                className="selectLanguageValuesDivItem"
+                                style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
                             >
-                                <span>x</span>
+                                <span>{lang.name}</span>
+                                <img src={lang.image} />
+                                <div
+                                    className="deleteIcon"
+                                    onClick={() => {
+                                        selectedDelete(lang._id);
+                                    }}
+                                >
+                                    <span>x</span>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })
-            }
+                        );
+                    })
+                }
             </div>
         </div>
     )

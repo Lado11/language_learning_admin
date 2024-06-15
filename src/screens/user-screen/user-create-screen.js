@@ -18,6 +18,7 @@ import {
   CustomAntdInput,
 } from "../../components";
 import "./user-screen.css";
+import { UserValue } from "../../data/custom-table-columns";
 
 export const UserCreateScreen = () => {
   const [form] = Form.useForm();
@@ -30,21 +31,8 @@ export const UserCreateScreen = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const createUserData = useSelector(getUserCreateData);
   const userLoading = useSelector(getUserCreateLoading);
+  const messageError = createUserData?.message;
 
-  const data = [
-    {
-      value: "1",
-      label: "admin",
-    },
-    {
-      value: "2",
-      label: "client",
-    },
-    {
-      value: "3",
-      label: "operator",
-    },
-  ];
 
   const onFinish = (values) => {
     const onFinshData = {
@@ -56,10 +44,15 @@ export const UserCreateScreen = () => {
       role: selected,
     };
     dispatch(userCreateThunk(onFinshData));
-    form.resetFields();
-    setSelected("");
   };
-  const messageError = createUserData?.message;
+
+  useEffect(() => {
+    if (createUserData?.success === true) {
+      form.resetFields();
+      setSelected("");
+      dispatch(deleteUserCreateResponse());
+    }
+  }, [createUserData?.success])
 
   useEffect(() => {
     createUserData?.success === true && Success({ messageApi });
@@ -122,17 +115,20 @@ export const UserCreateScreen = () => {
             type="password"
             min={6}
           />
+           <div className="left">
           <CustomAntdSelect
-            optinData={data}
+            user={true}
+            optinData={UserValue}
             setSelected={setSelected}
             selected={selected}
             defaultValue="Role"
           />
+          </div>
         </div>
         <Form.Item>
           {contextHolder}
 
-          <CustomAntdButton title="Add" background={Colors.PURPLE} loading={userLoading}/>
+          <CustomAntdButton title="Add" background={Colors.PURPLE} loading={userLoading} />
         </Form.Item>
       </Form>
     </div>

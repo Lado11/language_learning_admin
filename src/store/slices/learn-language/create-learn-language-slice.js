@@ -29,14 +29,14 @@ export const createLearnLanguageSlice = createSlice({
       state.createLearnLanguageResponse = "";
     },
     addLanguages: (state, { payload }) => {
-      state.selectedLanguages = state.selectedLanguages.filter(
-        (item) => item._id !== payload._id 
+      state.selectedLanguages = state.selectedLanguages?.filter(
+        (item) => item?._id !== payload?._id 
       );
-      state.selectedLanguages.push(payload) 
+      state.selectedLanguages?.push(payload) 
     },
     removeLanguagesItem: (state, action) => {
-      state.selectedLanguages = state.selectedLanguages.filter(
-        (item) => item._id !== action.payload
+      state.selectedLanguages = state.selectedLanguages?.filter(
+        (item) => item?._id !== action.payload
       );
     },
     removeAllCreateSelectedLanguages: (state) => {},

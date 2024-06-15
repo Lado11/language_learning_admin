@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./create-words-add-style.css";
 import {
   CustomAntdInput,
@@ -6,72 +6,119 @@ import {
   CustomUpload,
 } from "../../../../../components";
 import { Colors } from "../../../../../assets/colors";
-import { VoiceUpload } from "./components/voic-upload";
+import { useTranslation } from "react-i18next";
+import { categoryGetThunk, getCategoryGetData, learningLanguages, learningLanguagesThunk } from "../../../../../store/slices";
+import { useDispatch, useSelector } from "react-redux";
+import { wordlevel } from "../../../../../data";
+import { Waveform } from "./music-player";
+import logo from "../../../../../assets/images/Item (1).png"
 
 export const CreateWordsAdd = ({
-  setCreateWordSelectedLang,
+  image,
+  setIamge,
+  setAudio,
+  audio,
+  setFileListVoice,
   setSelectedLevel,
+  setFileList,
+  fileList,
   setSelectedCategory,
+  learningLanguageWordSelectedValue,
+  setLearningLanguageWordSelectedValue
 }) => {
-  const data = [
-    {
-      value: "1",
-      label: "admin",
-    },
-    {
-      value: "2",
-      label: "client",
-    },
-    {
-      value: "3",
-      label: "operator",
-    },
-  ];
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const learningLanguagesData = useSelector(learningLanguages);
+  const categoryData = useSelector(getCategoryGetData)?.data?.list;
+
+  const filteredResponseCategory = categoryData?.map((lang) => {
+    return {
+      _id: lang._id,
+      label: lang.name.toLowerCase(),
+      value: lang.name,
+    };
+  });
+
+  const filteredResponse = learningLanguagesData?.data?.list?.map((lang) => {
+    return {
+      _id: lang._id,
+      label: lang.name.toLowerCase(),
+      value: lang.name,
+      nativeLanguages: lang?.nativeLanguages
+    };
+  });
+ 
+  const skipNative = {
+    skip: 0,
+    limit: 12,
+  };
+  const addFile = (e) => {
+    const s = URL?.createObjectURL(e.target.files?.[0])
+    setFileListVoice(e.target.files?.[0])
+    setAudio(s)
+  }
+  
+  useEffect(() => {
+    dispatch(learningLanguagesThunk(skipNative));
+    dispatch(categoryGetThunk(skipNative));
+  }, []);
 
   return (
     <div className="createWordsAdd">
-      <p className="addWords">Add Words</p>
-      <div className="addWordsFirstSelect">
+      <p className="nativeLanguageTitle">Add Words</p>
+      <div className="addWordsFirstSelect bigSelect">
         <CustomAntdSelect
-          optinData={data}
-          defaultValue="English"
-          setSelected={setCreateWordSelectedLang}
-          color={Colors.BACKGROUND_COLOR}
+          // className="wordsSelectExel"
+          optinData={filteredResponse}
+          selected={learningLanguageWordSelectedValue}
+          setSelected={setLearningLanguageWordSelectedValue}
+          defaultValue={t("LEARNING_LANGUAGE")}
+          color={Colors.LIGHT_GRAY}
         />
       </div>
       <div className="createWordsAddInputs">
-        <CustomAntdInput
-          placeholder="Words*"
-          name={"word"}
-          type={"text"}
-          min={4}
-        />
-        <CustomAntdInput
-          placeholder="Transcribe*"
-          name={"transcribe"}
-          type={"text"}
-          min={4}
-          message={"This field is required"}
-        />
-        <CustomAntdSelect
-          // width={172}
-          defaultValue="Level*"
-          optinData={data}
-          setSelected={setSelectedLevel}
-        />
-        <CustomAntdSelect
-          // width={172}
-          defaultValue="Category*"
-          optinData={data}
-          setSelected={setSelectedCategory}
-        />
+        <div className="rowInputWords">
+          <CustomAntdInput
+            placeholder="Words*"
+            name={"word"}
+            type={"text"}
+            min={4}
+            rules={true}
+          />
+          <div className="inputLeft">
+            <CustomAntdInput
+              placeholder="Transcribe*"
+              name={"transcription"}
+              type={"text"}
+              min={4}
+              message={"This field is required"}
+              rules={true}
+
+            />
+          </div>
+        </div>
+        <div className="rowInputWords">
+          <CustomAntdSelect
+            // width={172}
+            defaultValue="Level*"
+            optinData={wordlevel}
+            setSelected={setSelectedLevel}
+          />
+          <CustomAntdSelect
+            // width={172}
+            defaultValue="Category*"
+            optinData={filteredResponseCategory}
+            setSelected={setSelectedCategory}
+          />
+        </div>
       </div>
-      <div>
-        <VoiceUpload />
+      {audio ? <Waveform url={audio} /> : null}
+      <div className="file-upload">
+        <img src={logo} alt="upload"  className="voiceUpload"/>
+        <input accept="audio/*" type='file' onChange={addFile} />
       </div>
-      <div>
-        <CustomUpload />
-      </div>
+
+        <CustomUpload setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
     </div>
   );
 };

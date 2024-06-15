@@ -7,11 +7,10 @@ import statisticIcon from "../../assets/images/statisticsIcon.svg";
 import logOutIcon from "../../assets/images/logout-svgrepo-com.svg";
 import {
   deleteReduxToken,
-  getToken,
 } from "../../store/slices/auth/login-slice";
 import { useMediaQuery } from "react-responsive";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { CustomDrawer } from "../custom-drawer/custom-drawer";
 import "./custom-header.css";
 
@@ -20,8 +19,6 @@ export const CustomHeader = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery({ maxWidth: 768 });
-  const reduxToken = useSelector(getToken);
-  const token = localStorage.getItem("token");
 
   const logOut = () => {
     localStorage.clear();
@@ -55,7 +52,7 @@ export const CustomHeader = () => {
             alt="statistics icon"
           />
           <img
-            alt=""
+            alt="logOut"
             src={logOutIcon}
             className="headerIcon logOutIcon"
             onClick={logOut}

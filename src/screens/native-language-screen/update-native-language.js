@@ -5,7 +5,7 @@ import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin } from "../../components";
 import {
   deleteNativeDeleteBool,
   deleteNativeDeleteResponse,
@@ -25,10 +25,12 @@ import {
 } from "../../store/slices";
 import {
   getNativeGetIdResponse,
+  getNativeGetIdloading,
   nativeLanguageGetIdThunk,
 } from "../../store/slices/native-language/get-id-native-language";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { Success, Error } from "../../components/custom-message/custom-message";
+import { beforeUpload, props } from "../utils/helper";
 
 export const UpdateNativeLanguage = () => {
   const [form] = Form.useForm();
@@ -46,8 +48,9 @@ export const UpdateNativeLanguage = () => {
   const nativeUpdateLoading = useSelector(getNativeUpdateLoading);
   const nativeDeleteLoading = useSelector(getNativeDeleteloading);
   const nativeUpdateBool = useSelector(getNativeUpdateBool);
-  const nativeResponse = useSelector(getNativeDeleteResponse);
+  const nativeDeleteResponse = useSelector(getNativeDeleteResponse);
   const nativeUpdateResponse = useSelector(getNativeUpdateData);
+  const getIdNativeLoading = useSelector(getNativeGetIdloading);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const onFinish = (values) => {
@@ -65,6 +68,7 @@ export const UpdateNativeLanguage = () => {
     }
   };
 
+
   useEffect(() => {
     dispatch(nativeLanguageGetIdThunk(nativeId));
   }, []);
@@ -81,30 +85,20 @@ export const UpdateNativeLanguage = () => {
     }
   };
 
-  const beforeUpload = () => {
-    return false;
-  };
+  
+ 
 
-  const props = {
-    accept: ".png",
-    onRemove: (file) => {
-      const index = fileList?.indexOf(file);
-      const newFileList = fileList?.slice();
-      newFileList?.splice(index, 1);
-    },
-  };
-
-  const messageError = nativeResponse?.message;
+  const messageError = nativeDeleteResponse?.message;
   const messageErrorUpdate = nativeUpdateResponse?.message;
 
   useEffect(() => {
-    nativeResponse?.success === true && Success({ messageApi });
-    nativeResponse?.success === false && Error({ messageApi, messageError });
+    nativeDeleteResponse?.success === true && Success({ messageApi });
+    nativeDeleteResponse?.success === false && Error({ messageApi, messageError });
     nativeUpdateResponse?.success === false &&
       Error({ messageApi, messageErrorUpdate });
     dispatch(deleteNativeDeleteResponse());
     dispatch(deleteNativeUpdateResponse());
-  }, [nativeResponse?.success, nativeUpdateResponse?.success]);
+  }, [nativeDeleteResponse?.success, nativeUpdateResponse?.success]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -119,18 +113,18 @@ export const UpdateNativeLanguage = () => {
   }, []);
 
   useEffect(() => {
-    if (nativeResponse?.success === true || nativeUpdateBool === true) {
+    if (nativeDeleteResponse?.success === true || nativeUpdateResponse?.success ===  true) {
       navigate("/native-language");
     }
     dispatch(deleteNativeDeleteBool());
-    dispatch(deleteNativeUpdateBool());
-  }, [deleteBool, nativeUpdateBool]);
+    dispatch(deleteNativeUpdateResponse());
+  }, [nativeDeleteResponse?.success,nativeUpdateResponse?.success]);
 
   const onTab = () => {
     dispatch(nativeLanguageDeleteThunk(nativeLanguageData?.id));
   };
   return (
-    <div className="nativeLanguageScreenMainDiv">
+    <div className="nativeLanguageCreateScreenMainDiv">
       <CustomModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
@@ -138,17 +132,17 @@ export const UpdateNativeLanguage = () => {
       />
       <p className="nativeLanguageTitle">Update Native Language</p>
 
-      <Form
+     {getIdNativeLoading ?<div className="CustomSpinUpdate"> <CustomSpin size={120} color={Colors.GRAY_COLOR} /> </div>: <Form
         autoComplete="off"
         form={form}
         name="control-hooks"
         onFinish={onFinish}
         className="formAntd"
       >
-        <p>Language english name</p>
-        <CustomAntdInput name="nameEng" placeholder=" Language English Name*" />
+       <p>Language english name</p>
+        <CustomAntdInput rules={true} name="nameEng" placeholder=" Language English Name*" />
         <p>Native Name</p>
-        <CustomAntdInput name="name" placeholder="Native Name*" />
+        <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
         <p>Language Icon</p>
         <Form.Item
           name="image"
@@ -208,7 +202,8 @@ export const UpdateNativeLanguage = () => {
             />
           </div>
         </Form.Item>
-      </Form>
+        
+      </Form>}
     </div>
   );
 };

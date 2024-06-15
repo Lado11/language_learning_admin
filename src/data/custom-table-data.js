@@ -6,63 +6,38 @@ export const customTableCountryData = {
   title: "England",
 };
 
-let num = 1;
 
 export const customTableColumns = [
   {
     title: "Word",
-    dataIndex: "_id",
-    key: "_id",
-    render: (text) => {
-      const newTag = <a>{num}</a>;
-      num++;
-      return newTag;
-    },
-    className: "column-id",
+    dataIndex: "word",
+    key: "word",
   },
   {
     title: "Language",
-    dataIndex: "firstName",
-    key: "firstName",
+    dataIndex: "language",
+    key: "language",
   },
   {
     title: "Translate",
-    dataIndex: "email",
-    key: "email",
-    className: "column-email",
+    dataIndex: "translate",
+    key: "translate",
+
   },
   {
     title: "Category",
-    dataIndex: "phoneNumber",
-    key: "phoneNumber",
+    dataIndex: "category",
+    key: "category",
   },
   {
     title: "Level",
-    dataIndex: "devices",
-    key: "devices",
-    className: "column-device-id",
+    dataIndex: "level",
+    key: "level",
   },
   {
     title: "Status",
-    key: "country",
-    dataIndex: "country",
-    render: () => (
-      <>
-        <TableCountryItem
-          image={customTableCountryData.image}
-          title={customTableCountryData.title}
-        />
-      </>
-    ),
-  },
-  {
-    title: "Status",
-    key: "action",
-    render: () => (
-      <>
-        <TableSubscribeButton />
-      </>
-    ),
+    dataIndex: "active",
+    key: "active",
   },
 ];
 
@@ -97,37 +72,94 @@ export const customTableData = [
 export const columns = [
   {
     id: "_id",
-    text: "Id",
+    title: "Id",
   },
   {
-    text: "User",
+    title: "User",
     id: "firstName",
     key: "firstName",
   },
   {
-    text: "Email",
+    title: "Email",
     id: "email",
     key: "email",
   },
   {
-    text: "Phone",
+    title: "Phone",
     id: "phoneNumber",
     key: "phoneNumber",
   },
   {
-    text: "Device ID",
+    title: "Device ID",
     id: "phoneNumber",
     key: "devices",
   },
   {
-    text: "Country",
+    title: "Country",
     id: "phoneNumber",
     key: "devices",
   },
   {
-    text: "Status",
+    title: "Status",
     id: "phoneNumber",
     key: "devices",
   },
   
+];
+
+
+
+export const columnsFeedback = [
+  {
+    id: "Feedback",
+    title: "Feedback",
+  },
+  {
+    title: "Status",
+    id: "Status",
+    key: "Status",
+  },
+  {
+    title: "Update Date",
+    id: "Update Date",
+    key: "Update Date",
+  },
+  {
+    title: "Create Date",
+    id: "Create Date",
+    key: "Create Date",
+  },
+];
+
+
+export const columnsUpload = [
+  {
+    id: " ID",
+    title: " ID",
+  },
+  {
+    title: "type ",
+    id: "type ",
+    key: "type ",
+  },
+  {
+    title: "Errors",
+    id: "Errors",
+    key: "Errors",
+  },
+  {
+    title: "Succsess / Words",
+    id: "Succsess / Words",
+    key: "Succsess / Words",
+  },
+  {
+    title: "Status",
+    id: "Status",
+    key: "Status",
+  },
+  {
+    title: "Start Date",
+    id: "Start Date",
+    key: "Start Date",
+  },
 ];

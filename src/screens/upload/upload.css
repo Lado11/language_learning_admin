@@ -1,0 +1,59 @@
+.rowCount {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.exelRowSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.textAreaSection {
+    width: 100%;
+    max-width: 420px;
+}
+
+.labelTextArea {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB3;
+}
+
+.wordsSuccess {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #29CC39;
+}
+
+.wordsItem {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #4D5E80;
+}
+
+.wordsError {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #F74850;
+}
+
+.errorIcon {
+    margin-right: 5px;
+}
+
+.textArea {
+    height: 200px !important;
+    resize: none;
+}
+
+.textArea::placeholder{
+    color: #7D8FB3;
+
+}

@@ -1,0 +1,10 @@
+.addWordsDiv{
+    display: flex;
+    flex-direction: row;
+}
+
+.translateSection{
+    width: 420px;
+    margin-left: 70px;
+}
+

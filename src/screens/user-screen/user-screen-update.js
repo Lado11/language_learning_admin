@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { deleteUserDeleteResponse, deleteUserUpdateResponse, getUserDeleteData, getUserDeleteLoading, getUserGetByIdData, getUserUpdateData, getUserUpdateLoading, getUserUpdateMessages, userDeleteThunk, userGetByIdThunk, userUpdateThunk } from "../../store/slices";
+import { deleteUserDeleteResponse, deleteUserUpdateResponse, getUserDeleteData, getUserDeleteLoading, getUserGetByIdData, getUserGetByIdLoading, getUserUpdateData, getUserUpdateLoading, getUserUpdateMessages, userDeleteThunk, userGetByIdThunk, userUpdateThunk } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, Error, Success } from "../../components";
+import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomSpin, Error, Success } from "../../components";
 import { DatePicker, Form, Space, message } from "antd";
 import { Colors } from "../../assets/colors";
 import CsutomSwitch from "../../components/custom-switch/custom-switch";
-import delteIcon from "../../assets/images/delteIcon.png"
-import { TableColumn } from "../../data/custom-table-columns";
+import { UserValue } from "../../data/custom-table-columns";
 import CustomModal from "../../components/custom-modal/custom-modal";
 
 export const UserScreenUpdate = () => {
@@ -17,18 +16,12 @@ export const UserScreenUpdate = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const formData = new FormData();
-    const [select1 ,setSelect1] = useState(false);
-    const [select2 ,setSelect2] = useState(false);
-    const [select3 ,setSelect3] = useState(false);
-    const [select4 ,setSelect4] = useState(false);
-    const [calendar,setCalendar] = useState();
-    console.log(calendar,"log cale")
-
-
+    const [select1, setSelect1] = useState(false);
+    const [select2, setSelect2] = useState(false);
+    const [select3, setSelect3] = useState(false);
+    const [select4, setSelect4] = useState(false);
+    const [calendar, setCalendar] = useState();
     dayjs.extend(customParseFormat);
-    const customFormat = (value) => `custom format: ${value.format(dateFormat)}`;
-    const { RangePicker } = DatePicker;
-
     const dateFormat = 'YYYY/MM/DD';
     const [selected, setSelected] = useState();
     const [messageApi, contextHolder] = message.useMessage();
@@ -40,72 +33,71 @@ export const UserScreenUpdate = () => {
     const userUpdateLoading = useSelector(getUserUpdateLoading);
     const userDeleteLoading = useSelector(getUserDeleteLoading);
     const userDeleteResponse = useSelector(getUserDeleteData);
-    console.log(userDeleteResponse,"response delete")
+    const userLoadingId = useSelector(getUserGetByIdLoading);
     const userList = userIdData?.data
-    console.log(userUpdateResponse,"log user dtaa")
 
     const showModal = () => {
         setIsModalOpen(true);
     };
     const onChange = (date, dateString) => {
         setCalendar(date?.format(dateFormat))
-        console.log(date?.format(dateFormat),"date");
-      };
-      const onTab = () => {
+    };
+    const onTab = () => {
         dispatch(userDeleteThunk(userList?.id,));
-      };
+    };
 
     const onFinish = (values) => {
-        console.log(values, "values");
         const data = {
             ...values,
-            id:userList?.id,
-            phoneNumberVerified:select1,
-            emailVerified:select2,
-            deleted:select3,
-            isSubscribed:select4,
-            subscriptionExpiresDt:calendar,
+            id: userList?.id,
+            phoneNumberVerified: select1,
+            emailVerified: select2,
+            deleted: select3,
+            isSubscribed: select4,
+            subscriptionExpiresDt: calendar,
         }
-            dispatch(userUpdateThunk(data))
+        dispatch(userUpdateThunk(data))
     };
 
     useEffect(() => {
         form.setFieldsValue({
-          firstName: userList?.firstName,
-          email: userList?.email,
-          password: userList?.password,
-          phoneNumber: userList?.phoneNumber,
-          lastName: userList?.lastName,
-          role: userList?.role,
+            firstName: userList?.firstName,
+            email: userList?.email,
+            password: userList?.password,
+            phoneNumber: userList?.phoneNumber,
+            lastName: userList?.lastName,
+            role: userList?.role,
         });
-      }, [userList]);
+    }, [userList]);
 
     useEffect(() => {
         dispatch(userGetByIdThunk(userId));
     }, []);
 
-    useEffect(()=>{
-        if( userUpdateResponse?.success === true || userDeleteResponse?.success === true){
+    useEffect(() => {
+        if (userUpdateResponse?.success === true || userDeleteResponse?.success === true) {
             navigate("/user")
         }
         dispatch(deleteUserUpdateResponse());
         dispatch(deleteUserDeleteResponse());
-    },[ userUpdateResponse?.success, userDeleteResponse?.success ])
+    }, [userUpdateResponse?.success, userDeleteResponse?.success])
 
     useEffect(() => {
         userUpdateResponse?.success === true && Success({ messageApi });
         userUpdateResponse?.success === false && Error({ messageApi, messageError });
         dispatch(deleteUserUpdateResponse())
-      }, [userUpdateResponse?.success,]);
+    }, [userUpdateResponse?.success,]);
 
     return (
         <div className="nativeLanguageScreenMainDiv">
-              <CustomModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        onTab={onTab}
-      />
-            <Form
+            <CustomModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                onTab={onTab}
+            />
+            {userLoadingId ? <div className="CustomSpinUpdate">
+                <CustomSpin size={120} color={Colors.GRAY_COLOR} />
+            </div> : <Form
                 autoComplete="off"
                 form={form}
                 name="category_create"
@@ -119,13 +111,13 @@ export const UserScreenUpdate = () => {
                     <div className="formColumn">
                         <div className="userHeader">
                             <p className="nativeLanguageTitle">Update User</p>
-                            <div className="deleteDiv">
+                            {/* <div className="deleteDiv">
                                 <p className="deleteTitle">
                                     Delete Block
 
                                 </p>
                                 <img className="delteIcon" src={delteIcon} alt="delet_icon" />
-                            </div>
+                            </div> */}
                         </div>
                         <div className="row borderBottom">
                             <div className="row">
@@ -137,11 +129,11 @@ export const UserScreenUpdate = () => {
                                 <p className="ietmColor">455555</p>
                             </div>
                         </div>
-                            <div className="row borderBottom">
-                                <p className="inputTitle">Religion:</p>
-                                <p className="ietmColor">54444</p>
-                                <img alt="region_img" />
-                            </div>
+                        <div className="row borderBottom">
+                            <p className="inputTitle">Religion:</p>
+                            <p className="ietmColor">54444</p>
+                            <img alt="region_img" />
+                        </div>
                         <div className="category_row_input_user">
                             <div>
                                 <p className="inputTitle">Fisrt Name</p>
@@ -176,7 +168,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch  check={select1} setCheck={setSelect1} color={Colors.GREEN} />
+                                <CsutomSwitch check={select1} setCheck={setSelect1} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div className="category_row_input_user">
@@ -191,7 +183,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch  check={select2} setCheck={setSelect2} color={Colors.GREEN} />
+                                <CsutomSwitch check={select2} setCheck={setSelect2} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div>
@@ -200,10 +192,10 @@ export const UserScreenUpdate = () => {
                         </div>
                         <div>
                             <p className="inputTitle">Role</p>
-                           <CustomAntdSelect
+                            <CustomAntdSelect
                                 name="role"
                                 width={"420px"}
-                                optinData={TableColumn}
+                                optinData={UserValue}
                                 setSelected={setSelected}
                                 selected={selected}
                                 defaultValue="Role"
@@ -213,7 +205,7 @@ export const UserScreenUpdate = () => {
                             <p className="deleteTitle">
                                 Block User
                             </p>
-                            <CsutomSwitch check={select3} setCheck={setSelect3}  color={Colors.RED} />
+                            <CsutomSwitch check={select3} setCheck={setSelect3} color={Colors.RED} />
                         </div>
                         <Form.Item>
                             {contextHolder}
@@ -224,7 +216,7 @@ export const UserScreenUpdate = () => {
                             />
                             <div className="deleteButton">
                                 <CustomAntdButtonDelete
-                                      loading={userDeleteLoading}
+                                    loading={userDeleteLoading}
                                     title="Delete"
                                     background={Colors.GRAY_COLOR}
                                     onClick={() => {
@@ -252,7 +244,7 @@ export const UserScreenUpdate = () => {
                         </div>
                     </div>
                 </div>
-            </Form>
+            </Form>}
         </div>
     )
 }

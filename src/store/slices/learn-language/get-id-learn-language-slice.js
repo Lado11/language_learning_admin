@@ -24,28 +24,35 @@ export const learnLanguageByIdSlice = createSlice({
   name: "learnLanguageById",
   initialState,
   reducers: {
+    removeAllSelectedData: (state, action) => {
+      state.learnLanguageUpdateSelectedLanguages =[]
+       
+    },
     removeSelectedLanguagesItem: (state, action) => {
       state.learnLanguageUpdateSelectedLanguages =
         state.learnLanguageUpdateSelectedLanguages.filter(
           (item) => item._id !== action.payload
         );
     },
+    addLearnLanguageSelected: (state, { payload }) => {
+      state.learnLanguageUpdateSelectedLanguages =
+      state.learnLanguageByIdResponse.data.nativeLanguages;
+    },
     addLearnLanguageSelectedLanguages: (state, { payload }) => {
-      if (payload) {
+      if (!payload) {
+        console.log("mtav")
+        state.learnLanguageUpdateSelectedLanguages =
+          state.learnLanguageByIdResponse.data.nativeLanguages;
+       
+      } else {
+        console.log("chmtav");
         state.learnLanguageUpdateSelectedLanguages = state.learnLanguageUpdateSelectedLanguages?.filter(
           (item) => item._id !==payload._id 
         );
-        state.learnLanguageUpdateSelectedLanguages.push(payload);
-      } else {
-        state.learnLanguageUpdateSelectedLanguages =
-          state.learnLanguageByIdResponse?.data?.nativeLanguages;
+        state.learnLanguageUpdateSelectedLanguages?.push(payload);
       }
     },
-    removeUpdateLanguagesItem: (state, action) => {
-      state.learnUpdatedLanguages = state.learnUpdatedLanguages.filter(
-        (item) => item._id !== action.payload
-      );
-    },
+  
   },
   extraReducers: (builder) => {
     builder.addCase(learnLanguageByIdThunk.pending, (state) => {
@@ -54,6 +61,8 @@ export const learnLanguageByIdSlice = createSlice({
     builder.addCase(learnLanguageByIdThunk.fulfilled, (state, { payload }) => {
       state.learnLanguageByIdLoading = false;
       state.learnLanguageByIdResponse = payload;
+      state.learnLanguageUpdateSelectedLanguages =
+      state.learnLanguageByIdResponse.data.nativeLanguages;
     });
     builder.addCase(learnLanguageByIdThunk.rejected, (state, { payload }) => {
       state.learnLanguageByIdLoading = false;
@@ -65,6 +74,8 @@ export const learnLanguageByIdSlice = createSlice({
 export const {
   addLearnLanguageSelectedLanguages,
   removeSelectedLanguagesItem,
+  removeAllSelectedData,
+  addLearnLanguageSelected
 } = learnLanguageByIdSlice.actions;
 
 export const getLearnLanguageByIdLoading = (state) => {

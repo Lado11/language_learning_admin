@@ -3,11 +3,19 @@
 }
 
 .wordsScreenTable {
-  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .wordsScreenAddFields {
   display: flex;
+}
+
+.container {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
 
 .wordsScreenTitle {
@@ -40,13 +48,13 @@
 }
 
 .wordsCreateAddWords {
-  width: 45%;
-  height: 100%;
+  /* width: 45%; */
+  /* height: 100%; */
 }
 
 .wordsCreateForm {
   width: 100%;
-  height: 90%;
+  /* height: 90%; */
 }
 
 .wordScreenSelectsDiv .ant-select{
@@ -82,6 +90,16 @@ color: #7D8FB3 !important;
   .wordScreenSelectsDiv {
     margin-bottom: 20px;
   }
+  .wordsScreenMainDiv {
+    padding:60px 25px 30px 25px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .wordsScreenMainDiv {
+    padding:60px 20px 30px 20px;
+  }
+  
 }
 
 @media only screen and (max-width: 425px) {

@@ -23,7 +23,7 @@
 }
 .filesItemDiv {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   margin: 27px 0 57px 0;
 }
 

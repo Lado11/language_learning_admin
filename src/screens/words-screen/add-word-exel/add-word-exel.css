@@ -25,3 +25,7 @@ height: 60px ;
     flex-direction: row;
     justify-content: space-between;
   }
+
+.addWordExel  .ant-upload-list-item{
+  height: 60px ;
+    }

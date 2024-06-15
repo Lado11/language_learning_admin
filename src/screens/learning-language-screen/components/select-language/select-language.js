@@ -11,11 +11,9 @@ import {
 } from "../../../../store/slices";
 
 export const SelectLanguage = ({ dataLanguages, onDelete, loading }) => {
-  console.log(dataLanguages,"log")
   const dispatch = useDispatch();
   const [newLanguages, setNewLanguages] = useState();
   const nativeLanguagesResponse = useSelector(getNativeGetResponse);
-  console.log(nativeLanguagesResponse,"response")
 
   const filteredResponse = nativeLanguagesResponse?.data?.list.map((lang) => {
     return {
@@ -24,7 +22,6 @@ export const SelectLanguage = ({ dataLanguages, onDelete, loading }) => {
       nameEng: lang.name,
     };
   });
-  console.log(filteredResponse,"filter")
 
   const selectedDelete = (id) => {
     onDelete(id);

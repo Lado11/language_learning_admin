@@ -4,7 +4,13 @@
   font-family: "Roboto";
   font-size: 18px;
   line-height: 30px;
-  text-align: left;
+}
+.wordsSelectExel{
+  border: 1px solid red;
+}
+.rowInputWords{
+  display: flex;
+  flex-direction: row;
 }
 
 .createWordsAdd {
@@ -27,12 +33,43 @@
 
 .createWordsAddInputs {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  /* flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
 }
+.audio{
+  display: flex;
+  width: 100%;
+  max-width: 420px;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #7D8FB326;
+  border-radius: 10px;
+  padding: 16px;
+}
+.voiceUpload{
+  width: 420px;
+}
+.audioListen{
+  min-width: 250px !important;
+  margin-left: 20px;
+}
+.inputLeft{
+  margin-left: 15px;
+}
+.bigSelect .ant-select-selection-item{
+  color: #7D8FB3 !important;
 
+}
+.bigSelect .ant-select-selector{
+  width: 420px !important;
+  background-color: #F7F8FA !important;
+  border:none !important;
+}
+.addButtonDiv{
+  margin-top: 10px;
+}
 .createWordsAddInputs .antd_custom_select {
   margin: 0;
 }
@@ -51,9 +88,28 @@
 }
 
 .createWordsAdd .ant-form-item {
-  width: 47% !important;
+  width: 200px !important;
 }
 
 .createWordsAdd .ant-input {
   height: 50px !important;
 }
+
+
+.file-upload {
+  /* text-align: start; */
+  /* padding: 1.5rem; */
+  position: relative;
+  cursor: pointer;
+}
+
+.file-upload input {
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;}

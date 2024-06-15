@@ -9,6 +9,7 @@ import {
   feedbackIcon,
   notificationIcon,
   filesIcon,
+  uploadIcon,
 } from "./svgs-data";
 
 export const customSideBarData = [
@@ -42,34 +43,41 @@ export const customSideBarData = [
   },
   {
     id: 5,
+    icon: uploadIcon,
+    title: "Upload",
+    color: Colors.PURPLE,
+    path: "/upload",
+  },
+  {
+    id: 6,
     icon: categoryIcon,
     title: "CATEGORY",
     color: Colors.GREEN,
     path: "/category",
   },
   {
-    id: 6,
+    id: 7,
     icon: userIcon,
     title: "USER",
     color: Colors.YELLOW,
     path: "/user",
   },
   {
-    id: 7,
+    id: 8,
     icon: feedbackIcon,
     title: "FEEDBACK",
     color: Colors.PURPLE,
     path: "/feedback",
   },
   {
-    id: 8,
+    id: 9,
     icon: notificationIcon,
     title: "NOTIFICATION",
     color: Colors.ORANGE,
     path: "/notification",
   },
   {
-    id: 9,
+    id: 10,
     icon: filesIcon,
     title: "FILES",
     color: Colors.GREEN,

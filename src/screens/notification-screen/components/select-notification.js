@@ -17,7 +17,6 @@ export const SelectNotification = ({data,defaultValue}) => {
     
     const [value, setValue] = useState(1);
     const onChange = (e) => {
-        console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
  

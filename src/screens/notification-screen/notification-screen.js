@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Colors } from "../../assets/colors/colors";
 import "./notification-screen-style.css";
-import { CustomButton } from "../../components/custom-button/custom-button";
-import icSendIcon from "../../assets/images/ic_send.svg";
 import { Form } from "antd";
 import { NotificationScreenInput } from "./components/notification-screen-input";
 import { NotificationScreenTextArea } from "./components";
@@ -32,7 +30,6 @@ export const NotificationScreen = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <div className="notificationScreenSendFieldsDiv">
           <p className="notificationScreenSendFieldsTitle">Send Notification</p>
 
          <div className="nothSection">
@@ -52,7 +49,6 @@ export const NotificationScreen = () => {
             background={Colors.PURPLE}
           // loading={nativeUpdateLoading}
           />
-        </div>
       </Form>
     </div>
   );

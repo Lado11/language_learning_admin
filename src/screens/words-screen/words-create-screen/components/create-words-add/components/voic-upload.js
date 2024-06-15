@@ -1,62 +1,98 @@
 import React, { useState } from "react";
 import "./voic-upload-style.css";
-import voicUploadIcon from "../../../../../../assets/images/upload-voice-icon.svg";
+import voicUploadIcon from "../../../../../../assets/images/Item.png";
+import { Image, Upload } from "antd";
+import { beforeUpload } from "../../../../../utils/helper";
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+export const VoiceUpload = ({setIamge,image,fileListVoice,setFileListVoice}) => {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
 
-export const VoiceUpload = () => {
-  const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState("");
-
-  const handleFileChange = (e) => {
-    if (!file) {
-      alert("Please select a file first!");
-      return;
+  const props = {
+    accept:"audio/*",
+    onRemove: (file) => {
+      const index = image?.indexOf(file);
+      const newFileList = image?.slice();
+      newFileList?.splice(index, 1);
+    },
+  };
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
     }
-    setFile(e.target.files[0]);
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
   };
 
-  const handleUpload = async () => {
-    if (!file) {
-      alert("Please select a file first!");
-      return;
-    }
+  const handleChange = (info) =>{
+    setIamge(info.fileList)
+    setFileListVoice(info.file);
+  }
 
-    const formData = new FormData();
-    formData.append("voice", file);
-
-    // try {
-    //   setUploadStatus("Uploading...");
-    //   const response = await axios.post("/api/upload", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   });
-    //   setUploadStatus("Upload successful!");
-    //   console.log(response.data);
-    // } catch (error) {
-    //   setUploadStatus("Upload failed!");
-    //   console.error(error);
-    // }
-  };
-
-  // const triggerFileInput = () => {
-  //   document.getElementById("voiceUpload").click();
-  // };
-
-  return (
-    <div className="voice-upload-container">
-      <div className="voice-upload-box">
-        <input
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-          id="voiceUpload"
-          style={{ display: "none" }}
-        />
-        <label htmlFor="voiceUpload" className="voice-upload-label">
-          <div className="voice-upload-text">Voice Upload </div>
-          <img src={voicUploadIcon} />
-        </label>
-      </div>
-    </div>
+  const uploadButton = (
+    <button
+      style={{
+        border: 0,
+        background: "none",
+        width: "100%",
+      }}
+      type="button"
+    >
+      <img src={voicUploadIcon}/>
+    </button>
   );
+  return (
+    <div className="custom-upload">
+      <Upload
+      {...props}
+      beforeUpload={beforeUpload}
+        listType="picture-card"
+        fileList={image}
+        onPreview={handlePreview}
+        onChange={handleChange}
+      >
+        {image?.length >= 1 ? null : uploadButton}
+      </Upload>
+      {previewImage && (
+        <Image
+          wrapperStyle={{
+            display: "none",
+          }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(""),
+          }}
+          src={previewImage}
+        />
+      )}
+    </div>
+
+      )
 };
+
+
+// return (
+//   <div className="voice-upload-container">
+//     <div className="voice-upload-box">
+//       <input
+//         type="file"
+//         onChange={handleFileChange}
+//         id="voiceUpload"
+//         style={{ display: "none" }}
+//       />
+//       <label htmlFor="voiceUpload" className="voice-upload-label">
+//         <div className="voice-upload-text">Voice Upload </div>
+//         <img src={voicUploadIcon} />
+//       </label>
+//     </div>
+//   </div>
+// );
+
+// accept="audio/*"

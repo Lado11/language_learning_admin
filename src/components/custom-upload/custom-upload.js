@@ -4,7 +4,8 @@ import "./custom-upload.css";
 import { Image, Upload } from "antd";
 import uploadImg from "../../assets/images/uploadImg.svg";
 import { Colors } from "../../assets/colors";
-import uploadIcon from "../../assets/images/upload-voice-icon.svg";
+import uploadIcon from "../../assets/images/wordUpload.png";
+import { beforeUpload } from "../../screens/utils/helper";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -13,11 +14,18 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-export const CustomUpload = () => {
+export const CustomUpload = ({fileList,setFileList,setIamge,image}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [fileList, setFileList] = useState();
 
+  const props = {
+    accept: ".png,.svg,.jpg",
+    onRemove: (file) => {
+      const index = image?.indexOf(file);
+      const newFileList = image?.slice();
+      newFileList?.splice(index, 1);
+    },
+  };
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -25,45 +33,24 @@ export const CustomUpload = () => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-        width: "100%",
-      }}
-      type="button"
-    >
-      <div
-        style={{
-          marginTop: 8,
-          paddingBottom: 15,
-        }}
-      >
-        <div className="uploadTitleLine">
-          <p
-            className="upload-button-text"
-            style={{ color: Colors.LIGHT_GRAY_WITH_ALFA }}
-          >
-            Photo Upload
-          </p>
-          <img src={uploadIcon} className="custom-upload-icon" />
-        </div>
-        <img src={uploadImg} className="upload-img" />
-      </div>
-    </button>
-  );
+
+  const handleChange = (info) =>{
+    setIamge(info.fileList)
+    setFileList(info.file);
+  }
+
+  
   return (
     <div className="custom-upload">
       <Upload
-        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+      {...props}
+      beforeUpload={beforeUpload}
         listType="picture-card"
-        fileList={fileList}
+        fileList={image}
         onPreview={handlePreview}
         onChange={handleChange}
       >
-        {fileList?.length >= 1 ? null : uploadButton}
+        {image?.length >= 1 ? null :   <img  src={uploadIcon}/>}
       </Upload>
       {previewImage && (
         <Image
