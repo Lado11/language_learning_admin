@@ -24,6 +24,9 @@ export const sendCodeSlice = createSlice({
   name: "sendCode",
   initialState,
   reducers: {
+    deletResponse: (state, { payload }) => {
+      state.sendCodeResponse = null;
+    },
     saveCode: (state, { payload }) => {
       state.code = payload;
     },
@@ -43,7 +46,7 @@ export const sendCodeSlice = createSlice({
   },
 });
 
-export const { saveCode } = sendCodeSlice.actions;
+export const { saveCode,deletResponse } = sendCodeSlice.actions;
 
 export const sendCodeLoadingData = (state) => {
   return state.sendCodeSlice.sendCodeLoading;

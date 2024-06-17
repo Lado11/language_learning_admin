@@ -9,8 +9,7 @@ import { getWordsThunk, learningLanguagesThunk, userGetAllThunk } from "../../st
 export const CustomPagination = ({length  ,pageLength}) => {
   const dispatch = useDispatch();
   const pageCount = (length / pageLength) * 10
-  const roundNumber = Math.ceil(pageCount)
-
+  const roundNumber = pageCount ? Math.ceil(pageCount) : 1
   const onChange = (current) => {
     const skip =( current -1 ) * pageLength;
     const data = {

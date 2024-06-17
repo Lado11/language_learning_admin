@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import PinInput from "react-pin-input";
 import "./email-verafication-screen-style.css";
 import {
+  deletResponse,
   saveCode,
   savedEmail,
   sendCodeResponseData,
@@ -22,10 +23,10 @@ export const EmailVeraficationScreen = () => {
   const email = reduxEmail ? reduxEmail : storageEmail;
 
   useEffect(() => {
-    if (sendCodeResponse?.success) {
+    if (sendCodeResponse?.data?.recoveryCode === true) {
       navigate("/resetPassword");
     }
-  }, [sendCodeResponse?.success]);
+  }, [sendCodeResponse?.data?.recoveryCode]);
 
   return (
     <div
@@ -51,10 +52,14 @@ export const EmailVeraficationScreen = () => {
             {t("EMAIL_VERIFICATION_DESCRIPTION_PART_TWO")}
           </p>
         </div>
+      {sendCodeResponse?.data?.recoveryCode === false && <p className="errorCode">Wrong code!</p>}
+
         <PinInput
           length={6}
           initialValue=""
-          onChange={(value, index) => {}}
+          onChange={(value, index) => {
+            dispatch(deletResponse())
+          }}
           type="numeric"
           inputMode="number"
           style={{ padding: "10px" }}

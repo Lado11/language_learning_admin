@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import uploadImage from "../../assets/images/uploadImg.png";
-import { CustomAntdButton, CustomAntdInput } from "../../components";
+import { CustomAntdButton, CustomAntdInput, CustomErrorSection } from "../../components";
 import { Colors } from "../../assets/colors";
 import "../../global-styles/global-styles.css";
 import "./learning-language-screen-style.css";
@@ -49,6 +49,7 @@ export const LearningLanguageCreateScreen = () => {
       formData.append("name", values.name);
       formData.append("image", learningLanguageFile);
       languages.forEach((item, ind) => {
+        console.log(item);
         formData.append(`nativeLanguages[${ind}]`, item._id);
       });
       dispatch(createLearnLanguageThunk(formData));
@@ -78,12 +79,16 @@ export const LearningLanguageCreateScreen = () => {
 
   useEffect(() => {
     createLearnLanguageResponse?.success === true && Success({ messageApi });
-    createLearnLanguageResponse?.success === false &&
-      Error({ messageApi, messageError });
+    // createLearnLanguageResponse?.success === false &&
+    //   Error({ messageApi, messageError });
     dispatch(deleteLerningCreateResponse());
     dispatch(removeAllCreateSelectedLanguages());
   }, [createLearnLanguageResponse?.success]);
 
+
+  const onRemove = () => {
+    dispatch(deleteLerningCreateResponse());
+  }
   const props = {
     accept: ".png,.svg,.jpg",
     onRemove: (file) => {
@@ -108,6 +113,7 @@ export const LearningLanguageCreateScreen = () => {
         >
         <div className="createLearningLangRow">
         <div>
+          { messageError && <CustomErrorSection error={messageError} onTab={onRemove}/>}
         <p className="nativeLanguageTitle">Add Learning Language</p>
 
          <div className="createScreenRowInputs">

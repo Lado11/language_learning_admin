@@ -234,6 +234,7 @@ h2 {
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    border-radius: 15px;
   }
 
   .table-row {
@@ -290,7 +291,7 @@ h2 {
 
   @media all and (max-width: 767px) {
     .table-header {
-      display: none;
+      /* display: none; */
     }
 
     

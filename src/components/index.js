@@ -20,4 +20,6 @@ export * from "./custom-message";
 export * from "./custom-spin";
 export * from "./custom-antd-select";
 export * from "./custom-upload";
-export * from "./custom-filter-select"
+export * from "./custom-filter-select";
+export * from "./custom-no-data";
+export * from "./custom-error-section"

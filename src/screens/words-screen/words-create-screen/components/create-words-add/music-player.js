@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import play from "../../../../../assets/images/play.png"
-import myusic from "../../../../../assets/colors/music.mp3"
+import WavesurferPlayer from '@wavesurfer/react'
 
 const formWaveSurferOptions = ref => ({
   container: ref,
@@ -75,3 +75,33 @@ export function Waveform({ url }) {
     </div>
   );
 }
+// export function Waveform({ url }) { 
+//   const [wavesurfer, setWavesurfer] = useState(null)
+//   const [isPlaying, setIsPlaying] = useState(false)
+
+//   const onReady = (ws) => {
+//     setWavesurfer(ws)
+//     setIsPlaying(false)
+//   }
+
+//   const onPlayPause = () => {
+//     wavesurfer && wavesurfer.playPause()
+//   }
+
+//   return (
+//     <>
+//       <WavesurferPlayer
+//         height={100}
+//         waveColor="violet"
+//         url={url}
+//         // onReady={onReady}
+//         onPlay={() => setIsPlaying(true)}
+//         onPause={() => setIsPlaying(false)}
+//       />
+
+//       <button onClick={onPlayPause}>
+//         {isPlaying ? 'Pause' : 'Play'}
+//       </button>
+//     </>
+//   )
+// }

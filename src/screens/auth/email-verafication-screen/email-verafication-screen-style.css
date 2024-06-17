@@ -4,7 +4,9 @@
   padding: 65px;
   height: 100vh;
 }
-
+.errorCode{
+  color: red;
+}
 .emailVeraficationScreenSubDiv {
   display: flex;
   flex-direction: column;

@@ -5,7 +5,7 @@ import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin } from "../../components";
 import remove_icon from "../../assets/images/remove_icon.png";
 import {
   categoryDeleteThunk,
@@ -83,9 +83,11 @@ export const CategoryUpdate = () => {
   useEffect(() => {
     if (categoryUpdateResponse?.success === true || categoryDeleteResponse?.success === true) {
       navigate("/category");
+      dispatch(deleteCategoryDeleteResponse());
+      dispatch(deleteCategoryUpdateResponse());
+
+
     }
-    dispatch(deleteCategoryDeleteResponse());
-    dispatch(deleteCategoryUpdateResponse());
   }, [categoryUpdateResponse?.success, categoryDeleteResponse?.success]);
 
   const showModal = () => {
@@ -94,95 +96,99 @@ export const CategoryUpdate = () => {
   const onTab = () => {
     dispatch(categoryDeleteThunk(categoryId))
   }
+  const onRemove = () => {
+    dispatch(deleteCategoryDeleteResponse());
+  }
 
   return (
     <div className="nativeLanguageScreenMainDiv">
-     <div>
-     <p className="nativeLanguageTitle">Update Category</p>
-      <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} onTab={onTab} />
-{catgeoryLoadingId ? <div className="CustomSpinUpdate">
-       <CustomSpin size={120} color={Colors.GRAY_COLOR} />
-        </div>:
-      <Form
-        autoComplete="off"
-        form={form}
-        name="control-hooks"
-        onFinish={onFinish}
-        className="formAntd"
+      <div>
+        {categoryDeleteResponse?.message && <CustomErrorSection error={categoryDeleteResponse?.message} onTab={onRemove} />}
+        <p className="nativeLanguageTitle">Update Category</p>
+        <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} onTab={onTab} />
+        {catgeoryLoadingId ? <div className="CustomSpinUpdate">
+          <CustomSpin size={120} color={Colors.GRAY_COLOR} />
+        </div> :
+          <Form
+            autoComplete="off"
+            form={form}
+            name="control-hooks"
+            onFinish={onFinish}
+            className="formAntd"
 
-      >
-        <div className="category_row_input_user">
-          <div className="update_category_input">
-            <p>Category Name</p>
-            <CustomAntdInput name="localization" placeholder="Category Name*" min={3} />
-          </div>
-          <div className="update_category_input left">
-            <p>localication string*</p>
-            <CustomAntdInput min={3} name="name" placeholder="localication string*" />
-          </div>
-        </div>
-      
-        <p>Category Icon</p>
-        <Form.Item
-          name="image"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          {categoryShow != null || fileList != null ? (
-            <div className="imgae_upload_design">
-              <div className="remove_icon_div">
-                <img
-                  className="remove_button"
-                  src={remove_icon}
+          >
+            <div className="category_row_input_user">
+              <div className="update_category_input">
+                <p>Category Name</p>
+                <CustomAntdInput name="localization" placeholder="Category Name*" min={3} />
+              </div>
+              <div className="update_category_input left">
+                <p>localication string*</p>
+                <CustomAntdInput min={3} name="name" placeholder="localication string*" />
+              </div>
+            </div>
+
+            <p>Category Icon</p>
+            <Form.Item
+              name="image"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              {categoryShow != null || fileList != null ? (
+                <div className="imgae_upload_design">
+                  <div className="remove_icon_div">
+                    <img
+                      className="remove_button"
+                      src={remove_icon}
+                      onClick={() => {
+                        setFileList();
+                        setCategoryShow();
+                      }}
+                    />
+                  </div>
+                  <div className="imgae_name">
+                    <p>{nativeLanguageData?.imageFile?.description}</p>
+                    <img src={`${baseUrl}${nativeLanguageData?.imageFile?.path}`} />
+                  </div>
+                </div>
+              ) : (
+                <Upload
+                  onChange={handleChange}
+                  beforeUpload={beforeUpload}
+                  {...props}
+                  maxCount={1}
+                  listType="picture"
+                  className="upload-list-inline"
+                >
+                  {categoryShow && showCategoryUpload ? null : (
+                    <img src={uploadIcon} className="upload" />
+                  )}
+                </Upload>
+              )}
+            </Form.Item>
+
+            <Form.Item>
+              <CustomAntdButton
+                title="Update"
+                background={Colors.PURPLE}
+                loading={categoryUpdateLoading}
+              />
+              <div className="deleteButton">
+                <CustomAntdButtonDelete
+                  loading={catgeoryUpdateLoading}
+                  title="Delete"
+                  background={Colors.GRAY_COLOR}
                   onClick={() => {
-                    setFileList();
-                    setCategoryShow();
+                    showModal()
                   }}
                 />
               </div>
-              <div className="imgae_name">
-                <p>{nativeLanguageData?.imageFile?.description}</p>
-                <img src={`${baseUrl}${nativeLanguageData?.imageFile?.path}`} />
-              </div>
-            </div>
-          ) : (
-            <Upload
-              onChange={handleChange}
-              beforeUpload={beforeUpload}
-              {...props}
-              maxCount={1}
-              listType="picture"
-              className="upload-list-inline"
-            >
-              {categoryShow && showCategoryUpload ? null : (
-                <img src={uploadIcon} className="upload" />
-              )}
-            </Upload>
-          )}
-        </Form.Item>
-
-        <Form.Item>
-          <CustomAntdButton
-            title="Update"
-            background={Colors.PURPLE}
-            loading={categoryUpdateLoading}
-          />
-          <div className="deleteButton">
-            <CustomAntdButtonDelete
-              loading={catgeoryUpdateLoading}
-              title="Delete"
-              background={Colors.GRAY_COLOR}
-              onClick={() => {
-                showModal()
-              }}
-            />
-          </div>
-        </Form.Item>
-      </Form>}
-     </div>
+            </Form.Item>
+          </Form>}
+      </div>
     </div>
   );
 };

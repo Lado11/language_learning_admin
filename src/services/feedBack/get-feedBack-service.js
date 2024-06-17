@@ -5,3 +5,10 @@ export const feedBackGetService = (data) => {
     `api/admin/feedback?skip=${data.skip}&limit=${data.limit}`
   );
 };
+
+
+export const feedBackGetIdService = (id) => {
+  return api.get(
+    `api/admin/feedback/${id}`
+  );
+};

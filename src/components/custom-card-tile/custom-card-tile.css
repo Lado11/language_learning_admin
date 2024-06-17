@@ -45,7 +45,7 @@
 
 @media only screen and (max-width: 1600px) {
   .customCardTileMainItem {
-    max-width: 48%;
+    max-width: 30%;
   }
 }
 @media only screen and (max-width: 1440px) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./words-screen-style.css";
 import { Colors } from "../../assets/colors";
-import { CustomPagination, CustomSpin } from "../../components";
+import { CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { useTranslation } from "react-i18next";
 import { WordsScreenAddFields, WordsScreenSelects } from "./components";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,25 +24,25 @@ export const WordsScreen = () => {
   const [wordsNativeLanguageSelectValue, setWordsNativeLanguageSelectValue] = useState();
   const [wordsLevelSelectedValue, setWordsLevelSelectedValue] = useState();
   const [wordsCategorySelecteValue, setWordsCategorySelectValue] = useState();
-  const [searchValue,setSearchValue ] = useState();
+  const [searchValue, setSearchValue] = useState();
   const wordsResponse = useSelector(wordsResponseData);
   const wordsLoading = useSelector(wordsLoadingData);
-  const updateWords = ( id) => {
-    localStorage.setItem("wordId",id)
-    navigate("/update-word")
+  const updateWords = (id) => {
+    localStorage.setItem("wordId", id)
+    navigate(`/update-word/:${id}`)
     dispatch(getIdWordsThunk(id));
   }
 
-   useEffect(() => {
+  useEffect(() => {
     const data = {
       skip: 0,
       limit: 5,
       language: learningLanguageWordSelectedValue?._id ?
-       learningLanguageWordSelectedValue?._id  : "",
-       level:wordsLevelSelectedValue?.value ? wordsLevelSelectedValue?.value : "",
-       category:wordsCategorySelecteValue?._id ? wordsCategorySelecteValue?._id : "",
-       translateLanguage:wordsNativeLanguageSelectValue?._id ? wordsNativeLanguageSelectValue?._id : "",
-       search:searchValue ? searchValue : ""
+        learningLanguageWordSelectedValue?._id : "",
+      level: wordsLevelSelectedValue?.value ? wordsLevelSelectedValue?.value : "",
+      category: wordsCategorySelecteValue?._id ? wordsCategorySelecteValue?._id : "",
+      translateLanguage: wordsNativeLanguageSelectValue?._id ? wordsNativeLanguageSelectValue?._id : "",
+      search: searchValue ? searchValue : ""
     };
     dispatch(getWordsThunk(data));
   }, []);
@@ -71,46 +71,46 @@ export const WordsScreen = () => {
           <div class="container">
             <ul class="responsive-table">
               <TableHeader data={customTableColumns} />
-              {!wordsResponse?.data?.list?.length && !wordsLoading ? <p>No Data</p> : null}
               {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
-              </div> : wordsResponse?.data?.list?.map((val, index) => {
-                return (
-                  <li class="table-row" key={val._id} onClick={()=>{
-                    updateWords(val?._id)
-                  }}>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.word}</div>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.language?.name}</div>
-                    <div class="col col-1 desc" data-label="Job Id">
-                      <Avatar.Group
-                        maxCount={4}
-                        maxStyle={{
-                          color: '#f56a00',
-                          backgroundColor: '#fde3cf',
-                        }}
-                      >
-                        {val?.translates.map((item, index) => {
-                          return <div key={index}>
-                            <Avatar src={item?.nativeLanguageDetails?.imageFile} />
-                          </div>
-                        })}
-
-                      </Avatar.Group>
-                    </div>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.transcription}</div>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.level === 0 ? "beginner" : val?.level === 1 ? "intermediate" : val?.level === 2 ? "advanced" : null}</div>
-                    <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.active).toString()}</p></div>
-                  </li>
-                )
-              })}
+              </div> :
+                <>
+                  {!wordsResponse?.data?.list?.length && !wordsLoading ? <CustomNoData /> : wordsResponse?.data?.list?.map((val, index) => {
+                    return (
+                      <li class="table-row" key={val._id} onClick={() => {
+                        updateWords(val?._id)
+                      }}>
+                        <div class="col col-1 desc" data-label="Job Id">{val?.word}</div>
+                        <div class="col col-1 desc" data-label="Job Id">{val?.language?.name}</div>
+                        <div class="col col-1 desc" data-label="Job Id">
+                          <Avatar.Group
+                            maxCount={4}
+                            maxStyle={{
+                              color: '#f56a00',
+                              backgroundColor: '#fde3cf',
+                            }}
+                          >
+                            {val?.translates.map((item, index) => {
+                              return <div key={index}>
+                                <Avatar src={item?.nativeLanguageDetails?.imageFile} />
+                              </div>
+                            })}
+                          </Avatar.Group>
+                        </div>
+                        <div class="col col-1 desc" data-label="Job Id">{val?.transcription}</div>
+                        <div class="col col-1 desc" data-label="Job Id">{val?.level === 0 ? "beginner" : val?.level === 1 ? "intermediate" : val?.level === 2 ? "advanced" : null}</div>
+                        <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.active).toString()}</p></div>
+                      </li>
+                    )
+                  }
+                  )}
+                </>}
             </ul>
-
+            {!wordsResponse?.data?.list?.length && !wordsLoading ? null : <div className="nativeScreenPaginationDiv">
+              <CustomPagination length={wordsResponse?.data?.total} pageLength={5} />
+            </div>}
           </div>
-
         </div>
-      </div>
-      <div className="nativeScreenPaginationDiv">
-        <CustomPagination length={wordsResponse?.data?.total} pageLength={5} />
       </div>
     </div>
   );

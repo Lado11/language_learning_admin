@@ -38,6 +38,8 @@ import { wordsUpdateSlice } from "./slices/words/update-words-slice";
 import { feedBackGetSlice } from "./slices/feedBack/get-feedback";
 import { wordsExelDeleteSlice } from "./slices/words/delete-exel-words";
 import { wordsExelGetSlice } from "./slices/words/get-exel-words";
+import { feedBackGetIdSlice } from "./slices/feedBack/getId-feadback";
+import { wordsExelGetIdSlice } from "./slices/words/getId-exel-words";
 
 export const store = configureStore({
   reducer: {
@@ -77,6 +79,8 @@ export const store = configureStore({
     wordsUpdateSlice:wordsUpdateSlice.reducer,
     sendPushNotificationSlice:sendPushNotificationSlice.reducer,
     sendEmailNotificationSlice:sendEmailNotificationSlice.reducer,
-    feedBackGetSlice:feedBackGetSlice.reducer
+    feedBackGetSlice:feedBackGetSlice.reducer,
+    feedBackGetIdSlice:feedBackGetIdSlice.reducer,
+    wordsExelGetIdSlice:wordsExelGetIdSlice.reducer
   },
 });

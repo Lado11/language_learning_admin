@@ -24,7 +24,8 @@ export const WordsCreateScreen = () => {
   const array = [];
   const loadingCreateWord = useSelector(createWordsLoadingData);
 
-
+const [val,setVal] = useState()
+console.log(val,"val");
   const onFinish = (values) => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
@@ -45,8 +46,7 @@ export const WordsCreateScreen = () => {
     learningLanguageWordSelectedValue?.nativeLanguages.forEach((item, ind) => {
       formData.append(`translates[${ind}].nativeLanguage`, item?._id);
     });
-    dispatch(createWordsThunk(formData))
-
+    setVal(values)
   };
   const messageError = createWordData?.message;
 
@@ -125,7 +125,9 @@ export const WordsCreateScreen = () => {
           </div>
           <div className="addButtonDiv">
             {contextHolder}
-            <CustomAntdButton title="Add" loading={loadingCreateWord} background={Colors.PURPLE} />
+            <CustomAntdButton onClick={() => {
+            dispatch(createWordsThunk(formData)) 
+            }} title="Add" loading={loadingCreateWord} background={Colors.PURPLE} />
           </div>
         </Form>
       </div>

@@ -3,7 +3,7 @@ import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
 import { CustomCountryItem } from "../../components/custom-country-item/custom-country-item";
 import "./native-language-style.css";
 import "../../global-styles/global-styles.css";
-import { CustomPagination } from "../../components";
+import { CustomNoData, CustomPagination } from "../../components";
 import { useNavigate } from "react-router-dom";
 import {
   getNativeGetResponse,
@@ -19,17 +19,16 @@ export const NativeLanguageScreen = () => {
   const dispatch = useDispatch();
   const nativeLoading = useSelector(getNativeGetloading);
   const nativeLanguageData = useSelector(getNativeGetResponse);
-  const token = localStorage.getItem("token");
   const nativeData = nativeLanguageData?.data?.list;
   const pageLength = 12;
 
 
   const navigateNativeUpdate = (countryItem) => {
-    localStorage.setItem("nativeId", countryItem?.id);
-    dispatch(nativeLanguageGetIdThunk(countryItem?.id));
-    navigate("/native-update");
+    localStorage.setItem("nativeId", countryItem?._id);
+    dispatch(nativeLanguageGetIdThunk(countryItem?._id));
+    navigate(`/native-update/:${countryItem?._id}`);
   };
-  
+
   const data = {
     skip: 0,
     limit: 12,
@@ -49,38 +48,41 @@ export const NativeLanguageScreen = () => {
             }}
           />
           <p className="nativeLanguageTitle">Native Language</p>
-          {!nativeData?.length && !nativeLoading ? <div>
-            <p>No data</p>
-          </div>:null}
-          {nativeLoading ? (
-            <div className="loadingDiv nativeLanguageScreenMainDiv">
-              <CustomSpin size={64} color="gray" />
-            </div>
-          ) : (
-            <div className="nativeLanguageCountryItems">
-              {nativeData?.map((countryItem) => {
-                return (
-                  <div
-                    key={countryItem?.id}
-                    onClick={() => {
-                      navigateNativeUpdate(countryItem);
-                    }}
-                    className="pointer"
-                  >
-                    <CustomCountryItem
-                      icon={countryItem.imageFile.path}
-                      title={countryItem.name}
-                    />
+          <div>
+            {!nativeData?.length && !nativeLoading ? <CustomNoData /> :
+
+              <>
+                {nativeLoading ?
+                  <div className="loadingDiv nativeLanguageScreenMainDiv">
+                    <CustomSpin size={64} color="gray" />
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-        <div className="nativeScreenPaginationDiv">
-          <CustomPagination length={nativeLanguageData?.data?.total}pageLength={pageLength}  func={()=>{
-            nativeLanguageGetThunk()
-          }}/>
+                  :
+                  <div className="nativeLanguageCountryItems">
+                    {nativeData?.map((countryItem) => {
+                      return (
+                        <div
+                          key={countryItem?.id}
+                          onClick={() => {
+                            navigateNativeUpdate(countryItem);
+                          }}
+                          className="pointer"
+                        >
+                          <CustomCountryItem
+                            icon={countryItem.imageFile.path}
+                            title={countryItem.nameEng}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                }
+                <div className="nativeScreenPaginationDiv">
+                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={pageLength} func={() => {
+                    nativeLanguageGetThunk()
+                  }} />
+                </div>
+              </>}
+          </div>
         </div>
       </div>
     </>

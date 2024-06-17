@@ -37,7 +37,7 @@ export const UserScreen = () => {
   const userUpdate = (id) => {
     localStorage.setItem("userId", id);
     dispatch(userGetByIdThunk(id));
-    navigate("/user-update");
+    navigate(`/user-update/:${id}`);
   }
 
 
@@ -66,7 +66,7 @@ export const UserScreen = () => {
 
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />
-        </div> : <div class="container">
+        </div> :<div> <div class="container">
           <ul class="responsive-table">
             <TableHeader data={columns} />
             {dataList?.map((val, index) => {
@@ -85,11 +85,14 @@ export const UserScreen = () => {
               )
             })}
           </ul>
+        </div>
+        
         </div>}
+        <div className="nativeScreenPaginationDiv">
+         <CustomPagination length={userData?.total} pageLength={5} />
+       </div> 
       </div>
-      <div className="nativeScreenPaginationDiv">
-        <CustomPagination length={userData?.total} pageLength={pageLength} />
-      </div>
+    
     </div>
   );
 };

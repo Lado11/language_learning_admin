@@ -12,6 +12,10 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
+.ant-select.ant-select-in-form-item {
+  width: 100%;
+  max-width:  420px !important;
+}
 .selectedNativeItem{
   width: 418px;
   display: flex;

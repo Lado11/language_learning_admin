@@ -7,3 +7,8 @@ export const wordExelDeleteService = (id) => {
 export const getWordsExelService = (data) => {
     return api.get(`api/admin/words/xlsx/process?limit=${data.limit}&skip=${data.skip}`);
   };
+
+  
+export const GetIdWordsExelService = (id) => {
+  return api.get(`api/admin/words/xlsx/process/${id}`);
+};

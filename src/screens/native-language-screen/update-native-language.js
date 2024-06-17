@@ -132,7 +132,8 @@ export const UpdateNativeLanguage = () => {
       />
       <p className="nativeLanguageTitle">Update Native Language</p>
 
-     {getIdNativeLoading ?<div className="CustomSpinUpdate"> <CustomSpin size={120} color={Colors.GRAY_COLOR} /> </div>: <Form
+     {getIdNativeLoading ?<div className="CustomSpinUpdate"> <CustomSpin size={120} color={Colors.GRAY_COLOR} /> </div>:
+      <Form
         autoComplete="off"
         form={form}
         name="control-hooks"

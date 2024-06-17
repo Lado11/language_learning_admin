@@ -7,10 +7,9 @@ import { useEffect } from "react";
 export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, name }) => {
     const dispatch = useDispatch();
     const nativeLanguagesResponse = useSelector(getNativeGetResponse);
-    console.log( nativeLanguagesResponse?.data?.total,"log");
     const filteredResponse = nativeLanguagesResponse?.data?.list.map((lang) => {
         return {
-            _id: lang.id,
+            _id: lang._id,
             name: lang.name.toLowerCase(),
             nameEng: lang.name,
         };
@@ -38,7 +37,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
             <CustomSelect
                 rules={rules}
                 name={name}
-                width={"418px"}
+                // width={"418px"}
                 data={filteredResponse}
                 title="Choose Native Language *"
                 optionsData={filteredResponse}

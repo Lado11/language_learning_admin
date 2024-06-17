@@ -126,11 +126,11 @@ const [myusic,setMyusci] = useState()
         dispatch(getWordsDeleteThunk(wordId));
     };
 
-
+console.log(wordsIdData?.data,"data");
     useEffect(() => {
         form.setFieldsValue({
-            language: wordsIdData?.data?.language,
-            category: wordsIdData?.data?.category,
+            language: wordsIdData?.data?.language?.nameEng,
+            category: wordsIdData?.data?.category?.name,
             transcription: wordsIdData?.data?.transcription,
             level: wordsIdData?.data?.level,
             word: wordsIdData?.data?.word,
@@ -270,17 +270,12 @@ const [myusic,setMyusci] = useState()
                             </div>}
                         </>
                     }
-
-
                 </Form.Item>
                 <p>Image</p>
                 <Form.Item
                     // name="image"
-                    rules={[
-                        {
-                            required: true,
-                        },
-                    ]}
+                    rules={[ {
+                            required: true}]}
                 >
                     {categoryShow != null || fileList != null ? (
                         <div className="imgae_upload_design">

@@ -13,7 +13,7 @@ import uploadImage from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdInput } from "../../components";
+import { CustomAntdInput, CustomErrorSection } from "../../components";
 import { Error, Success } from "../../components/custom-message/custom-message";
 import { beforeUpload, props } from "../utils/helper";
 
@@ -61,18 +61,23 @@ export const NativeLanguageCretae = () => {
       dispatch(deleteNativeCreateResponse());
     }
   }, [nativeLanguageData?.success])
+console.log(  nativeLanguageData?.success ,"LOGGG");
 
   useEffect(() => {
     nativeLanguageData?.success === true && Success({ messageApi });
-    nativeLanguageData?.success === false &&
-      Error({ messageApi, messageError });
+    // nativeLanguageData?.success === false &&
+    //   Error({ messageApi, messageError });
     dispatch(deleteNativeCreateResponse());
   }, [nativeLanguageData?.success]);
 
-
+  const str = messageError?.toString()
+  const onReome = () => {
+    dispatch(deleteNativeCreateResponse())
+  }
 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
+      {str != null ? <CustomErrorSection error={str} onTab={onReome} /> : null}
       <p className="nativeLanguageTitle">Add Native Language</p>
       <Form
         className="formAntd"

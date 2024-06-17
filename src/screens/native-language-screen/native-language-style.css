@@ -139,6 +139,17 @@
   margin-top: 10px;
 }
 
+.removeIcon{
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.errorDiv{
+  display: flex;
+  flex-direction: row;
+}
+
 @media screen and (max-width: 1440px) {
   .pointer {
     max-width: 33%;

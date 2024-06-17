@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {
   CustomCardItem,
+  CustomNoData,
   CustomPagination,
   CustomSelect,
 } from "../../components";
@@ -28,8 +29,10 @@ export const CategoryScreen = () => {
   }, [])
 
   const categoryUpdate = (id) => {
+
+    console.log(id,"d");
     localStorage.setItem("categoryId",id,)
-    navigate("/category-update");
+    navigate(`/category-update/:${id}`);
   };
 
   return (
@@ -49,32 +52,34 @@ export const CategoryScreen = () => {
         </div>
         <CustomSelect title={"Category Name"} />
       </div> */}
-      <p className="category-table-title">Category</p>
+      {/* <p className="category-table-title">Category</p> */}
       <div className="category-item-pagination">
-        {!categoryData?.length && !categoryLoading ? <div className="no_data">
-          <p  className="no_data_title">No Data</p>
-        </div> : null}
-        {categoryLoading ? <div className="nativeLanguageScreenMainDiv"> <CustomSpin size={64} color="gray" /> </div> : <div className="custom-card-item">
+        {!categoryData?.length && !categoryLoading ? <CustomNoData />:
+       <>
+       {categoryLoading ? <div className="nativeLanguageScreenMainDiv"> <CustomSpin size={64} color="gray" />
+         </div> :
+         <div className="custom-card-item">
           {categoryData?.map((countryItem, index) => {
             return (
               <div className="pointer" key={index + 1}  onClick={()=>{
-                categoryUpdate(countryItem?.id)
+                categoryUpdate(countryItem?._id)
               }}>
                 <CustomCardItem
                   icon={countryItem?.imageFile?.path}
                   title={countryItem.name}
-                 
                 />
               </div>
             );
           })}
         </div>}
-        </div>
-      
-      </div>
-      <div className="category-pagination">
+        <div className="category-pagination">
           <CustomPagination length={categoryData?.length} pageLength={pageLength}/>
         </div>
+       </>
+        }
+        </div>
+      </div>
+     
     </div>
   );
 };
