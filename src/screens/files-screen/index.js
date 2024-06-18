@@ -1,1 +1,1 @@
-export * from "./files-screen"
+export * from "./files-screen";

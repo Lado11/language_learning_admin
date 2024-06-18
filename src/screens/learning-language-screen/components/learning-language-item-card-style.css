@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Roboto:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500&family=Roboto:wght@500&display=swap");
 
 .learningLanguageCard {
   display: flex;
@@ -49,6 +49,26 @@
 .css-1pssjw0 {
   border: 3px solid white;
   box-shadow: none !important;
+}
+
+@media screen and (max-width: 1440px) {
+  .learningLanguageCardTitle {
+    font-size: 18px;
+  }
+  .learningLanguageCardFirstLine {
+    flex-direction: column;
+  }
+  .css-12g71p8 {
+    justify-content: center;
+  }
+  .css-12g71p8 img {
+    width: 25px;
+    height: 25px;
+  }
+  .css-1ioce3q {
+    width: 20px !important;
+    height: 20px !important;
+  }
 }
 
 @media screen and (max-width: 1024px) {

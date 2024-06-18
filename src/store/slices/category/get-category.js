@@ -2,17 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { categoryGetService } from "../../../services/category/get-category-service";
 
 const initialState = {
-    categoryGetloading: false,
-    categoryGetBool: false,
-    categoryGetResponse: null,
-    categoryGetErrors: null,
+  categoryGetloading: false,
+  categoryGetBool: false,
+  categoryGetResponse: null,
+  categoryGetErrors: null,
 };
 
 export const categoryGetThunk = createAsyncThunk(
   "categoryGet",
-  async (formData, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await categoryGetService(formData);
+      const response = await categoryGetService(data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -44,9 +44,7 @@ export const categoryGetSlice = createSlice({
   },
 });
 
-
 export const { deleteGetBool } = categoryGetSlice.actions;
-
 
 export const getCategoryGetLoading = (state) => {
   return state.categoryGetSlice.categoryGetloading;

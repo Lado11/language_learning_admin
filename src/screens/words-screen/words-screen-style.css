@@ -1,15 +1,118 @@
+.wordsScreenMainDiv {
+  padding: 60px 70px 30px 70px;
+}
+
+.wordsScreenTable {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .wordsScreenAddFields {
-    display: flex;
+  display: flex;
+}
+
+.container {
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
 
 .wordsScreenTitle {
-    font-family: 'Roboto';
-    font-size: 18px;
-    font-weight: 500;
-    color: '#000000'
+  font-family: "Roboto";
+  font-size: 18px;
+  font-weight: 500;
+  color: "#000000";
 }
 
 .wordScreenSelectsDiv {
+  display: flex;
+  flex-wrap: wrap;
+}
+.antd_custom_select_user {
+  margin-right: 16px;
+  margin-left: 0;
+}
+.wordsSearchInput {
+  min-height: 60px;
+}
+
+.wordsPagination {
+  display: flex;
+  justify-content: center;
+}
+
+.wordsCreateScreen {
+  display: flex;
+  flex-direction: row;
+}
+
+.wordsCreateAddWords {
+  /* width: 45%; */
+  /* height: 100%; */
+}
+
+.wordsCreateForm {
+  width: 100%;
+  /* height: 90%; */
+}
+
+.wordScreenSelectsDiv .ant-select{
+  width: 180px !important;
+  height: 60px !important;
+}
+
+
+.wordScreenSelectsDiv .ant-select-selector{
+  background-color: #F7F8FA !important;
+}
+.wordScreenSelectsDiv .ant-select-selection-item{
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 25px;
+color: #7D8FB3 !important;  
+}
+
+.wordsCreateTranslate {
+  border: 1px solid purple;
+  width: 45%;
+  height: 100%;
+}
+
+@media only screen and (max-width: 1440px) {
+  .wordScreenSelectsDiv {
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .wordScreenSelectsDiv {
+    margin-bottom: 20px;
+  }
+  .wordsScreenMainDiv {
+    padding:60px 25px 30px 25px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .wordsScreenMainDiv {
+    padding:60px 20px 30px 20px;
+  }
+  
+}
+
+@media only screen and (max-width: 425px) {
+  .wordsScreenMainDiv {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+  }
+  .wordsScreenAddFields {
+    flex-direction: column;
+  }
+  .column-id,
+  .column-email,
+  .column-device-id {
+    display: none;
+  }
 }

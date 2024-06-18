@@ -3,10 +3,10 @@ import { nativeLanguageCreateService } from "../../../services/native-language/n
 import { categoryCreateService } from "../../../services/category/category-create-service";
 
 const initialState = {
-    categoryCreateloading: false,
-    categoryCreateBool: false,
-    categoryCreateResponse: null,
-    categoryCreateErrors: null,
+  categoryCreateloading: false,
+  categoryCreateBool: false,
+  categoryCreateResponse: null,
+  categoryCreateErrors: null,
 };
 
 export const categoryCreateThunk = createAsyncThunk(
@@ -25,6 +25,9 @@ export const categoryCreateSlice = createSlice({
   name: "categoryCreate",
   initialState,
   reducers: {
+    deleteCategoryCreateResponse: (state) => {
+      state.categoryCreateResponse = "";
+    },
     deleteCategoryCreateBool: (state) => {
       state.categoryCreateBool = false;
     },
@@ -45,9 +48,7 @@ export const categoryCreateSlice = createSlice({
   },
 });
 
-
-export const { deleteCategoryCreateBool } = categoryCreateSlice.actions;
-
+export const { deleteCategoryCreateBool,deleteCategoryCreateResponse } = categoryCreateSlice.actions;
 
 export const getCategoryCreateLoading = (state) => {
   return state.categoryCreateSlice.categoryCreateloading;

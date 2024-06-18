@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./custom-input-styl.css";
 import { useTranslation } from "react-i18next";
 import { Colors } from "../../assets/colors/colors";
 import eyeIcon from "../../assets/images/eyeIcon.svg";
+import { useDispatch } from "react-redux";
 
 export const CustomInputField = ({
   name,
@@ -13,9 +14,11 @@ export const CustomInputField = ({
   onBlur,
   type,
   isPassword,
+  onFocus
 }) => {
   const { t } = useTranslation();
   const [isDisplayed, setIsDisplayed] = useState(false);
+  const dispatch = useDispatch();
 
   const onDisplayed = () => {
     setIsDisplayed(!isDisplayed);
@@ -24,12 +27,12 @@ export const CustomInputField = ({
   return (
     <div className="customInputMainDiv">
       <div className="customInputLabelDiv">
-        <p className="label">{label}</p>
+        <p className="customInputLabel">{label}</p>
         {isForgot ? (
           <a
-            href="#"
+            href="/sendEmail"
             style={{ color: Colors.PURPLE }}
-            className="label forgotLabel"
+            className="customInputLabel customInputForgotLabel"
           >
             {t("FORGOT")} ?
           </a>
@@ -45,7 +48,8 @@ export const CustomInputField = ({
           placeholder={placeholder}
           onChange={onChange}
           onBlur={onBlur}
-          className="inputStyle"
+          className="customInput"
+          onFocus={onFocus}
           style={{ backgroundColor: Colors.INPUT_BACKGROUND }}
         />
         {isPassword ? (

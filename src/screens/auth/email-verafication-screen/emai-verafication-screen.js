@@ -1,11 +1,32 @@
-import React from "react";
-import "./email-verafication-screen-style.css";
+import React, { useEffect } from "react";
 import { Colors } from "../../../assets/colors/colors";
 import { useTranslation } from "react-i18next";
 import PinInput from "react-pin-input";
+import "./email-verafication-screen-style.css";
+import {
+  deletResponse,
+  saveCode,
+  savedEmail,
+  sendCodeResponseData,
+  sendCodeThunk,
+} from "../../../store/slices";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const EmailVeraficationScreen = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const reduxEmail = useSelector(savedEmail);
+  const storageEmail = localStorage.getItem("email");
+  const sendCodeResponse = useSelector(sendCodeResponseData);
+  const email = reduxEmail ? reduxEmail : storageEmail;
+
+  useEffect(() => {
+    if (sendCodeResponse?.data?.recoveryCode === true) {
+      navigate("/resetPassword");
+    }
+  }, [sendCodeResponse?.data?.recoveryCode]);
 
   return (
     <div
@@ -31,10 +52,14 @@ export const EmailVeraficationScreen = () => {
             {t("EMAIL_VERIFICATION_DESCRIPTION_PART_TWO")}
           </p>
         </div>
+      {sendCodeResponse?.data?.recoveryCode === false && <p className="errorCode">Wrong code!</p>}
+
         <PinInput
           length={6}
           initialValue=""
-          onChange={(value, index) => {}}
+          onChange={(value, index) => {
+            dispatch(deletResponse())
+          }}
           type="numeric"
           inputMode="number"
           style={{ padding: "10px" }}
@@ -44,7 +69,11 @@ export const EmailVeraficationScreen = () => {
             borderRadius: 8,
             margin: "0 6px",
           }}
-          onComplete={(value, index) => {}}
+          onComplete={(value) => {
+            dispatch(saveCode(value));
+            localStorage.setItem("code", "112233");
+            dispatch(sendCodeThunk({ email, value }));
+          }}
           autoSelect={true}
           regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
         />

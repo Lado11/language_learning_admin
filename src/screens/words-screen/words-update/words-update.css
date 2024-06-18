@@ -1,0 +1,25 @@
+.update-words-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.lerning-language-section{
+    width: 420px;
+}
+
+.updateWordsAddInputs .ant-select{
+width: 202px;
+}
+
+.updateWordsAddInputs .ant-input{
+   width: 203px !important;
+}
+
+.updateWordsAddInputs .ant-form-item-explain-error{
+    width: 203px !important;
+}
+
+.ant-input-status-error{
+    border-color:#7d8fb326  !important;
+}

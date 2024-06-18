@@ -24,6 +24,9 @@ export const userDeleteSlice = createSlice({
     name: "userDelete",
     initialState,
     reducers: {
+        deleteUserDeleteResponse: (state) => {
+            state.userDeleteResponse = false;
+        },
         deleteUserDeleteBool: (state) => {
             state.userDeleteBool = false;
         },
@@ -45,7 +48,7 @@ export const userDeleteSlice = createSlice({
 });
 
 
-export const { deleteUserDeleteBool } = userDeleteSlice.actions;
+export const { deleteUserDeleteBool ,deleteUserDeleteResponse} = userDeleteSlice.actions;
 
 
 export const getUserDeleteLoading = (state) => {

@@ -1,90 +1,203 @@
 .nativeLanguageScreenMainDiv {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    padding: 60px 82px 30px 82px;
-    background-color: white;
-    border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 60px 82px 30px 82px;
+  background-color: white;
+  border-radius: 50px;
 }
-.nativeLanguageCreateScreenMainDiv{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 60px 82px 30px 82px;
-    background-color: white;
-    border-radius: 50px;
+
+
+.nativeLanguageCreateScreenMainDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 60px 82px 30px 82px;
+  background-color: white;
+  border-radius: 50px;
 }
-.pointer{
-    cursor: pointer;
-    width: 100%;
-    max-width: 25%;
+.imgae_upload_design {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 120px;
+  border: 1px solid #7d8fb326;
+  border-radius: 10px;
+}
+
+.imgae_upload_design_voice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  /* height: 120px; */
+  border: 1px solid #7d8fb326;
+  border-radius: 10px;
+}
+
+/* .ant-upload-list-item {
+  display: none !important;
+} */
+.remove_icon_div {
+  display: flex;
+  justify-content: end;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+}
+
+.imgae_name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.pointer {
+  cursor: pointer;
+  width: 100%;
+  max-width: 25%;
+}
+
+.CustomSpinUpdate{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .nativeScreenPaginationDiv {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .nativeLanguageTitle {
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 18px;
-    padding: 30px 0;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 18px;
+  padding-bottom: 18px;
 }
 
 .nativeLanguageCountryItems {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+}
+.nativeInput{
+  display: flex;
+  flex-direction: column;
+}
+.ant-input {
+  width: 100% !important;
+  max-width: 420px !important;
+  min-height: 60px;
+  border-radius: 10px;
+  border: 1px solid #7D8FB326;
+}
+.formAntd{
+  max-width: 600px;
+}
+::placeholder {
+  color: #7D8FB359 !important;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
 }
 
-.ant-input{
-    max-width: 420px !important;
-    min-height: 60px;
-    border-radius: 10px;
+.upload {
+  width: 100%;
+  max-width: 420px;
+  height: 120px;
+  cursor: pointer;
 }
 
-.upload{
-    cursor: pointer;
+.ant-upload-list-item {
+  height: 120px !important;
 }
 
-.ant-upload-list-item{
-    width: 420px;
+.ant-upload-list-item {
+  width: 420px;
 }
 
-.ant-upload-list-item-name{
-    overflow:visible !important;
+.ant-upload-list-item-name {
+  overflow: visible !important;
 }
 
-.ant-upload-list-item-action{
-    align-items: start !important;
-    justify-content: start !important;
-    background: none !important;
-    margin-left: 15px;
+.ant-upload-list-item-action {
+  align-items: start !important;
+  justify-content: start !important;
+  background: none !important;
+  margin-left: 15px;
+}
+
+.deleteButton {
+  margin-top: 10px;
+}
+
+.removeIcon{
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.errorDiv{
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 1440px) {
+  .pointer {
+    max-width: 33%;
+  }
+  .nativeLanguageScreenMainDiv {
+    padding: 60px 42px 30px 42px;
+  }
+  .nativeLanguageCountryItems .customCountryItem:nth-of-type(3n) {
+    margin-right: 0px !important;
+  }
 }
 
 @media only screen and (max-width: 1024px) {
-    .nativeLanguageScreenMainDiv {
-        padding: 60px 25px 30px 25px;
-    }
+  .pointer {
+    max-width: 50%;
+  }
+  .nativeLanguageScreenMainDiv {
+    padding: 60px 25px 30px 25px;
+  }
+  .nativeLanguageCreateScreenMainDiv {
+    padding: 60px 52px 30px 52px;
+  }
 }
 
-
 @media only screen and (max-width: 768px) {
-    .nativeLanguageScreenMainDiv {
-        padding: 60px 25px 30px 25px;
-        justify-content: center;
-        align-items: center;
-    }
-    .nativeScreenPaginationDiv {
-        margin-top: 20px;
-    }
+  .nativeLanguageScreenMainDiv {
+    padding: 60px 20px 30px 20px;
+    justify-content: center;
+    align-items: start;
+  }
+  .nativeScreenPaginationDiv {
+    margin-top: 20px;
+  }
+  .formAntd{
+    width: 100% !important;
+  }
 }
 
 @media only screen and (max-width: 425px) {
-    .nativeLanguageScreenMainDiv {
-        padding: 60px 25px 30px 25px;
-        justify-content: center;
-        align-items: center;
-    }
+  .formAntd{
+    width: 100% !important;
+  }
+  .pointer {
+    max-width: 100%;
+  }
+  .nativeLanguageScreenMainDiv {
+    padding: 60px 20px 30px 20px;
+    justify-content: center;
+    align-items: center;
+  }
 }

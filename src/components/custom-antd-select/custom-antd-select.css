@@ -1,0 +1,21 @@
+.antd_custom_select_user .ant-select {
+  width: 206px;
+  height: 60px !important;
+}
+
+.antd_custom_select_user .ant-select-selector {
+  background-color: white !important;
+  border: 1px solid #7d8fb326 !important;
+  border-radius: 10px !important;
+}
+
+.antd_custom_select_user .ant-select-selection-item {
+  color: #7d8fb359 !important;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+}
+.antd_custom_select_user {
+  margin-left: 8px;
+}

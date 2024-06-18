@@ -1,18 +1,18 @@
 import axios from "axios";
+// import { Navigate } from "react-router-dom";
+// import { redirect } from "react-router-dom";
 
 let store;
-
 export const injectStore = (_store) => {
-  store = _store
-}
+  store = _store;
+};
 
 export const api = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
 });
 
-
 api.interceptors.request.use(async (config) => {
-//   const Lang = localStorage.getItem("i18n")?.toLowerCase();
+  //   const Lang = localStorage.getItem("i18n")?.toLowerCase();
   const Token = localStorage.getItem("token");
 
   if (Token) {
@@ -26,7 +26,25 @@ api.interceptors.request.use(async (config) => {
     config.headers.Authorization = `Bearer ${Token}`;
     // config.headers['Accept-Language'] = Lang
   }
-
   delete config.headers.non_auth;
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.clear();
+      window.location = "/";
+      return <redirect to="/login" />;
+    }
+  }
+);
+
+export * from "./learn-language/update-learn-language-service";
+export * from "./learn-language/get-learn-language-byId-service";
+export * from "./words";
+export * from "./auth/send-email-service";
+export * from "./auth/send-code-service";

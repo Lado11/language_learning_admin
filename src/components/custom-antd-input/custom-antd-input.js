@@ -1,22 +1,30 @@
-import { Button, Form, Input,  Upload,} from 'antd';
+import { Form, Input } from "antd";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
+export const CustomAntdInput = ({rules, disabled,defaultValue,name, placeholder,min,type,message }) => {
+  const { t } = useTranslation();
 
-export const CustomAntdInput = ({name,placeholder}) => {
-    return (
-        <Form.Item
-            name={name}
-            rules={[
-                {
-                    required: true,
-                },
-                {
-                    min: 3,
-                    message: "min length 3!",
-                  },
-            ]}
-            normalize={(value, prevVal, prevVals) => value.trim()}
-        >
-            <Input placeholder={placeholder}/>
-        </Form.Item>
-    )
-}
+  return (
+    <Form.Item
+      name={name}
+      rules={[
+        {
+          type:type,
+          message: t(`${message}`),
+        },
+        {
+        
+          required: rules,
+        },
+        {
+          min: min,
+          message: t("INPUT_MIN_LENGTH_ERROR"),
+        },
+      ]}
+      normalize={(value) => value.trimStart()}
+    >
+      <Input disabled={disabled}  defaultValue={defaultValue}  placeholder={placeholder} />
+    </Form.Item>
+  );
+};

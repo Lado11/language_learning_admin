@@ -1,0 +1,31 @@
+ .uploadExel{
+    width: 425px;
+height: 60px ;
+}
+
+.addWordExel .ant-select{
+    width: 420px !important;
+    height: 60px !important;
+  }
+  
+  
+  .addWordExel .ant-select-selector{
+    background-color: #F7F8FA !important;
+  }
+  .addWordExel .ant-select-selection-item{
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 25px;
+  color: #7D8FB3 !important;  
+  }
+  .wordExelAdd{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+.addWordExel  .ant-upload-list-item{
+  height: 60px ;
+    }

@@ -35,5 +35,14 @@
   "VERIFED_BY_EMAIL": "Verifed By Email",
   "ADD_NEW_WORDS": "Add New Words",
   "ADD_WORDS_FROM_EXCEL": "Add  Words From Excel",
-  "UPDATE_WORDS_FROM_EXCEL": "Update Words From Excel"
+  "UPDATE_WORDS_FROM_EXCEL": "Update Words From Excel",
+  "ADD": "Add",
+  "UPDATE_LEARNING_LANGUAGE": "Update Learning Language",
+  "LANGUAGE_ENGLISH_NAME": "Language english name",
+  "NATIVE_NAME": "Native Name",
+  "LANGUAGE_ICON": "Language Icon",
+  "LEVEL": "Level",
+
+  "INPUT_MIN_LENGTH_ERROR": "The input must be at least 3 characters long.",
+  "INVALID_USERNAME_OR_PASSWORD": "Invalid username/password"
 }

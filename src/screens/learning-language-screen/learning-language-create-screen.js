@@ -1,48 +1,96 @@
-import React, { useState } from "react";
-import { Form, Upload } from "antd";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { Form, Upload, message } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import uploadImage from "../../assets/images/uploadImg.png";
-import { CustomAntdButton, CustomAntdInput } from "../../components";
+import { CustomAntdButton, CustomAntdInput, CustomErrorSection } from "../../components";
 import { Colors } from "../../assets/colors";
 import "../../global-styles/global-styles.css";
-import { SelectLanguage } from "./components/";
+import "./learning-language-screen-style.css";
+import {
+  createLearnLanguageThunk,
+  deleteLerningCreateResponse,
+  learnLanguageCreateResponse,
+  removeAllCreateSelectedLanguages,
+  nativeLanguageGetThunk,
+  learnLanguageSelectedLanguages,
+  removeLanguagesItem,
+  removeAllLanguages,
+  learnLanguageCreateLoading,
+} from "../../store/slices";
+import { Error, Success } from "../../components";
+import { SelectLearningLang } from "./select-learning-lang";
+import { beforeUpload } from "../utils/helper";
 
 export const LearningLanguageCreateScreen = () => {
-  const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const formData = new FormData();
   const [learningLanguageFileList, setLearningLanguageFileList] = useState([]);
   const [learningLanguageFile, setLearningLanguageFile] = useState();
-  const [showLearningLanguageUpload, setShowLearningLanguageUpload] =
-    useState();
+  const [showLearningLanguageUpload, setShowLearningLanguageUpload] = useState();
+  const languages = useSelector(learnLanguageSelectedLanguages);
+  console.log(languages,"log languages");
+  const languageLoading = useSelector(learnLanguageCreateLoading);
+  const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
+  const messageError = createLearnLanguageResponse?.message;
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    const data = {
+      skip: 0,
+      limit: 12,
+    };
+    dispatch(nativeLanguageGetThunk(data));
+  }, []);
 
   const onFinish = (values) => {
-    if (values.learningLanguageImg.file != "") {
-      formData.append("name", values.learningLanguageImg);
-      formData.append("localization", values.learningLanguageImg);
+    if (values.learningLanguageImage.file != "") {
+      formData.append("nameEng", values.nameEng);
+      formData.append("name", values.name);
       formData.append("image", learningLanguageFile);
-      // dispatch(categoryCreateThunk(formData));
-      form.resetFields();
-      setLearningLanguageFile("");
+      languages.forEach((item, ind) => {
+        console.log(item);
+        formData.append(`nativeLanguages[${ind}]`, item._id);
+      });
+      dispatch(createLearnLanguageThunk(formData));
+
     } else {
       console.log(values);
     }
   };
 
+  useEffect(() => {
+    if (createLearnLanguageResponse?.success === true) {
+      form.resetFields();
+      setLearningLanguageFile("");
+      dispatch(removeAllLanguages())
+      dispatch(deleteLerningCreateResponse());
+    }
+  }, [createLearnLanguageResponse?.success])
+
   const handleChange = (info) => {
     setLearningLanguageFile(info.file);
-    setShowLearningLanguageUpload(info.fileList[0]);
-    if (!info.fileList[0]) {
+    setShowLearningLanguageUpload(info.fileList?.[0]);
+    if (!info.fileList?.[0]) {
       info.file = "";
     }
   };
 
-  const beforeUpload = () => {
-    return false;
-  };
 
+  useEffect(() => {
+    createLearnLanguageResponse?.success === true && Success({ messageApi });
+    // createLearnLanguageResponse?.success === false &&
+    //   Error({ messageApi, messageError });
+    dispatch(deleteLerningCreateResponse());
+    dispatch(removeAllCreateSelectedLanguages());
+  }, [createLearnLanguageResponse?.success]);
+
+
+  const onRemove = () => {
+    dispatch(deleteLerningCreateResponse());
+  }
   const props = {
-    accept: ".png",
+    accept: ".png,.svg,.jpg",
     onRemove: (file) => {
       const index = learningLanguageFileList.indexOf(file);
       const newFileList = learningLanguageFileList.slice();
@@ -52,23 +100,25 @@ export const LearningLanguageCreateScreen = () => {
 
   return (
     <div
-      className="authScreenMainDiv"
+      className="authScreenMainDiv learnLanguageCreateScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE, flexDirection: "row" }}
     >
-      <div>
-        <p className="nativeLanguageTitle">Add Learning Language</p>
+      <div className="learningLanguageUpdateFormDiv">
         <Form
           autoComplete="off"
           form={form}
           name="createLearningLanguage"
           onFinish={onFinish}
+          // className="formAntd"
         >
-          <div className="createScreenRowInputs">
-            <CustomAntdInput
-              name="learningLanguageName"
-              placeholder="Language English Name*"
-            />
-            <CustomAntdInput name="nativeName" placeholder=" Native Name*" />
+        <div className="createLearningLangRow">
+        <div>
+          { messageError && <CustomErrorSection error={messageError} onTab={onRemove}/>}
+        <p className="nativeLanguageTitle">Add Learning Language</p>
+
+         <div className="createScreenRowInputs">
+            <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
+            <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
           </div>
 
           <Form.Item
@@ -92,15 +142,24 @@ export const LearningLanguageCreateScreen = () => {
               )}
             </Upload>
           </Form.Item>
-
           <Form.Item>
-            <CustomAntdButton title="Add" background={Colors.PURPLE} />
+            {contextHolder}
+            <CustomAntdButton loading={languageLoading} title="Add" background={Colors.PURPLE} />
           </Form.Item>
+
+         </div>
+          <div className="learnLanguageSelectedLanguages">
+        <p className="selectLanguageTitle">Native Language</p>
+        <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+          dispatch(removeLanguagesItem(id));
+        }} />
+      </div>
+        </div>
+
+        
         </Form>
       </div>
-      <div style={{ width: "44%" }}>
-        <SelectLanguage />
-      </div>
+      
     </div>
   );
 };

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { SideBarItem } from "./components/side-bar-item";
-import "./custom-sidebar.css";
 import { customSideBarData } from "../../data";
 import { Colors } from "../../assets/colors/colors";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "./custom-sidebar.css";
+import { removeAllLanguages, removeAllSelectedData } from "../../store/slices";
+import { useDispatch } from "react-redux";
 
 export const CustomSidebar = () => {
   const [select, setSelect] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
   let itemName;
@@ -22,16 +25,19 @@ export const CustomSidebar = () => {
     if (!itemName) {
       localStorage.setItem("item", customSideBarData[0].title);
     }
+
   }, [itemName]);
 
   return (
     <div className="projectOutlet">
-      <div className="sideBarComponent">
-        {customSideBarData.map((item, ind) => {
+      <div className="customSideBar">
+        {customSideBarData.map((item) => {
           return (
             <div
-              key={ind}
+              key={item.id}
               onClick={() => {
+                dispatch(removeAllSelectedData())
+                dispatch(removeAllLanguages())
                 setSelect(!select);
                 localStorage.setItem("item", item.title);
                 navigate(item.path);

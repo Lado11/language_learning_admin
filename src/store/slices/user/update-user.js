@@ -6,6 +6,7 @@ const initialState = {
     userUpdateBool: false,
     userUpdateResponse: null,
     userUpdateErrors: null,
+    userMessage:null
 };
 
 export const userUpdateThunk = createAsyncThunk(
@@ -24,39 +25,46 @@ export const userUpdateSlice = createSlice({
     name: "userUpdate",
     initialState,
     reducers: {
+        deleteUserUpdateResponse: (state) => {
+            state.userUpdateResponse = null;
+        },
         deleteUserUpdateBool: (state) => {
             state.userUpdateBool = false;
         },
     },
     extraReducers: (builder) => {
         builder.addCase(userUpdateThunk.pending, (state) => {
-            state.userDeleteloading = true;
+            state.userUpdateloading = true;
         });
         builder.addCase(userUpdateThunk.fulfilled, (state, { payload }) => {
-            state.userDeleteloading = false;
-            state.userDeleteResponse = payload;
-            state.userDeleteBool = true;
+            state.userUpdateloading = false;
+            state.userUpdateResponse = payload;
+            state.userUpdateBool = true;
+            state.userMessage = payload?.message;
         });
         builder.addCase(userUpdateThunk.rejected, (state, { payload }) => {
-            state.userDeleteloading = false;
-            state.userDeleteErrors = payload;
+            state.userUpdateloading = false;
+            state.userUpdateErrors = payload;
         });
     },
 });
 
 
-export const { updateUserDeleteBool } = userUpdateSlice.actions;
+export const { userUpdateBool ,deleteUserUpdateResponse} = userUpdateSlice.actions;
 
 
 export const getUserUpdateLoading = (state) => {
-    return state.userUpdateSlice.userUpdateloading;
+    return state.userUpdateSliceStore.userUpdateloading;
+};
+export const getUserUpdateMessages = (state) => {
+    return state.userUpdateSliceStore.userMessage;
 };
 export const getUserUpdateBool = (state) => {
-    return state.userUpdateSlice.userUpdateBool;
+    return state.userUpdateSliceStore.userUpdateBool;
 };
 export const getUserUpdateData = (state) => {
-    return state.userUpdateSlice.userUpdateResponse;
+    return state.userUpdateSliceStore.userUpdateResponse;
 };
 export const getUserUpdateError = (state) => {
-    return state.userUpdateSlice.userUpdateErrors;
+    return state.userUpdateSliceStore.userUpdateErrors;
 };

@@ -1,39 +1,35 @@
 .customCountryItem {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 10px;
-    padding: 15px 15px 15px 21px;
-    box-shadow: 0px 2px 5px 0px #26334D08;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    
-    /* min-width: 222px; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px;
+  padding: 15px 15px 15px 21px;
+  box-shadow: 0px 2px 5px 0px #26334d08;
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 .customCountryItemTitle {
-    font-family: Roboto;
-    font-weight: 700;
-    font-size: 13px;
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 13px;
 }
 
-@media only screen and (max-width: 1024px) {
-    .customCountryItem {
-        /* min-width: 150px; */
-    }
-}
+/* @media only screen and (max-width: 1024px) {
+  .customCountryItem {
+    min-width: 150px;
+  }
+} */
 
 @media only screen and (max-width: 768px) {
-    .customCountryItem {
-        /* min-width: 176px; */
-        margin: 10px;
-    }
+  .customCountryItem {
+    margin: 10px;
+  }
 }
 
 @media only screen and (max-width: 425px) {
-    .customCountryItem {
-        /* min-width: 150px; */
-        margin: 10px;
-    }
+  .customCountryItem {
+    margin: 10px;
+  }
 }

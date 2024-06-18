@@ -1,9 +1,10 @@
 .react-drawer-drawer {
-    background-color: white;
-    padding: 20px;
+  background-color: white;
+  padding: 20px;
+  z-index: 999;
 }
 
 .customDrawerItem {
-    display: flex;
-    padding: 20px;
+  display: flex;
+  padding: 20px;
 }

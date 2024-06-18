@@ -24,6 +24,9 @@ export const userCreateSlice = createSlice({
     name: "userCreate",
     initialState,
     reducers: {
+        deleteUserCreateResponse: (state) => {
+            state.userCreateResponse = "";
+          },
         deleteUserCreateBool: (state) => {
             state.userCreateBool = false;
         },
@@ -45,18 +48,18 @@ export const userCreateSlice = createSlice({
 });
 
 
-export const { deleteUserCreateBool } = userCreateSlice.actions;
+export const { deleteUserCreateBool,deleteUserCreateResponse } = userCreateSlice.actions;
 
 
 export const getUserCreateLoading = (state) => {
-    return state.createUserSlice.userCreateloading;
+    return state.userCreateSlice.userCreateloading;
 };
 export const getUserCreateBool = (state) => {
-    return state.createUserSlice.userCreateBool;
+    return state.userCreateSlice.userCreateBool;
 };
 export const getUserCreateData = (state) => {
-    return state.createUserSlice.userCreateResponse;
+    return state.userCreateSlice.userCreateResponse;
 };
 export const getUserCreateError = (state) => {
-    return state.createUserSlice.userCreateErrors;
+    return state.userCreateSlice.userCreateErrors;
 };

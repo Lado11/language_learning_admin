@@ -1,38 +1,45 @@
-import { Select } from "antd";
+import { Form, Select } from "antd";
+import { useDispatch } from "react-redux";
+import {
+  addLanguages,
+  addLearnLanguageSelectedLanguages,
+} from "../../store/slices";
 
-export const CustomSelect = ({title}) => {
-    const handleChange = (value) => {};
+const { Option } = Select;
 
-    const options = [
-        {
-            value: 'jack',
-            label: 'Jack',
-        },
-        {
-            value: 'lucy',
-            label: 'Lucy',
-        },
-        {
-            value: 'Yiminghe',
-            label: 'yiminghe',
-        },
-        {
-            value: 'disabled',
-            label: 'Disabled',
-            disabled: true,
-        },
-    ]
-    
-    return (
-        <div>
-            <Select
-                defaultValue={title}
-                style={{
-                width:177
-                }}
-                onChange={handleChange}
-                options={options}
-            />
-        </div>
-    )
-}
+export const CustomSelect = ({ title, optionsData, width, backgroundColor, data, name, rules }) => {
+  const dispatch = useDispatch();
+  const handleChange = (value) => {
+    const selectedOption = optionsData?.find((option) => option?.name === value);
+    dispatch(addLanguages(selectedOption));
+    dispatch(addLearnLanguageSelectedLanguages(selectedOption ));
+  };
+
+  return (
+    <div>
+      <Form.Item
+        name={name}
+        rules={[
+          {
+            required: rules,
+          }
+        ]}   
+        >
+        <Select
+          onChange={handleChange}
+          className="customSelect"
+          defaultValue={title}
+          style={{ width: width, backgroundColor: backgroundColor }}
+        >
+         
+          {data?.map((option) => (
+
+            <Option key={option?._id} value={option?.name}>
+              {option.label}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+    </div>
+  );
+};

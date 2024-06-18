@@ -2,17 +2,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { categoryDeleteService } from "../../../services/category/delete-category-service";
 
 const initialState = {
-    categoryCreateloading: false,
-    categoryCreateBool: false,
-    categoryCreateResponse: null,
-    categoryCreateErrors: null,
+  categoryCreateloading: false,
+  categoryCreateBool: false,
+  categoryCreateResponse: null,
+  categoryCreateErrors: null,
 };
 
 export const categoryDeleteThunk = createAsyncThunk(
   "categoryCreate",
-  async (formData, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await categoryDeleteService(formData);
+      const response = await categoryDeleteService(id);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -24,6 +24,9 @@ export const categoryDeleteSlice = createSlice({
   name: "categoryDelete",
   initialState,
   reducers: {
+    deleteCategoryDeleteResponse: (state) => {
+      state.categoryDeleteResponse = false;
+    },
     deleteCategoryDeleteBool: (state) => {
       state.categoryDeleteBool = false;
     },
@@ -44,9 +47,7 @@ export const categoryDeleteSlice = createSlice({
   },
 });
 
-
-export const { deleteCategoryDeleteBool } = categoryDeleteSlice.actions;
-
+export const { deleteCategoryDeleteBool ,deleteCategoryDeleteResponse} = categoryDeleteSlice.actions;
 
 export const getCategoryDeleteLoading = (state) => {
   return state.categoryDeleteSlice.categoryDeleteloading;

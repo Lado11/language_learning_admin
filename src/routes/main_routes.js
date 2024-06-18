@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import {
   CategoryScreen,
   HomeScreen,
@@ -12,27 +12,35 @@ import {
   FeedbackScreen,
   NotificationScreen,
   LearningLanguageCreateScreen,
+  DashboardScreen,
+  NativeLanguageScreen,
+  NativeLanguageCretae,
+  CategoryCretae,
+  FilesScreen,
+  UserCreateScreen,
+  UpdateNativeLanguage,
+  LearningLanguageUpdate,
+  WordsCreateScreen,
 } from "../screens";
-import { StatisticsScreen } from "../components";
-import { getLoginData } from "../store/slices/auth/login-slice";
+import { CustomHeader, CustomSidebar, StatisticsScreen } from "../components";
+import { getToken } from "../store/slices/auth/login-slice";
 import { useSelector } from "react-redux";
-import { CustomHeader } from "../components/custom-header/custom-header";
-import { CustomSidebar } from "../components/custom-sidebar/custom-sidebar";
-import { DashboardScreen } from "../screens/dashboard-screen/dashboard-screen";
-import { NativeLanguageScreen } from "../screens/native-language-screen/native-language-screen";
-import { NativeLanguageCretae } from "../screens/native-language-screen/native-language-cretae-form";
-import { CategoryCretae } from "../screens/category-screen/category-screen-create-from";
-import { FilesScreen } from "../screens/files-screen/files-screen";
-import { UserCreateScreen } from "../screens/user-screen/user-create-screen";
-import { UpdateNativeLanguage } from "../screens/native-language-screen/update-native-language";
+import { CategoryUpdate } from "../screens/category-screen/category-update";
+import { UserScreenUpdate } from "../screens/user-screen/user-screen-update";
+import { AddWordExel } from "../screens/words-screen/add-word-exel/add-word-exel";
+import { UpdateExelFromWord } from "../screens/words-screen/add-word-exel/update-word-from-exel";
+import { WordsUpdate } from "../screens/words-screen/words-update/words-update";
+import { UplaodScreen } from "../screens/upload/upload-screen";
+import { WordsProcess } from "../screens/upload/upload-proccessing";
+import { FeadBackMoreScreen } from "../screens/feedback-screen/feadback-more-screen";
 
 export const MyRoutes = () => {
   const token = localStorage.getItem("token");
-  const loginData = useSelector(getLoginData);
-
+  const reduxToken = useSelector(getToken);
+  let { id } = useParams();
   return (
     <>
-      {token && loginData?.token ? (
+      {!token && !reduxToken ? (
         <Routes>
           <Route path="/" element={<LoginScreen />} />
           <Route path="/sendEmail" element={<ResetPasswordEmail />} />
@@ -44,6 +52,7 @@ export const MyRoutes = () => {
           <Route path="/" element={<LoginScreen />} />
           <Route path="/resetPassword" element={<ResetSendPasswordScreen />} />
           <Route path="/sendEmail" element={<ResetSendPasswordScreen />} />
+          <Route path="*" element={<Navigate to={"/"} />} />
         </Routes>
       ) : (
         <Routes>
@@ -60,7 +69,6 @@ export const MyRoutes = () => {
                 path="/native-language-create"
                 element={<NativeLanguageCretae />}
               />
-              <Route path="/words" element={<WordsScreen />} />
               <Route
                 path="/learning-language"
                 element={<LearningLanguageScreen />}
@@ -70,17 +78,31 @@ export const MyRoutes = () => {
                 element={<NativeLanguageCretae />}
               />
               <Route path="/category" element={<CategoryScreen />} />
+              <Route path="/category-update/:id" element={<CategoryUpdate />} />
               <Route path="/category-create" element={<CategoryCretae />} />
               <Route path="/user" element={<UserScreen />} />
               <Route path="/feedback" element={<FeedbackScreen />} />
+              <Route path="/feadback-more" element={<FeadBackMoreScreen />}/>
               <Route path="/notification" element={<NotificationScreen />} />
               <Route path="/files" element={<FilesScreen />} />
               <Route path="/user-create" element={<UserCreateScreen />} />
+              <Route path="/user-update/:id" element={<UserScreenUpdate />} />
               <Route
                 path="/learning-language-create"
                 element={<LearningLanguageCreateScreen />}
               />
-              <Route path="/native-update" element={<UpdateNativeLanguage />} />
+              <Route path="/native-update/:id" element={<UpdateNativeLanguage />} />
+              <Route
+                path="/learning-update/:id"
+                element={<LearningLanguageUpdate />}
+              />
+              <Route path="/words" element={<WordsScreen />} />
+              <Route path="/upload" element={<UplaodScreen />} />
+              <Route path="/create-word" element={<WordsCreateScreen />} />
+              <Route path="/create-word-exel" element={<AddWordExel />} />
+              <Route path="/update-word-exel" element={<UpdateExelFromWord />}/>
+              <Route path="/update-word/:id" element={<WordsUpdate />}/>
+              <Route path="/words-exel-process" element={<WordsProcess/>}/>
             </Route>
           </Route>
         </Routes>

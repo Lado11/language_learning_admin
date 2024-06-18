@@ -1,18 +1,25 @@
-.searchInputMainDiv {
-    display: flex;
-    align-items: center;
-    border-radius: 10px;
-    border: 1px solid;
-    padding: 0 20px;
+.customSearchInputMainDiv {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid;
+  padding: 0 20px;
+  margin-left: 10px;
+  height: 60px;
+  width: 180px;
 }
 
-.searchInput {
-    border: none;
+.customSearchInput {
+  border: none;
+  width: 130px;
+
 }
 
-.searchInput::placeholder {
-    font-family: 'Roboto';
-    font-size: 12px;
-    font-weight: 700;
-    color: #ADB8CC
+.customSearchInput::placeholder {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+color: #ADB8CC;  
+width: 130px;
 }

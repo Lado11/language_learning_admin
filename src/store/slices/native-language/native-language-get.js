@@ -44,9 +44,7 @@ export const nativeLanguageGetSlice = createSlice({
   },
 });
 
-
 // export const { deleteNativeCreateBool } = nativeLanguageCreateSlice.actions;
-
 
 export const getNativeGetloading = (state) => {
   return state.getNativeSlice.nativeGetloading;
