@@ -47,6 +47,8 @@ console.log(val,"val");
       formData.append(`translates[${ind}].nativeLanguage`, item?._id);
     });
     setVal(values)
+    dispatch(createWordsThunk(formData)) 
+
   };
   const messageError = createWordData?.message;
 
@@ -103,11 +105,11 @@ console.log(val,"val");
               />
             </div>
             <div className="translateSection">
-              {learningLanguageWordSelectedValue && <p>Translate</p>}
+              {learningLanguageWordSelectedValue && <p className="titleTranslations">Translate</p>}
               {learningLanguageWordSelectedValue?.nativeLanguages?.length ? learningLanguageWordSelectedValue?.nativeLanguages.map((item, index) => {
                 return (
                   <div>
-                    <p>{item?.nameEng}</p>
+                    <p className="itemName">{item?.nameEng}</p>
                     <CustomAntdInput
                       key={item}
                       rules={false}
@@ -126,7 +128,6 @@ console.log(val,"val");
           <div className="addButtonDiv">
             {contextHolder}
             <CustomAntdButton onClick={() => {
-            dispatch(createWordsThunk(formData)) 
             }} title="Add" loading={loadingCreateWord} background={Colors.PURPLE} />
           </div>
         </Form>

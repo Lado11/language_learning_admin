@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import "./custom-upload.css";
-import { Image, Upload } from "antd";
+import { Form, Image, Upload } from "antd";
 import uploadImg from "../../assets/images/uploadImg.svg";
 import { Colors } from "../../assets/colors";
 import uploadIcon from "../../assets/images/wordUpload.png";
@@ -42,6 +42,10 @@ export const CustomUpload = ({fileList,setFileList,setIamge,image}) => {
   
   return (
     <div className="custom-upload">
+       <Form.Item
+        name={"words image"}
+        rules={[{ required: true }]}
+      >
       <Upload
       {...props}
       beforeUpload={beforeUpload}
@@ -65,6 +69,7 @@ export const CustomUpload = ({fileList,setFileList,setIamge,image}) => {
           src={previewImage}
         />
       )}
+      </Form.Item>
     </div>
   );
 };

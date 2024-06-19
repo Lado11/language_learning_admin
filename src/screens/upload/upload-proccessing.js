@@ -1,5 +1,7 @@
+
+import React from 'react';
 import { useTranslation } from "react-i18next";
-import { CustomAntdButtonDelete, CustomAntdInput } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin } from "../../components";
 import { Colors } from "../../assets/colors";
 import { useEffect, useState } from "react";
 import CustomModal from "../../components/custom-modal/custom-modal";
@@ -9,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Form, Input } from "antd";
 import { wordsExelGetIdLoading, wordsExelGetIdResponse, wordsExelGetIdThunk } from "../../store/slices/words/getId-exel-words";
 
-export const WordsProcess = () => {
+export const UplaodProcessScreen = () => {
     const { TextArea } = Input;
     const [form] = Form.useForm();
     const { t } = useTranslation();
@@ -23,16 +25,25 @@ export const WordsProcess = () => {
     const wordsIdResponse = useSelector(wordsExelGetIdResponse);
     const wordsIdLoading = useSelector(wordsExelGetIdLoading);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(wordsExelGetIdThunk(wordsProcessId))
-    },[])
-    // useEffect(() => {
-    //     form.setFieldsValue({
-    //       nameEng: nativeLanguageData?.nameEng,
-    //       name: nativeLanguageData?.name,
-    //       image: nativeLanguageData?.imageFile?.path,
-    //     });
-    //   }, [nativeLanguageData]);
+    }, [])
+
+    useEffect(() => {
+        form.setFieldsValue({
+            id: wordsIdResponse?.data?._id,
+            errorCount: wordsIdResponse?.data?.errorCount,
+            type: wordsIdResponse?.data?.type === 0 ? "create" : "update",
+            totalWords: wordsIdResponse?.data?.totalWords,
+            processedWords: wordsIdResponse?.data?.processedWords ,
+            successCount: wordsIdResponse?.data?.successCount,
+            finishDt: wordsIdResponse?.data?.finishDt,
+            createDt: wordsIdResponse?.data?.createDt,
+            errorLogs: wordsIdResponse?.data?.errorLogs?.map((item) => {
+              return item
+            })
+        });
+    }, [wordsIdResponse]);
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -51,8 +62,9 @@ export const WordsProcess = () => {
 
     return (
         <div className="nativeLanguageScreenMainDiv">
-
-            <div>
+           {wordsIdLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
+                            <CustomSpin size={64} color="gray" />
+                        </div> : <div>
                 <CustomModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
@@ -60,94 +72,94 @@ export const WordsProcess = () => {
                 />
                 <p className="feedbackTitle">{t("Uploading process details")}</p>
                 <Form
-        autoComplete="off"
-        form={form}
-        name="control-hooks"
-        // onFinish={onFinish}
-        // className="formAntd"
-      >
-                <div className="exelRowSection">
-      
-                    <div>
-                        <div className="category_row_input_user">
-                            <CustomAntdInput
-                                disabled={true}
-                                name="firstName"
-                                placeholder="ID*"
-                                type="text"
-                                min={3}
-                            />
-                            <div className="left">
+                    autoComplete="off"
+                    form={form}
+                    name="control-hooks"
+                >
+                    <div className="exelRowSection">
+                        <div>
+                            <div className="category_row_input_user">
                                 <CustomAntdInput
                                     disabled={true}
-                                    name="lastName"
-                                    placeholder="Error Count*"
+                                    name="id"
+                                    placeholder="ID*"
                                     type="text"
                                     min={3}
                                 />
+                                <div className="left">
+                                    <CustomAntdInput
+                                        disabled={true}
+                                        name="errorCount"
+                                        placeholder="Error Count*"
+                                        type="text"
+                                        min={3}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="category_row_input_user">
-                            <CustomAntdInput
-                                disabled={true}
-                                name="firstName"
-                                placeholder="Type*"
-                                type="text"
-                                min={3}
-                            />
-                            <div className="left">
+                            <div className="category_row_input_user">
                                 <CustomAntdInput
                                     disabled={true}
-                                    name="lastName"
-                                    placeholder="Total words*"
+                                    name="type"
+                                    placeholder="Type*"
                                     type="text"
                                     min={3}
                                 />
+                                <div className="left">
+                                    <CustomAntdInput
+                                        disabled={true}
+                                        name="totalWords"
+                                        placeholder="Total words*"
+                                        type="text"
+                                        min={3}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="category_row_input_user">
-                            <CustomAntdInput
-                                disabled={true}
-                                name="firstName"
-                                placeholder="processed Words*"
-                                type="text"
-                                min={3}
-                            />
-                            <div className="left">
+                            <div className="category_row_input_user">
                                 <CustomAntdInput
                                     disabled={true}
-                                    name="lastName"
-                                    placeholder="successCount*"
+                                    name="processedWords"
+                                    placeholder="processed Words*"
                                     type="text"
                                     min={3}
                                 />
-                            </div>
+                                <div className="left">
+                                    <CustomAntdInput
+                                        disabled={true}
+                                        name="successCount"
+                                        placeholder="successCount*"
+                                        type="text"
+                                        min={3}
+                                    />
+                                </div>
 
-                        </div>
-                        <div className="category_row_input_user">
-                            <CustomAntdInput
-                                disabled={true}
-                                name="firstName"
-                                placeholder="Finish date*"
-                                type="text"
-                                min={3}
-                            />
-                            <div className="left">
+                            </div>
+                            <div className="category_row_input_user">
                                 <CustomAntdInput
                                     disabled={true}
-                                    name="lastName"
-                                    placeholder="Create date*"
+                                    name="finishDt"
+                                    placeholder="Finish date*"
                                     type="text"
                                     min={3}
                                 />
+                                <div className="left">
+                                    <CustomAntdInput
+                                        disabled={true}
+                                        name="createDt"
+                                        placeholder="Create date*"
+                                        type="text"
+                                        min={3}
+                                    />
+                                </div>
                             </div>
                         </div>
+                        <div className="textAreaSection">
+                            <p className="labelTextArea">Error Logs</p>
+                            <Form.Item name="errorLogs">
+                            <TextArea  disabled rows={4} placeholder="Error Logs" className="textArea" />
+
+                            </Form.Item>
+                        </div>
                     </div>
-                    <div className="textAreaSection">
-                        <p className="labelTextArea">Error Logs</p>
-                        <TextArea disabled rows={4} placeholder="Error Logs" className="textArea" />
-                    </div>
-                </div>
                 </Form>
 
                 <div className="deleteButton">
@@ -160,7 +172,7 @@ export const WordsProcess = () => {
                         }}
                     />
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }

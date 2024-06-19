@@ -17,6 +17,7 @@ import { categoryGetThunk, getCategoryGetData, learningLanguages, learningLangua
 import { useTranslation } from "react-i18next";
 import "./words-update.css"
 import { beforeUpload, props } from "../../utils/helper";
+import logoVoice from "../../../assets/images/Vector (4).png"
 
 export const WordsUpdate = () => {
     const [form] = Form.useForm();
@@ -126,13 +127,12 @@ const [myusic,setMyusci] = useState()
         dispatch(getWordsDeleteThunk(wordId));
     };
 
-console.log(wordsIdData?.data,"data");
     useEffect(() => {
         form.setFieldsValue({
             language: wordsIdData?.data?.language?.nameEng,
             category: wordsIdData?.data?.category?.name,
             transcription: wordsIdData?.data?.transcription,
-            level: wordsIdData?.data?.level,
+            level: wordsIdData?.data?.level=== 0 ? "beginner" :wordsIdData?.data?.level=== 1 ? "intermediate" : wordsIdData?.data?.level === 2 ? "advanced" : null ,
             word: wordsIdData?.data?.word,
         });
     }, [wordsIdData?.data]);
@@ -265,7 +265,12 @@ console.log(wordsIdData?.data,"data");
 
 
                             </div> : <div className="file-upload">
-                                <img src={logo} alt="upload" className="voiceUpload" />
+                            <div className="voiceUpload">
+          <p className="titleVoiceUpload">
+            Voice Upload
+          </p>
+          <img src={logoVoice} />
+        </div>
                                 <input accept="audio/*" type='file' onChange={addFile} />
                             </div>}
                         </>

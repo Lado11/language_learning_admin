@@ -6,7 +6,7 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  max-width: 24%;
+  max-width: 23%;
   margin-right: 10px;
   margin-bottom: 10px;
   padding: 25px 36px;
@@ -45,7 +45,7 @@
 
 @media only screen and (max-width: 1600px) {
   .customCardTileMainItem {
-    max-width: 30%;
+    max-width: 23%;
   }
 }
 @media only screen and (max-width: 1440px) {

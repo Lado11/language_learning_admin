@@ -114,6 +114,9 @@ table.rtr-table thead th {
 .category_row_input_user .ant-input {
   width: 206px;
 }
+.left .antd_custom_select_user{
+  width: 206px !important;
+}
 
 .left {
   margin-left: 8px;
@@ -293,8 +296,6 @@ h2 {
     .table-header {
       /* display: none; */
     }
-
-    
 
     li {
       display: block;

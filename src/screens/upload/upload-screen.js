@@ -2,13 +2,17 @@ import { useTranslation } from "react-i18next";
 import { UploadScreenAddFields } from "../words-screen/components";
 import { CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import { columnsUpload } from "../../data";
-import { useEffect } from "react";
+import { columnsUpload, statusOptions, typeGroup } from "../../data";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { wordsExelGetLoading, wordsExelGetResponse, wordsExelGetThunk } from "../../store/slices/words/get-exel-words";
 import errorIcon from "../../assets/images/cross (1) 1.png"
 import "./upload.css"
 import { useNavigate } from "react-router-dom";
+import { Popover, Radio } from 'antd';
+import filterIcon from "../../assets/images/filterIcon.png"
+
+
 export const UplaodScreen = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -19,22 +23,77 @@ export const UplaodScreen = () => {
         skip: 0,
         limit: 5,
     };
+    const [open, setOpen] = useState(false);
+    const hide = () => {
+        setOpen(false);
+    };
+    const handleOpenChange = (newOpen) => {
+        setOpen(newOpen);
+    };
+
+
+
     useEffect(() => {
         dispatch(wordsExelGetThunk(data))
     }, [])
 
+    const [value, setValue] = useState(1);
+    const onChange = (e) => {
+        setValue(e.target.value);
+    };
+    const [valueType, setValueType] = useState(1);
+    const onChangeType = (e) => {
+        setValueType(e.target.value);
+    };
 
     const wordsExel = (val) => {
         localStorage.setItem("wordsExel", val);
         // dispatch(userGetByIdThunk(id));
-        navigate("/words-exel-process");
+        navigate(`/upload/${val}`);
     }
+
+
 
     return (
         <div className="nativeLanguageScreenMainDiv">
             <div>
-                <p className="feedbackTitle">{t("Upload from Exel")}</p>
+                
                 <UploadScreenAddFields />
+                <p className="feedbackTitle">{t("Upload from Exel")}</p>
+                <Popover
+                    placement="bottomLeft"
+                    content={<div className="filterSection">
+                        <p className="popeverTitle">Status</p>
+                        <Radio.Group onChange={onChange} value={value}>
+                            <div className="statusGroup">
+                                {statusOptions?.map((option) => {
+                                    return <Radio   className="radio" value={option.key}>{option.title}</Radio>
+                                })}
+                            </div>
+                        </Radio.Group>
+                        <hr className="poepverHr" />
+                        <p  className="popeverTitle">Type</p>
+
+                        <Radio.Group onChange={onChangeType} value={valueType}>
+                            <div className="statusGroup">
+                                {typeGroup?.map((option) => {
+                                    return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                                })}
+                            </div>
+
+                        </Radio.Group>
+                        <div className="buttonSection">
+                            <button className="button">Clear</button>
+                            <button className="buttonApply">Apply</button>
+                        </div>
+
+                    </div>}
+                    trigger="click"
+                    open={open}
+                    onOpenChange={handleOpenChange}
+                >
+                    <img src={filterIcon} className="popeverOpenImg" />
+                </Popover>
                 <div class="container">
                     <ul class="responsive-table">
                         <TableHeader data={columnsUpload} />

@@ -33,6 +33,7 @@ export const LearningLanguageCreateScreen = () => {
   const languageLoading = useSelector(learnLanguageCreateLoading);
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
   const messageError = createLearnLanguageResponse?.message;
+  console.log(messageError,"erro");
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
@@ -81,7 +82,7 @@ export const LearningLanguageCreateScreen = () => {
     createLearnLanguageResponse?.success === true && Success({ messageApi });
     // createLearnLanguageResponse?.success === false &&
     //   Error({ messageApi, messageError });
-    dispatch(deleteLerningCreateResponse());
+    // dispatch(deleteLerningCreateResponse());
     dispatch(removeAllCreateSelectedLanguages());
   }, [createLearnLanguageResponse?.success]);
 

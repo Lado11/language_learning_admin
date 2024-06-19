@@ -32,7 +32,7 @@ export const CategoryScreen = () => {
 
     console.log(id,"d");
     localStorage.setItem("categoryId",id,)
-    navigate(`/category-update/:${id}`);
+    navigate(`/category/${id}`);
   };
 
   return (

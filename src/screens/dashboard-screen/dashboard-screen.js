@@ -41,11 +41,11 @@ export const DashboardScreen = () => {
     localStorage.setItem("userId", id);
     localStorage.setItem("item", "USER")
     dispatch(userGetByIdThunk(id));
-    navigate("/user-update");
+    navigate(`/user/${id}`);
   }
 
   return (
-    <div className="dashboardScreen">
+    <div className="nativeLanguageScreenMainDiv">
       <div>
         <p className="dashboardTitle">{t("DASHBOARD")}</p>
       </div>
@@ -73,7 +73,7 @@ export const DashboardScreen = () => {
                     <div className="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
                     <div className="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
                     <div className="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                    <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString()}</p></div>
+                    <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString() === true ?"Subscribed" :"UnSubscribed"}</p></div>
                   </li>
                 )
               })}

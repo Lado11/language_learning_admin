@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import uploadImage from "../../assets/images/uploadImg.png";
-import { CustomAntdButton } from "../../components";
+import { CustomAntdButton, CustomErrorSection } from "../../components";
 import { Colors } from "../../assets/colors";
 import { CustomAntdInput } from "../../components";
-import { categoryCreateThunk, deleteCategoryCreateResponse, getCategoryCreateData } from "../../store/slices/category/category-create";
+import { categoryCreateThunk, deleteCategoryCreateResponse, getCategoryCreateData, getCategoryCreateLoading } from "../../store/slices/category/category-create";
 import { useTranslation } from "react-i18next";
 import { Error, Success } from "../../components/custom-message/custom-message";
 import { beforeUpload } from "../utils/helper";
@@ -20,6 +20,7 @@ export const CategoryCretae = () => {
   const [categoryShow, setCategoryShow] = useState();
   const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const categoryCreateData = useSelector(getCategoryCreateData);
+  const catgeoryCreateLoading = useSelector(getCategoryCreateLoading);
 
   const onFinish = (values) => {
     if (values.category_image.file != "") {
@@ -54,9 +55,9 @@ export const CategoryCretae = () => {
 
   useEffect(() => {
     categoryCreateData?.success === true && Success({ messageApi });
-    categoryCreateData?.success === false &&
-      Error({ messageApi, messageError });
-    dispatch(deleteCategoryCreateResponse());
+    // categoryCreateData?.success === false &&
+    //   Error({ messageApi, messageError });
+    // dispatch(deleteCategoryCreateResponse());
   }, [categoryCreateData?.success]);
 
 
@@ -68,9 +69,14 @@ export const CategoryCretae = () => {
       newFileList.splice(index, 1);
     },
   };
+  const str = messageError?.toString()
+  const onRemove = () => {
+    dispatch(deleteCategoryCreateResponse());
+  }
 
   return (
     <div className="categoryScreenMainDiv">
+      {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
       <p className="nativeLanguageTitle">Add Category</p>
       <Form
         autoComplete="off"
@@ -81,9 +87,9 @@ export const CategoryCretae = () => {
 
       >
         <div className="category_row_input_user">
-          <CustomAntdInput name="category_name" placeholder="Category Name*" min={3} />
+          <CustomAntdInput name="category_name" rules={true} placeholder="Category Name*" min={3} />
           <div className="left">
-            <CustomAntdInput min={3} name="category_string" placeholder="localication string*" />
+            <CustomAntdInput min={3} rules={true} name="category_string" placeholder="localication string*" />
           </div>
         </div>
 
@@ -110,7 +116,7 @@ export const CategoryCretae = () => {
         </Form.Item>
         {contextHolder}
         <Form.Item>
-          <CustomAntdButton title={t("ADD")} background={Colors.PURPLE} />
+          <CustomAntdButton  loading={catgeoryCreateLoading} title={t("ADD")} background={Colors.PURPLE} />
         </Form.Item>
       </Form>
     </div>

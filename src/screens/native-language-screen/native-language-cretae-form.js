@@ -67,17 +67,28 @@ console.log(  nativeLanguageData?.success ,"LOGGG");
     nativeLanguageData?.success === true && Success({ messageApi });
     // nativeLanguageData?.success === false &&
     //   Error({ messageApi, messageError });
-    dispatch(deleteNativeCreateResponse());
+    // dispatch(deleteNativeCreateResponse());
   }, [nativeLanguageData?.success]);
 
   const str = messageError?.toString()
-  const onReome = () => {
+  console.log(str,"log");
+  const onRemove = () => {
     dispatch(deleteNativeCreateResponse())
   }
 
+   const props = {
+    accept: ".png,.svg,.jpg",
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList?.splice(index, 1);
+    },
+  };
+  
+
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
-      {str != null ? <CustomErrorSection error={str} onTab={onReome} /> : null}
+      {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
       <p className="nativeLanguageTitle">Add Native Language</p>
       <Form
         className="formAntd"

@@ -3,6 +3,7 @@ import { getNativeGetResponse, nativeLanguageGetThunk } from "../../store/slices
 import { CustomSelect } from "../../components";
 import { Colors } from "../../assets/colors";
 import { useEffect } from "react";
+import deleteIcon from "../../assets/images/remove_icon.png"
 
 export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, name }) => {
     const dispatch = useDispatch();
@@ -59,7 +60,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
                                         selectedDelete(lang._id);
                                     }}
                                 >
-                                    <span>x</span>
+                                 <img src={deleteIcon}/>
                                 </div>
                             </div>
                         );

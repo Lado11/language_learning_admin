@@ -16,6 +16,7 @@ import {
   CustomAntdSelect,
   CustomAntdButton,
   CustomAntdInput,
+  CustomErrorSection,
 } from "../../components";
 import "./user-screen.css";
 import { UserValue } from "../../data/custom-table-columns";
@@ -56,15 +57,23 @@ export const UserCreateScreen = () => {
 
   useEffect(() => {
     createUserData?.success === true && Success({ messageApi });
-    createUserData?.success === false && Error({ messageApi, messageError });
-    dispatch(deleteUserCreateResponse());
+    // createUserData?.success === false && Error({ messageApi, messageError });
+    // dispatch(deleteUserCreateResponse());
   }, [createUserData?.success]);
+
+  const str = messageError?.toString()
+  const onRemove = () => {
+    dispatch(deleteUserCreateResponse());
+  }
+
 
   return (
     <div
       className="authScreenFilesDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
+        {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
+
       <p className="screensTitleStyle">Add User</p>
       <Form
         autoComplete="off"

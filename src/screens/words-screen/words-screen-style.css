@@ -7,7 +7,52 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.radioRowSection{
+  display: flex;
+  flex-direction: row;
+}
+.radioItem{
+  display: flex;
+  flex-direction: column;
+}
 
+::-webkit-scrollbar {
+  width: 2px;
+}
+                  
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  border-radius: 10px;
+}
+                  
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+.filterDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  margin: 40px 0 10px 0; 
+}
+.statusGroupWords{
+  width: 120px;
+  margin-right: 10px;
+  height: 130px !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.radio{
+  margin:   2px 0;
+}
+.filterSection{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 640px !important;
+}
 .wordsScreenAddFields {
   display: flex;
 }

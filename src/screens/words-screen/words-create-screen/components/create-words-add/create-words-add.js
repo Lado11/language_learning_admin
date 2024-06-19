@@ -11,7 +11,8 @@ import { categoryGetThunk, getCategoryGetData, learningLanguages, learningLangua
 import { useDispatch, useSelector } from "react-redux";
 import { wordlevel } from "../../../../../data";
 import { Waveform } from "./music-player";
-import logo from "../../../../../assets/images/Item (1).png"
+import logo from "../../../../../assets/images/Vector (4).png"
+import { Form } from "antd";
 
 export const CreateWordsAdd = ({
   image,
@@ -47,7 +48,7 @@ export const CreateWordsAdd = ({
       nativeLanguages: lang?.nativeLanguages
     };
   });
- 
+
   const skipNative = {
     skip: 0,
     limit: 12,
@@ -57,7 +58,7 @@ export const CreateWordsAdd = ({
     setFileListVoice(e.target.files?.[0])
     setAudio(s)
   }
-  
+
   useEffect(() => {
     dispatch(learningLanguagesThunk(skipNative));
     dispatch(categoryGetThunk(skipNative));
@@ -68,6 +69,8 @@ export const CreateWordsAdd = ({
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
         <CustomAntdSelect
+        rules={true}
+        name={"Learning language"}
           // className="wordsSelectExel"
           optinData={filteredResponse}
           selected={learningLanguageWordSelectedValue}
@@ -76,7 +79,7 @@ export const CreateWordsAdd = ({
           color={Colors.LIGHT_GRAY}
         />
       </div>
-      <div className="createWordsAddInputs">
+      <div className="createWordsAddInputs createWordsRow">
         <div className="rowInputWords">
           <CustomAntdInput
             placeholder="Words*"
@@ -90,7 +93,7 @@ export const CreateWordsAdd = ({
               placeholder="Transcribe*"
               name={"transcription"}
               type={"text"}
-              min={4}
+              min={1}
               message={"This field is required"}
               rules={true}
 
@@ -99,12 +102,16 @@ export const CreateWordsAdd = ({
         </div>
         <div className="rowInputWords">
           <CustomAntdSelect
+          name={"Level"}
+          rules={true}
             // width={172}
             defaultValue="Level*"
             optinData={wordlevel}
             setSelected={setSelectedLevel}
           />
           <CustomAntdSelect
+          rules={true}
+          name={"Category"}
             // width={172}
             defaultValue="Category*"
             optinData={filteredResponseCategory}
@@ -113,12 +120,22 @@ export const CreateWordsAdd = ({
         </div>
       </div>
       {audio ? <Waveform url={audio} /> : null}
+      <Form.Item
+        name={"Words voice"}
+        rules={[{ required: true }]}
+      >
       <div className="file-upload">
-        <img src={logo} alt="upload"  className="voiceUpload"/>
+        <div className="voiceUpload">
+          <p className="titleVoiceUpload">
+            Voice Upload
+          </p>
+          <img src={logo} />
+        </div>
         <input accept="audio/*" type='file' onChange={addFile} />
       </div>
+      </Form.Item>
 
-        <CustomUpload setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
+      <CustomUpload setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
     </div>
   );
 };

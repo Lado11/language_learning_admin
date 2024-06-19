@@ -27,7 +27,7 @@ export const LearningLanguageScreen = () => {
   const learningUpdate = (id) => {
     dispatch(learnLanguageByIdThunk(id));
     localStorage.setItem("learningId", id);
-    navigate(`/learning-update/:${id}`);
+    navigate(`/learning-language/${id}`);
   };
   const data = {
     skip: 0,

@@ -1,0 +1,9 @@
+.error{
+    color: red;
+}
+.errorDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}

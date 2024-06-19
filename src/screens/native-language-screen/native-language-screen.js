@@ -26,7 +26,7 @@ export const NativeLanguageScreen = () => {
   const navigateNativeUpdate = (countryItem) => {
     localStorage.setItem("nativeId", countryItem?._id);
     dispatch(nativeLanguageGetIdThunk(countryItem?._id));
-    navigate(`/native-update/:${countryItem?._id}`);
+    navigate(`/native-language/${countryItem?._id}`);
   };
 
   const data = {

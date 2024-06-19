@@ -57,3 +57,83 @@
     color: #7D8FB3;
 
 }
+.statusGroup{
+    display: flex;
+    flex-direction: column;
+}
+.ant-popover .ant-popover-inner{
+    padding: 15px !important;
+}
+.filterSection{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 244px;
+}
+.buttonSection{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.popeverTitle{
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 14.52px;
+    color: #7D8FB3;
+}
+.poepverHr{
+    margin:  10px 0;
+}
+.button{
+    cursor: pointer;
+    width: 102px;
+    min-height: 34px;
+    border-radius: 5px;
+    opacity: 0px;
+    border: 1px solid #EFF0F6;
+    color: #EFF0F6;
+    background-color: white;
+}
+.buttonApply{
+    cursor: pointer;
+    width: 102px;
+    min-height: 34px;
+    border-radius: 5px;
+    opacity: 0px;
+    border: none;
+    color: white;
+    background-color: #29CC39;
+    margin-left: 10px;
+}
+
+.popeverOpen{
+    /* margin: 40px 0 10px 0; */
+    cursor: pointer;
+    width: 47px;
+    height: 47px;
+}
+
+.popeverOpenImg{
+     margin: 40px 0 10px 0;
+     cursor: pointer;
+     width: 47px;
+     height: 47px;
+}
+
+@media only screen and (max-width: 1440px) {
+    .exelRowSection{
+        flex-direction: column;
+    }
+  }
+  @media only screen and (max-width: 510px) {
+
+  .category_row_input_user{
+    flex-direction: column;
+    align-items: start;
+  }
+  .left{
+    margin-left: 0;
+  }
+}

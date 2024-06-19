@@ -8,3 +8,22 @@
     margin-left: 70px;
 }
 
+.ant-form-item{
+    margin-bottom: 6px !important;
+}
+.itemName{
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB3;
+}
+
+.titleTranslations{
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #000;
+
+}

@@ -68,7 +68,7 @@
   border:none !important;
 }
 .addButtonDiv{
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .createWordsAddInputs .antd_custom_select {
   margin: 0;
@@ -82,25 +82,55 @@
   width: 174px;
 }
 
+.antd_custom_select_user .ant-select-selection-item{
+  color: #7D8FB3 !important;
+}
 .createWordsAdd .createWordsAddSelects .ant-select-selector {
   background-color: white !important;
   border: 1px solid #eaecf0 !important;
 }
-
-.createWordsAdd .ant-form-item {
-  width: 200px !important;
+.bigSelect .ant-form-item  {
+  width: 420px !important;
+}
+.createWordsRow .ant-form-item {
+  width: 202px !important;
 }
 
 .createWordsAdd .ant-input {
   height: 50px !important;
 }
 
+.voiceUpload{
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 22px;
+  border: 1px solid #7D8FB326;
+  border-radius: 10px;
+}
+.titleVoiceUpload{
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #7D8FB359;
+  margin-right: 7px;
 
+}
 .file-upload {
-  /* text-align: start; */
-  /* padding: 1.5rem; */
+  width: 420px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  margin: 0;
+  padding: 0;
+  text-align: start; 
+
   position: relative;
-  cursor: pointer;
+ cursor: pointer;
 }
 
 .file-upload input {
