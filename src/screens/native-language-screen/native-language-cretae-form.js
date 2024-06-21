@@ -13,7 +13,7 @@ import uploadImage from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdInput, CustomErrorSection } from "../../components";
+import { CustomAntdInput, CustomErrorSection, CustomUploadElement } from "../../components";
 import { Error, Success } from "../../components/custom-message/custom-message";
 import { beforeUpload, props } from "../utils/helper";
 
@@ -118,7 +118,7 @@ console.log(  nativeLanguageData?.success ,"LOGGG");
             className="upload-list-inline"
           >
             {categoryShow && showCategoryUpload ? null : (
-              <img src={uploadImage} className="upload" />
+              <CustomUploadElement title={"Upload Language Icon"} />
             )}
           </Upload>
         </Form.Item>

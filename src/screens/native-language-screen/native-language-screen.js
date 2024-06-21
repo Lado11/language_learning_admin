@@ -61,7 +61,7 @@ export const NativeLanguageScreen = () => {
                     {nativeData?.map((countryItem) => {
                       return (
                         <div
-                          key={countryItem?.id}
+                          key={countryItem?._id}
                           onClick={() => {
                             navigateNativeUpdate(countryItem);
                           }}

@@ -32,7 +32,7 @@ export const SelectNotification = ({data,defaultValue}) => {
                 style={{ width: "420px" ,backgroundColor:"white"}}
             >
                 {data?.map((option) => {
-                    return <Option key={option._id} value={option.title}>
+                    return <Option key={option.key} value={option.title}>
                         <Radio value={option.key}>{option.title}</Radio>
                     </Option>
                 }

@@ -29,12 +29,12 @@ export const FeadBackMoreScreen = () => {
          <div>
          {feadbackIdLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
-            </div> :<div> <div class="container">
-                <ul class="responsive-table">
+            </div> :<div> <div className="container">
+                <ul className="responsive-table">
                     <TableHeader data={columnsFeedback} />
 
-                    <li class="table-row" key={feadbackIdResponse?.data?._id}>
-                        <div class="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.type === 0 ?
+                    <li className="table-row" key={feadbackIdResponse?.data?._id}>
+                        <div className="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.type === 0 ?
                             <div className="rowFeadback">
                                 <img src={word} className="iconfeadback" />
                                 <p className="feadbackItem">Word Mistake</p>
@@ -50,14 +50,14 @@ export const FeadBackMoreScreen = () => {
                                     <p className="feadbackItem">General Mistake</p>
                                 </div>
                         }</div>
-                        <div class="col col-1 desc" data-label="Job Id">
+                        <div className="col col-1 desc" data-label="Job Id">
                             {feadbackIdResponse?.data?.status === 0 ?
                                 <p className="feadbackItem">Pending</p> :
                                 feadbackIdResponse?.data?.status === 1 ?
                                     <p className="feadbackItem">Resolved</p> :
                                     <p className="feadbackItem">Canceled</p>}</div>
-                        <div class="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.updateDt}</div>
-                        <div class="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.createDt}</div>
+                        <div className="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.updateDt}</div>
+                        <div className="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.createDt}</div>
                     </li>
                 </ul>
             </div>
@@ -73,7 +73,7 @@ export const FeadBackMoreScreen = () => {
                         </p>
                     </div>
                 </div>
-                <div class="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.type === 0 ?
+                <div className="col col-1 desc" data-label="Job Id">{feadbackIdResponse?.data?.type === 0 ?
                     <div className="rowFeadBackItem">
                         <div className="rowFeadback">
                             <img src={word} className="iconfeadback" />

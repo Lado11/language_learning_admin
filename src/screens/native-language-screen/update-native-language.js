@@ -5,7 +5,7 @@ import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin, CustomUploadElement } from "../../components";
 import {
   deleteNativeDeleteBool,
   deleteNativeDeleteResponse,
@@ -140,11 +140,11 @@ export const UpdateNativeLanguage = () => {
         onFinish={onFinish}
         className="formAntd"
       >
-       <p>Language english name</p>
+       <p className="customInputTitle">Language english name</p>
         <CustomAntdInput rules={true} name="nameEng" placeholder=" Language English Name*" />
-        <p>Native Name</p>
+        <p className="customInputTitle">Native Name</p>
         <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
-        <p>Language Icon</p>
+        <p className="customInputTitle">Language Icon</p>
         <Form.Item
           name="image"
           rules={[
@@ -179,7 +179,7 @@ export const UpdateNativeLanguage = () => {
               className="upload-list-inline"
             >
               {categoryShow && showCategoryUpload ? null : (
-                <img src={uploadIcon} className="upload" />
+              <CustomUploadElement title={"Upload Language Icon"} />
               )}
             </Upload>
           )}

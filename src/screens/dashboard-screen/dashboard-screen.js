@@ -59,8 +59,8 @@ export const DashboardScreen = () => {
 
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />
-        </div> :  <div class="container">
-          <ul class="responsive-table">
+        </div> :  <div className="container">
+          <ul className="responsive-table">
             <TableHeader data={columns} />
             {!dataList?.length && !userGetLoading ? <CustomNoData /> :
               dataList?.map((val, index) => {

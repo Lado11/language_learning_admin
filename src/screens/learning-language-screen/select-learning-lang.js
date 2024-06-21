@@ -52,7 +52,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
                                 className="selectLanguageValuesDivItem"
                                 style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
                             >
-                                <span>{lang.name}</span>
+                                <p className="title">{lang.name}</p>
                                 <img src={lang.image} />
                                 <div
                                     className="deleteIcon"

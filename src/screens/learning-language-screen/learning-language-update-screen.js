@@ -6,12 +6,14 @@ import uploadIcon from "../../assets/images/uploadImg.png";
 import remove_icon from "../../assets/images/remove_icon.png";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
+import logoVoice from "../../assets/images/Vector (4).png"
 
 import {
   CustomAntdButtonDelete,
   CustomAntdInput,
   CustomAntdButton,
   CustomSpin,
+  CustomUploadElement,
 } from "../../components";
 import {
   deleteLearnBool,
@@ -138,7 +140,8 @@ const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
 
   return (
     <div
-      className="learnLanguageUpdateScreenMainDiv"
+      // className="learnLanguageUpdateScreenMainDiv"
+      className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
       {loadingLanguageId ? <div className="CustomSpinUpdate">
@@ -208,7 +211,8 @@ const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
                     className="upload-list-inline"
                   >
                     {learningLanguageFile && showLearningLanguageUpload ? null : (
-                      <img src={uploadIcon} className="upload" />
+                  <CustomUploadElement title={"Upload Language Icon"} />
+
                     )}
                   </Upload>
                 )}

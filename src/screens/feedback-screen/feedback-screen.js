@@ -61,8 +61,6 @@ const clearFilter = () => {
   const data = {
     skip: 0,
     limit: 6,
-    type:2,
-    status:2
   }
   dispatch(feedBackGetThunk(data))
 }
@@ -88,20 +86,20 @@ const clearFilter = () => {
                     placement="bottomLeft"
                     content={<div className="filterSection">
                         <p className="popeverTitle">Feedback Type</p>
-                        <Radio.Group onChange={onChange} value={value}>
+                        <Radio.Group onChange={onChange} value={value} key={1}>
                             <div className="statusGroup">
                                 {typeFeadback?.map((option) => {
-                                    return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                                    return <Radio key={3} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
                         </Radio.Group>
                         <hr className="poepverHr" />
                         <p  className="popeverTitle">Status</p>
 
-                        <Radio.Group onChange={onChangeType} value={valueType}>
+                        <Radio.Group onChange={onChangeType} value={valueType} key={2}>
                             <div className="statusGroup">
                                 {statusFeadback?.map((option) => {
-                                    return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                                    return <Radio key={4} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
 
@@ -118,18 +116,18 @@ const clearFilter = () => {
                 >
                     <img src={filterIcon} className="popeverOpenImg" />
                 </Popover>
-        <div class="container">
-          <ul class="responsive-table">
+        <div className="container">
+          <ul className="responsive-table">
             <TableHeader data={columnsFeedback} />
             {feedBackLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
               <CustomSpin size={64} color="gray" />
             </div> : !getFeedBackRespone?.data?.list?.length && !feedBackLoading ? <CustomNoData /> :
               getFeedBackRespone?.data?.list?.map((val, index) => {
                 return (
-                  <li class="table-row" key={index} onClick={() => {
+                  <li className="table-row" key={index} onClick={() => {
                     feedBack(val?._id)
                   }}>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.type === 0 ?
+                    <div className="col col-1 desc" data-label="Job Id">{val?.type === 0 ?
                       <div className="rowFeadback">
                         <img src={word} className="iconfeadback" />
                         <p className="feadbackItem">Word Mistake</p>
@@ -145,9 +143,9 @@ const clearFilter = () => {
                           <p className="feadbackItem">General Mistake</p>
                         </div>
                     }</div>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.status === 0 ? <p className="feadbackItem">Pending</p> : val?.status === 1 ? <p className="feadbackItem">Resolved</p> : <p className="feadbackItem">Canceled</p>}</div>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.updateDt}</div>
-                    <div class="col col-1 desc" data-label="Job Id">{val?.createDt}</div>
+                    <div className="col col-1 desc" data-label="Job Id">{val?.status === 0 ? <p className="feadbackItem">Pending</p> : val?.status === 1 ? <p className="feadbackItem">Resolved</p> : <p className="feadbackItem">Canceled</p>}</div>
+                    <div className="col col-1 desc" data-label="Job Id">{val?.updateDt}</div>
+                    <div className="col col-1 desc" data-label="Job Id">{val?.createDt}</div>
                   </li>
                 )
               })}

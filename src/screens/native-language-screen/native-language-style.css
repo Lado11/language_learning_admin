@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+
 .nativeLanguageScreenMainDiv {
   display: flex;
   flex-direction: column;
@@ -108,16 +111,25 @@
   font-weight: 400;
   line-height: 25px;
 }
-
+.customInputTitle{
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 25px;
+  color: black;
+  margin-top: 5px;
+}
 .upload {
   width: 100%;
   max-width: 420px;
   height: 120px;
   cursor: pointer;
 }
-
+.addButton{
+  margin-top: 10px;
+}
 .ant-upload-list-item {
-  height: 120px !important;
+  height: 110px !important;
 }
 
 .ant-upload-list-item {

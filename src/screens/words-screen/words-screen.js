@@ -51,9 +51,19 @@ export const WordsScreen = () => {
   const onChange = (e) => {
     setValue(e.target.value);
   };
+
   const [valueType, setValueType] = useState(1);
   const onChangeType = (e) => {
     setValueType(e.target.value);
+  };
+  const [valueCategory, setValueCategor] = useState(1);
+  const onChangeCategory = (e) => {
+    setValueCategor(e.target.value);
+  };
+  
+  const [valueLevel, setValueLevel] = useState(1);
+  const onChangeLevel = (e) => {
+    setValueLevel(e.target.value);
   };
 
   const updateWords = (id) => {
@@ -103,30 +113,30 @@ export const WordsScreen = () => {
               <div className="radioItem">
                 <p className="popeverTitle">Learning Language</p>
                 
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group key={1} onChange={onChange} value={value}>
                   <div className="statusGroupWords">
                     {learningLanguagesData?.map((option) => {
-                      return <Radio className="radio" value={option?._id}>{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</Radio>
+                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
                     })}
                   </div>
                 </Radio.Group>
               </div>
               <div className="radioItem">
                 <p className="popeverTitle">Neative Language</p>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group   key={2}onChange={onChangeType} value={valueType}>
                   <div className="statusGroupWords">
                     {nativeLanguageData?.map((option) => {
-                      return <Radio className="radio" value={option?._id}>{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</Radio>
+                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
                     })}
                   </div>
                 </Radio.Group>
               </div>
               <div className="radioItem">
                 <p className="popeverTitle">Category</p>
-                <Radio.Group onChange={onChange} value={value}>
+                <Radio.Group   key={3}onChange={onChangeCategory} value={valueCategory}>
                   <div className="statusGroupWords">
                     {categoryData?.map((option) => {
-                      return <Radio className="radio" value={option?._id}>{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</Radio>
+                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
                     })}
                   </div>
                 </Radio.Group>
@@ -136,10 +146,10 @@ export const WordsScreen = () => {
             <hr className="poepverHr" />
             <p className="popeverTitle">Level</p>
 
-            <Radio.Group onChange={onChangeType} value={valueType}>
+            <Radio.Group  key={4}onChange={onChangeLevel} value={valueLevel}>
               <div className="statusGroup">
                 {level?.map((option) => {
-                  return <Radio className="radio" value={option.key}>{option.title}</Radio>
+                  return <Radio className="radio"key={option?._id} value={option?._id}><p className="optiontitle">{option.title}</p></Radio>
                 })}
               </div>
 
@@ -171,8 +181,8 @@ export const WordsScreen = () => {
           learningLanguageWordSelectedValue={learningLanguageWordSelectedValue}
         /> */}
         <div className="wordsScreenTable">
-          <div class="container">
-            <ul class="responsive-table">
+          <div className="container">
+            <ul className="responsive-table">
               <TableHeader data={customTableColumns} />
               {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
@@ -180,12 +190,12 @@ export const WordsScreen = () => {
                 <>
                   {!wordsResponse?.data?.list?.length && !wordsLoading ? <CustomNoData /> : wordsResponse?.data?.list?.map((val, index) => {
                     return (
-                      <li class="table-row" key={val._id} onClick={() => {
+                      <li className="table-row" key={val._id} onClick={() => {
                         updateWords(val?._id)
                       }}>
-                        <div class="col col-1 desc" data-label="Job Id">{val?.word}</div>
-                        <div class="col col-1 desc" data-label="Job Id">{val?.language?.name}</div>
-                        <div class="col col-1 desc" data-label="Job Id">
+                        <div className="col col-1 desc" data-label="Job Id">{val?.word}</div>
+                        <div className="col col-1 desc" data-label="Job Id">{val?.language?.name}</div>
+                        <div className="col col-1 desc" data-label="Job Id">
                           <Avatar.Group
                             maxCount={4}
                             maxStyle={{
@@ -200,9 +210,9 @@ export const WordsScreen = () => {
                             })}
                           </Avatar.Group>
                         </div>
-                        <div class="col col-1 desc" data-label="Job Id">{val?.transcription}</div>
-                        <div class="col col-1 desc" data-label="Job Id">{val?.level === 0 ? "beginner" : val?.level === 1 ? "intermediate" : val?.level === 2 ? "advanced" : null}</div>
-                        <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.active).toString()}</p></div>
+                        <div className="col col-1 desc" data-label="Job Id">{val?.transcription}</div>
+                        <div className="col col-1 desc" data-label="Job Id">{val?.level === 0 ? "beginner" : val?.level === 1 ? "intermediate" : val?.level === 2 ? "advanced" : null}</div>
+                        <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.active).toString()}</p></div>
                       </li>
                     )
                   }

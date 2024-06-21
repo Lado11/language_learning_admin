@@ -4,6 +4,35 @@
   justify-content: space-between;
   align-items: start;
 }
+.title{
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #7D8FB3;
+}
+.rightSection{
+  width: 100%;
+  max-width: 420px;
+}
+
+.ant-select .ant-select-arrow{
+  height: 24px !important;
+}
+
+
+.voiceUploadRow{
+display: flex;
+flex-direction: row;
+}
+
+.customSelect .ant-select-selection-placeholder{
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #7D8FB359;
+}
 
 .learningLanguageScreenMainDiv {
   display: flex;
@@ -77,6 +106,7 @@
 .learnLanguageSelectedLanguages .ant-select-selector{
   background-color: white !important;
   border: 1px solid #7D8FB326 !important;
+  border-radius: 10px;
 }
 
 @media screen and (max-width: 1440px) {

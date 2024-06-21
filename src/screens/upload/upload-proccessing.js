@@ -70,7 +70,7 @@ export const UplaodProcessScreen = () => {
                     setIsModalOpen={setIsModalOpen}
                     onTab={onTab}
                 />
-                <p className="feedbackTitle">{t("Uploading process details")}</p>
+               
                 <Form
                     autoComplete="off"
                     form={form}
@@ -78,6 +78,8 @@ export const UplaodProcessScreen = () => {
                 >
                     <div className="exelRowSection">
                         <div>
+                <p className="feedbackTitle uploadTitle">{t("Uploading process details")}</p>
+
                             <div className="category_row_input_user">
                                 <CustomAntdInput
                                     disabled={true}
@@ -153,7 +155,10 @@ export const UplaodProcessScreen = () => {
                             </div>
                         </div>
                         <div className="textAreaSection">
-                            <p className="labelTextArea">Error Logs</p>
+                        <div className='labelError'>
+                <p className="labelTextArea">Error Logs</p>
+
+                </div>
                             <Form.Item name="errorLogs">
                             <TextArea  disabled rows={4} placeholder="Error Logs" className="textArea" />
 

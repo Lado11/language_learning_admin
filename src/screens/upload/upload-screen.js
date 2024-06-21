@@ -57,7 +57,7 @@ export const UplaodScreen = () => {
     return (
         <div className="nativeLanguageScreenMainDiv">
             <div>
-                
+
                 <UploadScreenAddFields />
                 <p className="feedbackTitle">{t("Upload from Exel")}</p>
                 <Popover
@@ -67,7 +67,7 @@ export const UplaodScreen = () => {
                         <Radio.Group onChange={onChange} value={value}>
                             <div className="statusGroup">
                                 {statusOptions?.map((option) => {
-                                    return <Radio   className="radio" value={option.key}>{option.title}</Radio>
+                                    return <Radio  key={option?._id}  className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
                         </Radio.Group>
@@ -77,7 +77,7 @@ export const UplaodScreen = () => {
                         <Radio.Group onChange={onChangeType} value={valueType}>
                             <div className="statusGroup">
                                 {typeGroup?.map((option) => {
-                                    return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                                    return <Radio  key={option?._id}  className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
 
@@ -94,8 +94,8 @@ export const UplaodScreen = () => {
                 >
                     <img src={filterIcon} className="popeverOpenImg" />
                 </Popover>
-                <div class="container">
-                    <ul class="responsive-table">
+                <div className="container">
+                    <ul className="responsive-table">
                         <TableHeader data={columnsUpload} />
                         {wordsGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                             <CustomSpin size={64} color="gray" />
@@ -103,19 +103,19 @@ export const UplaodScreen = () => {
                             <>
                                 {!wordsGetLoading && !wordsGetResponse?.data?.list?.length ? <CustomNoData /> : wordsGetResponse?.data?.list?.map((val, index) => {
                                     return (
-                                        <li class="table-row" key={index} onClick={() => {
+                                        <li className="table-row" key={index} onClick={() => {
                                             wordsExel(val?._id)
                                         }}>
-                                            <div class="col col-1 desc" data-label="Job Id"> <p className="wordsItem">{(val?._id).slice(0, 10)}</p></div>
-                                            <div class="col col-1 desc" data-label="Job Id"> <p className="wordsItem">{val?.type === 0 ? "Create" : "Update"}</p></div>
-                                            <div class="col col-1 desc rowCount" data-label="Job Id">{val?.errorCount != 0 && <img className="errorIcon" src={errorIcon} />} <p className="wordsItem">{val?.errorCount}</p></div>
-                                            <div class="col col-1 desc rowCount" data-label="Job Id">
+                                            <div className="col col-1 desc" data-label="Job Id"> <p className="wordsItem">{(val?._id).slice(0, 10)}</p></div>
+                                            <div className="col col-1 desc" data-label="Job Id"> <p className="wordsItem">{val?.type === 0 ? "Create" : "Update"}</p></div>
+                                            <div className="col col-1 desc rowCount" data-label="Job Id">{val?.errorCount != 0 && <img className="errorIcon" src={errorIcon} />} <p className="wordsItem">{val?.errorCount}</p></div>
+                                            <div className="col col-1 desc rowCount" data-label="Job Id">
                                                 <p className="wordsSuccess">{val?.successCount}</p>
                                                 <p className="wordsItem">/</p>
                                                 <p className="wordsItem">{val?.totalWords}</p>
                                             </div>
-                                            <div class="col col-1 desc" data-label="Job Id">{val?.status === 0 ? <p className="wordsItem">progress</p> : val?.status === 1 ? <p className="wordsSuccess">completed</p> : <p className="wordsError">failed</p>}</div>
-                                            <div class="col col-1 desc" data-label="Job Id"> <p className="wordsItem">{val?.createDt}</p></div>
+                                            <div className="col col-1 desc" data-label="Job Id">{val?.status === 0 ? <p className="wordsItem">progress</p> : val?.status === 1 ? <p className="wordsSuccess">completed</p> : <p className="wordsError">failed</p>}</div>
+                                            <div className="col col-1 desc" data-label="Job Id"> <p className="wordsItem">{val?.createDt}</p></div>
                                         </li>
                                     )
                                 })}

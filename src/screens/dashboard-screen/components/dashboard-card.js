@@ -43,7 +43,7 @@ export const DashboardCard = ({ data,loading }) => {
         {customCardTileData?.map((cardInfo, ind) => {
           return (
             <CustomCardTile
-            loading={loading}
+              loading={loading}
               key={ind}
               icon={cardInfo.icon}
               title={t(`${cardInfo.title}`)}

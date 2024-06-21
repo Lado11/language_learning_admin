@@ -5,8 +5,9 @@ import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin, CustomUploadElement } from "../../components";
 import remove_icon from "../../assets/images/remove_icon.png";
+import logoVoice from "../../assets/images/Vector (4).png"
 import {
   categoryDeleteThunk,
   categoryUpdateThunk,
@@ -164,7 +165,7 @@ export const CategoryUpdate = () => {
                   className="upload-list-inline"
                 >
                   {categoryShow && showCategoryUpload ? null : (
-                    <img src={uploadIcon} className="upload" />
+                 <CustomUploadElement title={"Upload Category Icon "} />
                   )}
                 </Upload>
               )}

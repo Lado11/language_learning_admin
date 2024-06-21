@@ -18,6 +18,7 @@ export const FilesScreen = () => {
         {customFilesData.map((item,index) => {
           return (
               <CustomCardTile
+              key={index}
               icon={item.icon}
               title={t(`${item.title}`)}
               count={item.count}

@@ -54,11 +54,12 @@ export const CustomAntdSelect = ({
       >
 
         <Select
+        placeholder={defaultValue}
           showSearch
           onSearch={onSearch}
           filterOption={filterOption}
           onChange={handleChange}
-          defaultValue={defaultValue}
+          // defaultValue={defaultValue}
           style={{
             color: color,
             width: `${width}`

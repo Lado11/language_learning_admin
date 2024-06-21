@@ -37,15 +37,17 @@
   margin: 40px 0 10px 0; 
 }
 .statusGroupWords{
-  width: 120px;
-  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 130px;
+  margin-right: 25px;
   height: 130px !important;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .radio{
-  margin:   2px 0;
+  margin: 3px 0;
 }
 .filterSection{
   display: flex;

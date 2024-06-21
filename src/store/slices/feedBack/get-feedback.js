@@ -8,9 +8,12 @@ const initialState = {
     feedBackGetErrors: null,
 };
 
+
+
 export const feedBackGetThunk = createAsyncThunk(
   "feedBackGet",
   async (data, { rejectWithValue }) => {
+    console.log(data);
     try {
       const response = await feedBackGetService(data);
       return response.data;

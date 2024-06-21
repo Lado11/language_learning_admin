@@ -1,0 +1,23 @@
+.voiceUploadLanguage{
+    width: 420px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 22px;
+    border: 1px solid #7D8FB326;
+    border-radius: 10px;
+  }
+
+  .uploadElemntRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .reactangleIcon{
+    margin-top: 13px;
+  }
+  .uploadIcon{
+    width: 15px;
+    height: 15px;
+  }

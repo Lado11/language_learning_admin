@@ -31,7 +31,6 @@ export const NotificationScreen = () => {
         autoComplete="off"
       >
           <p className="notificationScreenSendFieldsTitle">Send Notification</p>
-
          <div className="nothSection">
          <SelectNotification data={devicesData} defaultValue={"User Device"} />
           <div className="notificationMiddle">
@@ -42,7 +41,6 @@ export const NotificationScreen = () => {
             name={"message"}
             placeholder={"Message Here..."}
           />
-         
          </div>
          <CustomAntdButton
             title="Send"

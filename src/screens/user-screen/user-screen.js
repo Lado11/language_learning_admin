@@ -104,7 +104,7 @@ export const UserScreen = () => {
             <Radio.Group onChange={onChange} value={value}>
               <div className="statusGroup">
                 {dataUser?.map((option) => {
-                  return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                  return <Radio  key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                 })}
               </div>
             </Radio.Group>
@@ -114,7 +114,7 @@ export const UserScreen = () => {
             <Radio.Group onChange={onChangeType} value={valueType}>
               <div className="statusGroup">
                 {dataPhone?.map((option) => {
-                  return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                  return <Radio   key={option.key}className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                 })}
               </div>
 
@@ -125,7 +125,7 @@ export const UserScreen = () => {
             <Radio.Group onChange={onChangeEmail} value={valueEmail}>
               <div className="statusGroup">
                 {dataEmail?.map((option) => {
-                  return <Radio  className="radio" value={option.key}>{option.title}</Radio>
+                  return <Radio  key={option.key}  className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                 })}
               </div>
 
@@ -135,7 +135,7 @@ export const UserScreen = () => {
             <Radio.Group onChange={onChangeRole} value={valueTypeRole}>
               <div className="statusGroup">
                 {dataRole?.map((option) => {
-                  return <Radio value={option.key}>{option.title}</Radio>
+                  return <Radio key={option.key} value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                 })}
               </div>
             </Radio.Group>
@@ -155,21 +155,21 @@ export const UserScreen = () => {
         </div>
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />
-        </div> : <div> <div class="container">
-          <ul class="responsive-table">
+        </div> : <div> <div className="container">
+          <ul className="responsive-table">
             <TableHeader data={columns} />
             {dataList?.map((val, index) => {
               return (
-                <li class="table-row" key={index} onClick={() => {
+                <li className="table-row" key={index} onClick={() => {
                   userUpdate(val?._id)
                 }}>
-                  <div class="col col-1 desc" data-label="Job Id">{index + 1}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.email}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString() === true ? "Subscribed" : "UnSubscribed"}</p></div>
+                  <div className="col col-1 desc" data-label="Job Id">{index + 1}</div>
+                  <div className="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
+                  <div className="col col-1 desc" data-label="Job Id">{val?.email}</div>
+                  <div className="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
+                  <div className="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
+                  <div className="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
+                  <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString() === true ? "Subscribed" : "UnSubscribed"}</p></div>
                 </li>
               )
             })}

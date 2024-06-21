@@ -13,6 +13,7 @@ import { wordlevel } from "../../../../../data";
 import { Waveform } from "./music-player";
 import logo from "../../../../../assets/images/Vector (4).png"
 import { Form } from "antd";
+import remove_icon from "../../../../../assets/images//remove_icon.png"
 
 export const CreateWordsAdd = ({
   image,
@@ -31,7 +32,7 @@ export const CreateWordsAdd = ({
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const categoryData = useSelector(getCategoryGetData)?.data?.list;
-
+  const [showVoice, setShowVoice] = useState(false);
   const filteredResponseCategory = categoryData?.map((lang) => {
     return {
       _id: lang._id,
@@ -69,8 +70,8 @@ export const CreateWordsAdd = ({
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
         <CustomAntdSelect
-        rules={true}
-        name={"Learning language"}
+          rules={true}
+          name={"Learning language"}
           // className="wordsSelectExel"
           optinData={filteredResponse}
           selected={learningLanguageWordSelectedValue}
@@ -102,16 +103,16 @@ export const CreateWordsAdd = ({
         </div>
         <div className="rowInputWords">
           <CustomAntdSelect
-          name={"Level"}
-          rules={true}
+            name={"Level"}
+            rules={true}
             // width={172}
             defaultValue="Level*"
             optinData={wordlevel}
             setSelected={setSelectedLevel}
           />
           <CustomAntdSelect
-          rules={true}
-          name={"Category"}
+            rules={true}
+            name={"Category"}
             // width={172}
             defaultValue="Category*"
             optinData={filteredResponseCategory}
@@ -119,7 +120,36 @@ export const CreateWordsAdd = ({
           />
         </div>
       </div>
-      {audio ? <Waveform url={audio} /> : null}
+
+      <>
+        {audio ? <div className="imgae_upload_design_voice">
+          <div className="remove_icon_div">
+            <img
+              src={remove_icon}
+              onClick={() => {
+                setAudio(null)
+              }}
+            />
+          </div>
+          <Waveform url={audio} />
+
+
+        </div> : <Form.Item
+          name={"Words voice"}
+          rules={[{ required: true }]}
+        > <div className="file-upload">
+            <div className="voiceUpload">
+              <p className="titleVoiceUpload">
+                Voice Upload
+              </p>
+              <img src={logo} />
+            </div>
+            <input accept="audio/*" type='file' onChange={addFile} />
+          </div> </Form.Item>}
+      </>
+      {/* } */}
+
+      {/* {audio ? <Waveform url={audio} /> : null}
       <Form.Item
         name={"Words voice"}
         rules={[{ required: true }]}
@@ -133,7 +163,7 @@ export const CreateWordsAdd = ({
         </div>
         <input accept="audio/*" type='file' onChange={addFile} />
       </div>
-      </Form.Item>
+      </Form.Item> */}
 
       <CustomUpload setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
     </div>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import uploadImage from "../../assets/images/uploadImg.png";
-import { CustomAntdButton, CustomAntdInput, CustomErrorSection } from "../../components";
+import { CustomAntdButton, CustomAntdInput, CustomErrorSection, CustomUploadElement } from "../../components";
 import { Colors } from "../../assets/colors";
+import logoVoice from "../../assets/images/Vector (4).png"
+import rectangle from "../../assets/images/Rectangle 663.png"
 import "../../global-styles/global-styles.css";
 import "./learning-language-screen-style.css";
 import {
@@ -29,11 +31,9 @@ export const LearningLanguageCreateScreen = () => {
   const [learningLanguageFile, setLearningLanguageFile] = useState();
   const [showLearningLanguageUpload, setShowLearningLanguageUpload] = useState();
   const languages = useSelector(learnLanguageSelectedLanguages);
-  console.log(languages,"log languages");
   const languageLoading = useSelector(learnLanguageCreateLoading);
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
   const messageError = createLearnLanguageResponse?.message;
-  console.log(messageError,"erro");
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
@@ -101,7 +101,8 @@ export const LearningLanguageCreateScreen = () => {
 
   return (
     <div
-      className="authScreenMainDiv learnLanguageCreateScreenMainDiv"
+      // className="authScreenMainDiv learnLanguageCreateScreenMainDiv"
+      className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE, flexDirection: "row" }}
     >
       <div className="learningLanguageUpdateFormDiv">
@@ -110,57 +111,54 @@ export const LearningLanguageCreateScreen = () => {
           form={form}
           name="createLearningLanguage"
           onFinish={onFinish}
-          // className="formAntd"
+        // className="formAntd"
         >
-        <div className="createLearningLangRow">
-        <div>
-          { messageError && <CustomErrorSection error={messageError} onTab={onRemove}/>}
-        <p className="nativeLanguageTitle">Add Learning Language</p>
+          <div className="createLearningLangRow">
+            <div className="rightSection">
+              {messageError && <CustomErrorSection error={messageError} onTab={onRemove} />}
+              <p className="nativeLanguageTitle">Add Learning Language</p>
+              <div className="createScreenRowInputs">
+                <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
+                <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
+              </div>
+              <Form.Item
+                name="learningLanguageImage"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Upload
+                  onChange={handleChange}
+                  beforeUpload={beforeUpload}
+                  {...props}
+                  maxCount={1}
+                  listType="picture"
+                  className="upload-list-inline"
+                >
+                  {learningLanguageFile && showLearningLanguageUpload ? null : (
+                   <CustomUploadElement title={"Upload Language Icon"} />
 
-         <div className="createScreenRowInputs">
-            <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
-            <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
+                  )}
+                </Upload>
+              </Form.Item>
+              <Form.Item>
+                {contextHolder}
+                <div className="addButton">
+                  <CustomAntdButton loading={languageLoading} title="Add" background={Colors.PURPLE} />
+                </div>
+              </Form.Item>
+            </div>
+            <div className="learnLanguageSelectedLanguages">
+              <p className="selectLanguageTitle">Native Language</p>
+              <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+                dispatch(removeLanguagesItem(id));
+              }} />
+            </div>
           </div>
-
-          <Form.Item
-            name="learningLanguageImage"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Upload
-              onChange={handleChange}
-              beforeUpload={beforeUpload}
-              {...props}
-              maxCount={1}
-              listType="picture"
-              className="upload-list-inline"
-            >
-              {learningLanguageFile && showLearningLanguageUpload ? null : (
-                <img src={uploadImage} className="upload" />
-              )}
-            </Upload>
-          </Form.Item>
-          <Form.Item>
-            {contextHolder}
-            <CustomAntdButton loading={languageLoading} title="Add" background={Colors.PURPLE} />
-          </Form.Item>
-
-         </div>
-          <div className="learnLanguageSelectedLanguages">
-        <p className="selectLanguageTitle">Native Language</p>
-        <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
-          dispatch(removeLanguagesItem(id));
-        }} />
-      </div>
-        </div>
-
-        
         </Form>
       </div>
-      
     </div>
   );
 };

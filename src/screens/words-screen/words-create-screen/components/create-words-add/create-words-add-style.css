@@ -99,7 +99,22 @@
 .createWordsAdd .ant-input {
   height: 50px !important;
 }
+.custom-upload .ant-upload-list-item{
+  width: 100%;
+  max-width:420px;
+}
 
+.imgae_upload_design_voice{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  /* height: 180px; */
+  border: 1px solid #7d8fb326;
+  border-radius: 10px;
+}
 .voiceUpload{
   width: 100%;
   max-width: 420px;
