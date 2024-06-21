@@ -32,11 +32,22 @@ export const UserScreen = () => {
   const data = {
     skip: 0,
     limit: 5,
+    search: searchValue ? searchValue : null
   };
   useEffect(() => {
     dispatch(userGetAllThunk(data));
   }, []);
 
+  const onChangeSearch = (e) =>{
+    const data = {
+      skip: 0,
+      limit: 5,
+      search: e.target.value ? e.target.value : null
+    };
+    setSearchValue(e.target.value)
+    dispatch(userGetAllThunk(data));
+   }
+   
   const userUpdate = (id) => {
     localStorage.setItem("userId", id);
     dispatch(userGetByIdThunk(id));
@@ -140,7 +151,7 @@ export const UserScreen = () => {
         >
           <img src={filterIcon} className="popeverOpen" />
         </Popover>
-        <CustomSearchInput searchValue={searchValue} setSearchValue={setSearchValue}/>
+        <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch}setSearchValue={setSearchValue}/>
         </div>
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />

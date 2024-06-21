@@ -47,6 +47,7 @@ export const DashboardScreen = () => {
   return (
     <div className="nativeLanguageScreenMainDiv">
       <div>
+      <div>
         <p className="dashboardTitle">{t("DASHBOARD")}</p>
       </div>
       <div className="dashboardScreenItem">
@@ -58,7 +59,7 @@ export const DashboardScreen = () => {
 
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />
-        </div> : <div> <div class="container">
+        </div> :  <div class="container">
           <ul class="responsive-table">
             <TableHeader data={columns} />
             {!dataList?.length && !userGetLoading ? <CustomNoData /> :
@@ -83,8 +84,9 @@ export const DashboardScreen = () => {
               </button>
             </div>}
           </ul>
-        </div>
+        
         </div>}
+      </div>
       </div>
     </div>
   );

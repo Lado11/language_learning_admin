@@ -31,11 +31,11 @@ export const FeedbackScreen = () => {
   };
   
 
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState();
   const onChange = (e) => {
       setValue(e.target.value);
   };
-  const [valueType, setValueType] = useState(1);
+  const [valueType, setValueType] = useState();
   const onChangeType = (e) => {
       setValueType(e.target.value);
   };
@@ -53,6 +53,28 @@ export const FeedbackScreen = () => {
     localStorage.setItem("feadback", id);
     dispatch(feedBackGetIdThunk(id));
     navigate(`/feadback/${id}`);
+  }
+
+const clearFilter = () => {
+  setValue("")
+  setValueType("")
+  const data = {
+    skip: 0,
+    limit: 6,
+    type:2,
+    status:2
+  }
+  dispatch(feedBackGetThunk(data))
+}
+
+  const sendFilter = () => {
+    const data = {
+      skip: 0,
+      limit: 6,
+      type:value-1,
+      status:valueType-1,
+    }
+    dispatch(feedBackGetThunk(data))
   }
 
   return (
@@ -85,8 +107,8 @@ export const FeedbackScreen = () => {
 
                         </Radio.Group>
                         <div className="buttonSection">
-                            <button className="button">Clear</button>
-                            <button className="buttonApply">Apply</button>
+                            <button onClick={clearFilter} className="button">Clear</button>
+                            <button onClick={sendFilter} className="buttonApply">Apply</button>
                         </div>
 
                     </div>}
