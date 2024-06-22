@@ -1,12 +1,20 @@
 import { api } from "..";
+import { buildUrl } from "../../helper/build-url";
 
 export const getWordsService = (data) => {
-  return api.get(`api/admin/words/word?limit=${data.limit}&skip=${data.skip}
-    
-    `);
+  const params ={
+    skip:data.skip,
+    limit:data.limit,
+    language:data.language,
+    translateLanguage: data.translateLanguage,
+    category: data.category,
+    level:data.level,
+    search:data.search
+  }
+
+  const url = buildUrl(`api/admin/words/word/`,params);
+  return api.get(url);
 };
-// &language=${data?.language}
-//     &level=${data?.level}&category=${data?.category}&search=${data?.search}&translateLanguage=${data.translateLanguage}
 
 export const getWordsIdService = (id) => {
   return api.get(`api/admin/words/word/${id}`);

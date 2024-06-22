@@ -3,7 +3,7 @@ import { Colors } from "../../assets/colors/colors";
 import { useTranslation } from "react-i18next";
 import "./feedback-screen-style.css";
 import { CustomNoData, CustomPagination, CustomSpin } from "../../components";
-import { columnsFeedback, statusFeadback, typeFeadback } from "../../data";
+import { FeedbackStatus, FeedbackType, columnsFeedback, statusFeadback, typeFeadback } from "../../data";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import { useDispatch, useSelector } from "react-redux";
 import { feedBackGetThunk, getFeedBackLoading, getFeedBackResponse } from "../../store/slices/feedBack/get-feedback";
@@ -23,57 +23,70 @@ export const FeedbackScreen = () => {
   const feedBackLoading = useSelector(getFeedBackLoading);
   const getFeedBackRespone = useSelector(getFeedBackResponse);
   const [open, setOpen] = useState(false);
+  const [filtterType,setFiltterType] = useState(undefined);
+  const [curentSatateType, setCurentSatateType] = useState();
+  const [filtterStatus,setFiltterStatus] = useState(undefined);
+  const [status, setStatus] = useState();
+
+const data = {
+    skip: 0,
+    limit: 6,
+  };
+  const filterData = {
+    skip: 0,
+    limit: 6,
+    type:filtterType,
+    status:filtterStatus,
+  }
+
   const hide = () => {
       setOpen(false);
   };
   const handleOpenChange = (newOpen) => {
       setOpen(newOpen);
   };
-  
 
-  const [value, setValue] = useState();
   const onChange = (e) => {
-      setValue(e.target.value);
+    setCurentSatateType(e.target.value);
+    if(e.target.value !== FeedbackType.All){
+      setFiltterType(e.target.value)
+    }else{
+      setFiltterType(undefined)
+    }
   };
-  const [valueType, setValueType] = useState();
+
   const onChangeType = (e) => {
-      setValueType(e.target.value);
+    setStatus(e.target.value);
+    if(e.target.value !== FeedbackStatus.All){
+      setFiltterStatus(e.target.value)
+    }else{
+      setFiltterStatus(undefined)
+    }
   };
 
-
-  const data = {
-    skip: 0,
-    limit: 6,
-  };
-  useEffect(() => {
-    dispatch(feedBackGetThunk(data))
-  }, [])
-
+  
   const feedBack = (id) => {
     localStorage.setItem("feadback", id);
     dispatch(feedBackGetIdThunk(id));
     navigate(`/feadback/${id}`);
   }
 
+
+
 const clearFilter = () => {
-  setValue("")
-  setValueType("")
-  const data = {
-    skip: 0,
-    limit: 6,
-  }
+  setCurentSatateType("")
+  setStatus("")
   dispatch(feedBackGetThunk(data))
 }
 
   const sendFilter = () => {
-    const data = {
-      skip: 0,
-      limit: 6,
-      type:value-1,
-      status:valueType-1,
-    }
-    dispatch(feedBackGetThunk(data))
+    dispatch(feedBackGetThunk(filterData))
   }
+
+
+  useEffect(() => {
+    dispatch(feedBackGetThunk(data))
+  }, [])
 
   return (
     <div
@@ -86,23 +99,22 @@ const clearFilter = () => {
                     placement="bottomLeft"
                     content={<div className="filterSection">
                         <p className="popeverTitle">Feedback Type</p>
-                        <Radio.Group onChange={onChange} value={value} key={1}>
+                        <Radio.Group onChange={onChange} value={curentSatateType} key={1}>
                             <div className="statusGroup">
                                 {typeFeadback?.map((option) => {
-                                    return <Radio key={3} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+                                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
                         </Radio.Group>
                         <hr className="poepverHr" />
                         <p  className="popeverTitle">Status</p>
 
-                        <Radio.Group onChange={onChangeType} value={valueType} key={2}>
+                        <Radio.Group onChange={onChangeType} value={status} key={2}>
                             <div className="statusGroup">
                                 {statusFeadback?.map((option) => {
-                                    return <Radio key={4} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+                                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
-
                         </Radio.Group>
                         <div className="buttonSection">
                             <button onClick={clearFilter} className="button">Clear</button>

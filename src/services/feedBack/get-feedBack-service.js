@@ -1,28 +1,17 @@
 import { api } from "..";
-
-function buildUrl(base, params) {
-  const url = new URL(base);
-  Object.keys(params).forEach(key => {
-    if (params[key] !== undefined && params[key] !== null) {
-      url.searchParams.append(key, params[key]);
-    }
-  });
-  return url;
-}
+import { buildUrl } from "../../helper/build-url";
 
 export  const feedBackGetService = async (data) => {
- console.log(data,"data");
   const params ={
     skip:data.skip,
     limit:data.limit,
-    status:data.status || undefined,
-    type:data.type || undefined
+    status:data.status ,
+    type:data.type 
   }
-  const url =  buildUrl(`api/admin/user`,params);
- 
-  return api.get(`api/admin/user&status=${data.status}&type=${data.type}`);
+
+  const url =  buildUrl(`api/admin/feedback/`,params);
+  return api.get(url);
 };
-// &status=${data.status}&type=${data.type}
 
 export const feedBackGetIdService = (id) => {
   return api.get(

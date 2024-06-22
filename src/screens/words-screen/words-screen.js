@@ -16,7 +16,7 @@ import {
   wordsLoadingData,
   wordsResponseData,
 } from "../../store/slices";
-import { customTableColumns, level } from "../../data";
+import { WordsLevel, customTableColumns, level } from "../../data";
 import { Avatar, Popover, Radio } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { getIdWordsThunk } from "../../store/slices/words/getId-words";
@@ -27,11 +27,8 @@ export const WordsScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [learningLanguageWordSelectedValue, setLearningLanguageWordSelectedValue] = useState();
-  const [wordsNativeLanguageSelectValue, setWordsNativeLanguageSelectValue] = useState();
-  const [wordsLevelSelectedValue, setWordsLevelSelectedValue] = useState();
-  const [wordsCategorySelecteValue, setWordsCategorySelectValue] = useState();
   const [searchValue, setSearchValue] = useState();
+  const [searchFilter, setSearchFilter] = useState();
   const wordsResponse = useSelector(wordsResponseData);
   const wordsLoading = useSelector(wordsLoadingData);
   const learningLanguagesData = useSelector(learningLanguages)?.data?.list;
@@ -39,6 +36,27 @@ export const WordsScreen = () => {
   const categoryData = useSelector(getCategoryGetData)?.data?.list
   const [open, setOpen] = useState(false);
 
+
+  const onChangeSearch = (e) => {
+    setSearchValue(e.target.value);
+    if (e.target.value !== "") {
+      setSearchFilter(e.target.value)
+      let data = {
+        skip: 0,
+        limit: 5,
+        search: e.target.value
+      }
+      dispatch(getWordsThunk(data));
+
+    } else {
+      let data = {
+        skip: 0,
+        limit: 5,
+      }
+      dispatch(getWordsThunk(data));
+      setSearchFilter(undefined)
+    }
+  }
   const hide = () => {
     setOpen(false);
   };
@@ -47,23 +65,31 @@ export const WordsScreen = () => {
   };
 
 
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState();
   const onChange = (e) => {
     setValue(e.target.value);
   };
 
-  const [valueType, setValueType] = useState(1);
+  const [valueType, setValueType] = useState();
   const onChangeType = (e) => {
     setValueType(e.target.value);
   };
-  const [valueCategory, setValueCategor] = useState(1);
+  const [valueCategory, setValueCategor] = useState();
   const onChangeCategory = (e) => {
     setValueCategor(e.target.value);
   };
-  
-  const [valueLevel, setValueLevel] = useState(1);
+
+  const [valueLevel, setValueLevel] = useState();
+  const [filterLevel, setFilterLevel] = useState(undefined);
+
   const onChangeLevel = (e) => {
+    console.log(e.target.value, "val");
     setValueLevel(e.target.value);
+    if (e.target.value !== WordsLevel.All) {
+      setFilterLevel(e.target.value)
+    } else {
+      setFilterLevel(undefined)
+    }
   };
 
   const updateWords = (id) => {
@@ -73,16 +99,6 @@ export const WordsScreen = () => {
   }
 
   useEffect(() => {
-    const data = {
-      skip: 0,
-      limit: 5,
-      language: learningLanguageWordSelectedValue?._id ?
-        learningLanguageWordSelectedValue?._id : "",
-      level: wordsLevelSelectedValue?.value ? wordsLevelSelectedValue?.value : "",
-      category: wordsCategorySelecteValue?._id ? wordsCategorySelecteValue?._id : "",
-      translateLanguage: wordsNativeLanguageSelectValue?._id ? wordsNativeLanguageSelectValue?._id : "",
-      search: searchValue ? searchValue : ""
-    };
     dispatch(getWordsThunk(data));
   }, []);
 
@@ -96,6 +112,27 @@ export const WordsScreen = () => {
     dispatch(categoryGetThunk(data));
   }, []);
 
+  const filterData = {
+    skip: 0,
+    limit: 6,
+    language: value,
+    level: filterLevel,
+    category: valueCategory,
+    translateLanguage: valueType,
+  }
+
+  const clearFilter = () => {
+    setValue()
+    setValueCategor()
+    setValueLevel()
+    setFilterLevel()
+    setValueType()
+    dispatch(getWordsThunk(data))
+  }
+
+  const sendFilter = () => {
+    dispatch(getWordsThunk(filterData))
+  }
 
   return (
     <div
@@ -105,69 +142,69 @@ export const WordsScreen = () => {
       <div>
         <WordsScreenAddFields />
         <p className="wordsScreenTitle">{t("WORDS")}</p>
-       <div className="filterDiv"> 
-       <Popover
-          placement="bottomLeft"
-          content={<div className="filterSection">
-            <div className="radioRowSection">
-              <div className="radioItem">
-                <p className="popeverTitle">Learning Language</p>
-                
-                <Radio.Group key={1} onChange={onChange} value={value}>
-                  <div className="statusGroupWords">
-                    {learningLanguagesData?.map((option) => {
-                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
-                    })}
-                  </div>
-                </Radio.Group>
-              </div>
-              <div className="radioItem">
-                <p className="popeverTitle">Neative Language</p>
-                <Radio.Group   key={2}onChange={onChangeType} value={valueType}>
-                  <div className="statusGroupWords">
-                    {nativeLanguageData?.map((option) => {
-                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
-                    })}
-                  </div>
-                </Radio.Group>
-              </div>
-              <div className="radioItem">
-                <p className="popeverTitle">Category</p>
-                <Radio.Group   key={3}onChange={onChangeCategory} value={valueCategory}>
-                  <div className="statusGroupWords">
-                    {categoryData?.map((option) => {
-                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
-                    })}
-                  </div>
-                </Radio.Group>
-              </div>
-            </div>
+        <div className="filterDiv">
+          <Popover
+            placement="bottomLeft"
+            content={<div className="filterSection">
+              <div className="radioRowSection">
+                <div className="radioItem">
+                  <p className="popeverTitle">Learning Language</p>
 
-            <hr className="poepverHr" />
-            <p className="popeverTitle">Level</p>
-
-            <Radio.Group  key={4}onChange={onChangeLevel} value={valueLevel}>
-              <div className="statusGroup">
-                {level?.map((option) => {
-                  return <Radio className="radio"key={option?._id} value={option?._id}><p className="optiontitle">{option.title}</p></Radio>
-                })}
+                  <Radio.Group key={1} onChange={onChange} value={value}>
+                    <div className="statusGroupWords">
+                      {learningLanguagesData?.map((option) => {
+                        return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+                      })}
+                    </div>
+                  </Radio.Group>
+                </div>
+                <div className="radioItem">
+                  <p className="popeverTitle">Neative Language</p>
+                  <Radio.Group key={2} onChange={onChangeType} value={valueType}>
+                    <div className="statusGroupWords">
+                      {nativeLanguageData?.map((option) => {
+                        return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+                      })}
+                    </div>
+                  </Radio.Group>
+                </div>
+                <div className="radioItem">
+                  <p className="popeverTitle">Category</p>
+                  <Radio.Group onChange={onChangeCategory} value={valueCategory}>
+                    <div className="statusGroupWords">
+                      {categoryData?.map((option) => {
+                        return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
+                      })}
+                    </div>
+                  </Radio.Group>
+                </div>
               </div>
 
-            </Radio.Group>
-            <div className="buttonSection">
-              <button className="button">Clear</button>
-              <button className="buttonApply">Apply</button>
-            </div>
+              <hr className="poepverHr" />
+              <p className="popeverTitle">Level</p>
 
-          </div>}
-          trigger="click"
-          open={open}
-          onOpenChange={handleOpenChange}
-        >
-          <img src={filterIcon} className="popeverOpen" />
-        </Popover>
-        <CustomSearchInput searchValue={searchValue} setSearchValue={setSearchValue}/>
-       </div>
+              <Radio.Group onChange={onChangeLevel} value={valueLevel}>
+                <div className="statusGroup">
+                  {level?.map((option) => {
+                    return <Radio className="radio" key={option?.key} value={option?.key}><p className="optiontitle">{option.title}</p></Radio>
+                  })}
+                </div>
+
+              </Radio.Group>
+              <div className="buttonSection">
+                <button onClick={clearFilter} className="button">Clear</button>
+                <button onClick={sendFilter} className="buttonApply">Apply</button>
+              </div>
+
+            </div>}
+            trigger="click"
+            open={open}
+            onOpenChange={handleOpenChange}
+          >
+            <img src={filterIcon} className="popeverOpen" />
+          </Popover>
+          <CustomSearchInput searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
+        </div>
         {/* <WordsScreenSelects
           searchValue={searchValue}
           setSearchValue={setSearchValue}

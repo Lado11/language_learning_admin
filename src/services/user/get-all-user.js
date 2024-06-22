@@ -1,34 +1,17 @@
-import axios from "axios";
 import { api } from "..";
-
-function buildUrl(base, params) {
-  const url = new URL(base);
-  Object.keys(params).forEach(key => {
-    if (params[key] !== undefined && params[key] !== null) {
-      url.searchParams.append(key, params[key]);
-    }
-  });
-  return url.toString();
-}
-
-export async function fetchData(regionCode, role, limit = 10, skip = 0) {
-  const params = {
-    regionCode: regionCode || undefined,
-    role: role || undefined,
-    limit,
-    skip
-  };
-
-  const url = buildUrl(`${api}api/admin/user`, params);
-
-  try {
-    const response = await axios.get(url);
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}
+import { buildUrl } from "../../helper/build-url";
 
 export const userGetAllService = (data) => {
-  return api.get(`api/admin/user?limit=${data.limit}&skip=${data.skip}&search=${data.search}`,);
+  const params ={
+    skip:data.skip,
+    limit:data.limit,
+    isSubscribed:data.isSubscribed,
+    phoneNumberVerified: data.phoneNumberVerified,
+    emailVerified: data.emailVerified,
+    role:data.role,
+    search:data.search
+  }
+
+  const url = buildUrl(`api/admin/user/`,params);
+  return api.get(url);
 };

@@ -1,3 +1,86 @@
+
+export const UserSubscription = Object.freeze({
+  SUBSCRIBED: true,
+  UNSUBSCRIBED: false,
+  All:-1
+})
+
+export const UserInfo = Object.freeze({
+  VERFIED: true,
+  UNVERFIED: false,
+  All:-1
+})
+
+export const UserRole = Object.freeze({
+  ADMIN: 0,
+  OPERATOR: 1,
+  USER: 2,
+  All:-1
+})
+
+export const dataUser = [
+  {
+    key: UserSubscription.SUBSCRIBED,
+    title: "Subscribed"
+  },
+  {
+    key: UserSubscription.UNSUBSCRIBED,
+    title: "Unsubscribed"
+  },
+  {
+    key: UserSubscription.All,
+    title: "All"
+  }]
+
+export const dataPhone = [
+  {
+    key: UserInfo.VERFIED,
+    title: "Verified"
+  },
+  {
+    key: UserInfo.UNVERFIED,
+    title: "UnVerified"
+  },
+  {
+    key: UserInfo.All,
+    title: "All"
+  }]
+
+
+export const dataEmail = [
+  {
+    key: UserInfo.VERFIED,
+    title: "Verified"
+  },
+  {
+    key: UserInfo.UNVERFIED,
+    title: "UnVerified"
+  },
+  {
+    key: UserInfo.All,
+    title: "All"
+  }
+]
+  
+export const dataRole = [
+  {
+    key: UserRole.ADMIN,
+    title: "Admin"
+  },
+  {
+    key: UserRole.OPERATOR,
+    title: "Operator"
+  },
+  {
+    key: UserRole.USER,
+    title: "User"
+  },
+  {
+    key: UserRole.All,
+    title: "All"
+  }]
+
+
 export const devicesData = [
   {
     key: 1,
@@ -12,99 +95,55 @@ export const devicesData = [
     title: "General"
   }]
 
-export const statusOptions = [
+  export const UploadStatus = Object.freeze({
+    PROCESSED: 0,
+    SUCCESS: 1,
+    ERROR: 2,
+    All:-1
+  })
+
+export const statusUpload = [
   {
     _id: 1,
-    key: 1,
+    key: UploadStatus.PROCESSED,
     title: "Processed words"
   },
   {
     _id: 2,
-    key: 2,
+    key: UploadStatus.SUCCESS,
     title: "Success count"
   },
   {
     _id: 3,
-    key: 3,
+    key: UploadStatus.ERROR,
     title: "Error count"
   },
   {
     _id: 4,
-    key: 4,
+    key: UploadStatus.All,
     title: "All"
   }]
+
+  export const TypeGroup = Object.freeze({
+    CREATE: 0,
+    UPDATE: 1,
+   
+  })
+
 
 export const typeGroup = [
   {
     _id: 1,
-    key: 1,
+    key: TypeGroup.CREATE,
     title: "Create words"
   },
   {
     _id: 2,
-    key: 2,
+    key: TypeGroup.UPDATE,
     title: "Update words"
   },
 ]
-export const dataUser = [
-  {
-    key: 1,
-    title: "Subscribed"
-  },
-  {
-    key: 2,
-    title: "Unsubscribed"
-  },
-  {
-    key: 3,
-    title: "All"
-  }]
 
-export const dataPhone = [
-  {
-    key: 1,
-    title: "Verified"
-  },
-  {
-    key: 2,
-    title: "UnVerified"
-  },
-  {
-    key: 3,
-    title: "All"
-  }]
-
-
-export const dataEmail = [
-  {
-    key: 1,
-    title: "Verified"
-  },
-  {
-    key: 2,
-    title: "UnVerified"
-  },
-  {
-    key: 3,
-    title: "All"
-  }]
-export const dataRole = [
-  {
-    key: 1,
-    title: "Admin"
-  },
-  {
-    key: 2,
-    title: "Operator"
-  },
-  {
-    key: 3,
-    title: "User"
-  },
-  {
-    key: 4,
-    title: "All"
-  }]
 
 
 export const dataUserSub = [
@@ -163,71 +202,93 @@ export const emailSelect = [
 ]
 
 
+ export const FeedbackType = Object.freeze({
+  WORD_MISTAKE: 0,
+  APP_ISSUE: 1,
+  GENERAL_FEEDBACK: 2,
+  All:-1
+});
+
+
 export const typeFeadback = [
   {
     _id: 1,
-    key: 1,
+    key: FeedbackType.WORD_MISTAKE,
     title: "Word Mistake"
   },
   {
     _id: 2,
-    key: 2,
-    title: "App Issue "
+    key:  FeedbackType.APP_ISSUE,
+    title: "App Issue"
   },
   {
     _id: 3,
-    key: 3,
+    key:  FeedbackType.GENERAL_FEEDBACK,
     title: "General Feedback"
   },
   {
     _id: 4,
-    key: 4,
+    key:  FeedbackType.All,
     title: "All"
   },
 ]
+
+export const FeedbackStatus = Object.freeze({
+  PENDING: 0,
+  RESOLVED: 1,
+  CANCELED: 2,
+  All:-1
+});
 
 export const statusFeadback = [
   {
     _id: 1,
-    key: 1,
+    key: FeedbackStatus.PENDING,
     title: "Pending"
   },
   {
     _id: 2,
-    key: 2,
+    key: FeedbackStatus.RESOLVED,
     title: "Resolved"
   },
   {
     _id: 3,
-    key: 3,
+    key: FeedbackStatus.CANCELED,
     title: "Canceled"
   },
   {
     _id: 4,
-    key: 4,
+    key: FeedbackStatus.All,
     title: "All"
   },
 ]
 
+
+export const WordsLevel = Object.freeze({
+  BEGINNER: 0,
+  INTERMIDATE: 1,
+  ADVANCED: 2,
+  All:-1
+})
 export const level = [
   {
     _id: 1,
-    key: 1,
+    key: WordsLevel.BEGINNER,
     title: "Beginner"
   },
   {
     _id: 2,
-    key: 2,
+    key: WordsLevel.INTERMIDATE,
     title: "Intermediate"
   },
   {
     _id: 3,
-    key: 3,
+    key: WordsLevel.ADVANCED,
     title: "Advanced"
   },
   {
     _id: 4,
-    key: 4,
+    key: WordsLevel.All,
     title: "All"
   },
   ]

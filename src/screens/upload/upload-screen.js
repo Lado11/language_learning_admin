@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { UploadScreenAddFields } from "../words-screen/components";
 import { CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import { columnsUpload, statusOptions, typeGroup } from "../../data";
+import { UploadStatus, columnsUpload, statusUpload, typeGroup } from "../../data";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { wordsExelGetLoading, wordsExelGetResponse, wordsExelGetThunk } from "../../store/slices/words/get-exel-words";
@@ -19,32 +19,57 @@ export const UplaodScreen = () => {
     const navigate = useNavigate();
     const wordsGetLoading = useSelector(wordsExelGetLoading);
     const wordsGetResponse = useSelector(wordsExelGetResponse);
+    const [open, setOpen] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState();
+    const [filtterStatus, setFiltterStatus] = useState(undefined);
+    const [filterUploadType, setFilterUploadType] = useState();
+
     const data = {
         skip: 0,
         limit: 5,
     };
-    const [open, setOpen] = useState(false);
+
+    const filterData = {
+        skip: 0,
+        limit: 6,
+        type: filterUploadType,
+        status: filtterStatus,
+    }
+
     const hide = () => {
         setOpen(false);
     };
+
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
     };
-
-
 
     useEffect(() => {
         dispatch(wordsExelGetThunk(data))
     }, [])
 
-    const [value, setValue] = useState(1);
     const onChange = (e) => {
-        setValue(e.target.value);
+        setUploadStatus(e.target.value);
+        if (e.target.value !== UploadStatus.All) {
+            setFiltterStatus(e.target.value)
+        } else {
+            setFiltterStatus(undefined)
+        }
     };
-    const [valueType, setValueType] = useState(1);
+
     const onChangeType = (e) => {
-        setValueType(e.target.value);
+        setFilterUploadType(e.target.value);
     };
+
+    const clearFilter = () => {
+        setUploadStatus("")
+        setFilterUploadType("")
+        dispatch(wordsExelGetThunk(data))
+    }
+
+    const sendFilter = () => {
+        dispatch(wordsExelGetThunk(filterData))
+    }
 
     const wordsExel = (val) => {
         localStorage.setItem("wordsExel", val);
@@ -57,34 +82,33 @@ export const UplaodScreen = () => {
     return (
         <div className="nativeLanguageScreenMainDiv">
             <div>
-
                 <UploadScreenAddFields />
                 <p className="feedbackTitle">{t("Upload from Exel")}</p>
                 <Popover
                     placement="bottomLeft"
                     content={<div className="filterSection">
                         <p className="popeverTitle">Status</p>
-                        <Radio.Group onChange={onChange} value={value}>
+                        <Radio.Group onChange={onChange} value={uploadStatus}>
                             <div className="statusGroup">
-                                {statusOptions?.map((option) => {
-                                    return <Radio  key={option?._id}  className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+                                {statusUpload?.map((option) => {
+                                    return <Radio key={option?._id} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
                         </Radio.Group>
                         <hr className="poepverHr" />
-                        <p  className="popeverTitle">Type</p>
+                        <p className="popeverTitle">Type</p>
 
-                        <Radio.Group onChange={onChangeType} value={valueType}>
+                        <Radio.Group onChange={onChangeType} value={filterUploadType}>
                             <div className="statusGroup">
                                 {typeGroup?.map((option) => {
-                                    return <Radio  key={option?._id}  className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+                                    return <Radio key={option?._id} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
                                 })}
                             </div>
 
                         </Radio.Group>
                         <div className="buttonSection">
-                            <button className="button">Clear</button>
-                            <button className="buttonApply">Apply</button>
+                            <button onClick={clearFilter} className="button">Clear</button>
+                            <button onClick={sendFilter} className="buttonApply">Apply</button>
                         </div>
 
                     </div>}
