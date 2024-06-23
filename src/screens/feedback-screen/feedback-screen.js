@@ -1,172 +1,243 @@
-import React, { useEffect, useState } from "react";
-import { Colors } from "../../assets/colors/colors";
+import wordIcon from "../../assets/images/word.png";
+import appIcon from "../../assets/images/app.png";
+import generalIcon from "../../assets/images/general.png";
+import filterIcon from "../../assets/images/filterIcon.png";
+import React, { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import "./feedback-screen-style.css";
 import { CustomNoData, CustomPagination, CustomSpin } from "../../components";
-import { FeedbackStatus, FeedbackType, columnsFeedback, statusFeadback, typeFeadback } from "../../data";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import { useDispatch, useSelector } from "react-redux";
-import { feedBackGetThunk, getFeedBackLoading, getFeedBackResponse } from "../../store/slices/feedBack/get-feedback";
-import word from "../../assets/images/word.png";
-import app from "../../assets/images/app.png";
-import general from "../../assets/images/general.png"
 import { useNavigate } from "react-router-dom";
 import { feedBackGetIdThunk } from "../../store/slices/feedBack/getId-feadback";
-import filterIcon from "../../assets/images/filterIcon.png"
 import { Popover, Radio } from "antd";
+import { Colors } from "../../assets/colors/colors";
+import "./feedback-screen-style.css";
+import { FeedbackStatus, FeedbackType} from "./feadback-typing"
+import { columnsFeedback, statusFeadback, typeFeadback } from "./feedback-data";
+import { feedBackGetThunk, getFeedBackLoading, getFeedBackResponse } from "../../store/slices/feedBack/get-feedback";
 
+
+const FeedbackFilterPopover = ({
+  currentType,
+  currentStatus,
+  onTypeChange,
+  onStatusChange,
+  onClearFilter,
+  onApplyFilter,
+  isPopoverOpen,
+  handlePopoverOpenChange,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Popover
+      placement="bottomLeft"
+      content={
+        <div className="filterSection">
+          <p className="popeverTitle">{t("Feedback Type")}</p>
+          <Radio.Group onChange={onTypeChange} value={currentType}>
+            <div className="statusGroup">
+              {typeFeadback?.map((option) => (
+                <Radio key={option.key} className="radio" value={option.key}>
+                  <p className="optiontitle">{option.title}</p>
+                </Radio>
+              ))}
+            </div>
+          </Radio.Group>
+          <hr className="poepverHr" />
+          <p className="popeverTitle">{t("Status")}</p>
+          <Radio.Group onChange={onStatusChange} value={currentStatus}>
+            <div className="statusGroup">
+              {statusFeadback?.map((option) => (
+                <Radio key={option.key} className="radio" value={option.key}>
+                  <p className="optiontitle">{option.title}</p>
+                </Radio>
+              ))}
+            </div>
+          </Radio.Group>
+          <div className="buttonSection">
+            <button onClick={onClearFilter} className="button">
+              {t("Clear")}
+            </button>
+            <button onClick={onApplyFilter} className="buttonApply">
+              {t("Apply")}
+            </button>
+          </div>
+        </div>
+      }
+      trigger="click"
+      open={isPopoverOpen}
+      onOpenChange={handlePopoverOpenChange}
+    >
+      <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+    </Popover>
+  );
+};
+
+const FeedbackListItem = ({ feedback, onClick }) => {
+  const getFeedbackTypeIcon = (type) => {
+    switch (type) {
+      case FeedbackType.WORD_MISTAKE:
+        return wordIcon;
+      case FeedbackType.APP_ISSUE:
+        return appIcon;
+      case FeedbackType.GENERAL_FEEDBACK:
+      default:
+        return generalIcon;
+    }
+  };
+
+  const getFeedbackTypeLabel = (type) => {
+    switch (type) {
+      case FeedbackType.WORD_MISTAKE:
+        return "Word Mistake";
+      case FeedbackType.APP_ISSUE:
+        return "App Issue";
+      case FeedbackType.GENERAL_FEEDBACK:
+      default:
+        return "General Mistake";
+    }
+  };
+
+  const getFeedbackStatusLabel = (status) => {
+    switch (status) {
+      case FeedbackStatus.PENDING:
+        return "Pending";
+      case FeedbackStatus.RESOLVED:
+        return "Resolved";
+      case FeedbackStatus.CANCELED:
+      default:
+        return "Canceled";
+    }
+  };
+
+  return (
+    <li className="table-row" onClick={onClick}>
+      <div className="col col-1 desc" data-label="Job Id">
+        <div className="rowFeadback">
+          <img src={getFeedbackTypeIcon(feedback?.type)} className="iconfeadback" alt="Icon" />
+          <p className="feadbackItem">{getFeedbackTypeLabel(feedback?.type)}</p>
+        </div>
+      </div>
+      <div className="col col-1 desc" data-label="Job Id">
+        <p className="feadbackItem">{getFeedbackStatusLabel(feedback?.status)}</p>
+      </div>
+      <div className="col col-1 desc" data-label="Job Id">
+        {feedback?.updateDt}
+      </div>
+      <div className="col col-1 desc" data-label="Job Id">
+        {feedback?.createDt}
+      </div>
+    </li>
+  );
+};
 
 export const FeedbackScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const feedBackLoading = useSelector(getFeedBackLoading);
-  const getFeedBackRespone = useSelector(getFeedBackResponse);
-  const [open, setOpen] = useState(false);
-  const [filtterType,setFiltterType] = useState(undefined);
-  const [curentSatateType, setCurentSatateType] = useState();
-  const [filtterStatus,setFiltterStatus] = useState(undefined);
-  const [status, setStatus] = useState();
+  const feedBackResponse = useSelector(getFeedBackResponse);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [filterType, setFilterType] = useState(undefined);
+  const [currentFilterType, setCurrentFilterType] = useState();
+  const [filterStatus, setFilterStatus] = useState(undefined);
+  const [currentStatus, setCurrentStatus] = useState();
 
-const data = {
-    skip: 0,
-    limit: 6,
-  };
-  const filterData = {
-    skip: 0,
-    limit: 6,
-    type:filtterType,
-    status:filtterStatus,
-  }
+  const fetchData = useCallback(() => {
+    const data = {
+      skip: 0,
+      limit: 6,
+    };
+    dispatch(feedBackGetThunk(data));
+  }, [dispatch]);
 
-  const hide = () => {
-      setOpen(false);
-  };
-  const handleOpenChange = (newOpen) => {
-      setOpen(newOpen);
-  };
+  const fetchFilteredData = useCallback(() => {
+    const filterData = {
+      skip: 0,
+      limit: 6,
+      type: filterType,
+      status: filterStatus,
+    };
+    dispatch(feedBackGetThunk(filterData));
+  }, [dispatch, filterType, filterStatus]);
 
-  const onChange = (e) => {
-    setCurentSatateType(e.target.value);
-    if(e.target.value !== FeedbackType.All){
-      setFiltterType(e.target.value)
-    }else{
-      setFiltterType(undefined)
-    }
+  const handlePopoverOpenChange = (newOpen) => {
+    setIsPopoverOpen(newOpen);
   };
 
-  const onChangeType = (e) => {
-    setStatus(e.target.value);
-    if(e.target.value !== FeedbackStatus.All){
-      setFiltterStatus(e.target.value)
-    }else{
-      setFiltterStatus(undefined)
-    }
+  const handleTypeChange = (e) => {
+    setCurrentFilterType(e.target.value);
+    setFilterType(e.target.value !== FeedbackType.All ? e.target.value : undefined);
   };
 
-  
-  const feedBack = (id) => {
+  const handleStatusChange = (e) => {
+    setCurrentStatus(e.target.value);
+    setFilterStatus(e.target.value !== FeedbackStatus.All ? e.target.value : undefined);
+  };
+
+  const handleFeedbackClick = (id) => {
     localStorage.setItem("feadback", id);
     dispatch(feedBackGetIdThunk(id));
     navigate(`/feadback/${id}`);
-  }
+  };
 
+  const handleClearFilter = () => {
+    setCurrentFilterType("");
+    setCurrentStatus("");
+    setFilterType(undefined);
+    setFilterStatus(undefined);
+    fetchFilteredData();
+  };
 
-
-const clearFilter = () => {
-  setCurentSatateType("")
-  setStatus("")
-  dispatch(feedBackGetThunk(data))
-}
-
-  const sendFilter = () => {
-    dispatch(feedBackGetThunk(filterData))
-  }
-
+  const handleApplyFilter = () => {
+    fetchFilteredData();
+  };
 
   useEffect(() => {
-    dispatch(feedBackGetThunk(data))
-  }, [])
+    fetchData();
+  }, [fetchData]);
 
   return (
-    <div
-      className="nativeLanguageScreenMainDiv"
-      style={{ backgroundColor: Colors.WHITE }}
-    >
+    <div className="nativeLanguageScreenMainDiv" style={{ backgroundColor: Colors.WHITE }}>
       <div>
         <p className="feedbackTitle">{t("FEEDBACK")}</p>
-        <Popover
-                    placement="bottomLeft"
-                    content={<div className="filterSection">
-                        <p className="popeverTitle">Feedback Type</p>
-                        <Radio.Group onChange={onChange} value={curentSatateType} key={1}>
-                            <div className="statusGroup">
-                                {typeFeadback?.map((option) => {
-                                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-                                })}
-                            </div>
-                        </Radio.Group>
-                        <hr className="poepverHr" />
-                        <p  className="popeverTitle">Status</p>
-
-                        <Radio.Group onChange={onChangeType} value={status} key={2}>
-                            <div className="statusGroup">
-                                {statusFeadback?.map((option) => {
-                                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-                                })}
-                            </div>
-                        </Radio.Group>
-                        <div className="buttonSection">
-                            <button onClick={clearFilter} className="button">Clear</button>
-                            <button onClick={sendFilter} className="buttonApply">Apply</button>
-                        </div>
-
-                    </div>}
-                    trigger="click"
-                    open={open}
-                    onOpenChange={handleOpenChange}
-                >
-                    <img src={filterIcon} className="popeverOpenImg" />
-                </Popover>
+        <FeedbackFilterPopover
+          currentType={currentFilterType}
+          currentStatus={currentStatus}
+          onTypeChange={handleTypeChange}
+          onStatusChange={handleStatusChange}
+          onClearFilter={handleClearFilter}
+          onApplyFilter={handleApplyFilter}
+          isPopoverOpen={isPopoverOpen}
+          handlePopoverOpenChange={handlePopoverOpenChange}
+        />
         <div className="container">
           <ul className="responsive-table">
             <TableHeader data={columnsFeedback} />
-            {feedBackLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
-              <CustomSpin size={64} color="gray" />
-            </div> : !getFeedBackRespone?.data?.list?.length && !feedBackLoading ? <CustomNoData /> :
-              getFeedBackRespone?.data?.list?.map((val, index) => {
-                return (
-                  <li className="table-row" key={index} onClick={() => {
-                    feedBack(val?._id)
-                  }}>
-                    <div className="col col-1 desc" data-label="Job Id">{val?.type === 0 ?
-                      <div className="rowFeadback">
-                        <img src={word} className="iconfeadback" />
-                        <p className="feadbackItem">Word Mistake</p>
-                      </div>
-                      : val?.type === 1 ?
-                        <div className="rowFeadback">
-                          <img src={app} className="iconfeadback" />
-                          <p className="feadbackItem">App Issue</p>
-                        </div>
-                        :
-                        <div className="rowFeadback">
-                          <img src={general} className="iconfeadback" />
-                          <p className="feadbackItem">General Mistake</p>
-                        </div>
-                    }</div>
-                    <div className="col col-1 desc" data-label="Job Id">{val?.status === 0 ? <p className="feadbackItem">Pending</p> : val?.status === 1 ? <p className="feadbackItem">Resolved</p> : <p className="feadbackItem">Canceled</p>}</div>
-                    <div className="col col-1 desc" data-label="Job Id">{val?.updateDt}</div>
-                    <div className="col col-1 desc" data-label="Job Id">{val?.createDt}</div>
-                  </li>
-                )
-              })}
+            {feedBackLoading ? (
+              <div className="loadingDiv nativeLanguageScreenMainDiv">
+                <CustomSpin size={64} color="gray" />
+              </div>
+            ) : !feedBackResponse?.data?.list?.length && !feedBackLoading ? (
+              <CustomNoData />
+            ) : (
+              feedBackResponse?.data?.list?.map((feedback, index) => (
+                <FeedbackListItem
+                  key={index}
+                  feedback={feedback}
+                  onClick={() => handleFeedbackClick(feedback?._id)}
+                />
+              ))
+            )}
           </ul>
         </div>
       </div>
-      {!getFeedBackRespone?.data?.list?.length && !feedBackLoading ? null : <div className="nativeScreenPaginationDiv">
-        <CustomPagination length={getFeedBackRespone?.data?.total} pageLength={12} />
-      </div>}
+      {!feedBackResponse?.data?.list?.length && !feedBackLoading ? null : (
+        <div className="nativeScreenPaginationDiv">
+          <CustomPagination length={feedBackResponse?.data?.total} pageLength={12} />
+        </div>
+      )}
     </div>
   );
 };

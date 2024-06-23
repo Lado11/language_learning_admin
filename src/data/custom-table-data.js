@@ -107,31 +107,6 @@ export const columns = [
   
 ];
 
-
-
-export const columnsFeedback = [
-  {
-    id: "Feedback",
-    title: "Feedback",
-  },
-  {
-    title: "Status",
-    id: "Status",
-    key: "Status",
-  },
-  {
-    title: "Update Date",
-    id: "Update Date",
-    key: "Update Date",
-  },
-  {
-    title: "Create Date",
-    id: "Create Date",
-    key: "Create Date",
-  },
-];
-
-
 export const columnsUpload = [
   {
     id: " ID",
