@@ -43,6 +43,8 @@ import { useTranslation } from "react-i18next";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { SelectLearningLang } from "./select-learning-lang";
 import { beforeUpload, props } from "../utils/helper";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { page0, page12 } from "../../constants/constants";
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
@@ -101,16 +103,8 @@ const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
     setIsModalOpen(true);
   };
 
-
-
-
-  const data = {
-    skip: 0,
-    limit: 12,
-  };
-
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(data));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
   }, []);
 
   useEffect(() => {
@@ -159,8 +153,7 @@ const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
           onFinish={onFinish}
         // className="formAntd"
         >
-    
-        
+  
           <div className="createLearningLangRow">
             <div className="updateSection">
               <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>

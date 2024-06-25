@@ -102,7 +102,7 @@ export const devicesData = [
     All:-1
   })
 
-export const statusUpload = [
+export const statufsUpload = [
   {
     _id: 1,
     key: UploadStatus.PROCESSED,

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import uploadImage from "../../assets/images/uploadImg.png";
 import { CustomAntdButton, CustomAntdInput, CustomErrorSection, CustomUploadElement } from "../../components";
 import { Colors } from "../../assets/colors";
-import logoVoice from "../../assets/images/Vector (4).png"
-import rectangle from "../../assets/images/Rectangle 663.png"
 import "../../global-styles/global-styles.css";
 import "./learning-language-screen-style.css";
 import {
@@ -19,9 +16,11 @@ import {
   removeAllLanguages,
   learnLanguageCreateLoading,
 } from "../../store/slices";
-import { Error, Success } from "../../components";
+import {  Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
 import { beforeUpload } from "../utils/helper";
+import { page0, page12 } from "../../constants/constants";
+import { ConstPagiantion, } from "../../constants/const-pagination";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
@@ -37,11 +36,7 @@ export const LearningLanguageCreateScreen = () => {
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    const data = {
-      skip: 0,
-      limit: 12,
-    };
-    dispatch(nativeLanguageGetThunk(data));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
   }, []);
 
   const onFinish = (values) => {

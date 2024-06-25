@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Colors } from "../../assets/colors/colors";
 import "../../global-styles/index";
 import {
   CustomAddNew,
-  CustomFilterSeelct,
   CustomPagination,
   CustomSearchInput,
-  CustomSelect,
   CustomSpin,
 } from "../../components";
 import { useTranslation } from "react-i18next";
@@ -14,29 +12,125 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
 import { UserInfo, UserRole, UserSubscription, columns, dataEmail, dataPhone, dataRole, dataUser } from "../../data";
-import { dataUserSub, phoneSelect, emailSelect } from "../../data";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import filterIcon from "../../assets/images/filterIcon.png"
 import { Popover, Radio } from "antd";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { page0, page5, page6 } from "../../constants/constants";
+
+const UserFilterPopover = ({
+  onChangeSubscribe,
+  onChangeRole,
+  onChangeEmail,
+  onChangePhone,
+  role,
+  subscribe,
+  email,
+  phone,
+  onClearFilter,
+  onApplyFilter,
+  isPopoverOpen,
+  handlePopoverOpenChange,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Popover
+      placement="bottomLeft"
+      content={<div className="filterSection">
+        <p className="popeverTitle">User Subscription</p>
+        <Radio.Group onChange={onChangeSubscribe} value={subscribe}>
+          <div className="statusGroup">
+            {dataUser?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Phone number</p>
+
+        <Radio.Group onChange={onChangePhone} value={phone}>
+          <div className="statusGroup">
+            {dataPhone?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Email</p>
+
+        <Radio.Group onChange={onChangeEmail} value={email}>
+          <div className="statusGroup">
+            {dataEmail?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Role</p>
+        <Radio.Group onChange={onChangeRole} value={role}>
+          <div className="statusGroup">
+            {dataRole?.map((option) => {
+              return <Radio key={option.key} value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+        </Radio.Group>
+        <div className="buttonSection">
+          <button onClick={onClearFilter} className="button">Clear</button>
+          <button onClick={onApplyFilter} className="buttonApply">Apply</button>
+        </div>
+      </div>}
+      trigger="click"
+      open={isPopoverOpen}
+      onOpenChange={handlePopoverOpenChange}
+    >
+      <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+    </Popover>
+  );
+};
+
+
+export const UserListItem = ({ user, onClick, key }) => {
+  const getUploadSubscribedLabel = (status) => {
+    switch (status) {
+      case UserSubscription.SUBSCRIBED:
+        return "Subscribed";
+      case UserSubscription.UNSUBSCRIBED:
+      default:
+        return "UnSubscribed";
+    }
+  };
+
+  return (
+    <li className="table-row" key={key} onClick={onClick}>
+      <div className="col col-1 desc" data-label="Job Id">{key + 1}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.email}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
+      <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{
+        getUploadSubscribedLabel(user?.isSubscribed)
+      }</p></div>
+    </li>
+  );
+};
 
 export const UserScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const pageLength = 5;
   const dispatch = useDispatch();
   const userGetLoading = useSelector(getUserGetAllLoading);
   const userData = useSelector(getUserGetAllData)?.data;
   const dataList = userData?.list;
   const [searchValue, setSearchValue] = useState();
   const [searchFilter, setSearchFilter] = useState();
-
-  const data = {
-    skip: 0,
-    limit: 5,
-  };
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(userGetAllThunk(data));
+    dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
   }, []);
 
   const onChangeSearch = (e) => {
@@ -44,18 +138,13 @@ export const UserScreen = () => {
     if (e.target.value !== "") {
       setSearchFilter(e.target.value)
       let data = {
-        skip: 0,
-        limit: 5,
+        skip: page0,
+        limit: page5,
         search: e.target.value
       }
       dispatch(userGetAllThunk(data));
-
     } else {
-      let data = {
-        skip: 0,
-        limit: 5,
-      }
-      dispatch(userGetAllThunk(data));
+      dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
       setSearchFilter(undefined)
     }
   }
@@ -65,16 +154,6 @@ export const UserScreen = () => {
     dispatch(userGetByIdThunk(id));
     navigate(`/user/${id}`);
   }
-
-
-
-  const [open, setOpen] = useState(false);
-  const hide = () => {
-    setOpen(false);
-  };
-  const handleOpenChange = (newOpen) => {
-    setOpen(newOpen);
-  };
 
   const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
   const [subscribe, setSubscribe] = useState();
@@ -124,27 +203,43 @@ export const UserScreen = () => {
     }
   };
 
-  const filterData = {
-    skip: 0,
-    limit: 6,
-    isSubscribed: filtterSsubscribe,
-    phoneNumberVerified: filtterPhone,
-    emailVerified: filtterEmail,
-    role: filtterRole,
-    search: searchFilter
-  }
+  const fetchData = useCallback(() => {
+    dispatch(userGetAllThunk(ConstPagiantion(page0, page6)));
+  }, [dispatch]);
 
-  const clearFilter = () => {
+  const fetchFilteredData = useCallback(() => {
+    const filterData = {
+      skip: page0,
+      limit: page6,
+      isSubscribed: filtterSsubscribe,
+      phoneNumberVerified: filtterPhone,
+      emailVerified: filtterEmail,
+      role: filtterRole,
+      search: searchFilter
+    };
+    dispatch(userGetAllThunk(filterData));
+  }, [dispatch, filtterSsubscribe, filtterPhone, filtterEmail, filtterRole, searchFilter]);
+
+  const handlePopoverOpenChange = (newOpen) => {
+    setIsPopoverOpen(newOpen);
+  };
+
+
+  const handleClearFilter = () => {
     setSubscribe("")
     setPhone("")
     setEmail("")
     setRole("")
-    dispatch(userGetAllThunk(data))
-  }
+    fetchData()
+  };
 
-  const sendFilter = () => {
-    dispatch(userGetAllThunk(filterData))
-  }
+  const handleApplyFilter = () => {
+    fetchFilteredData();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
 
   return (
@@ -161,85 +256,36 @@ export const UserScreen = () => {
         />
         <p className="screensTitleStyle">{t("USER")}</p>
         <div className="filterDiv">
-          <Popover
-            placement="bottomLeft"
-            content={<div className="filterSection">
-              <p className="popeverTitle">User Subscription</p>
-              <Radio.Group onChange={onChangeSubscribe} value={subscribe}>
-                <div className="statusGroup">
-                  {dataUser?.map((option) => {
-                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-                  })}
-                </div>
-              </Radio.Group>
-              <hr className="poepverHr" />
-              <p className="popeverTitle">Phone number</p>
-
-              <Radio.Group onChange={onChangePhone} value={phone}>
-                <div className="statusGroup">
-                  {dataPhone?.map((option) => {
-                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-                  })}
-                </div>
-
-              </Radio.Group>
-              <hr className="poepverHr" />
-              <p className="popeverTitle">Email</p>
-
-              <Radio.Group onChange={onChangeEmail} value={email}>
-                <div className="statusGroup">
-                  {dataEmail?.map((option) => {
-                    return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-                  })}
-                </div>
-
-              </Radio.Group>
-              <hr className="poepverHr" />
-              <p className="popeverTitle">Role</p>
-              <Radio.Group onChange={onChangeRole} value={role}>
-                <div className="statusGroup">
-                  {dataRole?.map((option) => {
-                    return <Radio key={option.key} value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-                  })}
-                </div>
-              </Radio.Group>
-              <div className="buttonSection">
-                <button onClick={clearFilter} className="button">Clear</button>
-                <button onClick={sendFilter} className="buttonApply">Apply</button>
-              </div>
-
-            </div>}
-            trigger="click"
-            open={open}
-            onOpenChange={handleOpenChange}
-          >
-            <img src={filterIcon} className="popeverOpen" />
-          </Popover>
+          <UserFilterPopover
+            subscribe={subscribe}
+            phone={phone}
+            email={email}
+            role={role}
+            onChangePhone={onChangePhone}
+            onChangeEmail={onChangeEmail}
+            onChangeRole={onChangeRole}
+            onChangeSubscribe={onChangeSubscribe}
+            onClearFilter={handleClearFilter}
+            onApplyFilter={handleApplyFilter}
+            isPopoverOpen={isPopoverOpen}
+            handlePopoverOpenChange={handlePopoverOpenChange}
+          />
           <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
         </div>
+
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />
         </div> : <div> <div className="container">
           <ul className="responsive-table">
             <TableHeader data={columns} />
-            {dataList?.map((val, index) => {
+            {dataList?.map((user, index) => {
               return (
-                <li className="table-row" key={index} onClick={() => {
-                  userUpdate(val?._id)
-                }}>
-                  <div className="col col-1 desc" data-label="Job Id">{index + 1}</div>
-                  <div className="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div className="col col-1 desc" data-label="Job Id">{val?.email}</div>
-                  <div className="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div className="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div className="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString() === true ? "Subscribed" : "UnSubscribed"}</p></div>
-                </li>
-              )
+                <UserListItem key={index}
+                  user={user}
+                  onClick={() => userUpdate(user?._id)} />)
             })}
           </ul>
         </div>
-
         </div>}
         <div className="nativeScreenPaginationDiv">
           <CustomPagination length={userData?.total} pageLength={5} />

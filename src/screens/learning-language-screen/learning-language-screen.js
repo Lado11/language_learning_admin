@@ -12,14 +12,14 @@ import {
   getLearnLanguagesLoading,
   learnLanguageByIdThunk,
 } from "../../store/slices";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { page0, page12 } from "../../constants/constants";
 
 export const LearningLanguageScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
-  // const learningLanguagesData = []
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
-  const pageLength = 12;
 
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
@@ -29,12 +29,9 @@ export const LearningLanguageScreen = () => {
     localStorage.setItem("learningId", id);
     navigate(`/learning-language/${id}`);
   };
-  const data = {
-    skip: 0,
-    limit: 12,
-  };
+ 
   useEffect(() => {
-    dispatch(learningLanguagesThunk(data));
+    dispatch(learningLanguagesThunk(ConstPagiantion(page0,page12)));
   }, []);
 
   return (
@@ -75,7 +72,7 @@ export const LearningLanguageScreen = () => {
                 </div>
               }
               <div className="learningLanguageScreenPaginationDiv">
-                <CustomPagination length={learningLanguagesData?.data?.total} pageLength={pageLength} />
+                <CustomPagination length={learningLanguagesData?.data?.total} pageLength={page12} />
               </div>
             </>
           }

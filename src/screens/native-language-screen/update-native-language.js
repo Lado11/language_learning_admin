@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +15,6 @@ import {
 } from "../../store/slices/native-language/native-language-delete";
 import remove_icon from "../../assets/images/remove_icon.png";
 import {
-  deleteNativeUpdateBool,
   deleteNativeUpdateResponse,
   getNativeUpdateBool,
   getNativeUpdateData,
@@ -84,9 +82,6 @@ export const UpdateNativeLanguage = () => {
       info.file = "";
     }
   };
-
-  
- 
 
   const messageError = nativeDeleteResponse?.message;
   const messageErrorUpdate = nativeUpdateResponse?.message;

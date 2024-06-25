@@ -3,7 +3,6 @@ import {
   CustomCardItem,
   CustomNoData,
   CustomPagination,
-  CustomSelect,
 } from "../../components";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
 import "./category-screen.css";
@@ -11,21 +10,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from "../../store/slices/category/get-category";
 import { useEffect } from "react";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
+import { page0, page12 } from "../../constants/constants";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
 
 export const CategoryScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const categoryLoading = useSelector(getCategoryGetLoading);
   const categoryData = useSelector(getCategoryGetData)?.data?.list;
-  const data = {
-    skip: 0,
-    limit: 12,
-  };
-  const pageLength = 12;
-
-
+const catgeoryImageResponse = useSelector(getfilesGetIdResponse)
+console.log(catgeoryImageResponse,"image resposne");
   useEffect(() => {
-    dispatch(categoryGetThunk(data));
+    dispatch(categoryGetThunk(ConstPagiantion(page0,page12)));
   }, [])
 
   const categoryUpdate = (id) => {
@@ -45,14 +42,6 @@ export const CategoryScreen = () => {
         }}
       />
       <p className="category-title">Category</p>
-      {/* <div className="select-row">
-        <CustomSelect title={"Learning Language"} />
-        <div className="select-middle">
-          <CustomSelect title={"Neative Language"} />
-        </div>
-        <CustomSelect title={"Category Name"} />
-      </div> */}
-      {/* <p className="category-table-title">Category</p> */}
       <div className="category-item-pagination">
         {!categoryData?.length && !categoryLoading ? <CustomNoData />:
        <>
@@ -60,6 +49,7 @@ export const CategoryScreen = () => {
          </div> :
          <div className="custom-card-item">
           {categoryData?.map((countryItem, index) => {
+            // dispatch(filesGetIdThunk(countryItem?.imageFile))
             return (
               <div className="pointer" key={index + 1}  onClick={()=>{
                 categoryUpdate(countryItem?._id)
@@ -73,7 +63,7 @@ export const CategoryScreen = () => {
           })}
         </div>}
         <div className="category-pagination">
-          <CustomPagination length={categoryData?.length} pageLength={pageLength}/>
+          <CustomPagination length={categoryData?.length} pageLength={page12}/>
         </div>
        </>
         }

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import uploadImage from "../../assets/images/uploadImg.png";
 import { CustomAntdButton, CustomErrorSection, CustomUploadElement } from "../../components";
 import { Colors } from "../../assets/colors";
 import { CustomAntdInput } from "../../components";
 import { categoryCreateThunk, deleteCategoryCreateResponse, getCategoryCreateData, getCategoryCreateLoading } from "../../store/slices/category/category-create";
 import { useTranslation } from "react-i18next";
-import { Error, Success } from "../../components/custom-message/custom-message";
+import { Success } from "../../components/custom-message/custom-message";
 import { beforeUpload } from "../utils/helper";
-import logoVoice from "../../assets/images/Vector (4).png"
 
 export const CategoryCretae = () => {
   const [form] = Form.useForm();
@@ -49,8 +47,6 @@ export const CategoryCretae = () => {
       info.file = "";
     }
   };
-
-  
 
   const messageError = categoryCreateData?.message;
 

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Form, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useNavigate } from "react-router-dom";
 import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin, CustomUploadElement } from "../../components";
 import remove_icon from "../../assets/images/remove_icon.png";
-import logoVoice from "../../assets/images/Vector (4).png"
 import {
   categoryDeleteThunk,
   categoryUpdateThunk,
@@ -70,8 +68,6 @@ export const CategoryUpdate = () => {
       info.file = "";
     }
   };
-
-
 
   useEffect(() => {
     form.setFieldsValue({

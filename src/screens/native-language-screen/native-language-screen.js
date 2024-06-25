@@ -13,6 +13,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { nativeLanguageGetIdThunk } from "../../store/slices/native-language/get-id-native-language";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { page0, page12 } from "../../constants/constants";
 
 export const NativeLanguageScreen = () => {
   const navigate = useNavigate();
@@ -20,8 +22,6 @@ export const NativeLanguageScreen = () => {
   const nativeLoading = useSelector(getNativeGetloading);
   const nativeLanguageData = useSelector(getNativeGetResponse);
   const nativeData = nativeLanguageData?.data?.list;
-  const pageLength = 12;
-
 
   const navigateNativeUpdate = (countryItem) => {
     localStorage.setItem("nativeId", countryItem?._id);
@@ -29,12 +29,8 @@ export const NativeLanguageScreen = () => {
     navigate(`/native-language/${countryItem?._id}`);
   };
 
-  const data = {
-    skip: 0,
-    limit: 12,
-  };
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(data));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
   }, []);
 
   return (
@@ -77,7 +73,7 @@ export const NativeLanguageScreen = () => {
                   </div>
                 }
                 <div className="nativeScreenPaginationDiv">
-                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={pageLength} func={() => {
+                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={page12} func={() => {
                     nativeLanguageGetThunk()
                   }} />
                 </div>

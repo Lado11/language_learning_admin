@@ -15,6 +15,8 @@ import "./feedback-screen-style.css";
 import { FeedbackStatus, FeedbackType} from "./feadback-typing"
 import { columnsFeedback, statusFeadback, typeFeadback } from "./feedback-data";
 import { feedBackGetThunk, getFeedBackLoading, getFeedBackResponse } from "../../store/slices/feedBack/get-feedback";
+import { page0, page12, page6 } from "../../constants/constants";
+import { ConstPagiantion } from "../../constants/const-pagination";
 
 
 const FeedbackFilterPopover = ({
@@ -145,17 +147,13 @@ export const FeedbackScreen = () => {
   const [currentStatus, setCurrentStatus] = useState();
 
   const fetchData = useCallback(() => {
-    const data = {
-      skip: 0,
-      limit: 6,
-    };
-    dispatch(feedBackGetThunk(data));
+    dispatch(feedBackGetThunk(ConstPagiantion(page0,page6)));
   }, [dispatch]);
 
   const fetchFilteredData = useCallback(() => {
     const filterData = {
-      skip: 0,
-      limit: 6,
+      skip: page0,
+      limit: page6,
       type: filterType,
       status: filterStatus,
     };
@@ -187,7 +185,8 @@ export const FeedbackScreen = () => {
     setCurrentStatus("");
     setFilterType(undefined);
     setFilterStatus(undefined);
-    fetchFilteredData();
+    fetchData()
+    // fetchFilteredData();
   };
 
   const handleApplyFilter = () => {
@@ -235,7 +234,7 @@ export const FeedbackScreen = () => {
       </div>
       {!feedBackResponse?.data?.list?.length && !feedBackLoading ? null : (
         <div className="nativeScreenPaginationDiv">
-          <CustomPagination length={feedBackResponse?.data?.total} pageLength={12} />
+          <CustomPagination length={feedBackResponse?.data?.total} pageLength={page12} />
         </div>
       )}
     </div>

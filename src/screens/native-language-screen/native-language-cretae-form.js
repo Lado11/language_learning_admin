@@ -9,13 +9,11 @@ import {
   getNativeCreateLoading,
   nativeLanguageCreateThunk,
 } from "../../store/slices/native-language/native-language-create";
-import uploadImage from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
-import { useNavigate } from "react-router-dom";
 import { CustomAntdInput, CustomErrorSection, CustomUploadElement } from "../../components";
-import { Error, Success } from "../../components/custom-message/custom-message";
-import { beforeUpload, props } from "../utils/helper";
+import { Success } from "../../components/custom-message/custom-message";
+import { beforeUpload } from "../utils/helper";
 
 export const NativeLanguageCretae = () => {
   const [form] = Form.useForm();
@@ -61,7 +59,6 @@ export const NativeLanguageCretae = () => {
       dispatch(deleteNativeCreateResponse());
     }
   }, [nativeLanguageData?.success])
-console.log(  nativeLanguageData?.success ,"LOGGG");
 
   useEffect(() => {
     nativeLanguageData?.success === true && Success({ messageApi });

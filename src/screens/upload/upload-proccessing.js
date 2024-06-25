@@ -35,12 +35,12 @@ export const UplaodProcessScreen = () => {
             errorCount: wordsIdResponse?.data?.errorCount,
             type: wordsIdResponse?.data?.type === 0 ? "create" : "update",
             totalWords: wordsIdResponse?.data?.totalWords,
-            processedWords: wordsIdResponse?.data?.processedWords ,
+            processedWords: wordsIdResponse?.data?.processedWords,
             successCount: wordsIdResponse?.data?.successCount,
             finishDt: wordsIdResponse?.data?.finishDt,
             createDt: wordsIdResponse?.data?.createDt,
             errorLogs: wordsIdResponse?.data?.errorLogs?.map((item) => {
-              return item
+                return item
             })
         });
     }, [wordsIdResponse]);
@@ -62,15 +62,14 @@ export const UplaodProcessScreen = () => {
 
     return (
         <div className="nativeLanguageScreenMainDiv">
-           {wordsIdLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
-                            <CustomSpin size={64} color="gray" />
-                        </div> : <div>
+            {wordsIdLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
+                <CustomSpin size={64} color="gray" />
+            </div> : <div>
                 <CustomModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     onTab={onTab}
                 />
-               
                 <Form
                     autoComplete="off"
                     form={form}
@@ -78,9 +77,11 @@ export const UplaodProcessScreen = () => {
                 >
                     <div className="exelRowSection">
                         <div>
-                <p className="feedbackTitle uploadTitle">{t("Uploading process details")}</p>
-
+                            <p className="feedbackTitle uploadTitle">{t("Uploading process details")}</p>
                             <div className="category_row_input_user">
+                            <div className='inputLabel'>
+
+                                <p  className="labelTextArea">ID</p>
                                 <CustomAntdInput
                                     disabled={true}
                                     name="id"
@@ -88,7 +89,9 @@ export const UplaodProcessScreen = () => {
                                     type="text"
                                     min={3}
                                 />
+                                </div>
                                 <div className="left">
+                                    <p  className="labelTextArea">Error Count</p>
                                     <CustomAntdInput
                                         disabled={true}
                                         name="errorCount"
@@ -99,6 +102,9 @@ export const UplaodProcessScreen = () => {
                                 </div>
                             </div>
                             <div className="category_row_input_user">
+                            <div className='inputLabel'>
+
+                            <p  className="labelTextArea">Type</p>
                                 <CustomAntdInput
                                     disabled={true}
                                     name="type"
@@ -106,7 +112,9 @@ export const UplaodProcessScreen = () => {
                                     type="text"
                                     min={3}
                                 />
+                                </div>
                                 <div className="left">
+                                <p  className="labelTextArea">Total words</p>
                                     <CustomAntdInput
                                         disabled={true}
                                         name="totalWords"
@@ -117,6 +125,9 @@ export const UplaodProcessScreen = () => {
                                 </div>
                             </div>
                             <div className="category_row_input_user">
+                            <div className='inputLabel'>
+
+                            <p  className="labelTextArea">Process words</p>
                                 <CustomAntdInput
                                     disabled={true}
                                     name="processedWords"
@@ -124,7 +135,9 @@ export const UplaodProcessScreen = () => {
                                     type="text"
                                     min={3}
                                 />
+                                </div>
                                 <div className="left">
+                                <p  className="labelTextArea">Success Count</p>
                                     <CustomAntdInput
                                         disabled={true}
                                         name="successCount"
@@ -136,6 +149,8 @@ export const UplaodProcessScreen = () => {
 
                             </div>
                             <div className="category_row_input_user">
+                           <div className='inputLabel'>
+                           <p  className="labelTextArea">Finsh date</p>
                                 <CustomAntdInput
                                     disabled={true}
                                     name="finishDt"
@@ -143,7 +158,9 @@ export const UplaodProcessScreen = () => {
                                     type="text"
                                     min={3}
                                 />
+                           </div>
                                 <div className="left">
+                                    <p  className="labelTextArea">Create date</p>
                                     <CustomAntdInput
                                         disabled={true}
                                         name="createDt"
@@ -155,18 +172,16 @@ export const UplaodProcessScreen = () => {
                             </div>
                         </div>
                         <div className="textAreaSection">
-                        <div className='labelError'>
-                <p className="labelTextArea">Error Logs</p>
-
-                </div>
+                            <div className='labelError'>
+                                <p className="labelTextArea">Error Logs</p>
+                            </div>
                             <Form.Item name="errorLogs">
-                            <TextArea  disabled rows={4} placeholder="Error Logs" className="textArea" />
+                                <TextArea disabled rows={4} placeholder="Error Logs" className="textArea" />
 
                             </Form.Item>
                         </div>
                     </div>
                 </Form>
-
                 <div className="deleteButton">
                     <CustomAntdButtonDelete
                         loading={wordsProcessDeleteLoading}

@@ -4,12 +4,12 @@ import { GetIdFeedBackLoading, GetIdFeedBackResponse, feedBackGetIdThunk } from 
 import { CustomSpin } from "../../components";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import { columnsFeedback } from "./feedback-data";
-import { FeedbackStatus, FeedbackType, MistakeWordType} from "./feadback-typing"
+import { FeedbackStatus, FeedbackType, MistakeWordType } from "./feadback-typing"
 import wordIcon from "../../assets/images/word.png";
 import appIcon from "../../assets/images/app.png";
 import generalIcon from "../../assets/images/general.png";
 import { Colors } from "../../assets/colors/colors";
-import "./feedback-screen-style.css"; 
+import "./feedback-screen-style.css";
 
 const FeedbackItem = ({ feedback }) => {
   const getTypeIcon = (type) => {
@@ -79,7 +79,7 @@ const FeedbackUserInfo = ({ feedback }) => {
         return "(translate)";
       case MistakeWordType.AUDIO:
         return "(audio)";
-      case    MistakeWordType.IMAGE:
+      case MistakeWordType.IMAGE:
         return "(image)";
       default:
         return "(UNdefined word mistake type)";
