@@ -71,7 +71,10 @@ const FeedbackFilterPopover = ({
       open={isPopoverOpen}
       onOpenChange={handlePopoverOpenChange}
     >
+      <div className="fiterlIconSection">
       <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+
+      </div>
     </Popover>
   );
 };
@@ -175,7 +178,6 @@ export const FeedbackScreen = () => {
   };
 
   const handleFeedbackClick = (id) => {
-    localStorage.setItem("feadback", id);
     dispatch(feedBackGetIdThunk(id));
     navigate(`/feadback/${id}`);
   };

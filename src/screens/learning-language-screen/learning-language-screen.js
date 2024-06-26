@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./learning-language-screen-style.css";
 import "../../global-styles/global-styles.css";
 import { Colors } from "../../assets/colors/colors";
@@ -14,19 +14,22 @@ import {
 } from "../../store/slices";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { page0, page12 } from "../../constants/constants";
+import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
 
 export const LearningLanguageScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
+ 
+
+
 
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
   };
   const learningUpdate = (id) => {
     dispatch(learnLanguageByIdThunk(id));
-    localStorage.setItem("learningId", id);
     navigate(`/learning-language/${id}`);
   };
  

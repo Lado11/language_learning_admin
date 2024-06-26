@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from '../../store/slices/category/get-category';
-import { filesGetIdThunk, getfilesGetIdResponse } from '../../store/slices/files/get-id-files';
-import { CustomAddNew, CustomCardItem, CustomNoData, CustomPagination, CustomSpin } from '../../components';
-import { ConstPagiantion } from '../../constants/const-pagination';
-import { page0, page6 } from '../../constants/constants';
-import './category-screen.css';
+import { useNavigate } from "react-router-dom";
+import {
+  CustomCardItem,
+  CustomNoData,
+  CustomPagination,
+} from "../../components";
+import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
+import "./category-screen.css";
+import { useDispatch, useSelector } from "react-redux";
+import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from "../../store/slices/category/get-category";
+import { useEffect, useState } from "react";
+import { CustomSpin } from "../../components/custom-spin/custom-spin";
+import { page0, page12, page6 } from "../../constants/constants";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import {  filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
 
 export const CategoryScreen = () => {
   const navigate = useNavigate();
@@ -14,10 +20,7 @@ export const CategoryScreen = () => {
   const categoryLoading = useSelector(getCategoryGetLoading);
   const categoryData = useSelector(getCategoryGetData);
   const [imageUrls, setImageUrls] = useState({});
-
-  useEffect(() => {
-    dispatch(categoryGetThunk(ConstPagiantion(page0, page6)));
-  }, [dispatch]);
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
   useEffect(() => {
     // Preload image URLs
@@ -28,18 +31,11 @@ export const CategoryScreen = () => {
     }
   }, [categoryData]);
 
-  const categoryUpdate = (id) => {
-    localStorage.setItem('categoryId', id);
-    navigate(`/category/${id}`);
-  };
-
   const fetchImage = (imageFileId) => {
     if (!imageUrls[imageFileId]) {
       dispatch(filesGetIdThunk(imageFileId));
     }
   };
-
-  const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
@@ -50,6 +46,15 @@ export const CategoryScreen = () => {
       }));
     }
   }, [categoryImageResponse]);
+
+  
+  useEffect(() => {
+    dispatch(categoryGetThunk(ConstPagiantion(page0, page6)));
+  }, [dispatch]);
+
+const categoryUpdate = (id) => {
+    navigate(`/category/${id}`);
+  };
 
   return (
     <div className="nativeLanguageScreenMainDiv">

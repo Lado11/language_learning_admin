@@ -3,7 +3,7 @@ import { Form, Upload, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin, CustomUploadElement } from "../../components";
 import {
   deleteNativeDeleteBool,
@@ -31,10 +31,11 @@ import { Success, Error } from "../../components/custom-message/custom-message";
 import { beforeUpload, props } from "../utils/helper";
 
 export const UpdateNativeLanguage = () => {
+  let location = useLocation();
+  const nativeId = location?.pathname.slice(17);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const nativeId = localStorage.getItem("nativeId");
   const formData = new FormData();
   const [fileList, setFileList] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -125,7 +126,7 @@ export const UpdateNativeLanguage = () => {
         setIsModalOpen={setIsModalOpen}
         onTab={onTab}
       />
-      <p className="nativeLanguageTitle">Update Native Language</p>
+      <p className="categoryUpdateTitle">Update Native Language</p>
 
      {getIdNativeLoading ?<div className="CustomSpinUpdate"> <CustomSpin size={120} color={Colors.GRAY_COLOR} /> </div>:
       <Form

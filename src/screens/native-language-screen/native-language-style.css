@@ -166,6 +166,9 @@
   .pointer {
     max-width: 33%;
   }
+  .nativeLanguageCreateScreenMainDiv{
+    padding: 60px 42px 30px 42px;
+  }
   .nativeLanguageScreenMainDiv {
     padding: 60px 42px 30px 42px;
   }
@@ -178,11 +181,12 @@
   .pointer {
     max-width: 50%;
   }
+ 
   .nativeLanguageScreenMainDiv {
     padding: 60px 25px 30px 25px;
   }
   .nativeLanguageCreateScreenMainDiv {
-    padding: 60px 52px 30px 52px;
+    padding: 60px 25px 30px 25px;
   }
 }
 

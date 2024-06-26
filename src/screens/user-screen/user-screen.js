@@ -150,7 +150,6 @@ export const UserScreen = () => {
   }
 
   const userUpdate = (id) => {
-    localStorage.setItem("userId", id);
     dispatch(userGetByIdThunk(id));
     navigate(`/user/${id}`);
   }

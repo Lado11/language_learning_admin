@@ -10,6 +10,7 @@ import appIcon from "../../assets/images/app.png";
 import generalIcon from "../../assets/images/general.png";
 import { Colors } from "../../assets/colors/colors";
 import "./feedback-screen-style.css";
+import { useLocation } from "react-router-dom";
 
 const FeedbackItem = ({ feedback }) => {
   const getTypeIcon = (type) => {
@@ -120,7 +121,8 @@ const FeedbackUserInfo = ({ feedback }) => {
 
 export const FeadBackMoreScreen = () => {
   const dispatch = useDispatch();
-  const feadbackId = localStorage.getItem("feadback");
+  let location = useLocation()
+  const feadbackId = location?.pathname.slice(10)
   const feadbackIdResponse = useSelector(GetIdFeedBackResponse);
   const feadbackIdLoading = useSelector(GetIdFeedBackLoading);
 

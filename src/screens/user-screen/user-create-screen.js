@@ -69,7 +69,7 @@ export const UserCreateScreen = () => {
 
   return (
     <div
-      className="authScreenFilesDiv"
+      className="nativeLanguageCreateScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
         {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}

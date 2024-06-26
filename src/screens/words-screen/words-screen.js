@@ -26,6 +26,7 @@ import { page0, page12, page5, page6 } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { WordsLevelData } from "./words-data";
 import { WordsStatus } from "./words-typing";
+import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
 
 
 const WordsFilterPopover = ({
@@ -110,7 +111,7 @@ const WordsFilterPopover = ({
     </Popover>
   );
 };
-const WordsListItem = ({ words, onClick, key }) => {
+const WordsListItem = ({ words, onClick, key,icon }) => {
   const getWordsLevelLabel = (status) => {
     switch (status) {
       case WordsLevel.BEGINNER:
@@ -147,7 +148,7 @@ const WordsListItem = ({ words, onClick, key }) => {
         >
           {words?.translates.map((item, index) => {
             return <div key={index}>
-              <Avatar src={item?.nativeLanguageDetails?.imageFile} />
+              <Avatar src={icon} />
             </div>
           })}
         </Avatar.Group>
@@ -175,7 +176,33 @@ export const WordsScreen = () => {
   const nativeLanguageData = useSelector(getNativeGetResponse)?.data?.list
   const categoryData = useSelector(getCategoryGetData)?.data?.list
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
+  useEffect(() => {
+    // Preload image URLs
+    if (wordsResponse?.data?.list?.length) {
+      wordsResponse?.data?.list?.forEach((item) => {
+        fetchImage(item.imageFile);
+      });
+    }
+  }, [wordsResponse?.data?.list]);
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+  useEffect(() => {
+    // Update imageUrls state with fetched image URLs
+    if (categoryImageResponse?.data?.url) {
+      setImageUrls((prevUrls) => ({
+        ...prevUrls,
+        [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+      }));
+    }
+  }, [categoryImageResponse]);
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
@@ -222,7 +249,6 @@ export const WordsScreen = () => {
   };
 
   const updateWords = (id) => {
-    localStorage.setItem("wordId", id)
     navigate(`/words/${id}`)
     dispatch(getIdWordsThunk(id));
   }
@@ -318,8 +344,7 @@ export const WordsScreen = () => {
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
                       return (
-                        <WordsListItem words={words} onClick={() => updateWords(words?._id)} key={index} />
-
+                        <WordsListItem icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
                     }
                     )}

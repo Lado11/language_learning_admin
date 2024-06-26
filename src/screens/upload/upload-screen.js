@@ -71,8 +71,11 @@ const UploadFilterPopover = ({
             open={isPopoverOpen}
             onOpenChange={handlePopoverOpenChange}
         >
-            <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
-        </Popover>
+<div className="fiterlIconSection">
+<img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+    
+    </div>     
+       </Popover>
     );
 };
 
@@ -132,7 +135,7 @@ export const UplaodScreen = () => {
     const [filterUploadType, setFilterUploadType] = useState();
 
     const wordsExel = (val) => {
-        localStorage.setItem("wordsExel", val);
+        // localStorage.setItem("wordsExel", val);
         // dispatch(userGetByIdThunk(id));
         navigate(`/upload/${val}`);
     }
@@ -142,13 +145,11 @@ export const UplaodScreen = () => {
     };
 
     const handleTypeChange = (e) => {
-        console.log(e, "log e");
         setFilterUploadType(e.target.value);
 
     };
 
     const handleStatusChange = (e) => {
-        console.log(e, "log ststuys");
         setUploadStatus(e.target.value);
         setFiltterStatus(e.target.value !== UploadStatus.All ? e.target.value : undefined);
 

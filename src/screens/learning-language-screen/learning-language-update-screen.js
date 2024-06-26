@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import uploadIcon from "../../assets/images/uploadImg.png";
 import remove_icon from "../../assets/images/remove_icon.png";
 import { Colors } from "../../assets/colors";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logoVoice from "../../assets/images/Vector (4).png"
 
 import {
@@ -48,6 +48,8 @@ import { page0, page12 } from "../../constants/constants";
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
+  let location = useLocation();
+  const learningId = location?.pathname.slice(19);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
   const { t } = useTranslation();
@@ -55,7 +57,7 @@ export const LearningLanguageUpdate = () => {
   const navigate = useNavigate();
   const formData = new FormData();
   const deleteBool = useSelector(learnLangBool);
-  const learningId = localStorage.getItem("learningId");
+  // const learningId = localStorage.getItem("learningId");
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const [learningLanguageFileList, setLearningLanguageFileList] = useState([]);
   const [learningLanguageFile, setLearningLanguageFile] = useState();
@@ -69,8 +71,8 @@ export const LearningLanguageUpdate = () => {
   const lerningLangAllData = useSelector(getUpdatedLanguages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const loadingLanguageId = useSelector(getLearnLanguageByIdLoading);
-const leraningLangugaeUpdateResponse = useSelector(getUpdatedLearnLanguageResponse);
-const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
+  const leraningLangugaeUpdateResponse = useSelector(getUpdatedLearnLanguageResponse);
+  const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
   const onFinish = (values) => {
     formData.append("nameEng", values.nameEng);
     formData.append("name", values.name);

@@ -19,7 +19,7 @@ export const CustomCountryItem = ({ icon, title }) => {
         >
           {title.length < 15 ? title : title.slice(0, 10)}
         </p>
-        <img src={britishIcon} />
+        <img className="itemImage" src={icon} />
       </div>
     </>
   );

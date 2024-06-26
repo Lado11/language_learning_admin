@@ -68,7 +68,6 @@ export const NativeLanguageCretae = () => {
   }, [nativeLanguageData?.success]);
 
   const str = messageError?.toString()
-  console.log(str,"log");
   const onRemove = () => {
     dispatch(deleteNativeCreateResponse())
   }
@@ -86,7 +85,7 @@ export const NativeLanguageCretae = () => {
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
       {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
-      <p className="nativeLanguageTitle">Add Native Language</p>
+      <p className="categoryCraeteTitle">Add Native Language</p>
       <Form
         className="formAntd"
         autoComplete="off"

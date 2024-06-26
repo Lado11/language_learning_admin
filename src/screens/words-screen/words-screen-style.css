@@ -34,7 +34,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: end;
-  margin: 40px 0 10px 0; 
+  margin: 15px 0 15px 0; 
 }
 .statusGroupWords{
   display: flex;

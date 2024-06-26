@@ -76,7 +76,7 @@ console.log(val,"val");
 
   return (
     <div
-      className="screensMainDiv wordsCreateScreen"
+      className="nativeLanguageCreateScreenMainDiv wordsCreateScreen"
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div className="wordsCreateAddWords">

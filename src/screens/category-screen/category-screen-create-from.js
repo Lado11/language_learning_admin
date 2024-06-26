@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Upload, message } from "antd";
+import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomAntdButton, CustomErrorSection, CustomUploadElement } from "../../components";
 import { Colors } from "../../assets/colors";
@@ -7,7 +7,22 @@ import { CustomAntdInput } from "../../components";
 import { categoryCreateThunk, deleteCategoryCreateResponse, getCategoryCreateData, getCategoryCreateLoading } from "../../store/slices/category/category-create";
 import { useTranslation } from "react-i18next";
 import { Success } from "../../components/custom-message/custom-message";
-import { beforeUpload } from "../utils/helper";
+import { fileToDataString } from "../../helper/file-build";
+import remove_icon from "../../assets/images/remove_icon.png";
+
+
+export const ImageUpload = ({ onChange }) => {
+  return (
+    <div className="file-upload">
+      <div className="imageUpload">
+        <CustomUploadElement title={"Upload Category Icon "} />
+      </div>
+      <form >
+        <input type="file" onChange={onChange} accept="image/*" />
+      </form>
+    </div>
+  )
+}
 
 export const CategoryCretae = () => {
   const [form] = Form.useForm();
@@ -15,17 +30,19 @@ export const CategoryCretae = () => {
   const dispatch = useDispatch();
   const formData = new FormData();
   const [messageApi, contextHolder] = message.useMessage();
-  const [categoryFileList, setCategoryFileList] = useState([]);
   const [categoryShow, setCategoryShow] = useState();
-  const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const categoryCreateData = useSelector(getCategoryCreateData);
   const catgeoryCreateLoading = useSelector(getCategoryCreateLoading);
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const messageError = categoryCreateData?.message;
+  const str = messageError?.toString()
 
   const onFinish = (values) => {
     if (values.category_image.file != "") {
       formData.append("name", values.category_name);
       formData.append("localization", values.category_string);
-      formData.append("image", categoryShow);
+      selectedImage && formData.append("image", selectedImage);
       dispatch(categoryCreateThunk(formData));
     } else {
       console.log(values, "values");
@@ -40,48 +57,40 @@ export const CategoryCretae = () => {
     }
   }, [categoryCreateData?.success])
 
-  const handleChange = (info) => {
-    setCategoryShow(info.file);
-    setCatgeoryShowUpload(info.fileList[0]);
-    if (!info.fileList[0]) {
-      info.file = "";
-    }
-  };
-
-  const messageError = categoryCreateData?.message;
-
   useEffect(() => {
     categoryCreateData?.success === true && Success({ messageApi });
-    // categoryCreateData?.success === false &&
-    //   Error({ messageApi, messageError });
-    // dispatch(deleteCategoryCreateResponse());
   }, [categoryCreateData?.success]);
 
-
-  const props = {
-    accept: ".png,.svg,.jpg",
-    onRemove: (file) => {
-      const index = categoryFileList.indexOf(file);
-      const newFileList = categoryFileList.slice();
-      newFileList.splice(index, 1);
-    },
-  };
-  const str = messageError?.toString()
   const onRemove = () => {
     dispatch(deleteCategoryCreateResponse());
   }
 
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="categoryScreenMainDiv">
+    <div className="nativeLanguageCreateScreenMainDiv">
       {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
-      <p className="nativeLanguageTitle">Add Category</p>
+      <p className="categoryCraeteTitle">Add Category</p>
       <Form
         autoComplete="off"
         form={form}
         name="category_create"
         onFinish={onFinish}
         className="formAntd"
-
       >
         <div className="category_row_input_user">
           <CustomAntdInput name="category_name" rules={true} placeholder="Category Name*" min={3} />
@@ -98,22 +107,29 @@ export const CategoryCretae = () => {
             },
           ]}
         >
-          <Upload
-            onChange={handleChange}
-            beforeUpload={beforeUpload}
-            {...props}
-            maxCount={1}
-            listType="picture"
-            className="upload-list-inline"
-          >
-            {categoryShow && showCategoryUpload ? null : (
-             <CustomUploadElement title={"Upload Category Icon "} />
-            )}
-          </Upload>
+          {previewImgUrl?.length ?
+            <div className="imgae_upload_design">
+              <div className="remove_icon_div">
+                <img
+                  className="remove_button"
+                  src={remove_icon}
+                  onClick={() => {
+                    setPreviewimgUrl("")
+                    setCategoryShow(null);
+                  }}
+                />
+              </div>
+              <div className="imgae_name">
+                <div className="image_wrapper">
+                  <p>{selectedImage?.name}</p>
+                  <img className="imageItem" src={previewImgUrl} />
+                </div>
+              </div>
+            </div> : <ImageUpload onChange={handleFileChange} />}
         </Form.Item>
         {contextHolder}
         <Form.Item>
-          <CustomAntdButton  loading={catgeoryCreateLoading} title={t("ADD")} background={Colors.PURPLE} />
+          <CustomAntdButton loading={catgeoryCreateLoading} title={t("ADD")} background={Colors.PURPLE} />
         </Form.Item>
       </Form>
     </div>

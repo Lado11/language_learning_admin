@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { getIdWordsThunk, wordsIdLoading, wordsIdResponse } from "../../../store/slices/words/getId-words";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomSpin, CustomUpload } from "../../../components";
 import CustomModal from "../../../components/custom-modal/custom-modal";
 import { deleteWordsDeleteResponse, getWordsDeleteThunk, wordsDeleteLoading, wordsDeleteResponse } from "../../../store/slices/words/delete_words-slice";
@@ -20,6 +20,8 @@ import { beforeUpload, props } from "../../utils/helper";
 import logoVoice from "../../../assets/images/Vector (4).png"
 
 export const WordsUpdate = () => {
+    let location = useLocation();
+    const wordId = location?.pathname.slice(7);
     const [form] = Form.useForm();
     const formData = new FormData();
     const { t } = useTranslation();
@@ -28,7 +30,6 @@ export const WordsUpdate = () => {
     const [selectedLevel, setSelectedLevel] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
     const [showVoice, setShowVoice] = useState(false);
-    const wordId = localStorage.getItem("wordId");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fileListVoice, setFileListVoice] = useState();
     const [showCategoryUpload, setCatgeoryShowUpload] = useState();

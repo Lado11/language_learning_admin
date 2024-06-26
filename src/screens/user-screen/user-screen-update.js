@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { deleteUserDeleteResponse, deleteUserUpdateResponse, getUserDeleteData, getUserDeleteLoading, getUserGetByIdData, getUserGetByIdLoading, getUserUpdateData, getUserUpdateLoading, getUserUpdateMessages, userDeleteThunk, userGetByIdThunk, userUpdateThunk } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomSpin, Error, Success } from "../../components";
@@ -12,6 +12,8 @@ import { UserValue } from "../../data/custom-table-columns";
 import CustomModal from "../../components/custom-modal/custom-modal";
 
 export const UserScreenUpdate = () => {
+    let location = useLocation();
+    const userId = location?.pathname.slice(6);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -26,7 +28,6 @@ export const UserScreenUpdate = () => {
     const [selected, setSelected] = useState();
     const [messageApi, contextHolder] = message.useMessage();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const userId = localStorage.getItem("userId");
     const userIdData = useSelector(getUserGetByIdData);
     const messageError = useSelector(getUserUpdateMessages);
     const userUpdateResponse = useSelector(getUserUpdateData)
@@ -89,7 +90,7 @@ export const UserScreenUpdate = () => {
     }, [userUpdateResponse?.success,]);
 
     return (
-        <div className="nativeLanguageScreenMainDiv">
+        <div className="nativeLanguageCreateScreenMainDiv">
             <CustomModal
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}

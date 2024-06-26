@@ -8,7 +8,7 @@ export const CustomCardItem = ({ icon, title }) => {
       <p className="customCardItemTitle" style={{ color: Colors.LIGHT_GRAY }}>
         {title}
       </p>
-      <img src={icon} alt="icon"/>
+      <img className="itemImage" src={icon} alt="icon"/>
     </div>
   );
 };

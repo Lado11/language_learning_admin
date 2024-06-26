@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteWordsDelete, wordsExelDeleteLoading, wordsExelDeleteResponse, wordsExelDeleteThunk } from "../../store/slices/words/delete-exel-words";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Form, Input } from "antd";
 import { wordsExelGetIdLoading, wordsExelGetIdResponse, wordsExelGetIdThunk } from "../../store/slices/words/getId-exel-words";
 
@@ -18,8 +18,8 @@ export const UplaodProcessScreen = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const wordsProcessId = localStorage.getItem("wordsExel");
+    let location = useLocation();
+    const wordsProcessId = location?.pathname.slice(8);
     const wordsProcessDeleteLoading = useSelector(wordsExelDeleteLoading);
     const wordsProcessDeleteResponse = useSelector(wordsExelDeleteResponse);
     const wordsIdResponse = useSelector(wordsExelGetIdResponse);

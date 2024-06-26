@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { DashboardCard } from "./components/dashboard-card";
 import { useTranslation } from "react-i18next";
 import { CustomNoData, CustomSpin } from "../../components";
-import { UserSubscription, columns } from "../../data";
+import { columns } from "../../data";
 import { useDispatch, useSelector } from "react-redux";
 import { dashboardGetThunk, getDashboardGetResponse, getDashboardGetloading } from "../../store/slices/dashboard/get-dashboard";
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
