@@ -11,9 +11,11 @@ import {
 } from "../../store/slices/native-language/native-language-create";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
-import { CustomAntdInput, CustomErrorSection, CustomUploadElement } from "../../components";
+import { CustomAntdInput, CustomErrorSection } from "../../components";
 import { Success } from "../../components/custom-message/custom-message";
-import { beforeUpload } from "../utils/helper";
+import { ImageUpload } from "../category-screen/category-screen-create-from";
+import remove_icon from "../../assets/images/remove_icon.png";
+import { fileToDataString } from "../../helper/file-build";
 
 export const NativeLanguageCretae = () => {
   const [form] = Form.useForm();
@@ -22,17 +24,18 @@ export const NativeLanguageCretae = () => {
   const nativeCreateBool = useSelector(getNativeCreateBool);
   const [fileList, setFileList] = useState([]);
   const [categoryShow, setCategoryShow] = useState();
-  const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const nativeLanguageData = useSelector(getNativeCreateData);
   const [messageApi, contextHolder] = message.useMessage();
   const craeteLoading = useSelector(getNativeCreateLoading);
   const messageError = nativeLanguageData?.message;
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
 
   const onFinish = (values) => {
     if (values.image.file != "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
-      formData.append("image", categoryShow);
+      selectedImage && formData.append("image", selectedImage);
       dispatch(nativeLanguageCreateThunk(formData));
     } else {
       console.log(values, "values");
@@ -43,28 +46,20 @@ export const NativeLanguageCretae = () => {
     dispatch(deleteNativeCreateBool());
   }, [nativeCreateBool]);
 
-  const handleChange = (info) => {
-    setCategoryShow(info.file);
-    setCatgeoryShowUpload(info.fileList[0]);
-    if (!info.fileList[0]) {
-      info.file = "";
-    }
-  };
 
 
   useEffect(() => {
     if (nativeLanguageData?.success === true) {
       form.resetFields();
       setCategoryShow("");
+      setPreviewimgUrl("")
+      setCategoryShow(null);
       dispatch(deleteNativeCreateResponse());
     }
   }, [nativeLanguageData?.success])
 
   useEffect(() => {
     nativeLanguageData?.success === true && Success({ messageApi });
-    // nativeLanguageData?.success === false &&
-    //   Error({ messageApi, messageError });
-    // dispatch(deleteNativeCreateResponse());
   }, [nativeLanguageData?.success]);
 
   const str = messageError?.toString()
@@ -81,6 +76,22 @@ export const NativeLanguageCretae = () => {
     },
   };
   
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
@@ -105,18 +116,26 @@ export const NativeLanguageCretae = () => {
             },
           ]}
         >
-          <Upload
-            onChange={handleChange}
-            beforeUpload={beforeUpload}
-            {...props}
-            maxCount={1}
-            listType="picture"
-            className="upload-list-inline"
-          >
-            {categoryShow && showCategoryUpload ? null : (
-              <CustomUploadElement title={"Upload Language Icon"} />
-            )}
-          </Upload>
+           {previewImgUrl?.length ?
+            <div className="imgae_upload_design">
+              <div className="remove_icon_div">
+                <img
+                  className="remove_button"
+                  src={remove_icon}
+                  onClick={() => {
+                    setPreviewimgUrl("")
+                    setCategoryShow(null);
+                  }}
+                />
+              </div>
+              <div className="imgae_name">
+                <div className="image_wrapper">
+                  <p>{selectedImage?.name}</p>
+                  <img className="imageItem" src={previewImgUrl} />
+                </div>
+              </div>
+            </div> : <ImageUpload onChange={handleFileChange} />}
+        
         </Form.Item>
         <Form.Item>
           {contextHolder}

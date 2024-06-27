@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./create-words-add-style.css";
 import {
   CustomAntdInput,
@@ -16,7 +16,13 @@ import { Form } from "antd";
 import remove_icon from "../../../../../assets/images//remove_icon.png"
 
 export const CreateWordsAdd = ({
+  setCategoryShow,
+  categoryShow,
+  setPreviewimgUrl,
+  previewImgUrl,
   image,
+  setSelectedImage,
+  selectedImage,
   setIamge,
   setAudio,
   audio,
@@ -32,7 +38,6 @@ export const CreateWordsAdd = ({
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const categoryData = useSelector(getCategoryGetData)?.data?.list;
-  const [showVoice, setShowVoice] = useState(false);
   const filteredResponseCategory = categoryData?.map((lang) => {
     return {
       _id: lang._id,
@@ -165,7 +170,10 @@ export const CreateWordsAdd = ({
       </div>
       </Form.Item> */}
 
-      <CustomUpload setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
+      <CustomUpload previewImgUrl={previewImgUrl}
+        setPreviewimgUrl={setPreviewimgUrl}
+        categoryShow={categoryShow}
+        setCategoryShow={setCategoryShow} selectedImage={selectedImage} setSelectedImage={setSelectedImage} setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
     </div>
   );
 };

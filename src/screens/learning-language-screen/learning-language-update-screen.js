@@ -1,40 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "./learning-language-screen-style.css";
-import { Form, Select, Upload } from "antd";
+import { Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import uploadIcon from "../../assets/images/uploadImg.png";
-import remove_icon from "../../assets/images/remove_icon.png";
 import { Colors } from "../../assets/colors";
 import { useLocation, useNavigate } from "react-router-dom";
-import logoVoice from "../../assets/images/Vector (4).png"
 
 import {
   CustomAntdButtonDelete,
   CustomAntdInput,
   CustomAntdButton,
   CustomSpin,
-  CustomUploadElement,
 } from "../../components";
 import {
-  deleteLearnBool,
   deleteLearnResponse,
-  deleteLearnUpdateBool,
   deleteLearnUpdateResponse,
   getLearnLanguageByIdLoading,
   getLearnLanguageByIdResponse,
-  getNativeGetResponse,
   getUpdatedLanguages,
   getUpdatedLearnLanguageBool,
   getUpdatedLearnLanguageLoading,
   getUpdatedLearnLanguageResponse,
-  learnLangBool,
   learnLanguageByIdThunk,
   learnLanguageDeleteLoading,
   learnLanguageDeleteResponse,
   learnLanguageDeleteThunk,
   learnLanguageUpdateThunk,
-  learningLanguages,
-  learningLanguagesThunk,
   nativeLanguageGetThunk,
   removeAllLanguages,
   removeSelectedLanguagesItem,
@@ -42,26 +32,23 @@ import {
 import { useTranslation } from "react-i18next";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { SelectLearningLang } from "./select-learning-lang";
-import { beforeUpload, props } from "../utils/helper";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { page0, page12 } from "../../constants/constants";
+import { ShowImage } from "../category-screen/category-update";
+import { ImageUpload } from "../category-screen/category-screen-create-from";
+import { fileToDataString } from "../../helper/file-build";
+import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
   let location = useLocation();
   const learningId = location?.pathname.slice(19);
-  const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formData = new FormData();
-  const deleteBool = useSelector(learnLangBool);
-  // const learningId = localStorage.getItem("learningId");
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-  const [learningLanguageFileList, setLearningLanguageFileList] = useState([]);
   const [learningLanguageFile, setLearningLanguageFile] = useState();
-  const [showLearningLanguageUpload, setShowLearningLanguageUpload] =
     useState();
   const updateBool = useSelector(getUpdatedLearnLanguageBool);
   const learningLanguageData = useSelector(getLearnLanguageByIdResponse);
@@ -70,13 +57,17 @@ export const LearningLanguageUpdate = () => {
   const learningData = learningLanguageData?.data;
   const lerningLangAllData = useSelector(getUpdatedLanguages);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const [categoryShow, setCategoryShow] = useState();
   const loadingLanguageId = useSelector(getLearnLanguageByIdLoading);
   const leraningLangugaeUpdateResponse = useSelector(getUpdatedLearnLanguageResponse);
   const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
+  
   const onFinish = (values) => {
     formData.append("nameEng", values.nameEng);
     formData.append("name", values.name);
-    learningLanguageFile && formData.append("image", learningLanguageFile);
+    selectedImage && formData.append("image", selectedImage);
     formData.append("id", learningData.id);
     formData.append("active", learningData?.active);
     lerningLangAllData.forEach((item, ind) => {
@@ -91,14 +82,6 @@ export const LearningLanguageUpdate = () => {
 
   const onDelete = () => {
     dispatch(learnLanguageDeleteThunk(learningData?.id));
-  };
-
-  const handleChange = (info) => {
-    setLearningLanguageFile(info.file);
-    setShowLearningLanguageUpload(info.fileList?.[0]);
-    if (!info.fileList?.[0]) {
-      info.file = "";
-    }
   };
 
   const showModal = () => {
@@ -132,11 +115,51 @@ export const LearningLanguageUpdate = () => {
 
   
   
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
+
+  useEffect(() => {
+    // Preload image URLs
+    if (learningData) {
+      fetchImage(learningData.imageFile?._id);
+    }
+  }, [learningData]);
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+  useEffect(() => {
+    // Update imageUrls state with fetched image URLs
+    if (categoryImageResponse?.data?.url) {
+      setImageUrls((prevUrls) => ({
+        ...prevUrls,
+        [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+      }));
+    }
+  }, [categoryImageResponse]);
+  
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
-      // className="learnLanguageUpdateScreenMainDiv"
       className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
@@ -153,9 +176,7 @@ export const LearningLanguageUpdate = () => {
           form={form}
           name="control-hooks"
           onFinish={onFinish}
-        // className="formAntd"
         >
-  
           <div className="createLearningLangRow">
             <div className="updateSection">
               <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
@@ -173,46 +194,24 @@ export const LearningLanguageUpdate = () => {
 
               <Form.Item
                 name="image"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+                rules={[{ required: true}]}
               >
-                {learningLanguageFile != null || fileList != null ? (
-                  <div className="imgae_upload_design">
-                    <div className="remove_icon_div">
-                      <img
-                        src={remove_icon}
-                        onClick={() => {
-                          setFileList(null)
-                          // setLearningLanguageFileList(null);
-                          setLearningLanguageFile(null);
-                        }}
-                      />
-                    </div>
-                    <div className="imgae_name">
-                      <p>{learningData?.imageFile?.description}</p>
-                      <img src={`${baseUrl}${learningData?.imageFile?.path}`} />
-                    </div>
-                  </div>
-                ) : (
-                  <Upload
-                    onChange={handleChange}
-                    beforeUpload={beforeUpload}
-                    {...props}
-                    maxCount={1}
-                    listType="picture"
-                    className="upload-list-inline"
-                  >
-                    {learningLanguageFile && showLearningLanguageUpload ? null : (
-                  <CustomUploadElement title={"Upload Language Icon"} />
-
-                    )}
-                  </Upload>
-                )}
+                 {previewImgUrl?.length > 1 ? (
+                <ShowImage title={selectedImage?.name}
+                  src={previewImgUrl}
+                  onClick={() => {
+                    setPreviewimgUrl(".")
+                    setCategoryShow(null);
+                  }} />
+              ) : learningData?.imageFile && !previewImgUrl ? (
+                <ShowImage title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
+                  setPreviewimgUrl(".")
+                  setCategoryShow(null);
+                }} />
+              ) : (
+                <ImageUpload onChange={handleFileChange} />
+              )}
               </Form.Item>
-
               <Form.Item>
                 <CustomAntdButton
                   title="Update"

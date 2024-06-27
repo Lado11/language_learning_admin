@@ -21,10 +21,6 @@ export const LearningLanguageScreen = () => {
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
- 
-
-
-
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
   };
@@ -37,6 +33,41 @@ export const LearningLanguageScreen = () => {
     dispatch(learningLanguagesThunk(ConstPagiantion(page0,page12)));
   }, []);
 
+
+  const [imageUrls, setImageUrls] = useState({});
+  const learningImageResponse = useSelector(getfilesGetIdResponse);
+
+  useEffect(() => {
+    // Preload image URLs
+    if (learningLanguagesData?.data?.list?.length > 0) {
+      learningLanguagesData?.data?.list?.forEach((item) => {
+       item?.nativeLanguages?.forEach((lang) => {
+        fetchImage(lang.imageFile);
+       });
+      });
+    }
+  }, [learningLanguagesData?.data?.list]);
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+  const getImage = (url) => {
+    url?.forEach((image)=> imageUrls[image?.imageFile])
+  }
+
+  useEffect(() => {
+    // Update imageUrls state with fetched image URLs
+    if (learningImageResponse?.data?.url) {
+      setImageUrls((prevUrls) => ({
+        ...prevUrls,
+        [learningImageResponse.data.fileId]: learningImageResponse.data.url,
+      }));
+    }
+  }, [learningImageResponse]);
+  
   return (
     <div
       className="nativeLanguageScreenMainDiv"
@@ -62,6 +93,7 @@ export const LearningLanguageScreen = () => {
                     return (
                       <div className="pointer" key={index}>
                         <LearningLanguageItemCard
+                          icon={getImage(lang?.nativeLanguages)}
                           data={lang?.nativeLanguages}
                           title={lang.name}
                           count={learningLanguagesData?.data?.total}

@@ -53,6 +53,8 @@ export const CategoryCretae = () => {
     if (categoryCreateData?.success === true) {
       form.resetFields();
       setCategoryShow("");
+      setPreviewimgUrl("")
+      setCategoryShow(null);
       dispatch(deleteCategoryCreateResponse());
     }
   }, [categoryCreateData?.success])

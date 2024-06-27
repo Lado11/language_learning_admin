@@ -23,16 +23,18 @@ export const WordsCreateScreen = () => {
   const formData = new FormData();
   const array = [];
   const loadingCreateWord = useSelector(createWordsLoadingData);
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const [categoryShow, setCategoryShow] = useState();
 
-const [val,setVal] = useState()
-console.log(val,"val");
+  const [val, setVal] = useState()
   const onFinish = (values) => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
     formData.append("level", selectedLevel?.value)
     formData.append("language", learningLanguageWordSelectedValue?._id)
     formData.append("category", selectedCategory?._id)
-    formData.append("image", fileList)
+    selectedImage && formData.append("image", selectedImage);
     formData.append("audio", fileListVoice)
 
     Object.keys(values).map((date, index) => {
@@ -47,7 +49,7 @@ console.log(val,"val");
       formData.append(`translates[${ind}].nativeLanguage`, item?._id);
     });
     setVal(values)
-    dispatch(createWordsThunk(formData)) 
+    dispatch(createWordsThunk(formData))
 
   };
   const messageError = createWordData?.message;
@@ -56,6 +58,8 @@ console.log(val,"val");
     if (createWordData?.success === true) {
       setAudio()
       setIamge()
+      setPreviewimgUrl("")
+      setCategoryShow(null);
       setLearningLanguageWordSelectedValue()
       form.resetFields()
       dispatch(deleteWordCreateResponse());
@@ -89,6 +93,12 @@ console.log(val,"val");
           <div className="addWordsDiv">
             <div className="addWordsFirstSelect">
               <CreateWordsAdd
+                previewImgUrl={previewImgUrl}
+                setPreviewimgUrl={setPreviewimgUrl}
+                categoryShow={categoryShow}
+                setCategoryShow={setCategoryShow}
+                setSelectedImage={setSelectedImage}
+                selectedImage={selectedImage}
                 image={image}
                 setIamge={setIamge}
                 setAudio={setAudio}

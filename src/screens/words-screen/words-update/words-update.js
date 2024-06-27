@@ -18,6 +18,10 @@ import { useTranslation } from "react-i18next";
 import "./words-update.css"
 import { beforeUpload, props } from "../../utils/helper";
 import logoVoice from "../../../assets/images/Vector (4).png"
+import { ShowImage } from "../../category-screen/category-update";
+import { ImageUpload } from "../../category-screen/category-screen-create-from";
+import { fileToDataString } from "../../../helper/file-build";
+import { filesGetIdThunk, getfilesGetIdResponse } from "../../../store/slices/files/get-id-files";
 
 export const WordsUpdate = () => {
     let location = useLocation();
@@ -37,7 +41,8 @@ export const WordsUpdate = () => {
     const [learningLanguageWordSelectedValue, setLearningLanguageWordSelectedValue] = useState();
     const [audio, setAudio] = useState();
     const [categoryShow, setCategoryShow] = useState();
-    const wordsIdData = useSelector(wordsIdResponse);
+    const wordsIdData = useSelector(wordsIdResponse)?.data;
+    console.log(wordsIdData,"log data");
     const wordsIdLoad = useSelector(wordsIdLoading);
     const wordDeleteData = useSelector(wordsDeleteResponse);
     const deleteWordLoading = useSelector(wordsDeleteLoading);
@@ -47,6 +52,8 @@ export const WordsUpdate = () => {
     const updateWordsResponse = useSelector(wordsUpdateResponseData);
     const updateWordsLoading = useSelector(wordsUpdateLoading);
     const array = [];
+    const [selectedImage, setSelectedImage] = useState();
+    const [previewImgUrl, setPreviewimgUrl] = useState("");
 
     const skipNative = {
         skip: 0,
@@ -59,13 +66,6 @@ export const WordsUpdate = () => {
         dispatch(categoryGetThunk(skipNative));
     }, []);
 
-    const handleChange = (info) => {
-        setCategoryShow(info.file);
-        setCatgeoryShowUpload(info.fileList[0]);
-        if (!info.fileList[0]) {
-            info.file = "";
-        }
-    };
     const [myusic, setMyusci] = useState()
     const addFile = (e) => {
         console.log(e.target.files, "e")
@@ -93,13 +93,14 @@ export const WordsUpdate = () => {
         };
     });
     const onFinish = (values) => {
-        formData.append("id", wordsIdData?.data?._id)
+        console.log(values,"val");
+        formData.append("id", wordsIdData?._id)
         values?.word != wordsIdData?.data?.word && formData.append("word", values?.word)
         formData.append("transcription", values?.transcription)
         formData.append("level", values?.level)
         formData.append("language", values?.language)
         formData.append("category", values?.category)
-        categoryShow && formData.append("image", categoryShow)
+        selectedImage && formData.append("image", selectedImage);
         fileListVoice && formData.append("audio", fileListVoice)
 
         Object.keys(values).map((date, index) => {
@@ -130,13 +131,13 @@ export const WordsUpdate = () => {
 
     useEffect(() => {
         form.setFieldsValue({
-            language: wordsIdData?.data?.language?.nameEng,
-            category: wordsIdData?.data?.category?.name,
-            transcription: wordsIdData?.data?.transcription,
-            level: wordsIdData?.data?.level === 0 ? "beginner" : wordsIdData?.data?.level === 1 ? "intermediate" : wordsIdData?.data?.level === 2 ? "advanced" : null,
-            word: wordsIdData?.data?.word,
+            language: wordsIdData?.language?.nameEng,
+            category: wordsIdData?.category?.name,
+            transcription: wordsIdData?.transcription,
+            level: wordsIdData?.level === 0 ? "beginner" : wordsIdData?.level === 1 ? "intermediate" : wordsIdData?.level === 2 ? "advanced" : null,
+            word: wordsIdData?.word,
         });
-    }, [wordsIdData?.data]);
+    }, [wordsIdData]);
 
     useEffect(() => {
         dispatch(getIdWordsThunk(wordId));
@@ -153,12 +154,64 @@ export const WordsUpdate = () => {
 
     }, [updateWordsResponse?.success, wordDeleteData?.success])
 
+    const [imageUrls, setImageUrls] = useState({});
+    const [voiceUrls, setVoiceUrls] = useState({});
+
+    const categoryImageResponse = useSelector(getfilesGetIdResponse);
+
+    useEffect(() => {
+        // Preload image URLs
+        if (wordsIdData) {
+            fetchImage(wordsIdData?.imageFile?._id,wordsIdData?.audioFile?._id);
+        }
+    }, [wordsIdData]);
+
+    const fetchImage = (imageFileId,voiceFileId) => {
+
+        if (!imageUrls[imageFileId]) {
+            dispatch(filesGetIdThunk(imageFileId));
+        }else if(!voiceUrls[voiceFileId]){
+            dispatch(filesGetIdThunk(voiceFileId));
+        }
+    };
+
+    useEffect(() => {
+        // Update imageUrls state with fetched image URLs
+        if (categoryImageResponse) {
+            setImageUrls((prevUrls) => ({
+                ...prevUrls,
+                [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+            }));
+        }else if(categoryImageResponse){
+                setVoiceUrls((prevUrls) => ({
+                    ...prevUrls,
+                    [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+                }));
+        }
+    }, [categoryImageResponse]);
+
+
+    const handleFileChange = async (
+        event
+    ) => {
+        const file = event.target.files;
+        setSelectedImage(file?.[0]);
+        if (!file) {
+            return;
+        }
+        try {
+            const imgUrl = await fileToDataString(file?.[0]);
+            setPreviewimgUrl(imgUrl);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
-          {wordsIdLoad ? <div className="loadingDiv nativeLanguageScreenMainDiv">
+            {wordsIdLoad ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
-              </div> : <div>
+            </div> : <div>
                 <CustomModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
@@ -243,7 +296,7 @@ export const WordsUpdate = () => {
                                     required: true,
                                 }]}>
 
-                                { showVoice === false ? <div className="imgae_upload_design_voice">
+                                {showVoice === false ? <div className="imgae_upload_design_voice">
                                     <div className="remove_icon_div">
                                         <img
                                             src={remove_icon}
@@ -253,7 +306,7 @@ export const WordsUpdate = () => {
                                             }}
                                         />
                                     </div>
-                                    <Waveform url={wordsIdData?.data?.audioFile?.path} />
+                                    <Waveform url={imageUrls[wordsIdData?.audioFile?._id]} />
                                 </div> :
                                     <>
                                         {audio ? <div className="imgae_upload_design_voice">
@@ -287,35 +340,20 @@ export const WordsUpdate = () => {
                                     required: true
                                 }]}
                             >
-                                {categoryShow != null || fileList != null ? (
-                                    <div className="imgae_upload_design">
-                                        <div className="remove_icon_div">
-                                            <img
-                                                src={remove_icon}
-                                                onClick={() => {
-                                                    setFileList(null);
-                                                    setCategoryShow(null);
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="imgae_name">
-                                            <p>{wordsIdData?.data?.imageFile?.description}</p>
-                                            <img src={`${baseUrl}${wordsIdData?.data?.imageFile?.path}`} />
-                                        </div>
-                                    </div>
+                                {previewImgUrl?.length > 1 ? (
+                                    <ShowImage title={selectedImage?.name}
+                                        src={previewImgUrl}
+                                        onClick={() => {
+                                            setPreviewimgUrl(".")
+                                            setCategoryShow(null);
+                                        }} />
+                                ) : wordsIdData?.imageFile && !previewImgUrl ? (
+                                    <ShowImage title={wordsIdData?.imageFile?.description} src={imageUrls[wordsIdData?.imageFile?._id]} onClick={() => {
+                                        setPreviewimgUrl(".")
+                                        setCategoryShow(null);
+                                    }} />
                                 ) : (
-                                    <Upload
-                                        onChange={handleChange}
-                                        beforeUpload={beforeUpload}
-                                        {...props}
-                                        maxCount={1}
-                                        listType="picture"
-                                        className="upload-list-inline"
-                                    >
-                                        {categoryShow && showCategoryUpload ? null : (
-                                            <img src={uploadIcon} className="upload" />
-                                        )}
-                                    </Upload>
+                                    <ImageUpload onChange={handleFileChange} />
                                 )}
                             </Form.Item>
 
@@ -357,9 +395,9 @@ export const WordsUpdate = () => {
                                         )
                                     }) : null}
                             </div>
-                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.data?.translates && <p>Translate</p>}
+                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p>Translate</p>}
 
-                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.data?.translates && wordsIdData?.data?.translates?.map((item, index) => {
+                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && wordsIdData?.translates?.map((item, index) => {
                                 return (
                                     <div>
                                         <p>{item?.nativeLanguage?.nameEng}</p>

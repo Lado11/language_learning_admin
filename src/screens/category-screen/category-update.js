@@ -22,7 +22,7 @@ import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files
 import { fileToDataString } from "../../helper/file-build";
 import { ImageUpload } from "./category-screen-create-from";
 
-const ShowImage = ({ title, src, onClick }) => {
+export const ShowImage = ({ title, src, onClick }) => {
   return (
     <div className="imgae_upload_design">
       <div className="remove_icon_div">
@@ -179,24 +179,6 @@ export const CategoryUpdate = () => {
               rules={[{ required: true }]}
             >
               {previewImgUrl?.length > 1 ? (
-                // <div className="imgae_upload_design">
-                //   <div className="remove_icon_div">
-                //     <img
-                //       className="remove_button"
-                //       src={remove_icon}
-                //       onClick={() => {
-                //         setPreviewimgUrl(".")
-                //         setCategoryShow(null);
-                //       }}
-                //     />
-                //   </div>
-                //   <div className="imgae_name">
-                //     <div className="image_wrapper">
-                //       <p>{selectedImage?.name}</p>
-                //       <img className="imageItem" src={previewImgUrl} />
-                //     </div>
-                //   </div>
-                // </div>
                 <ShowImage title={selectedImage?.name}
                   src={previewImgUrl}
                   onClick={() => {

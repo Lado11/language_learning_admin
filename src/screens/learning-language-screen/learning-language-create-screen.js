@@ -21,6 +21,9 @@ import { SelectLearningLang } from "./select-learning-lang";
 import { beforeUpload } from "../utils/helper";
 import { page0, page12 } from "../../constants/constants";
 import { ConstPagiantion, } from "../../constants/const-pagination";
+import { ImageUpload } from "../category-screen/category-screen-create-from";
+import { fileToDataString } from "../../helper/file-build";
+import remove_icon from "../../assets/images/remove_icon.png";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
@@ -34,6 +37,9 @@ export const LearningLanguageCreateScreen = () => {
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
   const messageError = createLearnLanguageResponse?.message;
   const [messageApi, contextHolder] = message.useMessage();
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const [categoryShow, setCategoryShow] = useState();
 
   useEffect(() => {
     dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
@@ -43,9 +49,8 @@ export const LearningLanguageCreateScreen = () => {
     if (values.learningLanguageImage.file != "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
-      formData.append("image", learningLanguageFile);
+      selectedImage && formData.append("image", selectedImage);
       languages.forEach((item, ind) => {
-        console.log(item);
         formData.append(`nativeLanguages[${ind}]`, item._id);
       });
       dispatch(createLearnLanguageThunk(formData));
@@ -60,6 +65,8 @@ export const LearningLanguageCreateScreen = () => {
       form.resetFields();
       setLearningLanguageFile("");
       dispatch(removeAllLanguages())
+      setPreviewimgUrl("")
+      setCategoryShow(null);
       dispatch(deleteLerningCreateResponse());
     }
   }, [createLearnLanguageResponse?.success])
@@ -93,6 +100,21 @@ export const LearningLanguageCreateScreen = () => {
       newFileList.splice(index, 1);
     },
   };
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
@@ -124,7 +146,26 @@ export const LearningLanguageCreateScreen = () => {
                   },
                 ]}
               >
-                <Upload
+                {previewImgUrl?.length ?
+            <div className="imgae_upload_design">
+              <div className="remove_icon_div">
+                <img
+                  className="remove_button"
+                  src={remove_icon}
+                  onClick={() => {
+                    setPreviewimgUrl("")
+                    setCategoryShow(null);
+                  }}
+                />
+              </div>
+              <div className="imgae_name">
+                <div className="image_wrapper">
+                  <p>{selectedImage?.name}</p>
+                  <img className="imageItem" src={previewImgUrl} />
+                </div>
+              </div>
+            </div> : <ImageUpload onChange={handleFileChange} />}
+                {/* <Upload
                   onChange={handleChange}
                   beforeUpload={beforeUpload}
                   {...props}
@@ -136,7 +177,7 @@ export const LearningLanguageCreateScreen = () => {
                    <CustomUploadElement title={"Upload Language Icon"} />
 
                   )}
-                </Upload>
+                </Upload> */}
               </Form.Item>
               <Form.Item>
                 {contextHolder}

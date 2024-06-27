@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from "../../store/slices/category/get-category";
 import { useEffect, useState } from "react";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
-import { page0, page12, page6 } from "../../constants/constants";
+import { page0, page6 } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import {  filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
 
@@ -36,7 +36,6 @@ export const CategoryScreen = () => {
       dispatch(filesGetIdThunk(imageFileId));
     }
   };
-
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
     if (categoryImageResponse?.data?.url) {
