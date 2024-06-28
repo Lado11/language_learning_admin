@@ -105,7 +105,7 @@ export const UserListItem = ({ user, onClick, key }) => {
 
   return (
     <li className="table-row" key={key} onClick={onClick}>
-      <div className="col col-1 desc" data-label="Job Id">{key + 1}</div>
+      <div className="col col-1 desc" data-label="Job Id">{(user?._id).slice(0,10)}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.email}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>

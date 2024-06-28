@@ -18,7 +18,7 @@ export const customSideBarData = [
     icon: dashboardIcon,
     title: "DASHBOARD",
     color: Colors.BLUE,
-    path: "/dashboard",
+    path: "/",
   },
   {
     id: 2,

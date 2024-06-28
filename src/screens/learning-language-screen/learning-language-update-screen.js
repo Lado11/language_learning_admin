@@ -4,7 +4,6 @@ import { Form, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../assets/colors";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import {
   CustomAntdButtonDelete,
   CustomAntdInput,
@@ -179,39 +178,49 @@ export const LearningLanguageUpdate = () => {
         >
           <div className="createLearningLangRow">
             <div className="updateSection">
+              <div className="update-language-right-section">
               <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
 
-              <p className="inputTitle">{t("LANGUAGE_ENGLISH_NAME")}</p>
-              <CustomAntdInput
-                rules={true}
-                name="nameEng"
-                placeholder=" Language English Name*"
-              />
-              <p className="inputTitle">{t("NATIVE_NAME")}</p>
+<p className="inputTitle">{t("LANGUAGE_ENGLISH_NAME")}</p>
+<CustomAntdInput
+  rules={true}
+  name="nameEng"
+  placeholder=" Language English Name*"
+/>
+<p className="inputTitle">{t("NATIVE_NAME")}</p>
 
-              <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
-              <p className="inputTitle">{t("LANGUAGE_ICON")}</p>
+<CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
+<p className="inputTitle">{t("LANGUAGE_ICON")}</p>
 
-              <Form.Item
-                name="image"
-                rules={[{ required: true}]}
-              >
-                 {previewImgUrl?.length > 1 ? (
-                <ShowImage title={selectedImage?.name}
-                  src={previewImgUrl}
-                  onClick={() => {
-                    setPreviewimgUrl(".")
-                    setCategoryShow(null);
-                  }} />
-              ) : learningData?.imageFile && !previewImgUrl ? (
-                <ShowImage title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
-                  setPreviewimgUrl(".")
-                  setCategoryShow(null);
-                }} />
-              ) : (
-                <ImageUpload onChange={handleFileChange} />
-              )}
-              </Form.Item>
+<Form.Item
+  name="image"
+  rules={[{ required: true}]}
+>
+   {previewImgUrl?.length > 1 ? (
+  <ShowImage title={selectedImage?.name}
+    src={previewImgUrl}
+    onClick={() => {
+      setPreviewimgUrl(".")
+      setCategoryShow(null);
+    }} />
+) : learningData?.imageFile && !previewImgUrl ? (
+  <ShowImage title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
+    setPreviewimgUrl(".")
+    setCategoryShow(null);
+  }} />
+) : (
+  <ImageUpload onChange={handleFileChange} />
+)}
+</Form.Item>
+              </div>
+              <div className="learnLanguageSelectedLanguages">
+              <p className="inputTitle marginBottom">Native Language</p>
+              <SelectLearningLang  name={"Native Language"} dataLanguages={lerningLangAllData} onDelete={(id) => {
+                dispatch(removeSelectedLanguagesItem(id));
+              }} />
+            </div>
+            </div>
+
               <Form.Item>
                 <CustomAntdButton
                   title="Update"
@@ -229,13 +238,7 @@ export const LearningLanguageUpdate = () => {
                   />
                 </div>
               </Form.Item>
-            </div>
-            <div className="learnLanguageSelectedLanguages">
-              <p className="inputTitle marginBottom">Native Language</p>
-              <SelectLearningLang  name={"Native Language"} dataLanguages={lerningLangAllData} onDelete={(id) => {
-                dispatch(removeSelectedLanguagesItem(id));
-              }} />
-            </div>
+          
           </div>
         </Form>
       </div>

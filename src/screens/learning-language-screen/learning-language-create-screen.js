@@ -16,7 +16,7 @@ import {
   removeAllLanguages,
   learnLanguageCreateLoading,
 } from "../../store/slices";
-import {  Success } from "../../components";
+import { Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
 import { beforeUpload } from "../utils/helper";
 import { page0, page12 } from "../../constants/constants";
@@ -42,7 +42,7 @@ export const LearningLanguageCreateScreen = () => {
   const [categoryShow, setCategoryShow] = useState();
 
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
   }, []);
 
   const onFinish = (values) => {
@@ -131,67 +131,56 @@ export const LearningLanguageCreateScreen = () => {
         // className="formAntd"
         >
           <div className="createLearningLangRow">
-            <div className="rightSection">
-              {messageError && <CustomErrorSection error={messageError} onTab={onRemove} />}
-              <p className="nativeLanguageTitle">Add Learning Language</p>
-              <div className="createScreenRowInputs">
-                <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
-                <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
-              </div>
-              <Form.Item
-                name="learningLanguageImage"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                {previewImgUrl?.length ?
-            <div className="imgae_upload_design">
-              <div className="remove_icon_div">
-                <img
-                  className="remove_button"
-                  src={remove_icon}
-                  onClick={() => {
-                    setPreviewimgUrl("")
-                    setCategoryShow(null);
-                  }}
-                />
-              </div>
-              <div className="imgae_name">
-                <div className="image_wrapper">
-                  <p>{selectedImage?.name}</p>
-                  <img className="imageItem" src={previewImgUrl} />
+            <div className="updateSection">
+              <div>
+                {messageError && <CustomErrorSection error={messageError} onTab={onRemove} />}
+                <p className="nativeLanguageTitle">Add Learning Language</p>
+                <div className="createScreenRowInputs">
+                  <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
+                  <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
                 </div>
-              </div>
-            </div> : <ImageUpload onChange={handleFileChange} />}
-                {/* <Upload
-                  onChange={handleChange}
-                  beforeUpload={beforeUpload}
-                  {...props}
-                  maxCount={1}
-                  listType="picture"
-                  className="upload-list-inline"
+                <Form.Item
+                  name="learningLanguageImage"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  {learningLanguageFile && showLearningLanguageUpload ? null : (
-                   <CustomUploadElement title={"Upload Language Icon"} />
-
-                  )}
-                </Upload> */}
-              </Form.Item>
-              <Form.Item>
-                {contextHolder}
-                <div className="addButton">
-                  <CustomAntdButton loading={languageLoading} title="Add" background={Colors.PURPLE} />
-                </div>
-              </Form.Item>
+                  {previewImgUrl?.length ?
+                    <div className="imgae_upload_design">
+                      <div className="remove_icon_div">
+                        <img
+                          className="remove_button"
+                          src={remove_icon}
+                          onClick={() => {
+                            setPreviewimgUrl("")
+                            setCategoryShow(null);
+                          }}
+                        />
+                      </div>
+                      <div className="imgae_name">
+                        <div className="image_wrapper">
+                          <p>{selectedImage?.name}</p>
+                          <img className="imageItem" src={previewImgUrl} />
+                        </div>
+                      </div>
+                    </div> : <ImageUpload onChange={handleFileChange} />}
+                </Form.Item>
+              </div>
+              <div className="learnLanguageSelectedLanguages">
+                <p className="selectLanguageTitle">Native Language</p>
+                <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+                  dispatch(removeLanguagesItem(id));
+                }} />
+              </div>
             </div>
-            <div className="learnLanguageSelectedLanguages">
-              <p className="selectLanguageTitle">Native Language</p>
-              <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
-                dispatch(removeLanguagesItem(id));
-              }} />
-            </div>
+            <Form.Item>
+              {contextHolder}
+              <div className="addButton">
+                <CustomAntdButton loading={languageLoading} title="Add" background={Colors.PURPLE} />
+              </div>
+            </Form.Item>
           </div>
         </Form>
       </div>

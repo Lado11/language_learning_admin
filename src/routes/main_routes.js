@@ -60,7 +60,7 @@ export const MyRoutes = () => {
           <Route element={<CustomHeader />}>
             <Route path="/" element={<HomeScreen />} />
             <Route element={<CustomSidebar />}>
-              <Route path="/dashboard" element={<DashboardScreen />} />
+              <Route path="/" element={<DashboardScreen />} />
               <Route path="/statistics" element={<StatisticsScreen />} />
               <Route
                 path="/native-language"

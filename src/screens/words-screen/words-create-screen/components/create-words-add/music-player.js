@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import play from "../../../../../assets/images/play.png"
-import WavesurferPlayer from '@wavesurfer/react'
 
 const formWaveSurferOptions = ref => ({
   container: ref,
@@ -105,3 +104,5 @@ export function Waveform({ url }) {
 //     </>
 //   )
 // }
+
+

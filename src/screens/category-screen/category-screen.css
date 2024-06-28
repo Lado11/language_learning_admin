@@ -162,6 +162,7 @@
 .category_row_input_user .ant-form-item {
   width: 100% !important;
   max-width: 206px;
+  /* border: 1px solid; */
 }
 .update_category_input{
   display: flex;
@@ -177,6 +178,20 @@
 
 .ant-form-item-explain-error{
   width: 220px !important;
+}
+
+@media only screen and (max-width: 465px) {
+  .category_row_input_user .ant-form-item {
+    width: 100% !important;
+    max-width: 420px;
+  }
+  .category_row_input_user .ant-input{
+    width: 100% !important;
+    max-width: 420px;
+  }
+  .left {
+    width: 100%;
+  }
 }
 
 

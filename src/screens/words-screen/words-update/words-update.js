@@ -7,16 +7,13 @@ import CustomModal from "../../../components/custom-modal/custom-modal";
 import { deleteWordsDeleteResponse, getWordsDeleteThunk, wordsDeleteLoading, wordsDeleteResponse } from "../../../store/slices/words/delete_words-slice";
 import { Colors } from "../../../assets/colors";
 import { deleteWordUpdateResponse, wordsUpdateLoading, wordsUpdateResponseData, wordsUpdateThunk } from "../../../store/slices/words/update-words-slice";
-import { Form, Upload } from "antd";
-import uploadIcon from "../../../assets/images/uploadImg.png";
+import { Form } from "antd";
 import remove_icon from "../../../assets/images//remove_icon.png"
 import { Waveform } from "../words-create-screen/components/create-words-add/music-player";
-import logo from "../../../assets/images/Item (1).png"
 import { wordlevel } from "../../../data";
 import { categoryGetThunk, getCategoryGetData, learningLanguages, learningLanguagesThunk } from "../../../store/slices";
 import { useTranslation } from "react-i18next";
 import "./words-update.css"
-import { beforeUpload, props } from "../../utils/helper";
 import logoVoice from "../../../assets/images/Vector (4).png"
 import { ShowImage } from "../../category-screen/category-update";
 import { ImageUpload } from "../../category-screen/category-screen-create-from";
@@ -42,7 +39,6 @@ export const WordsUpdate = () => {
     const [audio, setAudio] = useState();
     const [categoryShow, setCategoryShow] = useState();
     const wordsIdData = useSelector(wordsIdResponse)?.data;
-    console.log(wordsIdData,"log data");
     const wordsIdLoad = useSelector(wordsIdLoading);
     const wordDeleteData = useSelector(wordsDeleteResponse);
     const deleteWordLoading = useSelector(wordsDeleteLoading);
@@ -180,7 +176,7 @@ export const WordsUpdate = () => {
         if (categoryImageResponse) {
             setImageUrls((prevUrls) => ({
                 ...prevUrls,
-                [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+                [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
             }));
         }else if(categoryImageResponse){
                 setVoiceUrls((prevUrls) => ({
@@ -225,8 +221,9 @@ export const WordsUpdate = () => {
                 >
 
                     <div className="update-words-section">
-                        <div>
-                            <p>Update</p>
+                          <div className="update-words-row">
+                          <div>
+                          <p>Update</p>
                             <div className="addWordsFirstSelect bigSelect">
                                 <CustomAntdSelect
                                     rules={true}
@@ -356,25 +353,9 @@ export const WordsUpdate = () => {
                                     <ImageUpload onChange={handleFileChange} />
                                 )}
                             </Form.Item>
+                          </div>
 
-
-
-                            <CustomAntdButton title="Update"
-                                loading={updateWordsLoading}
-                                background={Colors.PURPLE} />
-                            <div className="deleteButton">
-
-                                <CustomAntdButtonDelete
-                                    loading={deleteWordLoading}
-                                    title="Delete"
-                                    background={Colors.GRAY_COLOR}
-                                    onClick={() => {
-                                        showModal();
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="lerning-language-section">
+                            <div className="lerning-language-section">
                             {learningLanguageWordSelectedValue?.nativeLanguages?.length && <p>Translate</p>}
                             <div>
                                 {learningLanguageWordSelectedValue?.nativeLanguages?.length ?
@@ -417,7 +398,23 @@ export const WordsUpdate = () => {
                                 )
                             })}
                         </div>
-                    </div>
+                          </div>
+
+                            <CustomAntdButton title="Update"
+                                loading={updateWordsLoading}
+                                background={Colors.PURPLE} />
+                            <div className="deleteButton">
+                                <CustomAntdButtonDelete
+                                    loading={deleteWordLoading}
+                                    title="Delete"
+                                    background={Colors.GRAY_COLOR}
+                                    onClick={() => {
+                                        showModal();
+                                    }}
+                                />
+                            </div>
+                        </div>
+                       
 
                 </Form>
             </div>}

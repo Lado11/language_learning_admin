@@ -21,16 +21,18 @@ export const LearningLanguageScreen = () => {
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
+
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
   };
+
   const learningUpdate = (id) => {
     dispatch(learnLanguageByIdThunk(id));
     navigate(`/learning-language/${id}`);
   };
  
   useEffect(() => {
-    dispatch(learningLanguagesThunk(ConstPagiantion(page0,page12)));
+    !learningLanguagesData?.data?.list?.length && dispatch(learningLanguagesThunk(ConstPagiantion(page0,page12)));
   }, []);
 
 
@@ -39,7 +41,7 @@ export const LearningLanguageScreen = () => {
 
   useEffect(() => {
     // Preload image URLs
-    if (learningLanguagesData?.data?.list?.length > 0) {
+    if (learningLanguagesData?.data?.list?.length) {
       learningLanguagesData?.data?.list?.forEach((item) => {
        item?.nativeLanguages?.forEach((lang) => {
         fetchImage(lang.imageFile);
@@ -54,9 +56,6 @@ export const LearningLanguageScreen = () => {
     }
   };
 
-  const getImage = (url) => {
-    url?.forEach((image)=> imageUrls[image?.imageFile])
-  }
 
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
@@ -93,7 +92,8 @@ export const LearningLanguageScreen = () => {
                     return (
                       <div className="pointer" key={index}>
                         <LearningLanguageItemCard
-                          icon={getImage(lang?.nativeLanguages)}
+                          imageUrls={imageUrls}
+                          icon={imageUrls[lang?.imageFile]}
                           data={lang?.nativeLanguages}
                           title={lang.name}
                           count={learningLanguagesData?.data?.total}

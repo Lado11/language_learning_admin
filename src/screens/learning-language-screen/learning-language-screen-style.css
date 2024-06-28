@@ -12,8 +12,10 @@
   color: #7D8FB3;
 }
 .rightSection{
-  width: 100%;
-  max-width: 420px;
+
+display: flex;
+flex-direction: row;
+justify-content: space-between;
 }
 
 .ant-select .ant-select-arrow{
@@ -45,7 +47,13 @@ flex-direction: row;
 .formAntd{
   width: 100% !important;
 }
+.update-language-right-section{
+  width: 100%;
+}
 .updateSection{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
 }
 .learningLanguageScreenLoadingDiv {
@@ -55,8 +63,7 @@ flex-direction: row;
 }
 .createLearningLangRow{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
 }
 .learnLanguageUpdateScreenMainDiv {
@@ -88,7 +95,8 @@ flex-direction: row;
 }
 
 .learnLanguageSelectedLanguages {
-  width: 44%;
+  width: 100%;
+  max-width: 420px;
 }
 .CustomSpinUpdate{
   display: flex;
@@ -109,11 +117,24 @@ flex-direction: row;
   border-radius: 10px;
 }
 
+.selectLanguageValuesDivItem:nth-child(-n +3){
+  margin-right: 12px;
+
+}
 @media screen and (max-width: 1440px) {
   .learnLanguageUpdateScreenMainDiv {
     padding: 60px 40px 30px 40px;
   }
 }
+@media screen and (max-width: 1300px) {
+  .updateSection{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    width: 100%;
+  }
+}
+
 
 @media screen and (max-width: 1024px) {
   .learnLanguageUpdateScreenMainDiv {
@@ -151,13 +172,17 @@ flex-direction: row;
     align-items: center;
     padding: 60px 10px 30px 10px;
   }
-  .learningLanguageUpdateFormDiv {
-    width: 80%;
+  .selectedNativeItem{
+    width: 100%;
+    max-width: 420px;
   }
+ 
   .learnLanguageSelectedLanguages {
     display: flex;
-    justify-content: center;
-    width: 80%;
+    flex-direction: column;
+  }
+  .selectLanguageValuesDivItem .selectLanguageValuesDivItem{
+    width: 100%;
   }
   .selectLanguageMainDiv {
     width: 100%;

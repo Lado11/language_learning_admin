@@ -58,14 +58,20 @@
 .inputLeft{
   margin-left: 15px;
 }
+
 .bigSelect .ant-select-selection-item{
   color: #7D8FB3 !important;
 
 }
 .bigSelect .ant-select-selector{
-  width: 420px !important;
+  width: 100% !important;
+  max-width: 420px;
   background-color: #F7F8FA !important;
   border:none !important;
+}
+.bigSelect .ant-form-item  {
+  width: 100% !important;
+  max-width: 420px;
 }
 .addButtonDiv{
   margin-top: 15px;
@@ -89,9 +95,7 @@
   background-color: white !important;
   border: 1px solid #eaecf0 !important;
 }
-.bigSelect .ant-form-item  {
-  width: 420px !important;
-}
+
 .createWordsRow .ant-form-item {
   width: 202px !important;
 }
@@ -136,7 +140,8 @@
 
 }
 .file-upload {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   display: flex;
   justify-content: start;
   align-items: start;

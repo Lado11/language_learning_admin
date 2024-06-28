@@ -1,6 +1,11 @@
  .uploadExel{
-    width: 425px;
-height: 60px ;
+   width: 425px;
+  height: 60px ;
+}
+.addWordExel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .addWordExel .ant-select{
@@ -22,10 +27,30 @@ height: 60px ;
   .wordExelAdd{
     width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
   }
 
 .addWordExel  .ant-upload-list-item{
   height: 60px ;
     }
+
+    @media only screen and (max-width: 1024px) {
+      .addWordExel {
+flex-direction: column;
+      }
+    
+        .ant-select.ant-select-in-form-item
+      {
+
+width: 100% !important;
+max-width: 420px !important;
+      }
+     
+    }
+    @media only screen and (max-width: 425px) {
+
+    .uploadExel{
+      width: 100%;
+      max-width: 420px;
+    }
+  }

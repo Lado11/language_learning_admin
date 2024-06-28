@@ -32,9 +32,9 @@
   position: relative;
   width: 100%;
 
-  max-width: 190px;
+  max-width: 195px;
   height: 60px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   margin-top: 16px;
   border-radius: 10px;
 }

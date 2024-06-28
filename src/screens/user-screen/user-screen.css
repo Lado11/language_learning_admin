@@ -331,6 +331,15 @@ h2 {
   }
 }
 @media  screen and (max-width: 425px) {
+    .category_row_input_user .ant-form-item {
+      width: 100% !important;
+      max-width: 420px;
+    }
+    .left .antd_custom_select_user{
+      width: 100% !important;
+      max-width: 420px !important;
+    }
+  
   
   .category_row_input_user{
     display: flex;

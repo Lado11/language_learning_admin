@@ -76,7 +76,7 @@ const WordsFilterPopover = ({
           </div>
           <div className="radioItem">
             <p className="popeverTitle">Category</p>
-            <Radio.Group onChange={onChangeCategory} value={valueCategory}>
+            <Radio.Group key={3} onChange={onChangeCategory} value={valueCategory}>
               <div className="statusGroupWords">
                 {categoryData?.map((option) => {
                   return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
@@ -89,7 +89,7 @@ const WordsFilterPopover = ({
         <hr className="poepverHr" />
         <p className="popeverTitle">Level</p>
 
-        <Radio.Group onChange={onChangeLevel} value={valueLevel}>
+        <Radio.Group key={4} onChange={onChangeLevel} value={valueLevel}>
           <div className="statusGroup">
             {WordsLevelData?.map((option) => {
               return <Radio className="radio" key={option?.key} value={option?.key}><p className="optiontitle">{option.title}</p></Radio>
@@ -111,7 +111,7 @@ const WordsFilterPopover = ({
     </Popover>
   );
 };
-const WordsListItem = ({ words, onClick, key,icon }) => {
+const WordsListItem = ({imageUrls, words, onClick, key,icon }) => {
   const getWordsLevelLabel = (status) => {
     switch (status) {
       case WordsLevel.BEGINNER:
@@ -148,7 +148,7 @@ const WordsListItem = ({ words, onClick, key,icon }) => {
         >
           {words?.translates.map((item, index) => {
             return <div key={index}>
-              <Avatar src={icon} />
+              <Avatar src={imageUrls[item.nativeLanguageDetails.imageFile]} />
             </div>
           })}
         </Avatar.Group>
@@ -183,7 +183,9 @@ export const WordsScreen = () => {
     // Preload image URLs
     if (wordsResponse?.data?.list?.length) {
       wordsResponse?.data?.list?.forEach((item) => {
-        fetchImage(item.imageFile);
+        item?.translates?.forEach((image)=>{
+          fetchImage(image?.nativeLanguageDetails?.imageFile);
+        })
       });
     }
   }, [wordsResponse?.data?.list]);
@@ -254,7 +256,7 @@ export const WordsScreen = () => {
   }
 
   useEffect(() => {
-    dispatch(getWordsThunk(ConstPagiantion(page0, page12)));
+    !wordsResponse?.data?.list?.length && dispatch(getWordsThunk(ConstPagiantion(page0, page12)));
   }, []);
 
 
@@ -344,7 +346,7 @@ export const WordsScreen = () => {
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
                       return (
-                        <WordsListItem icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
+                        <WordsListItem imageUrls={imageUrls} icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
                     }
                     )}
