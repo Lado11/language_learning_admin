@@ -33,8 +33,8 @@ export const UploadScreenAddFields = () => {
 
   return (
     <div className="wordsScreenAddFields">
-      <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/upload/create-wordsfrom-excel")} />
-      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/upload/update-wordsfrom-excel")} />
+      <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/upload/create-words-from-excel")} />
+      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/upload/update-words-from-excel")} />
     </div>
   );
 };
