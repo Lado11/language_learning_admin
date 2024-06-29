@@ -1,4 +1,6 @@
-import { Routes, Route, Navigate, useParams } from "react-router-dom";
+import { Routes, Route, Navigate, useParams, useLocation, Outlet } from "react-router-dom";
+import { redirect, } from "react-router-dom";
+
 import {
   CategoryScreen,
   HomeScreen,
@@ -38,7 +40,14 @@ export const MyRoutes = () => {
   const token = localStorage.getItem("token");
   const reduxToken = useSelector(getToken);
   let { id } = useParams();
+  const location = useLocation().pathname
 
+
+  const PublicRoutes = () => {
+  
+    return location === "/" ? <Navigate to={'/dashboard'} replace /> : <Outlet />
+  }
+  
   return (
     <>
       {!token && !reduxToken ? (
@@ -59,53 +68,57 @@ export const MyRoutes = () => {
         <Routes>
           <Route element={<CustomHeader />}>
             <Route element={<CustomSidebar />}>
-              <Route path="/dashboard" element={<DashboardScreen />} />
-              <Route path="/statistics" element={<StatisticsScreen />} />
-              <Route
-                path="/native-language"
-                element={<NativeLanguageScreen />}
-              />
-              <Route
-                path="/native-language-create"
-                element={<NativeLanguageCretae />}
-              />
-              <Route
-                path="/learning-language"
-                element={<LearningLanguageScreen />}
-              />
-              <Route
-                path="/native-language-create"
-                element={<NativeLanguageCretae />}
-              />
-              <Route path="/category" element={<CategoryScreen />} />
-              <Route path="/category/:id" element={<CategoryUpdate />} />
-              <Route path="/category-create" element={<CategoryCretae />} />
-              <Route path="/user" element={<UserScreen />} />
-              <Route path="/feedback" element={<FeedbackScreen />} />
-              <Route path="/feadback/:id" element={<FeadBackMoreScreen />}/>
-              <Route path="/notification" element={<NotificationScreen />} />
-              <Route path="/files" element={<FilesScreen />} />
-              <Route path="/user-create" element={<UserCreateScreen />} />
-              <Route path="/user/:id" element={<UserScreenUpdate />} />
-              <Route
-                path="/learning-language-create"
-                element={<LearningLanguageCreateScreen />}
-              />
-              <Route path="native-language/:id" element={<UpdateNativeLanguage />} />
-              <Route
-                path="/learning-language/:id"
-                element={<LearningLanguageUpdate />}
-              />
-       
-             <Route path="/upload/:id" element={<UplaodProcessScreen />}/>
+                <Route path="/" element={<PublicRoutes />}/>
+                <Route path="/dashboard" element={<DashboardScreen />} />
 
-              <Route path="/words" element={<WordsScreen />} />
-              <Route path="/upload" element={<UplaodScreen />} />
-              <Route path="/create-word" element={<WordsCreateScreen />} />
-              <Route path="/create-word-exel" element={<AddWordExel />} />
-              <Route path="/update-word-exel" element={<UpdateExelFromWord />}/>
-              <Route path="/words/:id" element={<WordsUpdate />}/>
+                <Route path="/statistics" element={<StatisticsScreen />} />
+                <Route
+                  path="/native-language"
+                  element={<NativeLanguageScreen />}
+                />
+                <Route
+                  path="/native-language-create"
+                  element={<NativeLanguageCretae />}
+                />
+                <Route
+                  path="/learning-language"
+                  element={<LearningLanguageScreen />}
+                />
+                <Route
+                  path="/native-language-create"
+                  element={<NativeLanguageCretae />}
+                />
+                <Route path="/category" element={<CategoryScreen />} />
+                <Route path="/category/:id" element={<CategoryUpdate />} />
+                <Route path="/category-create" element={<CategoryCretae />} />
+                <Route path="/user" element={<UserScreen />} />
+                <Route path="/feedback" element={<FeedbackScreen />} />
+                <Route path="/feadback/:id" element={<FeadBackMoreScreen />} />
+                <Route path="/notification" element={<NotificationScreen />} />
+                <Route path="/files" element={<FilesScreen />} />
+                <Route path="/user-create" element={<UserCreateScreen />} />
+                <Route path="/user/:id" element={<UserScreenUpdate />} />
+                <Route
+                  path="/learning-language-create"
+                  element={<LearningLanguageCreateScreen />}
+                />
+                <Route path="native-language/:id" element={<UpdateNativeLanguage />} />
+                <Route
+                  path="/learning-language/:id"
+                  element={<LearningLanguageUpdate />}
+                />
+
+                <Route path="/upload/:id" element={<UplaodProcessScreen />} />
+
+                <Route path="/words" element={<WordsScreen />} />
+                <Route path="/upload" element={<UplaodScreen />} />
+                <Route path="/create-word" element={<WordsCreateScreen />} />
+                <Route path="/create-word-exel" element={<AddWordExel />} />
+                <Route path="/update-word-exel" element={<UpdateExelFromWord />} />
+                <Route path="/words/:id" element={<WordsUpdate />} />
+
             </Route>
+            <Route path="*" element={<Navigate to={"/"} />} />
           </Route>
         </Routes>
       )}

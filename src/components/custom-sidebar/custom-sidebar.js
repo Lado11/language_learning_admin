@@ -14,19 +14,7 @@ export const CustomSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  let itemName;
 
-  if (localStorage.getItem("item")) {
-    itemName = localStorage.getItem("item");
-  } else {
-    itemName = customSideBarData[0].title;
-  }
-
-  useEffect(() => {
-    if (!itemName) {
-      localStorage.setItem("item", customSideBarData[0].title);
-    }
-  }, [itemName]);
 
   return (
     <div className="projectOutlet">
@@ -47,7 +35,7 @@ export const CustomSidebar = () => {
                 color={ item.color}
                 title={t(`${item.title}`)}
                 icon={item.icon}
-                isSelected={ location.includes(item.path) || location == item.path }
+                isSelected={ location.includes(item.path)  }
               />
             </div>
           );
