@@ -13,7 +13,6 @@ import { CustomSpin } from "../../components/custom-spin/custom-spin";
 import { page0, page6 } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import {  filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
-
 export const CategoryScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

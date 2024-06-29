@@ -4,6 +4,7 @@ import { Colors } from "../../assets/colors/colors";
 import { CustomSpin } from "../custom-spin";
 
 export const ImageItem = ({ icon, title, loading, count }) => {
+
   return (
     <>
       <div
@@ -22,9 +23,7 @@ export const ImageItem = ({ icon, title, loading, count }) => {
           <p className="languageItem count">{count}</p>
         </div>}
         </div>
-       
         {loading || !icon ? <CustomSpin color={Colors.GRAY_COLOR} size={37} /> : <img className="itemImage" src={icon} alt="image"/>}
-
       </div>
     </>
   );

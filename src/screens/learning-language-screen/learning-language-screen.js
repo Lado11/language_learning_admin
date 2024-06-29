@@ -117,3 +117,13 @@ export const LearningLanguageScreen = () => {
     </div>
   );
 };
+ {/* <LearningLanguageItemCard
+                          imageUrls={imageUrls}
+                          icon={imageUrls[lang?.imageFile]}
+                          data={lang?.nativeLanguages}
+                          title={lang.name}
+                          count={learningLanguagesData?.data?.total}
+                          onTap={() => {
+                            learningUpdate(lang?._id);
+                          }}
+                        /> */}

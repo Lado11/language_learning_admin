@@ -197,6 +197,7 @@ export const FilesScreen = () => {
           <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} /> */}
         </div>
       {/* <div className="filesItemDiv">
+
         {customFilesData.map((item,index) => {
           return (
               <CustomCardTile
@@ -210,6 +211,7 @@ export const FilesScreen = () => {
         })}
       </div> */}
       {/* <div>
+
         {customFilesDirectoryData.map((item,index) => {
           return (
             <div className="filesDirection" key={index+1}>
@@ -219,6 +221,7 @@ export const FilesScreen = () => {
           );
         })}
       </div> */}
+
     </div>
   );
 };

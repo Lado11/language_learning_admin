@@ -4,6 +4,7 @@ import { Colors } from "../../assets/colors/colors";
 import { CustomSpin } from "../custom-spin";
 
 export const CustomCardItem = ({ icon, title,loading }) => {
+
   return (
     <div className="customCardItem" style={{ backgroundColor: Colors.WHITE }}>
       <p className="customCardItemTitle" style={{ color: Colors.LIGHT_GRAY }}>
