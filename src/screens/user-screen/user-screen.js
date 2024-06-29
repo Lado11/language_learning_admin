@@ -250,7 +250,7 @@ export const UserScreen = () => {
         <CustomAddNew
           title={"Add New User"}
           onClick={() => {
-            navigate("/user-create");
+            navigate("/user/create");
           }}
         />
         <p className="screensTitleStyle">{t("USER")}</p>

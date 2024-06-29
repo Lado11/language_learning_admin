@@ -36,7 +36,7 @@ import { listItemCountForShow } from "../../constants/constants";
 import { ShowImage } from "../category-screen/category-update";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
@@ -49,7 +49,6 @@ export const LearningLanguageUpdate = () => {
   const formData = new FormData();
   const [learningLanguageFile, setLearningLanguageFile] = useState();
     useState();
-  const updateBool = useSelector(getUpdatedLearnLanguageBool);
   const learningLanguageData = useSelector(getLearnLanguageByIdResponse);
   const deleteLerningLoading = useSelector(learnLanguageDeleteLoading);
   const updateLearningLoading = useSelector(getUpdatedLearnLanguageLoading);
@@ -116,6 +115,7 @@ export const LearningLanguageUpdate = () => {
   
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const learnignLanguageImageUpdate = useSelector(getfilesGetIdloading);
 
 
   useEffect(() => {
@@ -204,7 +204,7 @@ export const LearningLanguageUpdate = () => {
       setCategoryShow(null);
     }} />
 ) : learningData?.imageFile && !previewImgUrl ? (
-  <ShowImage title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
+  <ShowImage  loading={learnignLanguageImageUpdate} title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
     setPreviewimgUrl(".")
     setCategoryShow(null);
   }} />

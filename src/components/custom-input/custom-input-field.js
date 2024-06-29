@@ -30,7 +30,7 @@ export const CustomInputField = ({
         <p className="customInputLabel">{label}</p>
         {isForgot ? (
           <a
-            href="/sendEmail"
+            href="/recover"
             style={{ color: Colors.PURPLE }}
             className="customInputLabel customInputForgotLabel"
           >

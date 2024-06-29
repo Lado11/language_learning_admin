@@ -24,7 +24,7 @@ export const ResetPasswordEmail = () => {
 
   useEffect(() => {
     if (sendEmailResponseData?.success) {
-      navigate("/emailVerafication");
+      navigate("/rescover/code");
     }
   }, [sendEmailResponseData?.success]);
 

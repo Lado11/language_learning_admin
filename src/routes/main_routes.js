@@ -53,15 +53,12 @@ export const MyRoutes = () => {
       {!token && !reduxToken ? (
         <Routes>
           <Route path="/" element={<LoginScreen />} />
-          <Route path="/sendEmail" element={<ResetPasswordEmail />} />
-          <Route path="/resetPassword" element={<ResetSendPasswordScreen />} />
+          <Route path="/recover" element={<ResetPasswordEmail />} />
+          <Route path="/recover/password" element={<ResetSendPasswordScreen />} />
           <Route
-            path="/emailVerafication"
+            path="/rescover/code"
             element={<EmailVeraficationScreen />}
           />
-          <Route path="/" element={<LoginScreen />} />
-          <Route path="/resetPassword" element={<ResetSendPasswordScreen />} />
-          <Route path="/sendEmail" element={<ResetSendPasswordScreen />} />
           <Route path="*" element={<Navigate to={"/"} />} />
         </Routes>
       ) : (
@@ -76,45 +73,43 @@ export const MyRoutes = () => {
                   path="/native-language"
                   element={<NativeLanguageScreen />}
                 />
+                <Route path="native-language/:id" element={<UpdateNativeLanguage />} />
                 <Route
-                  path="/native-language-create"
+                  path="/native-language/create"
                   element={<NativeLanguageCretae />}
                 />
                 <Route
                   path="/learning-language"
                   element={<LearningLanguageScreen />}
                 />
-                <Route
-                  path="/native-language-create"
-                  element={<NativeLanguageCretae />}
+                 <Route
+                  path="/learning-language/create"
+                  element={<LearningLanguageCreateScreen />}
                 />
+                <Route
+                  path="/learning-language/:id"
+                  element={<LearningLanguageUpdate />}
+                />
+               
                 <Route path="/category" element={<CategoryScreen />} />
                 <Route path="/category/:id" element={<CategoryUpdate />} />
-                <Route path="/category-create" element={<CategoryCretae />} />
+                <Route path="/category/create" element={<CategoryCretae />} />
                 <Route path="/user" element={<UserScreen />} />
                 <Route path="/feedback" element={<FeedbackScreen />} />
                 <Route path="/feedback/:id" element={<FeadBackMoreScreen />} />
                 <Route path="/notification" element={<NotificationScreen />} />
                 <Route path="/files" element={<FilesScreen />} />
-                <Route path="/user-create" element={<UserCreateScreen />} />
+                <Route path="/user/create" element={<UserCreateScreen />} />
                 <Route path="/user/:id" element={<UserScreenUpdate />} />
-                <Route
-                  path="/learning-language-create"
-                  element={<LearningLanguageCreateScreen />}
-                />
-                <Route path="native-language/:id" element={<UpdateNativeLanguage />} />
-                <Route
-                  path="/learning-language/:id"
-                  element={<LearningLanguageUpdate />}
-                />
+               
 
                 <Route path="/upload/:id" element={<UplaodProcessScreen />} />
 
                 <Route path="/words" element={<WordsScreen />} />
                 <Route path="/upload" element={<UplaodScreen />} />
-                <Route path="/words-create" element={<WordsCreateScreen />} />
-                <Route path="/upload-create-exel" element={<AddWordExel />} />
-                <Route path="/upload-update-exel" element={<UpdateExelFromWord />} />
+                <Route path="/words/create" element={<WordsCreateScreen />} />
+                <Route path="/upload/create-exel" element={<AddWordExel />} />
+                <Route path="/upload/update-exel" element={<UpdateExelFromWord />} />
                 <Route path="/words/:id" element={<WordsUpdate />} />
 
             </Route>

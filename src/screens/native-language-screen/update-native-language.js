@@ -29,7 +29,7 @@ import CustomModal from "../../components/custom-modal/custom-modal";
 import { Success, Error } from "../../components/custom-message/custom-message";
 import { ShowImage } from "../category-screen/category-update";
 import { fileToDataString } from "../../helper/file-build";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 
 export const UpdateNativeLanguage = () => {
@@ -115,7 +115,7 @@ export const UpdateNativeLanguage = () => {
 
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
-
+const nativeLanguageImageUpdate = useSelector(getfilesGetIdloading);
 
   useEffect(() => {
     // Preload image URLs
@@ -194,7 +194,7 @@ export const UpdateNativeLanguage = () => {
                   setCategoryShow(null);
                 }} />
             ) : nativeLanguageData?.imageFile && !previewImgUrl ? (
-              <ShowImage title={nativeLanguageData?.imageFile?.description} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
+              <ShowImage loading={nativeLanguageImageUpdate} title={nativeLanguageData?.imageFile?.description} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
                 setPreviewimgUrl(".")
                 setCategoryShow(null);
               }} />

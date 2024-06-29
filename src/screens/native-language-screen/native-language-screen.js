@@ -69,7 +69,7 @@ export const NativeLanguageScreen = () => {
           <CustomAddNew
             title={"Add New Language"}
             onClick={() => {
-              navigate("/native-language-create");
+              navigate("/native-language/create");
             }}
           />
           <p className="category-title">Native Language</p>

@@ -24,7 +24,7 @@ export const EmailVeraficationScreen = () => {
 
   useEffect(() => {
     if (sendCodeResponse?.data?.recoveryCode === true) {
-      navigate("/resetPassword");
+      navigate("/recover/password");
     }
   }, [sendCodeResponse?.data?.recoveryCode]);
 

@@ -23,7 +23,7 @@ export const LearningLanguageScreen = () => {
   const imageLoading  = useSelector(getfilesGetIdloading);
 
   const navigateToCreateScreen = () => {
-    navigate("/learning-language-create");
+    navigate("/learning-language/create");
   };
 
   const learningUpdate = (id) => {

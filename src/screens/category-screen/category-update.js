@@ -18,11 +18,11 @@ import {
 } from "../../store/slices";
 import { categoryGetIdThunk, getCategoryGetIdResponse, getCategoryGetIdloading } from "../../store/slices/category/get-id-category";
 import CustomModal from "../../components/custom-modal/custom-modal";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 import { fileToDataString } from "../../helper/file-build";
 import { ImageUpload } from "./category-screen-create-from";
 
-export const ShowImage = ({ title, src, onClick }) => {
+export const ShowImage = ({ title, src, onClick ,loading}) => {
   return (
     <div className="imgae_upload_design">
       <div className="remove_icon_div">
@@ -32,10 +32,10 @@ export const ShowImage = ({ title, src, onClick }) => {
           onClick={onClick}
         />
       </div>
-      <div className="imgae_name">
+      {loading ? <CustomSpin color={Colors.GRAY_COLOR} size={37}/> :<div className="imgae_name">
         <p>{title}</p>
         <img className="imageItem" src={src} />
-      </div>
+      </div>}
     </div>
   )
 }
@@ -105,7 +105,7 @@ export const CategoryUpdate = () => {
 
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
-
+const categoryImageLoading = useSelector(getfilesGetIdloading)
 
   useEffect(() => {
     // Preload image URLs
@@ -186,7 +186,7 @@ export const CategoryUpdate = () => {
                     setCategoryShow(null);
                   }} />
               ) : nativeLanguageData?.imageFile && !previewImgUrl ? (
-                <ShowImage title={nativeLanguageData?.imageFile?.description} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
+                <ShowImage title={nativeLanguageData?.imageFile?.description} loading={categoryImageLoading} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
                   setPreviewimgUrl(".")
                   setCategoryShow(null);
                 }} />

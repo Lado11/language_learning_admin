@@ -61,7 +61,7 @@ const categoryUpdate = (id) => {
         <CustomAddNew
           title="Add New Category"
           onClick={() => {
-            navigate('/category-create');
+            navigate('/category/create');
           }}
         />
         <p className="category-title">Category</p>
