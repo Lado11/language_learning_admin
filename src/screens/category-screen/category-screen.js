@@ -22,6 +22,17 @@ export const CategoryScreen = () => {
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
   const categoryImageLoading = useSelector(getfilesGetIdloading);
 
+  const onChangePagination = (current) => {
+    const skip =( current -1 ) * listItemCountForShow;    
+    dispatch(categoryGetThunk(ConstPagiantion(skip, listItemCountForShow)));
+  };
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
   useEffect(() => {
     // Preload image URLs
     if (categoryData?.data?.list?.length) {
@@ -31,11 +42,6 @@ export const CategoryScreen = () => {
     }
   }, [categoryData]);
 
-  const fetchImage = (imageFileId) => {
-    if (!imageUrls[imageFileId]) {
-      dispatch(filesGetIdThunk(imageFileId));
-    }
-  };
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
     if (categoryImageResponse?.data?.url) {
@@ -86,7 +92,7 @@ const categoryUpdate = (id) => {
                 </div>
               )}
               <div className="category-pagination">
-                <CustomPagination length={categoryData?.data?.total} pageLength={listItemCountForShow} />
+                <CustomPagination length={categoryData?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
               </div>
             </>
           )}

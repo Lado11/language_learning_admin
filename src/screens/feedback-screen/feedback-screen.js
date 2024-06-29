@@ -149,13 +149,18 @@ export const FeedbackScreen = () => {
   const [filterStatus, setFilterStatus] = useState(undefined);
   const [currentStatus, setCurrentStatus] = useState();
 
+  const onChangePagination = (current) => {
+    const skip =( current -1 ) * listItemCountForShow;    
+    fetchFilteredData(skip);
+  };
+
   const fetchData = useCallback(() => {
     dispatch(feedBackGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback(() => {
+  const fetchFilteredData = useCallback((skip = 0) => {
     const filterData = {
-      skip: 0,
+      skip: skip,
       limit: listItemCountForShow,
       type: filterType,
       status: filterStatus,
@@ -236,7 +241,7 @@ export const FeedbackScreen = () => {
       </div>
       {!feedBackResponse?.data?.list?.length && !feedBackLoading ? null : (
         <div className="nativeScreenPaginationDiv">
-          <CustomPagination length={feedBackResponse?.data?.total} pageLength={listItemCountForShow} />
+          <CustomPagination length={feedBackResponse?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
         </div>
       )}
     </div>

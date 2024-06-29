@@ -30,9 +30,20 @@ export const LearningLanguageScreen = () => {
     dispatch(learnLanguageByIdThunk(id));
     navigate(`/learning-language/${id}`);
   };
+
+  const onChangePagination = (current) => {
+    const skip =( current -1 ) * listItemCountForShow;   
+    dispatch(learningLanguagesThunk(ConstPagiantion(skip,listItemCountForShow))); 
+  };
  
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
   useEffect(() => {
-    !learningLanguagesData?.data?.list?.length && dispatch(learningLanguagesThunk(ConstPagiantion(0,listItemCountForShow)));
+    dispatch(learningLanguagesThunk(ConstPagiantion(0,listItemCountForShow)));
   }, []);
 
 
@@ -47,13 +58,6 @@ export const LearningLanguageScreen = () => {
       });
     }
   }, [learningLanguagesData?.data?.list]);
-
-  const fetchImage = (imageFileId) => {
-    if (!imageUrls[imageFileId]) {
-      dispatch(filesGetIdThunk(imageFileId));
-    }
-  };
-
 
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
@@ -108,7 +112,7 @@ export const LearningLanguageScreen = () => {
                 </div>
               }
               <div className="learningLanguageScreenPaginationDiv">
-                <CustomPagination length={learningLanguagesData?.data?.total} pageLength={listItemCountForShow} />
+                <CustomPagination length={learningLanguagesData?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
               </div>
             </>
           }

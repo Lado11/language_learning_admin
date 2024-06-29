@@ -129,9 +129,19 @@ export const UserScreen = () => {
   const [searchFilter, setSearchFilter] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  useEffect(() => {
-    dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
+  const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
+  const [subscribe, setSubscribe] = useState();
+
+  const [filtterPhone, setFiltterPhone] = useState(undefined);
+  const [phone, setPhone] = useState();
+
+  const [filtterEmail, setFiltterEmail] = useState(undefined);
+  const [email, setEmail] = useState();
+
+  const [filtterRole, setFiltterRole] = useState(undefined);
+  const [role, setRole] = useState();
+
+
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
@@ -154,17 +164,10 @@ export const UserScreen = () => {
     navigate(`/user/${id}`);
   }
 
-  const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
-  const [subscribe, setSubscribe] = useState();
-
-  const [filtterPhone, setFiltterPhone] = useState(undefined);
-  const [phone, setPhone] = useState();
-
-  const [filtterEmail, setFiltterEmail] = useState(undefined);
-  const [email, setEmail] = useState();
-
-  const [filtterRole, setFiltterRole] = useState(undefined);
-  const [role, setRole] = useState();
+  const onChangePagination = (current) => {
+    const skip =( current -1 ) * listItemCountForShow;    
+    fetchFilteredData(skip);
+  };
 
   const onChangeSubscribe = (e) => {
     setSubscribe(e.target.value);
@@ -206,9 +209,9 @@ export const UserScreen = () => {
     dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback(() => {
+  const fetchFilteredData = useCallback((skip = 0) => {
     const filterData = {
-      skip: 0,
+      skip: skip,
       limit: listItemCountForShow,
       isSubscribed: filtterSsubscribe,
       phoneNumberVerified: filtterPhone,
@@ -240,8 +243,7 @@ export const UserScreen = () => {
     fetchData();
   }, [fetchData]);
 
-
-  return (
+ return (
     <div
       className="nativeLanguageScreenMainDiv "
       style={{ backgroundColor: Colors.WHITE }}
@@ -287,7 +289,7 @@ export const UserScreen = () => {
         </div>
         </div>}
         <div className="nativeScreenPaginationDiv">
-          <CustomPagination length={userData?.total} pageLength={5} />
+          <CustomPagination length={userData?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
         </div>
       </div>
 

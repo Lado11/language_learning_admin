@@ -140,6 +140,11 @@ export const UplaodScreen = () => {
         navigate(`/upload/${val}`);
     }
 
+    const onChangePagination = (current) => {
+        const skip =( current -1 ) * listItemCountForShow;   
+        dispatch(wordsExelGetThunk(ConstPagiantion(skip,listItemCountForShow)))
+    };
+
     const handlePopoverOpenChange = (newOpen) => {
         setIsPopoverOpen(newOpen);
     };
@@ -224,7 +229,7 @@ export const UplaodScreen = () => {
                 </div>
             </div>
             {!wordsGetLoading && !wordsGetResponse?.data?.list?.length ? null : <div className="nativeScreenPaginationDiv">
-                <CustomPagination length={wordsGetResponse?.data?.total} pageLength={12} />
+                <CustomPagination length={wordsGetResponse?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
             </div>}
         </div>
     )

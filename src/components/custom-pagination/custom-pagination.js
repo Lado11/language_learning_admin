@@ -7,23 +7,9 @@ import { categoryGetThunk } from "../../store/slices/category/get-category";
 import { getWordsThunk, learningLanguagesThunk, userGetAllThunk } from "../../store/slices";
 import { listItemCountForShow } from "../../constants/constants";
 
-export const CustomPagination = ({length  ,pageLength}) => {
-  const dispatch = useDispatch();
+export const CustomPagination = ({length, pageLength, onChange }) => {
   const pageCount = (length / pageLength) * 10
   const roundNumber = pageCount ? Math.ceil(pageCount) : 1
-  const onChange = (current) => {
-    const skip =( current -1 ) * pageLength;
-    const data = {
-      skip: skip,
-      limit: listItemCountForShow,
-    }
-    
-    dispatch(getWordsThunk(data));
-    dispatch(userGetAllThunk(data));
-    dispatch(learningLanguagesThunk(data));
-    dispatch(categoryGetThunk(data));
-    dispatch(nativeLanguageGetThunk(data));
-  };
 
   return (
     <div>
