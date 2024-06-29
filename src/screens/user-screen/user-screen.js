@@ -11,7 +11,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
-import { UserInfo, UserRole, UserSubscription, columns, dataEmail, dataPhone, dataRole, dataUser } from "../../data";
+import { tableHeaderData, dataEmail, dataPhone, dataRole, dataUser } from "./user-data";
+import { UserInfo, UserRole, UserSubscription } from "./user-typing";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import filterIcon from "../../assets/images/filterIcon.png"
 import { Popover, Radio } from "antd";
@@ -278,7 +279,7 @@ export const UserScreen = () => {
           <CustomSpin size={64} color="gray" />
         </div> : <div> <div className="container">
           <ul className="responsive-table">
-            <TableHeader data={columns} />
+            <TableHeader data={tableHeaderData} />
             {dataList?.map((user, index) => {
               return (
                 <UserListItem key={index}

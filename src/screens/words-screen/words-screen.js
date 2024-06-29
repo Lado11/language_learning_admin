@@ -16,7 +16,6 @@ import {
   wordsLoadingData,
   wordsResponseData,
 } from "../../store/slices";
-import { WordsLevel, customTableColumns } from "../../data";
 import { Popover, Radio } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { getIdWordsThunk } from "../../store/slices/words/getId-words";
@@ -24,9 +23,8 @@ import { TableHeader } from "../../components/custom-table/components/table-head
 import filterIcon from "../../assets/images/filterIcon.png"
 import { listItemCountForShow,} from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { WordsLevelData } from "./words-data";
-import { WordsStatus } from "./words-typing";
-import { getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { WordsLevelData, tableHeaderData } from "./words-data";
+import { WordsLevel, WordsStatus } from "./words-typing";
 
 
 const WordsFilterPopover = ({
@@ -111,7 +109,7 @@ const WordsFilterPopover = ({
     </Popover>
   );
 };
-const WordsListItem = ({count, words, onClick, key,icon }) => {
+const WordsListItem = ({count, words, onClick, key }) => {
   const getWordsLevelLabel = (status) => {
     switch (status) {
       case WordsLevel.BEGINNER:
@@ -179,13 +177,8 @@ export const WordsScreen = () => {
   const nativeLanguageData = useSelector(getNativeGetResponse)?.data?.list
   const categoryData = useSelector(getCategoryGetData)?.data?.list
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [imageUrls, setImageUrls] = useState({});
-  const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
-
-
-
-
+  //es texapoxel filtri mej
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
     if (e.target.value !== "") {
@@ -278,7 +271,7 @@ export const WordsScreen = () => {
     dispatch(learningLanguagesThunk(ConstPagiantion(0, listItemCountForShow)));
     dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
     dispatch(categoryGetThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetchData();
@@ -318,7 +311,7 @@ export const WordsScreen = () => {
         <div className="wordsScreenTable">
           <div className="container">
             <ul className="responsive-table">
-              <TableHeader data={customTableColumns} />
+              <TableHeader data={tableHeaderData} />
               {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
               </div> :
@@ -326,7 +319,7 @@ export const WordsScreen = () => {
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
                       return (
-                        <WordsListItem  count={words?.translates?.length} icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
+                        <WordsListItem  count={words?.translates?.length} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
                     }
                     )}

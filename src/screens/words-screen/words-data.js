@@ -33,4 +33,38 @@ export const WordsLevelData = [
       key: WordsLevel.All,
       title: "All"
     },
-    ]
+]
+
+export const tableHeaderData = [
+  {
+    title: "Word",
+    dataIndex: "word",
+    key: "word",
+  },
+  {
+    title: "Language",
+    dataIndex: "language",
+    key: "language",
+  },
+  {
+    title: "Translate",
+    dataIndex: "translate",
+    key: "translate",
+
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
+  },
+  {
+    title: "Level",
+    dataIndex: "level",
+    key: "level",
+  },
+  {
+    title: "Status",
+    dataIndex: "active",
+    key: "active",
+  },
+];

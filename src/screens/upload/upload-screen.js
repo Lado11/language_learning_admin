@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next";
 import { UploadScreenAddFields } from "../words-screen/components";
 import { CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import { UploadStatus, columnsUpload } from "../../data";
+import { UploadStatus } from "./upload-typing";
+import { tableHeaderData } from "./upload-data";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { wordsExelGetLoading, wordsExelGetResponse, wordsExelGetThunk } from "../../store/slices/words/get-exel-words";
@@ -207,7 +208,7 @@ export const UplaodScreen = () => {
                 />
                 <div className="container">
                     <ul className="responsive-table">
-                        <TableHeader data={columnsUpload} />
+                        <TableHeader data={tableHeaderData} />
                         {wordsGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                             <CustomSpin size={64} color="gray" />
                         </div> :

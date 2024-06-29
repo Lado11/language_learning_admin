@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { DashboardCard } from "./components/dashboard-card";
 import { useTranslation } from "react-i18next";
 import { CustomNoData, CustomSpin } from "../../components";
-import { columns } from "../../data";
+import { tableHeaderData } from "./dashboard-data";
 import { useDispatch, useSelector } from "react-redux";
 import { dashboardGetThunk, getDashboardGetResponse, getDashboardGetloading } from "../../store/slices/dashboard/get-dashboard";
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
@@ -61,7 +61,7 @@ export const DashboardScreen = () => {
             <CustomSpin size={64} color="gray" />
           </div> : <div className="container">
             <ul className="responsive-table">
-              <TableHeader data={columns} />
+              <TableHeader data={tableHeaderData} />
               {!dataList?.length && !userGetLoading ? <CustomNoData /> :
                 dataList?.map((user, index) => {
                   return (

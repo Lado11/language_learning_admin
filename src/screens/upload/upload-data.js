@@ -34,5 +34,37 @@ export const typeUpload = [
       title: "Update words"
     },
   ]
+
+  export const tableHeaderData = [
+    {
+      id: " ID",
+      title: " ID",
+    },
+    {
+      title: "type ",
+      id: "type ",
+      key: "type ",
+    },
+    {
+      title: "Errors",
+      id: "Errors",
+      key: "Errors",
+    },
+    {
+      title: "Succsess / Words",
+      id: "Succsess / Words",
+      key: "Succsess / Words",
+    },
+    {
+      title: "Status",
+      id: "Status",
+      key: "Status",
+    },
+    {
+      title: "Start Date",
+      id: "Start Date",
+      key: "Start Date",
+    },
+  ];
   
   
