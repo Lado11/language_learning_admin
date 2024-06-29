@@ -18,8 +18,8 @@ import logoVoice from "../../../assets/images/Vector (4).png"
 import { ShowImage } from "../../category-screen/category-update";
 import { ImageUpload } from "../../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../../helper/file-build";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../../store/slices/files/get-id-files";
-import { getvoiceGetIdResponse, voiceGetIdThunk } from "../../../store/slices/files/get-id-voice";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../../store/slices/files/get-id-files";
+import { getvoiceGetIdResponse, getvoiceGetIdloading, voiceGetIdThunk } from "../../../store/slices/files/get-id-voice";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
@@ -36,7 +36,6 @@ export const WordsUpdate = () => {
     const [showVoice, setShowVoice] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fileListVoice, setFileListVoice] = useState();
-    const [showCategoryUpload, setCatgeoryShowUpload] = useState();
     const [fileList, setFileList] = useState([]);
     const [learningLanguageWordSelectedValue, setLearningLanguageWordSelectedValue] = useState();
     const [audio, setAudio] = useState();
@@ -45,7 +44,6 @@ export const WordsUpdate = () => {
     const wordsIdLoad = useSelector(wordsIdLoading);
     const wordDeleteData = useSelector(wordsDeleteResponse);
     const deleteWordLoading = useSelector(wordsDeleteLoading);
-    const baseUrl = process.env.REACT_APP_BASE_URL;
     const categoryData = useSelector(getCategoryGetData)?.data?.list;
     const learningLanguagesData = useSelector(learningLanguages);
     const updateWordsResponse = useSelector(wordsUpdateResponseData);
@@ -54,6 +52,7 @@ export const WordsUpdate = () => {
     const [selectedImage, setSelectedImage] = useState();
     const [previewImgUrl, setPreviewimgUrl] = useState("");
     const voiceResponse = useSelector(getvoiceGetIdResponse)
+    const voiceLoading = useSelector(getvoiceGetIdloading)
     const skipNative = {
         skip: 0,
         limit: 12,
@@ -65,7 +64,6 @@ export const WordsUpdate = () => {
         dispatch(categoryGetThunk(skipNative));
     }, []);
 
-    const [myusic, setMyusci] = useState()
     const addFile = (e) => {
         const s = URL?.createObjectURL(e.target.files?.[0])
         setFileListVoice(e.target.files?.[0])
@@ -155,7 +153,7 @@ export const WordsUpdate = () => {
     const [voiceUrls, setVoiceUrls] = useState({});
 
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
-
+ const wordsImageLoading = useSelector(getfilesGetIdloading);
     useEffect(() => {
         // Preload image URLs
         if (wordsIdData) {
@@ -304,7 +302,7 @@ export const WordsUpdate = () => {
                                             }}
                                         />
                                     </div>
-                                    <Waveform url={voiceResponse?.data?.url} />
+                                    <Waveform loading={voiceLoading} url={voiceResponse?.data?.url} />
 
                                 </div> :
                                     <>
@@ -347,7 +345,7 @@ export const WordsUpdate = () => {
                                             setCategoryShow(null);
                                         }} />
                                 ) : wordsIdData?.imageFile && !previewImgUrl ? (
-                                    <ShowImage title={wordsIdData?.imageFile?.description} src={imageUrls[wordsIdData?.imageFile?._id]} onClick={() => {
+                                    <ShowImage loading={wordsImageLoading} title={wordsIdData?.imageFile?.description} src={imageUrls[wordsIdData?.imageFile?._id]} onClick={() => {
                                         setPreviewimgUrl(".")
                                         setCategoryShow(null);
                                     }} />

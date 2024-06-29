@@ -108,8 +108,8 @@ export const MyRoutes = () => {
                 <Route path="/words" element={<WordsScreen />} />
                 <Route path="/upload" element={<UplaodScreen />} />
                 <Route path="/words/create" element={<WordsCreateScreen />} />
-                <Route path="/upload/create-exel" element={<AddWordExel />} />
-                <Route path="/upload/update-exel" element={<UpdateExelFromWord />} />
+                <Route path="/upload/create-wordsfrom-excel" element={<AddWordExel />} />
+                <Route path="/upload/update-wordsfrom-excel" element={<UpdateExelFromWord />} />
                 <Route path="/words/:id" element={<WordsUpdate />} />
 
             </Route>

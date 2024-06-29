@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
 import play from "../../../../../assets/images/play.png";
+import { CustomSpin } from "../../../../../components";
+import { Colors } from "../../../../../assets/colors";
 
 const formWaveSurferOptions = ref => ({
   container: ref,
@@ -15,7 +17,7 @@ const formWaveSurferOptions = ref => ({
   partialRender: true
 });
 
-export function Waveform({ url }) {
+export function Waveform({ url ,loading}) {
   console.log(url,"url");
   const waveformRef = useRef(null);
   const wavesurfer = useRef(null);
@@ -75,7 +77,7 @@ export function Waveform({ url }) {
 
   return (
     <div className="audio">
-      {url && (
+      { loading ? <CustomSpin size={37} color={Colors.GRAY_COLOR} /> :url && (
         <button onClick={handlePlayPause}>
           {!playing ? <img src={play} alt="Play" /> : <img src={play} alt="Pause" />}
         </button>
