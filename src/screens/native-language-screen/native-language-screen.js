@@ -15,7 +15,7 @@ import { nativeLanguageGetIdThunk } from "../../store/slices/native-language/get
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { page0, page12 } from "../../constants/constants";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 
 export const NativeLanguageScreen = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const NativeLanguageScreen = () => {
   const nativeLoading = useSelector(getNativeGetloading);
   const nativeLanguageData = useSelector(getNativeGetResponse);
   const nativeData = nativeLanguageData?.data?.list;
-
+  const imageLoading = useSelector(getfilesGetIdloading);
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
@@ -59,7 +59,7 @@ export const NativeLanguageScreen = () => {
   };
 
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
   }, []);
 
   return (
@@ -93,7 +93,8 @@ export const NativeLanguageScreen = () => {
                           className="pointer"
                         >
                           <CustomCountryItem
-                           icon={imageUrls[countryItem.imageFile]}
+                            loading={imageLoading}
+                            icon={imageUrls[countryItem.imageFile]}
                             title={countryItem.nameEng}
                           />
                         </div>

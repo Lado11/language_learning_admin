@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./learning-language-screen-style.css";
 import "../../global-styles/global-styles.css";
 import { Colors } from "../../assets/colors/colors";
-import { CustomAddNew, CustomNoData, CustomPagination, CustomSpin } from "../../components";
+import { CustomAddNew, CustomCountryItem, CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { LearningLanguageItemCard } from "./components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,13 +14,14 @@ import {
 } from "../../store/slices";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { page0, page12 } from "../../constants/constants";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 
 export const LearningLanguageScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
+  const imageLoading  = useSelector(getfilesGetIdloading);
 
   const navigateToCreateScreen = () => {
     navigate("/learning-language-create");
@@ -43,9 +44,7 @@ export const LearningLanguageScreen = () => {
     // Preload image URLs
     if (learningLanguagesData?.data?.list?.length) {
       learningLanguagesData?.data?.list?.forEach((item) => {
-       item?.nativeLanguages?.forEach((lang) => {
-        fetchImage(lang.imageFile);
-       });
+        fetchImage(item.imageFile);
       });
     }
   }, [learningLanguagesData?.data?.list]);
@@ -89,19 +88,22 @@ export const LearningLanguageScreen = () => {
               </div> :
                 <div className="learningLanguageCardItems">
                   {learningLanguagesData?.data?.list.map((lang, index) => {
+                    console.log(lang,"lang");
                     return (
-                      <div className="pointer" key={index}>
-                        <LearningLanguageItemCard
-                          imageUrls={imageUrls}
-                          icon={imageUrls[lang?.imageFile]}
-                          data={lang?.nativeLanguages}
-                          title={lang.name}
-                          count={learningLanguagesData?.data?.total}
-                          onTap={() => {
+                         <div
+                          key={lang?._id}
+                          onClick={() => {
                             learningUpdate(lang?._id);
                           }}
-                        />
-                      </div>
+                          className="pointer"
+                        >
+                          <CustomCountryItem
+                            count={lang?.nativeLanguages?.length}
+                            loading={imageLoading}
+                            icon={imageUrls[lang.imageFile]}
+                            title={lang.name}
+                          />
+                        </div>
                     );
                   })}
                 </div>
@@ -116,3 +118,13 @@ export const LearningLanguageScreen = () => {
     </div>
   );
 };
+ {/* <LearningLanguageItemCard
+                          imageUrls={imageUrls}
+                          icon={imageUrls[lang?.imageFile]}
+                          data={lang?.nativeLanguages}
+                          title={lang.name}
+                          count={learningLanguagesData?.data?.total}
+                          onTap={() => {
+                            learningUpdate(lang?._id);
+                          }}
+                        /> */}

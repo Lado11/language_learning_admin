@@ -1,25 +1,28 @@
 import React from "react";
 import "./custom-country-item-style.css";
 import { Colors } from "../../assets/colors/colors";
-import britishIcon from "../../assets/images/britishCountryIcon.svg.svg";
+import { CustomSpin } from "../custom-spin";
 
-export const CustomCountryItem = ({ icon, title }) => {
-  const url = process.env.REACT_APP_BASE_URL;
-  const image = url + icon;
-
+export const CustomCountryItem = ({ icon, title, loading, count }) => {
   return (
     <>
       <div
         className="customCountryItem"
         style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
       >
-        <p
-          className="customCountryItemTitle"
-          style={{ color: Colors.LIGHT_GRAY }}
-        >
-          {title.length < 15 ? title : title.slice(0, 10)}
-        </p>
-        <img className="itemImage" src={icon} />
+        <div className="imageRow">
+          <p
+            className="customCountryItemTitle"
+            style={{ color: Colors.LIGHT_GRAY }}
+          >
+            {title.length < 15 ? title : title.slice(0, 10)}
+          </p>
+          {loading ? <CustomSpin color={Colors.GRAY_COLOR} size={37} /> : <img className="itemImage" src={icon} />}
+        </div>
+       {count && <div className="langaugeCount">
+          <p>language count</p>
+          <p>{count}</p>
+        </div>}
       </div>
     </>
   );
