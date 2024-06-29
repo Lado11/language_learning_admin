@@ -12,9 +12,9 @@ export const UserInfo = Object.freeze({
 })
 
 export const UserRole = Object.freeze({
-  ADMIN: 0,
-  OPERATOR: 1,
-  USER: 2,
+  ADMIN: 1,
+  OPERATOR: 2,
+  USER: 3,
   All:-1
 })
 

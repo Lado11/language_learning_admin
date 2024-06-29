@@ -1,176 +1,221 @@
 import { useCallback, useEffect, useState } from "react";
-import { Colors } from "../../assets/colors";
-import { CustomCardTile } from "../../components/custom-card-tile/custom-card-tile";
-import { customFilesData } from "../../data/custom-files-data";
-import { customFilesDirectoryData } from "../../data/custom-files-directory";
 import "./files-screen.css";
 import filterIcon from "../../assets/images/filterIcon.png"
 import { Popover, Radio } from "antd";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page5, page6 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fileTypes, fileUsedObj } from "./files-data";
-import { CustomSearchInput } from "../../components";
-// const UserFilterPopover = ({
-//   onChangeSubscribe,
-//   onChangeRole,
-//   onChangeEmail,
-//   onChangePhone,
-//   role,
-//   subscribe,
-//   email,
-//   phone,
-//   onClearFilter,
-//   onApplyFilter,
-//   isPopoverOpen,
-//   handlePopoverOpenChange,
-// }) => {
-//   const { t } = useTranslation();
+import { CustomSearchInput, CustomSpin } from "../../components";
+import { UserInfo, UserSubscription } from "../../data";
+import { filesGetThunk, getfilesGetResponse } from "../../store/slices/files/get-files";
+import { MediaTypes, UserObjectType } from "./files-typing";
+import voiceIcon from "../../assets/images/sound-waves 1 (1).png"
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
+import { Colors } from "../../assets/colors";
 
-//   return (
-//     <Popover
-//       placement="bottomLeft"
-//       content={<div className="filterSection">
-//         <p className="popeverTitle">File Type</p>
-//         <Radio.Group onChange={onChangeSubscribe} value={subscribe}>
-//           <div className="statusGroup">
-//             {fileTypes?.map((option) => {
-//               return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-//             })}
-//           </div>
-//         </Radio.Group>
-//         <hr className="poepverHr" />
-//         <p className="popeverTitle">Used Objects</p>
+const FilesItem = ({ data, imageUrls, loading }) => {
 
-//         <Radio.Group onChange={onChangePhone} value={phone}>
-//           <div className="statusGroup">
-//             {fileUsedObj?.map((option) => {
-//               return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
-//             })}
-//           </div>
+  const getFilesTypeIcon = (type, id) => {
+    switch (type) {
+      case MediaTypes.IMAGE:
+        return imageUrls[id];
+      case MediaTypes.AUDIO:
+      default:
+        return voiceIcon;
+    }
+  };
 
-//         </Radio.Group>
-        
-//         <div className="buttonSection">
-//           <button onClick={onClearFilter} className="button">Clear</button>
-//           <button onClick={onApplyFilter} className="buttonApply">Apply</button>
-//         </div>
-//       </div>}
-//       trigger="click"
-//       open={isPopoverOpen}
-//       onOpenChange={handlePopoverOpenChange}
-//     >
-//       <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
-//     </Popover>
-//   );
-// };
+  const getFilesTypeLabel = (type) => {
+    switch (type) {
+      case UserObjectType.NATIVELANGUAGE:
+        return "Native Langauge";
+      case UserObjectType.LEARNINGLANGUAGE:
+        return "Learning Langauge";
+      case UserObjectType.CATEGORY:
+        return "Category";
+      case UserObjectType.WORD:
+      default:
+        return "Word";
+    }
+  };
+  return (
+    <div className="filesDataSection">
+      {data?.map((file,index) => {
+        return (
+          <div className="filesTypeItem" key={index}>
+            <div>
+              <p className="filesTypeLabel">{getFilesTypeLabel(file?.usedObjectType)}</p>
+              <p className="filesUsedObj">Used Object</p>
+            </div>
+            {loading ? <CustomSpin size={73} color={Colors.GRAY_COLOR} /> : <img alt="img" className="fileIcon" src={getFilesTypeIcon(file?.type, file?._id)} />}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+const FileFilterPopover = ({
+  onChangeFileType,
+  onChangeUserObj,
+  userObj,
+  file,
+  onClearFilter,
+  onApplyFilter,
+  isPopoverOpen,
+  handlePopoverOpenChange,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Popover
+      placement="bottomLeft"
+      content={<div className="filterSection">
+        <p className="popeverTitle">File Type</p>
+        <Radio.Group onChange={onChangeFileType} value={file}>
+          <div className="statusGroup">
+            {fileTypes?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Used Objects</p>
+
+        <Radio.Group onChange={onChangeUserObj} value={userObj}>
+          <div className="statusGroup">
+            {fileUsedObj?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+
+        </Radio.Group>
+
+        <div className="buttonSection">
+          <button onClick={onClearFilter} className="button">Clear</button>
+          <button onClick={onApplyFilter} className="buttonApply">Apply</button>
+        </div>
+      </div>}
+      trigger="click"
+      open={isPopoverOpen}
+      onOpenChange={handlePopoverOpenChange}
+    >
+      <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+    </Popover>
+  );
+};
 export const FilesScreen = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState();
   const [searchFilter, setSearchFilter] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const filesResponse = useSelector(getfilesGetResponse)?.data;
+
   const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
-  const [subscribe, setSubscribe] = useState();
+  const [file, setSubscribe] = useState();
 
   const [filtterPhone, setFiltterPhone] = useState(undefined);
-  const [phone, setPhone] = useState();
+  const [userObj, setPhone] = useState();
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const filesImageLoading = useSelector(getfilesGetIdloading);
 
-  const [filtterEmail, setFiltterEmail] = useState(undefined);
-  const [email, setEmail] = useState();
+  useEffect(() => {
+    // Preload image URLs
+    if (filesResponse?.list?.length) {
+      filesResponse?.list.forEach((item) => {
+        fetchImage(item._id);
+      });
+    }
+  }, [filesResponse]);
 
-  const [filtterRole, setFiltterRole] = useState(undefined);
-  const [role, setRole] = useState();
-
-  // const onChangeSearch = (e) => {
-  //   setSearchValue(e.target.value);
-  //   if (e.target.value !== "") {
-  //     setSearchFilter(e.target.value)
-  //     let data = {
-  //       skip: page0,
-  //       limit: page5,
-  //       search: e.target.value
-  //     }
-  //     dispatch(userGetAllThunk(data));
-  //   } else {
-  //     dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
-  //     setSearchFilter(undefined)
-  //   }
-  // }
-  // const onChangeSubscribe = (e) => {
-  //   setSubscribe(e.target.value);
-  //   if (e.target.value !== UserSubscription.All) {
-  //     setFiltterSsubscribe(e.target.value)
-  //   } else {
-  //     setFiltterSsubscribe(undefined)
-  //   }
-  // };
-
-  // const onChangePhone = (e) => {
-  //   setPhone(e.target.value);
-  //   if (e.target.value !== UserInfo.All) {
-  //     setFiltterPhone(e.target.value)
-  //   } else {
-  //     setFiltterPhone(undefined)
-  //   }
-  // };
-
-  // const onChangeEmail = (e) => {
-  //   setEmail(e.target.value);
-  //   if (e.target.value !== UserInfo.All) {
-  //     setFiltterEmail(e.target.value)
-  //   } else {
-  //     setFiltterEmail(undefined)
-  //   }
-  // };
-
-  // const onChangeRole = (e) => {
-  //   setRole(e.target.value);
-  //   if (e.target.value !== UserRole.All) {
-  //     setFiltterRole(e.target.value)
-  //   } else {
-  //     setFiltterRole(undefined)
-  //   }
-  // };
-
-  // const fetchData = useCallback(() => {
-  //   dispatch(userGetAllThunk(ConstPagiantion(page0, page6)));
-  // }, [dispatch]);
-
-  // const fetchFilteredData = useCallback(() => {
-  //   const filterData = {
-  //     skip: page0,
-  //     limit: page6,
-  //     isSubscribed: filtterSsubscribe,
-  //     phoneNumberVerified: filtterPhone,
-  //     emailVerified: filtterEmail,
-  //     role: filtterRole,
-  //     search: searchFilter
-  //   };
-  //   dispatch(userGetAllThunk(filterData));
-  // }, [dispatch, filtterSsubscribe, filtterPhone, filtterEmail, filtterRole, searchFilter]);
-
-  // const handlePopoverOpenChange = (newOpen) => {
-  //   setIsPopoverOpen(newOpen);
-  // };
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+  useEffect(() => {
+    // Update imageUrls state with fetched image URLs
+    if (categoryImageResponse?.data?.url) {
+      setImageUrls((prevUrls) => ({
+        ...prevUrls,
+        [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+      }));
+    }
+  }, [categoryImageResponse]);
 
 
-  // const handleClearFilter = () => {
-  //   setSubscribe("")
-  //   setPhone("")
-  //   setEmail("")
-  //   setRole("")
-  //   fetchData()
-  // };
 
-  // const handleApplyFilter = () => {
-  //   fetchFilteredData();
-  // };
+  const onChangeSearch = (e) => {
+    setSearchValue(e.target.value);
+    if (e.target.value !== "") {
+      setSearchFilter(e.target.value)
+      let data = {
+        skip: 0,
+        limit: listItemCountForShow,
+        search: e.target.value
+      }
+      dispatch(filesGetThunk(data));
+    } else {
+      dispatch(filesGetThunk(ConstPagiantion(0, listItemCountForShow)));
+      setSearchFilter(undefined)
+    }
+  }
+  const onChangeFileType = (e) => {
+    setSubscribe(e.target.value);
+    if (e.target.value !== UserSubscription.All) {
+      setFiltterSsubscribe(e.target.value)
+    } else {
+      setFiltterSsubscribe(undefined)
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [fetchData]);
+  const onChangeUserObj = (e) => {
+    setPhone(e.target.value);
+    if (e.target.value !== UserInfo.All) {
+      setFiltterPhone(e.target.value)
+    } else {
+      setFiltterPhone(undefined)
+    }
+  };
+
+
+
+  const fetchData = useCallback(() => {
+    dispatch(filesGetThunk(ConstPagiantion(0, listItemCountForShow)));
+  }, [dispatch]);
+
+  const fetchFilteredData = useCallback(() => {
+    const filterData = {
+      skip: 0,
+      limit: listItemCountForShow,
+      mediaType: filtterSsubscribe,
+      usedObjectType: filtterPhone,
+      search: searchFilter
+    };
+    dispatch(filesGetThunk(filterData));
+  }, [dispatch, filtterSsubscribe, filtterPhone, searchFilter]);
+
+  const handlePopoverOpenChange = (newOpen) => {
+    setIsPopoverOpen(newOpen);
+  };
+
+
+  const handleClearFilter = () => {
+    setSubscribe("")
+    setPhone("")
+    fetchData()
+  };
+
+  const handleApplyFilter = () => {
+    fetchFilteredData();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
 
   return (
@@ -180,48 +225,20 @@ export const FilesScreen = () => {
     >
       <p className="filesTitle">File</p>
       <div className="filterDiv">
-          {/* <UserFilterPopover
-            subscribe={subscribe}
-            phone={phone}
-            email={email}
-            role={role}
-            onChangePhone={onChangePhone}
-            onChangeEmail={onChangeEmail}
-            onChangeRole={onChangeRole}
-            onChangeSubscribe={onChangeSubscribe}
-            onClearFilter={handleClearFilter}
-            onApplyFilter={handleApplyFilter}
-            isPopoverOpen={isPopoverOpen}
-            handlePopoverOpenChange={handlePopoverOpenChange}
-          />
-          <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} /> */}
-        </div>
-      {/* <div className="filesItemDiv">
+        <FileFilterPopover
+          file={file}
+          userObj={userObj}
+          onChangeUserObj={onChangeUserObj}
+          onChangeFileType={onChangeFileType}
+          onClearFilter={handleClearFilter}
+          onApplyFilter={handleApplyFilter}
+          isPopoverOpen={isPopoverOpen}
+          handlePopoverOpenChange={handlePopoverOpenChange}
+        />
+        <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
+      </div>
 
-        {customFilesData.map((item,index) => {
-          return (
-              <CustomCardTile
-              key={index}
-              icon={item.icon}
-              title={t(`${item.title}`)}
-              count={item.count}
-              backgroundColor={item.backgroundColor}
-            />
-          );
-        })}
-      </div> */}
-      {/* <div>
-
-        {customFilesDirectoryData.map((item,index) => {
-          return (
-            <div className="filesDirection" key={index+1}>
-              <img src={item.icon} />
-              <p className="filesDirectionTitle">{item.title}</p>
-            </div>
-          );
-        })}
-      </div> */}
-
+      <FilesItem loading={filesImageLoading} setImageUrls={setImageUrls} imageUrls={imageUrls} data={filesResponse?.list} />
     </div>
   );
 };

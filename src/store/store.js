@@ -42,6 +42,9 @@ import { feedBackGetIdSlice } from "./slices/feedBack/getId-feadback";
 import { wordsExelGetIdSlice } from "./slices/words/getId-exel-words";
 import { filesGetIdSlice } from "./slices/files/get-id-files";
 import { voiceGetIdSlice } from "./slices/files/get-id-voice";
+import { filesGetSlice } from "./slices/files/get-files";
+import { filesIdGetSlice } from "./slices/files/get-files-id";
+import { filesDeleteSlice } from "./slices/files/delete-files";
 
 export const store = configureStore({
   reducer: {
@@ -85,6 +88,9 @@ export const store = configureStore({
     feedBackGetIdSlice:feedBackGetIdSlice.reducer,
     wordsExelGetIdSlice:wordsExelGetIdSlice.reducer,
     filesGetIdSlice:filesGetIdSlice.reducer,
-    voiceGetIdSlice:voiceGetIdSlice.reducer
+    voiceGetIdSlice:voiceGetIdSlice.reducer,
+    filesGetSlice:filesGetSlice.reducer,
+    filesIdGetSlice:filesIdGetSlice.reducer,
+    filesDeleteSlice:filesDeleteSlice.reducer
   },
 });

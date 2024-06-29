@@ -7,7 +7,7 @@ import { categoryGetThunk } from "../../store/slices/category/get-category";
 import { getWordsThunk, learningLanguagesThunk, userGetAllThunk } from "../../store/slices";
 import { listItemCountForShow } from "../../constants/constants";
 
-export const CustomPagination = ({length  ,pageLength}) => {
+export const CustomPagination = ({length ,pageLength}) => {
   const dispatch = useDispatch();
   const pageCount = (length / pageLength) * 10
   const roundNumber = pageCount ? Math.ceil(pageCount) : 1

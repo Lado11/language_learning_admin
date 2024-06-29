@@ -1,6 +1,10 @@
 import { api } from "..";
 import { buildUrl } from "../../helper/build-url";
 
+
+export const filesIdGetService = () => {
+  
+}
 export const getWordsService = (data) => {
   const params ={
     skip:data.skip,
