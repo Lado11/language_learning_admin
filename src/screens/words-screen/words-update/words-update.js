@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getIdWordsThunk, wordsIdLoading, wordsIdResponse } from "../../../store/slices/words/getId-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -19,8 +19,11 @@ import { ShowImage } from "../../category-screen/category-update";
 import { ImageUpload } from "../../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../../helper/file-build";
 import { filesGetIdThunk, getfilesGetIdResponse } from "../../../store/slices/files/get-id-files";
+import { getvoiceGetIdResponse, voiceGetIdThunk } from "../../../store/slices/files/get-id-voice";
 
 export const WordsUpdate = () => {
+    const words = useRef(1);
+    console.log(words);
     let location = useLocation();
     const wordId = location?.pathname.slice(7);
     const [form] = Form.useForm();
@@ -50,7 +53,7 @@ export const WordsUpdate = () => {
     const array = [];
     const [selectedImage, setSelectedImage] = useState();
     const [previewImgUrl, setPreviewimgUrl] = useState("");
-
+    const voiceResponse = useSelector(getvoiceGetIdResponse)
     const skipNative = {
         skip: 0,
         limit: 12,
@@ -64,7 +67,6 @@ export const WordsUpdate = () => {
 
     const [myusic, setMyusci] = useState()
     const addFile = (e) => {
-        console.log(e.target.files, "e")
         const s = URL?.createObjectURL(e.target.files?.[0])
         setFileListVoice(e.target.files?.[0])
         setAudio(s)
@@ -89,7 +91,6 @@ export const WordsUpdate = () => {
         };
     });
     const onFinish = (values) => {
-        console.log(values,"val");
         formData.append("id", wordsIdData?._id)
         values?.word != wordsIdData?.data?.word && formData.append("word", values?.word)
         formData.append("transcription", values?.transcription)
@@ -113,8 +114,8 @@ export const WordsUpdate = () => {
         learningLanguageWordSelectedValue && learningLanguageWordSelectedValue?.nativeLanguages.forEach((item, ind) => {
             formData.append(`translates[${ind}].nativeLanguage`, item?._id);
         });
-        dispatch(wordsUpdateThunk(formData))
-
+            dispatch(wordsUpdateThunk(formData))
+        
     };
 
 
@@ -158,16 +159,17 @@ export const WordsUpdate = () => {
     useEffect(() => {
         // Preload image URLs
         if (wordsIdData) {
-            fetchImage(wordsIdData?.imageFile?._id,wordsIdData?.audioFile?._id);
+            fetchImage(wordsIdData?.imageFile?._id);
         }
     }, [wordsIdData]);
 
-    const fetchImage = (imageFileId,voiceFileId) => {
+    useEffect(()=>{
+        dispatch(voiceGetIdThunk(wordsIdData?.audioFile?._id));
+    },[wordsIdData])
 
+    const fetchImage = (imageFileId) => {
         if (!imageUrls[imageFileId]) {
             dispatch(filesGetIdThunk(imageFileId));
-        }else if(!voiceUrls[voiceFileId]){
-            dispatch(filesGetIdThunk(voiceFileId));
         }
     };
 
@@ -178,11 +180,9 @@ export const WordsUpdate = () => {
                 ...prevUrls,
                 [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
             }));
-        }else if(categoryImageResponse){
-                setVoiceUrls((prevUrls) => ({
-                    ...prevUrls,
-                    [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
-                }));
+            setVoiceUrls((voice) => ({...voice,
+                [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
+            })) 
         }
     }, [categoryImageResponse]);
 
@@ -218,12 +218,13 @@ export const WordsUpdate = () => {
                     form={form}
                     onFinish={onFinish}
                     autoComplete="off"
+                    ref={words}
                 >
 
                     <div className="update-words-section">
                           <div className="update-words-row">
                           <div>
-                          <p>Update</p>
+                          <p className="updateTitle">Update</p>
                             <div className="addWordsFirstSelect bigSelect">
                                 <CustomAntdSelect
                                     rules={true}
@@ -303,7 +304,8 @@ export const WordsUpdate = () => {
                                             }}
                                         />
                                     </div>
-                                    <Waveform url={imageUrls[wordsIdData?.audioFile?._id]} />
+                                    <Waveform url={voiceResponse?.data?.url} />
+
                                 </div> :
                                     <>
                                         {audio ? <div className="imgae_upload_design_voice">
@@ -356,13 +358,13 @@ export const WordsUpdate = () => {
                           </div>
 
                             <div className="lerning-language-section">
-                            {learningLanguageWordSelectedValue?.nativeLanguages?.length && <p>Translate</p>}
+                            {learningLanguageWordSelectedValue?.nativeLanguages?.length && <p className="wordsTitle">Translate</p>}
                             <div>
                                 {learningLanguageWordSelectedValue?.nativeLanguages?.length ?
                                     learningLanguageWordSelectedValue?.nativeLanguages.map((item, index) => {
                                         return (
                                             <div>
-                                                <p>{item?.nameEng}</p>
+                                                <p className="wordsInputTitle">{item?.nameEng}</p>
                                                 <CustomAntdInput
                                                     key={item}
                                                     rules={true}
@@ -376,12 +378,12 @@ export const WordsUpdate = () => {
                                         )
                                     }) : null}
                             </div>
-                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p>Translate</p>}
+                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p className="wordsTitle">Translate</p>}
 
                             {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && wordsIdData?.translates?.map((item, index) => {
                                 return (
                                     <div>
-                                        <p>{item?.nativeLanguage?.nameEng}</p>
+                                        <p className="wordsInputTitle">{item?.nativeLanguage?.nameEng}</p>
                                         <CustomAntdInput
                                             key={item}
                                             // rules={true}

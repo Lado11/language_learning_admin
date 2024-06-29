@@ -19,7 +19,26 @@ width: 202px;
 .updateWordsAddInputs .ant-form-item-explain-error{
     width: 203px !important;
 }
+.updateTitle{
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 30px;
 
+}
+.wordsTitle{
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+}
+.wordsInputTitle{
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB3;
+}
 .ant-input-status-error{
     border-color:#7d8fb326  !important;
 }
@@ -27,6 +46,7 @@ width: 202px;
 .update-words-row{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 @media only screen and (max-width: 1024px) {
     .update-words-row{
