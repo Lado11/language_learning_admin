@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import {
-  CustomCardItem,
   CustomNoData,
   CustomPagination,
+  ImageItem,
 } from "../../components";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
 import "./category-screen.css";
@@ -12,8 +12,7 @@ import { useEffect, useState } from "react";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
 import { page0, page6 } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import {  filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
-
+import {  filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 export const CategoryScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,6 +20,7 @@ export const CategoryScreen = () => {
   const categoryData = useSelector(getCategoryGetData);
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const categoryImageLoading = useSelector(getfilesGetIdloading);
 
   useEffect(() => {
     // Preload image URLs
@@ -78,7 +78,9 @@ const categoryUpdate = (id) => {
                 <div className="custom-card-item">
                   {categoryData?.data?.list?.map((countryItem, index) => (
                     <div className="pointer" key={index + 1} onClick={() => categoryUpdate(countryItem._id)}>
-                      <CustomCardItem icon={imageUrls[countryItem.imageFile]} title={countryItem.name} />
+                        <ImageItem
+                          loading={categoryImageLoading} icon={imageUrls[countryItem.imageFile]} title={countryItem.name}
+                          />
                     </div>
                   ))}
                 </div>

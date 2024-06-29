@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./learning-language-screen-style.css";
 import "../../global-styles/global-styles.css";
 import { Colors } from "../../assets/colors/colors";
-import { CustomAddNew, CustomCountryItem, CustomNoData, CustomPagination, CustomSpin } from "../../components";
-import { LearningLanguageItemCard } from "./components";
+import { CustomAddNew, ImageItem, CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -97,7 +96,7 @@ export const LearningLanguageScreen = () => {
                           }}
                           className="pointer"
                         >
-                          <CustomCountryItem
+                          <ImageItem
                             count={lang?.nativeLanguages?.length}
                             loading={imageLoading}
                             icon={imageUrls[lang.imageFile]}

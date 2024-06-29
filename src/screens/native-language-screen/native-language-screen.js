@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
-import { CustomCountryItem } from "../../components/custom-country-item/custom-country-item";
+import { ImageItem } from "../../components/custom-country-item/custom-country-item";
 import "./native-language-style.css";
 import "../../global-styles/global-styles.css";
 import { CustomNoData, CustomPagination } from "../../components";
@@ -92,7 +92,7 @@ export const NativeLanguageScreen = () => {
                           }}
                           className="pointer"
                         >
-                          <CustomCountryItem
+                          <ImageItem
                             loading={imageLoading}
                             icon={imageUrls[countryItem.imageFile]}
                             title={countryItem.nameEng}

@@ -3,7 +3,8 @@ import "./custom-country-item-style.css";
 import { Colors } from "../../assets/colors/colors";
 import { CustomSpin } from "../custom-spin";
 
-export const CustomCountryItem = ({ icon, title, loading, count }) => {
+export const ImageItem = ({ icon, title, loading, count }) => {
+
   return (
     <>
       <div
@@ -17,12 +18,12 @@ export const CustomCountryItem = ({ icon, title, loading, count }) => {
           >
             {title.length < 15 ? title : title.slice(0, 10)}
           </p>
-          {loading ? <CustomSpin color={Colors.GRAY_COLOR} size={37} /> : <img className="itemImage" src={icon} />}
-        </div>
-       {count && <div className="langaugeCount">
-          <p>language count</p>
-          <p>{count}</p>
+          {count && <div className="langaugeCount">
+          <p className="languageItem">language count:</p>
+          <p className="languageItem count">{count}</p>
         </div>}
+        </div>
+        {loading || !icon ? <CustomSpin color={Colors.GRAY_COLOR} size={37} /> : <img className="itemImage" src={icon} alt="image"/>}
       </div>
     </>
   );
