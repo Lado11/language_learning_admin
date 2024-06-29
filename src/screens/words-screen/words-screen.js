@@ -161,7 +161,7 @@ const WordsListItem = ({count, words, onClick, key,icon }) => {
         {getWordsLevelLabel(words?.level)}
       </div>
       <div className="col col-1 desc buttonCol" data-label="Job Id">
-        <p className="titleCol">{getWordsStatusLabel(words?.status)}</p></div>
+        {getWordsStatusLabel(words?.status)}</div>
     </li>
   );
 };
