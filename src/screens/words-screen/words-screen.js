@@ -111,7 +111,7 @@ const WordsFilterPopover = ({
     </Popover>
   );
 };
-const WordsListItem = ({imageUrls, words, onClick, key,icon }) => {
+const WordsListItem = ({count, words, onClick, key,icon }) => {
   const getWordsLevelLabel = (status) => {
     switch (status) {
       case WordsLevel.BEGINNER:
@@ -138,8 +138,11 @@ const WordsListItem = ({imageUrls, words, onClick, key,icon }) => {
     <li className="table-row" key={key} onClick={onClick}>
       <div className="col col-1 desc" data-label="Job Id">{words?.word}</div>
       <div className="col col-1 desc" data-label="Job Id">{words?.language?.name}</div>
-      <div className="col col-1 desc" data-label="Job Id">
-        <Avatar.Group
+      <div className="col col-1 desc count" data-label="Job Id">
+        <div className="wordsItemCount">
+          {count}
+        </div>
+        {/* <Avatar.Group
           maxCount={4}
           maxStyle={{
             color: '#f56a00',
@@ -148,10 +151,10 @@ const WordsListItem = ({imageUrls, words, onClick, key,icon }) => {
         >
           {words?.translates.map((item, index) => {
             return <div key={index}>
-              <Avatar src={imageUrls[item.nativeLanguageDetails.imageFile]} />
+              <Avatar src={icon} />
             </div>
           })}
-        </Avatar.Group>
+        </Avatar.Group> */}
       </div>
       <div className="col col-1 desc" data-label="Job Id">{words?.transcription}</div>
       <div className="col col-1 desc" data-label="Job Id">
@@ -183,9 +186,8 @@ export const WordsScreen = () => {
     // Preload image URLs
     if (wordsResponse?.data?.list?.length) {
       wordsResponse?.data?.list?.forEach((item) => {
-        item?.translates?.forEach((image)=>{
-          fetchImage(image?.nativeLanguageDetails?.imageFile);
-        })
+          fetchImage(item?.imageFile);
+      
       });
     }
   }, [wordsResponse?.data?.list]);
@@ -345,8 +347,9 @@ export const WordsScreen = () => {
                 <>
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
+                      console.log(words,"words");
                       return (
-                        <WordsListItem imageUrls={imageUrls} icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
+                        <WordsListItem  count={words?.translates?.length} icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
                     }
                     )}

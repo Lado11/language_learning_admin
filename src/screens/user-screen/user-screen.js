@@ -111,7 +111,7 @@ export const UserListItem = ({ user, onClick, key }) => {
       <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
-      <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{
+      <div className="col col-1 desc buttonCol" style={{backgroundColor: user?.isSubscribed === true ? Colors.GREEN : Colors.LIGHT_PURPLE}} data-label="Job Id"><p className="titleCol">{
         getUploadSubscribedLabel(user?.isSubscribed)
       }</p></div>
     </li>

@@ -200,7 +200,7 @@ td:nth-child(n) {
 
 }
 .buttonCol{
-  background-color: #8833FF;
+  /* background-color: #8833FF; */
   border-radius: 15px;
   padding: 5px 15px;
 }
