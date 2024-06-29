@@ -1,8 +1,8 @@
 .customCountryItem {
   display: flex;
-  flex-direction: column;
-  /* align-items: center;
-  justify-content: space-between; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between; 
   border-radius: 10px;
   padding: 15px 15px 15px 21px;
   box-shadow: 0px 2px 5px 0px #26334d08;
@@ -12,9 +12,9 @@
 
 .imageRow{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  align-items: start;
 }
 
 .customCountryItemTitle {
@@ -22,7 +22,9 @@
   font-weight: 700;
   font-size: 13px;
 }
-
+.count{
+  margin-left: 5px;
+}
 /* @media only screen and (max-width: 1024px) {
   .customCountryItem {
     min-width: 150px;
@@ -32,7 +34,13 @@
 .langaugeCount{
   display: flex;
   flex-direction: row;
-justify-content: space-between;
+}
+
+.languageItem{
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 11px;
+  color: gray;
 }
 
 @media only screen and (max-width: 768px) {
