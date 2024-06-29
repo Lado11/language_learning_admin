@@ -5,9 +5,9 @@ import { Colors } from "../../assets/colors";
 import { useEffect } from "react";
 import deleteIcon from "../../assets/images/remove_icon.png"
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page12 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 
-export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, name }) => {
+export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name }) => {
     const dispatch = useDispatch();
     const nativeLanguagesResponse = useSelector(getNativeGetResponse);
     const filteredResponse = nativeLanguagesResponse?.data?.list.map((lang) => {
@@ -18,7 +18,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
         };
     });
     useEffect(() => {
-        dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
+        dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
     }, []);
 
     const selectedDelete = (id) => {

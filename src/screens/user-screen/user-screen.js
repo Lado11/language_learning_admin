@@ -16,7 +16,7 @@ import { TableHeader } from "../../components/custom-table/components/table-head
 import filterIcon from "../../assets/images/filterIcon.png"
 import { Popover, Radio } from "antd";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page5, page6 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 
 const UserFilterPopover = ({
   onChangeSubscribe,
@@ -130,7 +130,7 @@ export const UserScreen = () => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
+    dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
   const onChangeSearch = (e) => {
@@ -138,13 +138,13 @@ export const UserScreen = () => {
     if (e.target.value !== "") {
       setSearchFilter(e.target.value)
       let data = {
-        skip: page0,
-        limit: page5,
+        skip: 0,
+        limit: listItemCountForShow,
         search: e.target.value
       }
       dispatch(userGetAllThunk(data));
     } else {
-      dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
+      dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
@@ -203,13 +203,13 @@ export const UserScreen = () => {
   };
 
   const fetchData = useCallback(() => {
-    dispatch(userGetAllThunk(ConstPagiantion(page0, page6)));
+    dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
   const fetchFilteredData = useCallback(() => {
     const filterData = {
-      skip: page0,
-      limit: page6,
+      skip: 0,
+      limit: listItemCountForShow,
       isSubscribed: filtterSsubscribe,
       phoneNumberVerified: filtterPhone,
       emailVerified: filtterEmail,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
-import { CustomCountryItem } from "../../components/custom-country-item/custom-country-item";
+import { ImageItem } from "../../components/custom-country-item/custom-country-item";
 import "./native-language-style.css";
 import "../../global-styles/global-styles.css";
 import { CustomNoData, CustomPagination } from "../../components";
@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { nativeLanguageGetIdThunk } from "../../store/slices/native-language/get-id-native-language";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page12 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 
 export const NativeLanguageScreen = () => {
@@ -59,7 +59,7 @@ export const NativeLanguageScreen = () => {
   };
 
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
   return (
@@ -92,7 +92,7 @@ export const NativeLanguageScreen = () => {
                           }}
                           className="pointer"
                         >
-                          <CustomCountryItem
+                          <ImageItem
                             loading={imageLoading}
                             icon={imageUrls[countryItem.imageFile]}
                             title={countryItem.nameEng}
@@ -103,7 +103,7 @@ export const NativeLanguageScreen = () => {
                   </div>
                 }
                 <div className="nativeScreenPaginationDiv">
-                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={page12} func={() => {
+                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={listItemCountForShow} func={() => {
                     nativeLanguageGetThunk()
                   }} />
                 </div>

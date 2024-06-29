@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./learning-language-screen-style.css";
 import "../../global-styles/global-styles.css";
 import { Colors } from "../../assets/colors/colors";
-import { CustomAddNew, CustomCountryItem, CustomNoData, CustomPagination, CustomSpin } from "../../components";
-import { LearningLanguageItemCard } from "./components";
+import { CustomAddNew, ImageItem, CustomNoData, CustomPagination, CustomSpin } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -13,7 +12,7 @@ import {
   learnLanguageByIdThunk,
 } from "../../store/slices";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page12 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 
 export const LearningLanguageScreen = () => {
@@ -33,7 +32,7 @@ export const LearningLanguageScreen = () => {
   };
  
   useEffect(() => {
-    !learningLanguagesData?.data?.list?.length && dispatch(learningLanguagesThunk(ConstPagiantion(page0,page12)));
+    !learningLanguagesData?.data?.list?.length && dispatch(learningLanguagesThunk(ConstPagiantion(0,listItemCountForShow)));
   }, []);
 
 
@@ -97,7 +96,7 @@ export const LearningLanguageScreen = () => {
                           }}
                           className="pointer"
                         >
-                          <CustomCountryItem
+                          <ImageItem
                             count={lang?.nativeLanguages?.length}
                             loading={imageLoading}
                             icon={imageUrls[lang.imageFile]}
@@ -109,7 +108,7 @@ export const LearningLanguageScreen = () => {
                 </div>
               }
               <div className="learningLanguageScreenPaginationDiv">
-                <CustomPagination length={learningLanguagesData?.data?.total} pageLength={page12} />
+                <CustomPagination length={learningLanguagesData?.data?.total} pageLength={listItemCountForShow} />
               </div>
             </>
           }
@@ -118,13 +117,4 @@ export const LearningLanguageScreen = () => {
     </div>
   );
 };
- {/* <LearningLanguageItemCard
-                          imageUrls={imageUrls}
-                          icon={imageUrls[lang?.imageFile]}
-                          data={lang?.nativeLanguages}
-                          title={lang.name}
-                          count={learningLanguagesData?.data?.total}
-                          onTap={() => {
-                            learningUpdate(lang?._id);
-                          }}
-                        /> */}
+

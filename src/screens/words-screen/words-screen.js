@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { getIdWordsThunk } from "../../store/slices/words/getId-words";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import filterIcon from "../../assets/images/filterIcon.png"
-import { page0, page12, page5, page6 } from "../../constants/constants";
+import { listItemCountForShow,} from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { WordsLevelData } from "./words-data";
 import { WordsStatus } from "./words-typing";
@@ -211,14 +211,14 @@ export const WordsScreen = () => {
     if (e.target.value !== "") {
       setSearchFilter(e.target.value)
       let data = {
-        skip: page0,
-        limit: page5,
+        skip: 0,
+        limit: listItemCountForShow,
         search: e.target.value
       }
       dispatch(getWordsThunk(data));
 
     } else {
-      dispatch(getWordsThunk(ConstPagiantion(page0, page5)));
+      dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
@@ -256,25 +256,25 @@ export const WordsScreen = () => {
   }
 
   useEffect(() => {
-    !wordsResponse?.data?.list?.length && dispatch(getWordsThunk(ConstPagiantion(page0, page12)));
+    !wordsResponse?.data?.list?.length && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
 
   useEffect(() => {
-    dispatch(learningLanguagesThunk(ConstPagiantion(page0, page12)));
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
-    dispatch(categoryGetThunk(ConstPagiantion(page0, page12)));
+    dispatch(learningLanguagesThunk(ConstPagiantion(0, listItemCountForShow)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
+    dispatch(categoryGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
 
   const fetchData = useCallback(() => {
-    dispatch(getWordsThunk(ConstPagiantion(page0, page6)));
+    dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
   const fetchFilteredData = useCallback(() => {
     const filterData = {
-      skip: page0,
-      limit: page6,
+      skip: 0,
+      limit: listItemCountForShow,
       language: lerningLanguage,
       level: filterLevel,
       category: valueCategory,

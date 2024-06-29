@@ -32,7 +32,7 @@ import { useTranslation } from "react-i18next";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { SelectLearningLang } from "./select-learning-lang";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page12 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 import { ShowImage } from "../category-screen/category-update";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
@@ -88,7 +88,7 @@ export const LearningLanguageUpdate = () => {
   };
 
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0,page12)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(0,listItemCountForShow)));
   }, []);
 
   useEffect(() => {

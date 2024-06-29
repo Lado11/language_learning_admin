@@ -9,10 +9,8 @@ export const HomeScreen = () => {
 
   return (
     <div className="dashboardMainDiv">
-      <div className="dashboardInfo">
         {!isSmallScreen && <CustomSidebar />}
         <DashboardScreen />
-      </div>
     </div>
   );
 };

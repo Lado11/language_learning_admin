@@ -15,7 +15,7 @@ import { statusUpload, typeUpload } from "./upload-data";
 import { UploadType } from "./upload-typing";
 import { useCallback } from "react";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { page0, page6 } from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 
 
 
@@ -156,13 +156,13 @@ export const UplaodScreen = () => {
     };
 
     const fetchData = useCallback(() => {
-        dispatch(wordsExelGetThunk(ConstPagiantion(page0,page6)))
+        dispatch(wordsExelGetThunk(ConstPagiantion(0,listItemCountForShow)))
     }, [dispatch]);
 
     const fetchFilteredData = useCallback(() => {
         const filterData = {
             skip: 0,
-            limit: 6,
+            limit: listItemCountForShow,
             type: filterUploadType,
             status: filterStatus,
         };

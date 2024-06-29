@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import {
-  CustomCardItem,
   CustomNoData,
   CustomPagination,
+  ImageItem,
 } from "../../components";
 import { CustomAddNew } from "../../components/custom-add-new/custom-add-new";
 import "./category-screen.css";
@@ -10,10 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from "../../store/slices/category/get-category";
 import { useEffect, useState } from "react";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
-import { page0, page6 } from "../../constants/constants";
+import { listItemCountForShow, page0, page6 } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import {  filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
-
+import {  filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 export const CategoryScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,6 +20,7 @@ export const CategoryScreen = () => {
   const categoryData = useSelector(getCategoryGetData);
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const categoryImageLoading = useSelector(getfilesGetIdloading);
 
   useEffect(() => {
     // Preload image URLs
@@ -48,7 +48,7 @@ export const CategoryScreen = () => {
 
   
   useEffect(() => {
-    dispatch(categoryGetThunk(ConstPagiantion(page0, page6)));
+    dispatch(categoryGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
 const categoryUpdate = (id) => {
@@ -78,13 +78,15 @@ const categoryUpdate = (id) => {
                 <div className="custom-card-item">
                   {categoryData?.data?.list?.map((countryItem, index) => (
                     <div className="pointer" key={index + 1} onClick={() => categoryUpdate(countryItem._id)}>
-                      <CustomCardItem icon={imageUrls[countryItem.imageFile]} title={countryItem.name} />
+                        <ImageItem
+                          loading={categoryImageLoading} icon={imageUrls[countryItem.imageFile]} title={countryItem.name}
+                          />
                     </div>
                   ))}
                 </div>
               )}
               <div className="category-pagination">
-                <CustomPagination length={categoryData?.data?.total} pageLength={page6} />
+                <CustomPagination length={categoryData?.data?.total} pageLength={listItemCountForShow} />
               </div>
             </>
           )}

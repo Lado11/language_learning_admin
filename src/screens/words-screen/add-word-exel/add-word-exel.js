@@ -7,10 +7,11 @@ import { useTranslation } from "react-i18next";
 import "./add-word-exel.css";
 import { SelectLearningLang } from "../../learning-language-screen/select-learning-lang";
 import { useDispatch, useSelector } from "react-redux";
-import { getLearnLanguagesLoading, learnLanguageSelectedLanguages, learningLanguages, learningLanguagesThunk, nativeLanguageGetThunk, removeAllLanguages, removeLanguagesItem } from "../../../store/slices";
+import {  learnLanguageSelectedLanguages, learningLanguages, learningLanguagesThunk, nativeLanguageGetThunk, removeAllLanguages, removeLanguagesItem } from "../../../store/slices";
 import { createExelWordsLoadingData, createExelWordsResponseData, createExelWordsThunk, deleteAddWordExelResponse } from "../../../store/slices/words/post-exel-word";
 import { beforeUpload } from "../../utils/helper";
-import { page0, page12 } from "../../../constants/constants";
+import { listItemCountForShow } from "../../../constants/constants";
+import { ConstPagiantion } from "../../../constants/const-pagination";
 
 export const AddWordExel = () => {
     const [form] = Form.useForm();
@@ -27,13 +28,9 @@ export const AddWordExel = () => {
     const addWordFormExelLoading = useSelector(createExelWordsLoadingData);
     const addWordExel = useSelector(createExelWordsResponseData);
 
-    const skipNative = {
-        skip: page0,
-        limit: page12,
-    };
-
+   
     useEffect(() => {
-        dispatch(learningLanguagesThunk(skipNative));
+        dispatch(learningLanguagesThunk(ConstPagiantion(0, listItemCountForShow)));
     }, []);
 
     const filteredResponse = learningLanguagesData?.data?.list.map((lang) => {
@@ -46,7 +43,7 @@ export const AddWordExel = () => {
 
 
     useEffect(() => {
-        dispatch(nativeLanguageGetThunk(skipNative));
+        dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
     }, []);
 
     const onFinish = (values) => {

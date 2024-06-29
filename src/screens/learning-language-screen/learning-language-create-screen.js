@@ -18,8 +18,7 @@ import {
 } from "../../store/slices";
 import { Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
-import { beforeUpload } from "../utils/helper";
-import { page0, page12 } from "../../constants/constants";
+import { listItemCountForShow,  } from "../../constants/constants";
 import { ConstPagiantion, } from "../../constants/const-pagination";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
@@ -42,7 +41,7 @@ export const LearningLanguageCreateScreen = () => {
   const [categoryShow, setCategoryShow] = useState();
 
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
   const onFinish = (values) => {

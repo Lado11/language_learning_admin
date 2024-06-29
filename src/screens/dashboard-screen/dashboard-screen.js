@@ -8,7 +8,7 @@ import { dashboardGetThunk, getDashboardGetResponse, getDashboardGetloading } fr
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
 import { useNavigate } from "react-router-dom";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import { page0, page10 } from "../../constants/constants";
+import { listItemCountForShow} from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { UserListItem } from "../user-screen/user-screen";
 
@@ -29,7 +29,7 @@ export const DashboardScreen = () => {
 
 
   useEffect(() => {
-    dispatch(userGetAllThunk(ConstPagiantion(page0, page10)));
+    dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
   const seeAllUsers = () => {
