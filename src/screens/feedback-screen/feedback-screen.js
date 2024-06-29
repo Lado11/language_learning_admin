@@ -179,7 +179,7 @@ export const FeedbackScreen = () => {
 
   const handleFeedbackClick = (id) => {
     dispatch(feedBackGetIdThunk(id));
-    navigate(`/feadback/${id}`);
+    navigate(`/feedback/${id}`);
   };
 
   const handleClearFilter = () => {

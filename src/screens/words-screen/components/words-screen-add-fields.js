@@ -16,7 +16,7 @@ export const WordsScreenAddFields = () => {
     <div className="wordsScreenAddFields">
       <CustomAddNew
         title={t("ADD_NEW_WORDS")}
-        onClick={() => onNavigate("/create-word")}
+        onClick={() => onNavigate("/words-create")}
       />
       {/* <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/create-word-exel")} />
       <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() =>onNavigate("/update-word-exel") }/> */}
@@ -33,8 +33,8 @@ export const UploadScreenAddFields = () => {
 
   return (
     <div className="wordsScreenAddFields">
-      <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/create-word-exel")} />
-      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/update-word-exel")} />
+      <CustomAddNew title={t("ADD_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/upload-create-exel")} />
+      <CustomAddNew title={t("UPDATE_WORDS_FROM_EXCEL")} onClick={() => onNavigate("/upload-update-exel")} />
     </div>
   );
 };

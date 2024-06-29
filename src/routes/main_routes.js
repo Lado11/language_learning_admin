@@ -93,7 +93,7 @@ export const MyRoutes = () => {
                 <Route path="/category-create" element={<CategoryCretae />} />
                 <Route path="/user" element={<UserScreen />} />
                 <Route path="/feedback" element={<FeedbackScreen />} />
-                <Route path="/feadback/:id" element={<FeadBackMoreScreen />} />
+                <Route path="/feedback/:id" element={<FeadBackMoreScreen />} />
                 <Route path="/notification" element={<NotificationScreen />} />
                 <Route path="/files" element={<FilesScreen />} />
                 <Route path="/user-create" element={<UserCreateScreen />} />
@@ -112,9 +112,9 @@ export const MyRoutes = () => {
 
                 <Route path="/words" element={<WordsScreen />} />
                 <Route path="/upload" element={<UplaodScreen />} />
-                <Route path="/create-word" element={<WordsCreateScreen />} />
-                <Route path="/create-word-exel" element={<AddWordExel />} />
-                <Route path="/update-word-exel" element={<UpdateExelFromWord />} />
+                <Route path="/words-create" element={<WordsCreateScreen />} />
+                <Route path="/upload-create-exel" element={<AddWordExel />} />
+                <Route path="/upload-update-exel" element={<UpdateExelFromWord />} />
                 <Route path="/words/:id" element={<WordsUpdate />} />
 
             </Route>

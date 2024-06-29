@@ -347,7 +347,6 @@ export const WordsScreen = () => {
                 <>
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
-                      console.log(words,"words");
                       return (
                         <WordsListItem  count={words?.translates?.length} icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
