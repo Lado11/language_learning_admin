@@ -44,14 +44,10 @@ export const CustomSidebar = () => {
               }}
             >
               <SideBarItem
-                count={item.count}
-                backgroundColor={
-                  item.path === location ? item.color : Colors.BACKGROUND_COLOR
-                }
-                color={item.path !== location ? item.color : Colors.WHITE}
+                color={ item.color}
                 title={t(`${item.title}`)}
                 icon={item.icon}
-                bool={itemName}
+                isSelected={ location.includes(item.path) || location == item.path }
               />
             </div>
           );

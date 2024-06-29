@@ -6,13 +6,11 @@ export const SideBarItem = ({
   title,
   icon,
   color,
-  backgroundColor,
-  bool,
-  count,
+  isSelected,
 }) => {
   return (
     <div>
-      <div className="sideBarItem" style={{ backgroundColor: backgroundColor }}>
+      <div className="sideBarItem" style={{ backgroundColor: isSelected ? color : Colors.BACKGROUND_COLOR }}>
         <svg
           width="25"
           height="25"
@@ -20,16 +18,11 @@ export const SideBarItem = ({
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d={icon} fill={bool != title ? color : Colors.WHITE} />
+          <path d={icon} fill={isSelected ? Colors.WHITE : color } />
         </svg>
-        <p className="sideBarItemTitle" style={{ color: color }}>
+        <p className="sideBarItemTitle" style={{ color: isSelected ? Colors.WHITE : color }}>
           {title}
         </p>
-        {count ? (
-          <div className="countStyle" style={{ backgroundColor: "#8833FF40" }}>
-            <p style={{ color: color }}>{count}</p>
-          </div>
-        ) : null}
       </div>
     </div>
   );
