@@ -1,11 +1,15 @@
 .selectLanguageTitle {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .selectLanguageMainDiv .ant-select {
   width: 100% !important;
 }
 
+.ant-select-selector{
+  min-height: 60px;
+  border-radius: 10px;
+}
 .selectLanguageValuesDiv {
   display: flex;
   flex-direction: row;
@@ -26,11 +30,12 @@
   align-items: center;
   justify-content: space-around;
   position: relative;
-  width: 47%;
-  min-width: 110px;
+  width: 100%;
+
+  max-width: 195px;
   height: 60px;
-  margin-right: 10px;
-  margin-top: 10px;
+  /* margin-right: 10px; */
+  margin-top: 16px;
   border-radius: 10px;
 }
 
@@ -45,8 +50,8 @@
   width: 25px;
   height: 25px;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -4px;
+  right: -9px;
   background-color: red;
   color: white;
   font-weight: 600;

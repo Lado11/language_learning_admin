@@ -3,6 +3,9 @@ import { getNativeGetResponse, nativeLanguageGetThunk } from "../../store/slices
 import { CustomSelect } from "../../components";
 import { Colors } from "../../assets/colors";
 import { useEffect } from "react";
+import deleteIcon from "../../assets/images/remove_icon.png"
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { page0, page12 } from "../../constants/constants";
 
 export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, name }) => {
     const dispatch = useDispatch();
@@ -15,18 +18,9 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
         };
     });
     useEffect(() => {
-        const data = {
-          skip: 0,
-          limit: 12,
-        };
-        dispatch(nativeLanguageGetThunk(data));
-      }, []);
-    
+        dispatch(nativeLanguageGetThunk(ConstPagiantion(page0, page12)));
+    }, []);
 
-
-    // const onDelete = (id) => {
-    //   dispatch(removeSelectedLanguagesItem(id));
-    // };
     const selectedDelete = (id) => {
         onDelete(id);
     }
@@ -51,7 +45,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
                                 className="selectLanguageValuesDivItem"
                                 style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
                             >
-                                <span>{lang.name}</span>
+                                <p className="title">{lang.name}</p>
                                 <img src={lang.image} />
                                 <div
                                     className="deleteIcon"
@@ -59,7 +53,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, loading, rules, na
                                         selectedDelete(lang._id);
                                     }}
                                 >
-                                    <span>x</span>
+                                    <img src={deleteIcon} />
                                 </div>
                             </div>
                         );

@@ -3,16 +3,14 @@ import "./custom-search-input-style.css";
 import { Colors } from "../../assets/colors/colors";
 import searchIcon from "../../assets/images/searchIcon.svg";
 
-export const CustomSearchInput = ({searchValue,setSearchValue}) => {
- const onChange = (e) =>{
-  setSearchValue(e.target.value)
- }
+export const CustomSearchInput = ({searchValue,setSearchValue,onChangeSearch}) => {
+ 
   return (
     <div
       className="customSearchInputMainDiv"
       style={{ borderColor: Colors.LIGHT_GRAY_WITH_ALFA }}
     >
-      <input placeholder="Search Word" onChange={onChange} className="customSearchInput" />
+      <input placeholder="Search ID, name, device ID, email, phone number" onChange={onChangeSearch} className="customSearchInput" />
       <img src={searchIcon} />
     </div>
   );

@@ -1,44 +1,244 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Colors } from "../../assets/colors/colors";
 import "../../global-styles/index";
 import {
   CustomAddNew,
-  CustomFilterSeelct,
   CustomPagination,
-  CustomSelect,
+  CustomSearchInput,
   CustomSpin,
 } from "../../components";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
-import { columns } from "../../data";
-import { dataUserSub, phoneSelect, emailSelect } from "../../data";
+import { UserInfo, UserRole, UserSubscription, columns, dataEmail, dataPhone, dataRole, dataUser } from "../../data";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import filterIcon from "../../assets/images/filter.png"
+import filterIcon from "../../assets/images/filterIcon.png"
+import { Popover, Radio } from "antd";
+import { ConstPagiantion } from "../../constants/const-pagination";
+import { page0, page5, page6 } from "../../constants/constants";
+
+const UserFilterPopover = ({
+  onChangeSubscribe,
+  onChangeRole,
+  onChangeEmail,
+  onChangePhone,
+  role,
+  subscribe,
+  email,
+  phone,
+  onClearFilter,
+  onApplyFilter,
+  isPopoverOpen,
+  handlePopoverOpenChange,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Popover
+      placement="bottomLeft"
+      content={<div className="filterSection">
+        <p className="popeverTitle">User Subscription</p>
+        <Radio.Group onChange={onChangeSubscribe} value={subscribe}>
+          <div className="statusGroup">
+            {dataUser?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Phone number</p>
+
+        <Radio.Group onChange={onChangePhone} value={phone}>
+          <div className="statusGroup">
+            {dataPhone?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Email</p>
+
+        <Radio.Group onChange={onChangeEmail} value={email}>
+          <div className="statusGroup">
+            {dataEmail?.map((option) => {
+              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+
+        </Radio.Group>
+        <hr className="poepverHr" />
+        <p className="popeverTitle">Role</p>
+        <Radio.Group onChange={onChangeRole} value={role}>
+          <div className="statusGroup">
+            {dataRole?.map((option) => {
+              return <Radio key={option.key} value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+            })}
+          </div>
+        </Radio.Group>
+        <div className="buttonSection">
+          <button onClick={onClearFilter} className="button">Clear</button>
+          <button onClick={onApplyFilter} className="buttonApply">Apply</button>
+        </div>
+      </div>}
+      trigger="click"
+      open={isPopoverOpen}
+      onOpenChange={handlePopoverOpenChange}
+    >
+      <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+    </Popover>
+  );
+};
+
+
+export const UserListItem = ({ user, onClick, key }) => {
+  const getUploadSubscribedLabel = (status) => {
+    switch (status) {
+      case UserSubscription.SUBSCRIBED:
+        return "Subscribed";
+      case UserSubscription.UNSUBSCRIBED:
+      default:
+        return "UnSubscribed";
+    }
+  };
+
+  return (
+    <li className="table-row" key={key} onClick={onClick}>
+      <div className="col col-1 desc" data-label="Job Id">{(user?._id).slice(0,10)}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.email}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
+      <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
+      <div className="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{
+        getUploadSubscribedLabel(user?.isSubscribed)
+      }</p></div>
+    </li>
+  );
+};
 
 export const UserScreen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const pageLength = 5;
   const dispatch = useDispatch();
   const userGetLoading = useSelector(getUserGetAllLoading);
   const userData = useSelector(getUserGetAllData)?.data;
   const dataList = userData?.list;
+  const [searchValue, setSearchValue] = useState();
+  const [searchFilter, setSearchFilter] = useState();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  const data = {
-    skip: 0,
-    limit: 5,
-  };
   useEffect(() => {
-    dispatch(userGetAllThunk(data));
+    dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
   }, []);
 
-  const userUpdate = (id) => {
-    localStorage.setItem("userId", id);
-    dispatch(userGetByIdThunk(id));
-    navigate(`/user-update/:${id}`);
+  const onChangeSearch = (e) => {
+    setSearchValue(e.target.value);
+    if (e.target.value !== "") {
+      setSearchFilter(e.target.value)
+      let data = {
+        skip: page0,
+        limit: page5,
+        search: e.target.value
+      }
+      dispatch(userGetAllThunk(data));
+    } else {
+      dispatch(userGetAllThunk(ConstPagiantion(page0, page5)));
+      setSearchFilter(undefined)
+    }
   }
+
+  const userUpdate = (id) => {
+    dispatch(userGetByIdThunk(id));
+    navigate(`/user/${id}`);
+  }
+
+  const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
+  const [subscribe, setSubscribe] = useState();
+
+  const [filtterPhone, setFiltterPhone] = useState(undefined);
+  const [phone, setPhone] = useState();
+
+  const [filtterEmail, setFiltterEmail] = useState(undefined);
+  const [email, setEmail] = useState();
+
+  const [filtterRole, setFiltterRole] = useState(undefined);
+  const [role, setRole] = useState();
+
+  const onChangeSubscribe = (e) => {
+    setSubscribe(e.target.value);
+    if (e.target.value !== UserSubscription.All) {
+      setFiltterSsubscribe(e.target.value)
+    } else {
+      setFiltterSsubscribe(undefined)
+    }
+  };
+
+  const onChangePhone = (e) => {
+    setPhone(e.target.value);
+    if (e.target.value !== UserInfo.All) {
+      setFiltterPhone(e.target.value)
+    } else {
+      setFiltterPhone(undefined)
+    }
+  };
+
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
+    if (e.target.value !== UserInfo.All) {
+      setFiltterEmail(e.target.value)
+    } else {
+      setFiltterEmail(undefined)
+    }
+  };
+
+  const onChangeRole = (e) => {
+    setRole(e.target.value);
+    if (e.target.value !== UserRole.All) {
+      setFiltterRole(e.target.value)
+    } else {
+      setFiltterRole(undefined)
+    }
+  };
+
+  const fetchData = useCallback(() => {
+    dispatch(userGetAllThunk(ConstPagiantion(page0, page6)));
+  }, [dispatch]);
+
+  const fetchFilteredData = useCallback(() => {
+    const filterData = {
+      skip: page0,
+      limit: page6,
+      isSubscribed: filtterSsubscribe,
+      phoneNumberVerified: filtterPhone,
+      emailVerified: filtterEmail,
+      role: filtterRole,
+      search: searchFilter
+    };
+    dispatch(userGetAllThunk(filterData));
+  }, [dispatch, filtterSsubscribe, filtterPhone, filtterEmail, filtterRole, searchFilter]);
+
+  const handlePopoverOpenChange = (newOpen) => {
+    setIsPopoverOpen(newOpen);
+  };
+
+
+  const handleClearFilter = () => {
+    setSubscribe("")
+    setPhone("")
+    setEmail("")
+    setRole("")
+    fetchData()
+  };
+
+  const handleApplyFilter = () => {
+    fetchFilteredData();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
 
   return (
@@ -54,45 +254,43 @@ export const UserScreen = () => {
           }}
         />
         <p className="screensTitleStyle">{t("USER")}</p>
-        {/* <img src={filterIcon}/> */}
-        {/* <CustomFilterSeelct/> */}
-        {/* <div className="select-row words_select">
-          <CustomSelect data={dataUserSub} optionsData={dataUserSub} title={t("SUBSCRIPTION")} />
-          <div className="select_middle">
-            <CustomSelect data={phoneSelect} title={t("VERIFED_BY_PHONE")} />
-          </div>
-          <CustomSelect data={emailSelect} title={t("VERIFED_BY_EMAIL")} />
-        </div> */}
+        <div className="filterDiv">
+          <UserFilterPopover
+            subscribe={subscribe}
+            phone={phone}
+            email={email}
+            role={role}
+            onChangePhone={onChangePhone}
+            onChangeEmail={onChangeEmail}
+            onChangeRole={onChangeRole}
+            onChangeSubscribe={onChangeSubscribe}
+            onClearFilter={handleClearFilter}
+            onApplyFilter={handleApplyFilter}
+            isPopoverOpen={isPopoverOpen}
+            handlePopoverOpenChange={handlePopoverOpenChange}
+          />
+          <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
+        </div>
 
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
           <CustomSpin size={64} color="gray" />
-        </div> :<div> <div class="container">
-          <ul class="responsive-table">
+        </div> : <div> <div className="container">
+          <ul className="responsive-table">
             <TableHeader data={columns} />
-            {dataList?.map((val, index) => {
+            {dataList?.map((user, index) => {
               return (
-                <li class="table-row" key={index} onClick={() => {
-                  userUpdate(val?._id)
-                }}>
-                  <div class="col col-1 desc" data-label="Job Id">{index + 1}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.email}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.firstName}</div>
-                  <div class="col col-1 desc" data-label="Job Id">{val?.phoneNumber}</div>
-                  <div class="col col-1 desc buttonCol" data-label="Job Id"><p className="titleCol">{(val?.isSubscribed).toString()}</p></div>
-                </li>
-              )
+                <UserListItem key={index}
+                  user={user}
+                  onClick={() => userUpdate(user?._id)} />)
             })}
           </ul>
         </div>
-        
         </div>}
         <div className="nativeScreenPaginationDiv">
-         <CustomPagination length={userData?.total} pageLength={5} />
-       </div> 
+          <CustomPagination length={userData?.total} pageLength={5} />
+        </div>
       </div>
-    
+
     </div>
   );
 };

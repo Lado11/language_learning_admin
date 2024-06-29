@@ -28,7 +28,7 @@
   "CONFIRM_PASSWORD": "Confirm Password",
   "EMAIL_VERIFICATION": "Email Verification",
   "EMAIL_VERIFICATION_DESCRIPTION_PART_ONE": "We've sent an verification to emailaddress@gmail.com to",
-  "EMAIL_VERIFICATION_DESCRIPTION_PART_TWO": "verify your email address and activate your account.",
+  "EMAIL_VERIFICATION_DESCRIPTION_PART_TWO": "help you reset your password. Pleace check your inbox and enter the code to complete the process.",
   "DONT_RECEIVE_CODE": "Didn’t receive code?",
   "RESEND": "Resend",
   "VERIFED_BY_PHONE": "Verifed by Phone",

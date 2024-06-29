@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import uploadIcon from "../../../assets/images/exelupload.png";
-import { createExelWordsThunk } from "../../../store/slices/words/post-exel-word";
 import { updateExelWordsLoadingData, updateExelWordsThunk } from "../../../store/slices/words/put-exel-word";
 import { beforeUpload } from "../../utils/helper";
 
@@ -26,7 +25,6 @@ export const UpdateExelFromWord = () => {
         const learningLanguagesData = useSelector(learningLanguages);
         const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
         const updateWordLoading = useSelector(updateExelWordsLoadingData);
-        const pageLength = 12;
         const skipNative = {
             skip: 0,
             limit: 12,
@@ -90,34 +88,44 @@ export const UpdateExelFromWord = () => {
                 >
                     <div className="wordExelAdd ">
                         <div className="addWordExel">
-                            <p className="nativeLanguageTitle ">Update Words From Excel</p>
+                           <div>
+                           <p className="nativeLanguageTitle ">Update Words From Excel</p>
     
-                            <CustomAntdSelect 
-                             name={"Learning Language"}
-                            //   rules={true}
-                                className="wordsSelectExel"
-                                optinData={filteredResponse}
-                                selected={learningLanguageWordSelectedValue}
-                                setSelected={setLearningLanguageWordSelectedValue}
-                                defaultValue={t("LEARNING_LANGUAGE")}
-                                color={Colors.LIGHT_GRAY}
-                            />
-                            <Form.Item
-                                name="image"
-                                rules={[{ required: true }]}>
-                                <Upload
-                                    onChange={handleChange}
-                                    beforeUpload={beforeUpload}
-                                    {...props}
-                                    maxCount={1}
-                                    listType="picture"
-                                    className="upload-list-inline"
-                                >
-                                    {categoryShow && showCategoryUpload ? null : (
-                                        <img src={uploadIcon} className="uploadExel" />
-                                    )}
-                                </Upload>
-                            </Form.Item>
+    <CustomAntdSelect 
+     name={"Learning Language"}
+    //   rules={true}
+        className="wordsSelectExel"
+        optinData={filteredResponse}
+        selected={learningLanguageWordSelectedValue}
+        setSelected={setLearningLanguageWordSelectedValue}
+        defaultValue={t("LEARNING_LANGUAGE")}
+        color={Colors.LIGHT_GRAY}
+    />
+    <Form.Item
+        name="image"
+        rules={[{ required: true }]}>
+        <Upload
+            onChange={handleChange}
+            beforeUpload={beforeUpload}
+            {...props}
+            maxCount={1}
+            listType="picture"
+            className="upload-list-inline"
+        >
+            {categoryShow && showCategoryUpload ? null : (
+                <img src={uploadIcon} className="uploadExel" />
+            )}
+        </Upload>
+    </Form.Item>
+                           </div>
+                            <div className="learnLanguageSelectedLanguages">
+                            <p className="selectLanguageTitle">Native Language</p>
+                            <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+                                dispatch(removeLanguagesItem(id));
+                            }} />
+                        </div>
+                        </div>
+
                             <Form.Item>
                                 {/* {contextHolder} */}
                                 <CustomAntdButton
@@ -126,13 +134,7 @@ export const UpdateExelFromWord = () => {
                                 loading={updateWordLoading}
                                 />
                             </Form.Item>
-                        </div>
-                        <div className="learnLanguageSelectedLanguages">
-                            <p className="selectLanguageTitle">Native Language</p>
-                            <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
-                                dispatch(removeLanguagesItem(id));
-                            }} />
-                        </div>
+                       
                     </div>
                 </Form>
     

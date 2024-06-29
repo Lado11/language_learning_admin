@@ -1,10 +1,78 @@
-.addWordsDiv{
+.addWordsDiv {
     display: flex;
     flex-direction: row;
 }
 
-.translateSection{
+.translateSection {
     width: 420px;
     margin-left: 70px;
 }
 
+.ant-form-item {
+    margin-bottom: 10px !important;
+}
+
+.itemName {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB3;
+}
+
+.titleTranslations {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #000;
+
+}
+@media only screen and (max-width: 1024px) {
+    .addWordsDiv {
+        display: flex;
+        flex-direction: column;
+    }
+    .translateSection {
+        margin-left: 0px;
+        width: 100%;
+        max-width: 420px;
+    }
+
+
+}
+@media only screen and (max-width: 768px) {
+
+    .addWordsDiv {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .translateSection {
+        margin-left: 0px;
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .rowInputWords {
+        flex-direction: column;
+    }
+
+    .inputLeft {
+        margin-left: 0px;
+    }
+
+    .createWordsRow .ant-form-item {
+        width: 100% !important;
+        max-width: 420px !important;
+    }
+
+    .wordsCreateAddWords {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .antd_custom_select_user {
+        margin-right: 0px;
+    }
+}

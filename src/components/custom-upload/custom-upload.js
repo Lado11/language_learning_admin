@@ -1,70 +1,55 @@
-import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import React from "react";
 import "./custom-upload.css";
-import { Image, Upload } from "antd";
-import uploadImg from "../../assets/images/uploadImg.svg";
-import { Colors } from "../../assets/colors";
-import uploadIcon from "../../assets/images/wordUpload.png";
-import { beforeUpload } from "../../screens/utils/helper";
+import { Form} from "antd";
+import remove_icon from "../../assets/images/remove_icon.png";
+import { ImageUpload } from "../../screens/category-screen/category-screen-create-from";
+import { fileToDataString } from "../../helper/file-build";
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-export const CustomUpload = ({fileList,setFileList,setIamge,image}) => {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
 
-  const props = {
-    accept: ".png,.svg,.jpg",
-    onRemove: (file) => {
-      const index = image?.indexOf(file);
-      const newFileList = image?.slice();
-      newFileList?.splice(index, 1);
-    },
-  };
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+export const CustomUpload = ({ setCategoryShow, setPreviewimgUrl, previewImgUrl, setSelectedImage, selectedImage }) => {
+
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  const handleChange = (info) =>{
-    setIamge(info.fileList)
-    setFileList(info.file);
-  }
-
-  
   return (
     <div className="custom-upload">
-      <Upload
-      {...props}
-      beforeUpload={beforeUpload}
-        listType="picture-card"
-        fileList={image}
-        onPreview={handlePreview}
-        onChange={handleChange}
+      <Form.Item
+        name={"words image"}
+        rules={[{ required: true }]}
       >
-        {image?.length >= 1 ? null :   <img  src={uploadIcon}/>}
-      </Upload>
-      {previewImage && (
-        <Image
-          wrapperStyle={{
-            display: "none",
-          }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(""),
-          }}
-          src={previewImage}
-        />
-      )}
+        {previewImgUrl?.length ?
+          <div className="imgae_upload_design">
+            <div className="remove_icon_div">
+              <img
+                className="remove_button"
+                src={remove_icon}
+                onClick={() => {
+                  setPreviewimgUrl("")
+                  setCategoryShow(null);
+                }}
+              />
+            </div>
+            <div className="imgae_name">
+              <div className="image_wrapper">
+                <p>{selectedImage?.name}</p>
+                <img className="imageItem" src={previewImgUrl} />
+              </div>
+            </div>
+          </div> : <ImageUpload onChange={handleFileChange} />}
+
+      </Form.Item>
     </div>
   );
 };

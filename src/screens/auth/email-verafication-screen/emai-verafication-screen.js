@@ -43,7 +43,7 @@ export const EmailVeraficationScreen = () => {
             className="emailVerificationDescription"
             style={{ color: Colors.TEXT_FONT }}
           >
-            {t("EMAIL_VERIFICATION_DESCRIPTION_PART_ONE")}
+           We've sent an verification to {storageEmail} to
           </p>
           <p
             className="emailVerificationDescription"

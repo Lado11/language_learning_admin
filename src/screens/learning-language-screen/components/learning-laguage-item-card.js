@@ -4,7 +4,7 @@ import { Colors } from "../../../assets/colors/colors";
 import { Avatar } from 'antd';
 import { sliceText } from "../../utils/helper";
 
-export const LearningLanguageItemCard = ({ data, title, count, onTap }) => {
+export const LearningLanguageItemCard = ({ imageUrls,data,icon, title, count, onTap }) => {
   return (
     <div
       className="learningLanguageCard"
@@ -25,12 +25,11 @@ export const LearningLanguageItemCard = ({ data, title, count, onTap }) => {
             backgroundColor: '#fde3cf',
           }}
         >
-          {data?.map((item, index) => {
+           {data?.map((item, index) => {
             return <div key={index}>
-              <Avatar src={item?.imageFile} />
+              <Avatar src={imageUrls[item.imageFile]} />
             </div>
           })}
-
         </Avatar.Group>
       </div>
     </div>

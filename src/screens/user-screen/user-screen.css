@@ -1,6 +1,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap");
 
 .authScreenFilesDiv {
   display: flex;
@@ -9,6 +10,15 @@
   border-radius: 50px;
   padding: 47px 94px 47px 94px;
 }
+.optiontitle{
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.94px;
+  letter-spacing: -0.15399999916553497px;
+  color: black;
+}
+
 .row{
   display: flex;
   flex-direction: row;
@@ -113,6 +123,9 @@ table.rtr-table thead th {
 
 .category_row_input_user .ant-input {
   width: 206px;
+}
+.left .antd_custom_select_user{
+  width: 206px !important;
 }
 
 .left {
@@ -294,8 +307,6 @@ h2 {
       /* display: none; */
     }
 
-    
-
     li {
       display: block;
     }
@@ -320,6 +331,15 @@ h2 {
   }
 }
 @media  screen and (max-width: 425px) {
+    .category_row_input_user .ant-form-item {
+      width: 100% !important;
+      max-width: 420px;
+    }
+    .left .antd_custom_select_user{
+      width: 100% !important;
+      max-width: 420px !important;
+    }
+  
   
   .category_row_input_user{
     display: flex;

@@ -4,6 +4,37 @@
   justify-content: space-between;
   align-items: start;
 }
+.title{
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 25px;
+  color: #7D8FB3;
+}
+.rightSection{
+
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+}
+
+.ant-select .ant-select-arrow{
+  height: 24px !important;
+}
+
+
+.voiceUploadRow{
+display: flex;
+flex-direction: row;
+}
+
+.customSelect .ant-select-selection-placeholder{
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  color: #7D8FB359;
+}
 
 .learningLanguageScreenMainDiv {
   display: flex;
@@ -16,7 +47,13 @@
 .formAntd{
   width: 100% !important;
 }
+.update-language-right-section{
+  width: 100%;
+}
 .updateSection{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
 }
 .learningLanguageScreenLoadingDiv {
@@ -26,8 +63,7 @@
 }
 .createLearningLangRow{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
 }
 .learnLanguageUpdateScreenMainDiv {
@@ -59,7 +95,8 @@
 }
 
 .learnLanguageSelectedLanguages {
-  width: 44%;
+  width: 100%;
+  max-width: 420px;
 }
 .CustomSpinUpdate{
   display: flex;
@@ -77,13 +114,27 @@
 .learnLanguageSelectedLanguages .ant-select-selector{
   background-color: white !important;
   border: 1px solid #7D8FB326 !important;
+  border-radius: 10px;
 }
 
+.selectLanguageValuesDivItem:nth-child(-n +3){
+  margin-right: 12px;
+
+}
 @media screen and (max-width: 1440px) {
   .learnLanguageUpdateScreenMainDiv {
     padding: 60px 40px 30px 40px;
   }
 }
+@media screen and (max-width: 1300px) {
+  .updateSection{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    width: 100%;
+  }
+}
+
 
 @media screen and (max-width: 1024px) {
   .learnLanguageUpdateScreenMainDiv {
@@ -121,13 +172,17 @@
     align-items: center;
     padding: 60px 10px 30px 10px;
   }
-  .learningLanguageUpdateFormDiv {
-    width: 80%;
+  .selectedNativeItem{
+    width: 100%;
+    max-width: 420px;
   }
+ 
   .learnLanguageSelectedLanguages {
     display: flex;
-    justify-content: center;
-    width: 80%;
+    flex-direction: column;
+  }
+  .selectLanguageValuesDivItem .selectLanguageValuesDivItem{
+    width: 100%;
   }
   .selectLanguageMainDiv {
     width: 100%;

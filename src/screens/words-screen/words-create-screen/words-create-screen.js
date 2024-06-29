@@ -23,16 +23,18 @@ export const WordsCreateScreen = () => {
   const formData = new FormData();
   const array = [];
   const loadingCreateWord = useSelector(createWordsLoadingData);
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const [categoryShow, setCategoryShow] = useState();
 
-const [val,setVal] = useState()
-console.log(val,"val");
+  const [val, setVal] = useState()
   const onFinish = (values) => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
     formData.append("level", selectedLevel?.value)
     formData.append("language", learningLanguageWordSelectedValue?._id)
     formData.append("category", selectedCategory?._id)
-    formData.append("image", fileList)
+    selectedImage && formData.append("image", selectedImage);
     formData.append("audio", fileListVoice)
 
     Object.keys(values).map((date, index) => {
@@ -47,6 +49,8 @@ console.log(val,"val");
       formData.append(`translates[${ind}].nativeLanguage`, item?._id);
     });
     setVal(values)
+    dispatch(createWordsThunk(formData))
+
   };
   const messageError = createWordData?.message;
 
@@ -54,6 +58,8 @@ console.log(val,"val");
     if (createWordData?.success === true) {
       setAudio()
       setIamge()
+      setPreviewimgUrl("")
+      setCategoryShow(null);
       setLearningLanguageWordSelectedValue()
       form.resetFields()
       dispatch(deleteWordCreateResponse());
@@ -74,7 +80,7 @@ console.log(val,"val");
 
   return (
     <div
-      className="screensMainDiv wordsCreateScreen"
+      className="nativeLanguageCreateScreenMainDiv wordsCreateScreen"
       style={{ backgroundColor: Colors.WHITE }}
     >
       <div className="wordsCreateAddWords">
@@ -87,6 +93,12 @@ console.log(val,"val");
           <div className="addWordsDiv">
             <div className="addWordsFirstSelect">
               <CreateWordsAdd
+                previewImgUrl={previewImgUrl}
+                setPreviewimgUrl={setPreviewimgUrl}
+                categoryShow={categoryShow}
+                setCategoryShow={setCategoryShow}
+                setSelectedImage={setSelectedImage}
+                selectedImage={selectedImage}
                 image={image}
                 setIamge={setIamge}
                 setAudio={setAudio}
@@ -103,11 +115,11 @@ console.log(val,"val");
               />
             </div>
             <div className="translateSection">
-              {learningLanguageWordSelectedValue && <p>Translate</p>}
+              {learningLanguageWordSelectedValue && <p className="titleTranslations">Translate</p>}
               {learningLanguageWordSelectedValue?.nativeLanguages?.length ? learningLanguageWordSelectedValue?.nativeLanguages.map((item, index) => {
                 return (
                   <div>
-                    <p>{item?.nameEng}</p>
+                    <p className="itemName">{item?.nameEng}</p>
                     <CustomAntdInput
                       key={item}
                       rules={false}
@@ -126,7 +138,6 @@ console.log(val,"val");
           <div className="addButtonDiv">
             {contextHolder}
             <CustomAntdButton onClick={() => {
-            dispatch(createWordsThunk(formData)) 
             }} title="Add" loading={loadingCreateWord} background={Colors.PURPLE} />
           </div>
         </Form>

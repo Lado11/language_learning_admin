@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
-import play from "../../../../../assets/images/play.png"
-import WavesurferPlayer from '@wavesurfer/react'
+import play from "../../../../../assets/images/play.png";
 
 const formWaveSurferOptions = ref => ({
   container: ref,
@@ -12,96 +11,77 @@ const formWaveSurferOptions = ref => ({
   barRadius: 3,
   responsive: true,
   height: 18,
-  // If true, normalize by the maximum peak instead of 1.0.
   normalize: true,
-  // Use the PeakCache to improve rendering speed of large waveforms.
   partialRender: true
 });
 
 export function Waveform({ url }) {
+  console.log(url,"url");
   const waveformRef = useRef(null);
   const wavesurfer = useRef(null);
-  const [playing, setPlay] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
+  const [isReady, setIsReady] = useState(false); // Track if WaveSurfer is ready
 
-  // create new WaveSurfer instance
-  // On component mount and when url changes
   useEffect(() => {
-    setPlay(false);
-
-    const options = formWaveSurferOptions(waveformRef.current);
-    wavesurfer.current = WaveSurfer.create(options);
-
-    wavesurfer.current.load(url);
-
-    wavesurfer.current.on("ready", function () {
-      // https://wavesurfer-js.org/docs/methods.html
-      // wavesurfer.current.play();
-      // setPlay(true);
-
-      // make sure object stillavailable when file loaded
+    // Cleanup previous instance on component unmount
+    return () => {
       if (wavesurfer.current) {
-        wavesurfer.current.setVolume(volume);
-        setVolume(volume);
+        wavesurfer.current.destroy();
       }
-    });
+    };
+  }, []);
 
-    // Removes events, elements and disconnects Web Audio nodes.
-    // when component unmount
-    return () => wavesurfer?.current?.destroy();
+  useEffect(() => {
+    if (!url) return;
+
+    wavesurfer.current = WaveSurfer.create(formWaveSurferOptions(waveformRef.current));
+  
+    wavesurfer.current.load(url)
+      .then(() => {
+        setIsReady(true);
+        wavesurfer.current.setVolume(volume);
+        if (playing) {
+          wavesurfer.current.play();
+        }
+      })
+      .catch(error => {
+        console.error('Error loading audio:', error);
+        // Handle error state or show a message to the user
+      });
+  
+    return () => {
+      if (wavesurfer.current) {
+        wavesurfer.current.destroy();
+        setIsReady(false);
+      }
+    };
   }, [url]);
 
+
   const handlePlayPause = () => {
-    setPlay(!playing);
-    wavesurfer.current.playPause();
-  };
+    if (!wavesurfer.current) return;
 
-  const onVolumeChange = e => {
-    const { target } = e;
-    const newVolume = +target.value;
+    setPlaying(!playing); // Toggle `playing` state
 
-    if (newVolume) {
-      setVolume(newVolume);
-      wavesurfer.current.setVolume(newVolume || 1);
+    if (!playing && isReady) {
+      wavesurfer.current.play();
+    } else {
+      wavesurfer.current.pause();
     }
   };
 
+
+
   return (
     <div className="audio">
-      {url ? <button onClick={handlePlayPause}>
-        {!playing ? <img src={play} /> : <img src={play} />}
-        </button> : null}
+      {url && (
+        <button onClick={handlePlayPause}>
+          {!playing ? <img src={play} alt="Play" /> : <img src={play} alt="Pause" />}
+        </button>
+      )}
+      
       <div id="waveform" ref={waveformRef} className="audioListen" />
     </div>
   );
 }
-// export function Waveform({ url }) { 
-//   const [wavesurfer, setWavesurfer] = useState(null)
-//   const [isPlaying, setIsPlaying] = useState(false)
-
-//   const onReady = (ws) => {
-//     setWavesurfer(ws)
-//     setIsPlaying(false)
-//   }
-
-//   const onPlayPause = () => {
-//     wavesurfer && wavesurfer.playPause()
-//   }
-
-//   return (
-//     <>
-//       <WavesurferPlayer
-//         height={100}
-//         waveColor="violet"
-//         url={url}
-//         // onReady={onReady}
-//         onPlay={() => setIsPlaying(true)}
-//         onPause={() => setIsPlaying(false)}
-//       />
-
-//       <button onClick={onPlayPause}>
-//         {isPlaying ? 'Pause' : 'Play'}
-//       </button>
-//     </>
-//   )
-// }

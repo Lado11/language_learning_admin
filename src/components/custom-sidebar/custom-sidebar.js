@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { SideBarItem } from "./components/side-bar-item";
 import { customSideBarData } from "../../data";
 import { Colors } from "../../assets/colors/colors";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./custom-sidebar.css";
 import { removeAllLanguages, removeAllSelectedData } from "../../store/slices";
 import { useDispatch } from "react-redux";
 
 export const CustomSidebar = () => {
+  const location = useLocation().pathname
   const [select, setSelect] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,7 +26,6 @@ export const CustomSidebar = () => {
     if (!itemName) {
       localStorage.setItem("item", customSideBarData[0].title);
     }
-
   }, [itemName]);
 
   return (
@@ -46,9 +46,9 @@ export const CustomSidebar = () => {
               <SideBarItem
                 count={item.count}
                 backgroundColor={
-                  item.title === itemName ? item.color : Colors.BACKGROUND_COLOR
+                  item.path === location ? item.color : Colors.BACKGROUND_COLOR
                 }
-                color={item.title !== itemName ? item.color : Colors.WHITE}
+                color={item.path !== location ? item.color : Colors.WHITE}
                 title={t(`${item.title}`)}
                 icon={item.icon}
                 bool={itemName}

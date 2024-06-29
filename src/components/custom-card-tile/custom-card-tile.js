@@ -10,14 +10,14 @@ export const CustomCardTile = ({ icon, title, count, backgroundColor ,loading}) 
         className="customCardTileImage"
         style={{ backgroundColor: backgroundColor }}
       >
-        <img src={icon} alt="" />
+        <img className="dashboardIcon" src={icon} alt="" />
       </div>
-      <div className="customCardTileTitleDiv">
+        {loading ?<CustomSpin size={24} color="gray" />: <div className="customCardTileTitleDiv">
         <p className="customCardTileTitle" style={{ color: Colors.LIGHT_BLUE }}>
-         {loading ?   <CustomSpin size={24} color="gray" />: title}
+         { title}
         </p>
-        <p className="customCardCount">{count}</p>
-      </div>
+        <p className="customCardCount">{ count}</p>
+      </div>}
     </div>
   );
 };

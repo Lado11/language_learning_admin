@@ -1,11 +1,11 @@
 .update-words-section{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .lerning-language-section{
-    width: 420px;
+    width: 100%;
+    max-width: 420px;
 }
 
 .updateWordsAddInputs .ant-select{
@@ -19,7 +19,82 @@ width: 202px;
 .updateWordsAddInputs .ant-form-item-explain-error{
     width: 203px !important;
 }
+.updateTitle{
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 30px;
 
+}
+.wordsTitle{
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+}
+.wordsInputTitle{
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 25px;
+    color: #7D8FB3;
+}
 .ant-input-status-error{
     border-color:#7d8fb326  !important;
+}
+
+.update-words-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+@media only screen and (max-width: 1024px) {
+    .update-words-row{
+        flex-direction: column;
+    }
+    
+    .updateWordsAddInputs .ant-select{
+        max-width: 420px;
+        }
+        
+        .updateWordsAddInputs .ant-input{
+            max-width: 420px !important;
+        }
+        
+        .updateWordsAddInputs .ant-form-item-explain-error{
+            width: 100% !important;
+            max-width: 420px !important;
+        }
+}
+@media only screen and (max-width: 768px) {
+    .updateWordsAddInputs .ant-select{
+        width: 100%;
+        max-width: 420px;
+        }
+        
+        .updateWordsAddInputs .ant-input{
+            width: 100% !important;
+            max-width: 420px !important;
+        }
+        
+        .updateWordsAddInputs .ant-form-item-explain-error{
+            width: 100% !important;
+            max-width: 420px !important;
+        }
+}
+@media only screen and (max-width: 425px) {
+    .updateWordsAddInputs .ant-select{
+        width: 100%;
+        max-width: 420px;
+        }
+        
+        .updateWordsAddInputs .ant-input{
+            width: 100% !important;
+            max-width: 420px !important;
+        }
+        
+        .updateWordsAddInputs .ant-form-item-explain-error{
+            width: 100% !important;
+            max-width: 420px !important;
+        }
 }

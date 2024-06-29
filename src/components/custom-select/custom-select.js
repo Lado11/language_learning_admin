@@ -14,7 +14,9 @@ export const CustomSelect = ({ title, optionsData, width, backgroundColor, data,
     dispatch(addLanguages(selectedOption));
     dispatch(addLearnLanguageSelectedLanguages(selectedOption ));
   };
-
+  const onSearch = (value) => {
+    console.log('search:', value);
+  };
   return (
     <div>
       <Form.Item
@@ -26,9 +28,11 @@ export const CustomSelect = ({ title, optionsData, width, backgroundColor, data,
         ]}   
         >
         <Select
+         onSearch={onSearch}
           onChange={handleChange}
           className="customSelect"
-          defaultValue={title}
+          placeholder={title}
+          // defaultValue={title}
           style={{ width: width, backgroundColor: backgroundColor }}
         >
          

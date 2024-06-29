@@ -5,6 +5,7 @@ import { nativeLanguageGetThunk } from "../../store/slices/native-language/nativ
 import "./custom-pagination.css";
 import { categoryGetThunk } from "../../store/slices/category/get-category";
 import { getWordsThunk, learningLanguagesThunk, userGetAllThunk } from "../../store/slices";
+import { page12, page5 } from "../../constants/constants";
 
 export const CustomPagination = ({length  ,pageLength}) => {
   const dispatch = useDispatch();
@@ -14,11 +15,11 @@ export const CustomPagination = ({length  ,pageLength}) => {
     const skip =( current -1 ) * pageLength;
     const data = {
       skip: skip,
-      limit: 12,
+      limit: page12,
     }
     const dataUser = {
       skip: skip,
-      limit: 5,
+      limit: page5,
     };
     dispatch(getWordsThunk(dataUser));
     dispatch(userGetAllThunk(dataUser));

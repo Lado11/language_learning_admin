@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+
 .nativeLanguageScreenMainDiv {
   display: flex;
   flex-direction: column;
@@ -108,16 +111,25 @@
   font-weight: 400;
   line-height: 25px;
 }
-
+.customInputTitle{
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 25px;
+  color: black;
+  margin-top: 5px;
+}
 .upload {
   width: 100%;
   max-width: 420px;
   height: 120px;
   cursor: pointer;
 }
-
+.addButton{
+  margin-top: 10px;
+}
 .ant-upload-list-item {
-  height: 120px !important;
+  height: 110px !important;
 }
 
 .ant-upload-list-item {
@@ -142,7 +154,7 @@
 .removeIcon{
   width: 30px;
   height: 30px;
-  margin-right: 10px;
+  margin-left: 10px;
   cursor: pointer;
 }
 .errorDiv{
@@ -153,6 +165,9 @@
 @media screen and (max-width: 1440px) {
   .pointer {
     max-width: 33%;
+  }
+  .nativeLanguageCreateScreenMainDiv{
+    padding: 60px 42px 30px 42px;
   }
   .nativeLanguageScreenMainDiv {
     padding: 60px 42px 30px 42px;
@@ -166,11 +181,12 @@
   .pointer {
     max-width: 50%;
   }
+ 
   .nativeLanguageScreenMainDiv {
     padding: 60px 25px 30px 25px;
   }
   .nativeLanguageCreateScreenMainDiv {
-    padding: 60px 52px 30px 52px;
+    padding: 60px 25px 30px 25px;
   }
 }
 

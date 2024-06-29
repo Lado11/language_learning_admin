@@ -1,12 +1,13 @@
 .customSearchInputMainDiv {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   border-radius: 10px;
   border: 1px solid;
   padding: 0 20px;
   margin-left: 10px;
-  height: 60px;
-  width: 180px;
+  height: 47px;
+  width: 345px;
 }
 
 .customSearchInput {

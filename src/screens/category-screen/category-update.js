@@ -1,53 +1,68 @@
 import React, { useEffect, useState } from "react";
-import { Form, Upload } from "antd";
+import { Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import uploadIcon from "../../assets/images/uploadImg.png";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
-import { useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin } from "../../components";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin, CustomUploadElement } from "../../components";
 import remove_icon from "../../assets/images/remove_icon.png";
 import {
   categoryDeleteThunk,
   categoryUpdateThunk,
   deleteCategoryDeleteResponse,
   deleteCategoryUpdateResponse,
-  getCategoryDeleteBool,
   getCategoryDeleteData,
   getCategoryDeleteLoading,
-  getCategoryUpdateBool,
   getCategoryUpdateData,
   getCategoryUpdateLoading,
 } from "../../store/slices";
 import { categoryGetIdThunk, getCategoryGetIdResponse, getCategoryGetIdloading } from "../../store/slices/category/get-id-category";
 import CustomModal from "../../components/custom-modal/custom-modal";
-import { beforeUpload, props } from "../utils/helper";
+import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { fileToDataString } from "../../helper/file-build";
+import { ImageUpload } from "./category-screen-create-from";
+
+export const ShowImage = ({ title, src, onClick }) => {
+  return (
+    <div className="imgae_upload_design">
+      <div className="remove_icon_div">
+        <img
+          className="remove_button"
+          src={remove_icon}
+          onClick={onClick}
+        />
+      </div>
+      <div className="imgae_name">
+        <p>{title}</p>
+        <img className="imageItem" src={src} />
+      </div>
+    </div>
+  )
+}
 
 export const CategoryUpdate = () => {
+  let location = useLocation();
+  const categoryId = location?.pathname.slice(10);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const categoryId = localStorage.getItem("categoryId");
   const formData = new FormData();
-  const [fileList, setFileList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryShow, setCategoryShow] = useState();
-  const [showCategoryUpload, setCatgeoryShowUpload] = useState();
   const nativeLanguageData = useSelector(getCategoryGetIdResponse)?.data;
   const catgeoryUpdateLoading = useSelector(getCategoryDeleteLoading);
-  const categoryUpdateBool = useSelector(getCategoryUpdateBool);
-  const categoryDeleteBool = useSelector(getCategoryDeleteBool);
   const categoryUpdateLoading = useSelector(getCategoryUpdateLoading);
   const categoryDeleteResponse = useSelector(getCategoryDeleteData);
   const categoryUpdateResponse = useSelector(getCategoryUpdateData);
   const catgeoryLoadingId = useSelector(getCategoryGetIdloading);
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [selectedImage, setSelectedImage] = useState();
+  const [previewImgUrl, setPreviewimgUrl] = useState("");
 
   const onFinish = (values) => {
     if (values.image.file != "") {
       formData.append("localization", values.localization);
       formData.append("name", values.name);
-      categoryShow && formData.append("image", categoryShow);
+      selectedImage && formData.append("image", selectedImage);
       formData.append("id", nativeLanguageData.id);
       formData.append("active", nativeLanguageData?.active);
       dispatch(categoryUpdateThunk(formData));
@@ -62,16 +77,6 @@ export const CategoryUpdate = () => {
     dispatch(categoryGetIdThunk(categoryId));
   }, []);
 
-  const handleChange = (info) => {
-    setCategoryShow(info.file);
-    setCatgeoryShowUpload(info.fileList[0]);
-    if (!info.fileList[0]) {
-      info.file = "";
-    }
-  };
-
-
-
   useEffect(() => {
     form.setFieldsValue({
       localization: nativeLanguageData?.localization,
@@ -85,8 +90,6 @@ export const CategoryUpdate = () => {
       navigate("/category");
       dispatch(deleteCategoryDeleteResponse());
       dispatch(deleteCategoryUpdateResponse());
-
-
     }
   }, [categoryUpdateResponse?.success, categoryDeleteResponse?.success]);
 
@@ -100,11 +103,55 @@ export const CategoryUpdate = () => {
     dispatch(deleteCategoryDeleteResponse());
   }
 
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
+
+
+  useEffect(() => {
+    // Preload image URLs
+    if (nativeLanguageData) {
+      fetchImage(nativeLanguageData.imageFile?._id);
+    }
+  }, [nativeLanguageData]);
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+  useEffect(() => {
+    // Update imageUrls state with fetched image URLs
+    if (categoryImageResponse?.data?.url) {
+      setImageUrls((prevUrls) => ({
+        ...prevUrls,
+        [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
+      }));
+    }
+  }, [categoryImageResponse]);
+  
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
-    <div className="nativeLanguageScreenMainDiv">
+    <div className="nativeLanguageCreateScreenMainDiv">
       <div>
         {categoryDeleteResponse?.message && <CustomErrorSection error={categoryDeleteResponse?.message} onTab={onRemove} />}
-        <p className="nativeLanguageTitle">Update Category</p>
+        <p className="categoryUpdateTitle">Update Category</p>
         <CustomModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} onTab={onTab} />
         {catgeoryLoadingId ? <div className="CustomSpinUpdate">
           <CustomSpin size={120} color={Colors.GRAY_COLOR} />
@@ -115,61 +162,38 @@ export const CategoryUpdate = () => {
             name="control-hooks"
             onFinish={onFinish}
             className="formAntd"
-
           >
             <div className="category_row_input_user">
               <div className="update_category_input">
-                <p>Category Name</p>
+                <p className="categoryInputTitle">Category Name</p>
                 <CustomAntdInput name="localization" placeholder="Category Name*" min={3} />
               </div>
               <div className="update_category_input left">
-                <p>localication string*</p>
+                <p className="categoryInputTitle">localication string*</p>
                 <CustomAntdInput min={3} name="name" placeholder="localication string*" />
               </div>
             </div>
-
-            <p>Category Icon</p>
+            <p className="categoryInputTitle">Category Icon</p>
             <Form.Item
               name="image"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
+              rules={[{ required: true }]}
             >
-              {categoryShow != null || fileList != null ? (
-                <div className="imgae_upload_design">
-                  <div className="remove_icon_div">
-                    <img
-                      className="remove_button"
-                      src={remove_icon}
-                      onClick={() => {
-                        setFileList();
-                        setCategoryShow();
-                      }}
-                    />
-                  </div>
-                  <div className="imgae_name">
-                    <p>{nativeLanguageData?.imageFile?.description}</p>
-                    <img src={`${baseUrl}${nativeLanguageData?.imageFile?.path}`} />
-                  </div>
-                </div>
+              {previewImgUrl?.length > 1 ? (
+                <ShowImage title={selectedImage?.name}
+                  src={previewImgUrl}
+                  onClick={() => {
+                    setPreviewimgUrl(".")
+                    setCategoryShow(null);
+                  }} />
+              ) : nativeLanguageData?.imageFile && !previewImgUrl ? (
+                <ShowImage title={nativeLanguageData?.imageFile?.description} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
+                  setPreviewimgUrl(".")
+                  setCategoryShow(null);
+                }} />
               ) : (
-                <Upload
-                  onChange={handleChange}
-                  beforeUpload={beforeUpload}
-                  {...props}
-                  maxCount={1}
-                  listType="picture"
-                  className="upload-list-inline"
-                >
-                  {categoryShow && showCategoryUpload ? null : (
-                    <img src={uploadIcon} className="upload" />
-                  )}
-                </Upload>
+                <ImageUpload onChange={handleFileChange} />
               )}
             </Form.Item>
-
             <Form.Item>
               <CustomAntdButton
                 title="Update"

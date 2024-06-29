@@ -1,9 +1,9 @@
 export const TableHeader = ({data}) =>{
      return (
-        <li class="table-header">
+        <li className="table-header">
                 {data?.map((item, index) => {
                   return (
-                    <div key={index} class="col col-1 label">{item?.title}</div>
+                    <div key={index} className="col col-1 label">{item?.title}</div>
                   )
                 })}
               </li>
