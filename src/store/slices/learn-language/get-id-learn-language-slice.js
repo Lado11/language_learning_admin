@@ -40,12 +40,9 @@ export const learnLanguageByIdSlice = createSlice({
     },
     addLearnLanguageSelectedLanguages: (state, { payload }) => {
       if (!payload) {
-        console.log("mtav")
         state.learnLanguageUpdateSelectedLanguages =
           state.learnLanguageByIdResponse.data.nativeLanguages;
-       
       } else {
-        console.log("chmtav");
         state.learnLanguageUpdateSelectedLanguages = state.learnLanguageUpdateSelectedLanguages?.filter(
           (item) => item._id !==payload._id 
         );

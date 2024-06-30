@@ -22,6 +22,11 @@ justify-content: space-between;
   height: 24px !important;
 }
 
+.selectedImage{
+  width: 37px;
+  height: 37px;
+}
+
 
 .voiceUploadRow{
 display: flex;
