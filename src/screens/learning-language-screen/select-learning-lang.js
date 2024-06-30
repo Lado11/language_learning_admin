@@ -1,30 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addLanguages, addLearnLanguageSelectedLanguages, getNativeGetResponse, nativeLanguageGetThunk } from "../../store/slices";
-import { CustomSelect, CustomSpin } from "../../components";
+import { addLanguages, addLearnLanguageSelectedLanguages } from "../../store/slices";
+import { CustomSpin } from "../../components";
 import { Colors } from "../../assets/colors";
 import { useEffect, useState } from "react";
 import deleteIcon from "../../assets/images/remove_icon.png"
-import { ConstPagiantion } from "../../constants/const-pagination";
-import { listItemCountForShow } from "../../constants/constants";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 import { AsyncPaginate } from "react-select-async-paginate";
 
 export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name,loadOptions,current }) => {
     const dispatch = useDispatch();
     const [imageUrls, setImageUrls] = useState({});
-    const nativeLanguagesResponse = useSelector(getNativeGetResponse);
-    const filteredResponse = nativeLanguagesResponse?.data?.list.map((lang) => {
-        return {
-            _id: lang._id,
-            name: lang.name.toLowerCase(),
-            nameEng: lang.nameEng,
-            image:lang?.imageFile
-        };
-    });
-
-    useEffect(() => {
-        dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
-    }, []);
 
     const selectedDelete = (id) => {
         onDelete(id);
