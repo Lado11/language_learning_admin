@@ -24,7 +24,6 @@ import {
   learnLanguageDeleteResponse,
   learnLanguageDeleteThunk,
   learnLanguageUpdateThunk,
-  nativeLanguageGetThunk,
   removeAllLanguages,
   removeSelectedLanguagesItem,
 } from "../../store/slices";
@@ -87,10 +86,6 @@ export const LearningLanguageUpdate = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-
-  useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
 
   useEffect(() => {
     dispatch(learnLanguageByIdThunk(learningId));

@@ -98,10 +98,6 @@ export const UpdateNativeLanguage = () => {
   }, [nativeLanguageData]);
 
   useEffect(() => {
-    dispatch(nativeLanguageGetIdThunk(nativeId));
-  }, []);
-
-  useEffect(() => {
     if (nativeDeleteResponse?.success === true || nativeUpdateResponse?.success === true) {
       navigate("/native-language");
     }
