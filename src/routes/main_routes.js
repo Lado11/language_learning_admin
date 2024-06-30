@@ -35,6 +35,7 @@ import { WordsUpdate } from "../screens/words-screen/words-update/words-update";
 import { UplaodScreen } from "../screens/upload/upload-screen";
 import { UplaodProcessScreen } from "../screens/upload/upload-proccessing";
 import { FeadBackMoreScreen } from "../screens/feedback-screen/feadback-more-screen";
+import { FilesMore } from "../screens/files-screen/files-more";
 
 export const MyRoutes = () => {
   const token = localStorage.getItem("token");
@@ -99,6 +100,7 @@ export const MyRoutes = () => {
                 <Route path="/feedback/:id" element={<FeadBackMoreScreen />} />
                 <Route path="/notification" element={<NotificationScreen />} />
                 <Route path="/files" element={<FilesScreen />} />
+                <Route path="/files/more/:id" element={<FilesMore />} />
                 <Route path="/user/create" element={<UserCreateScreen />} />
                 <Route path="/user/:id" element={<UserScreenUpdate />} />
                

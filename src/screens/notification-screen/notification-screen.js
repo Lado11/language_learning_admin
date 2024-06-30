@@ -6,7 +6,7 @@ import { NotificationScreenInput } from "./components/notification-screen-input"
 import { NotificationScreenTextArea } from "./components";
 import { CustomAntdButton } from "../../components";
 import { SelectNotification } from "./components/select-notification";
-import { dataUser, devicesData } from "../../data/radio-data";
+import { userSubsriptionData, deviceTpesData } from "./notification-data";
 
 export const NotificationScreen = () => {
   const [device, setDevice] = useState();
@@ -32,9 +32,9 @@ export const NotificationScreen = () => {
       >
           <p className="notificationScreenSendFieldsTitle">Send Notification</p>
          <div className="nothSection">
-         <SelectNotification data={devicesData} defaultValue={"User Device"} />
+         <SelectNotification data={deviceTpesData} defaultValue={"User Device"} />
           <div className="notificationMiddle">
-            <SelectNotification data={dataUser} defaultValue={"User Subscription "} />
+            <SelectNotification data={userSubsriptionData} defaultValue={"User Subscription "} />
           </div>
           <NotificationScreenInput name={"id"} placeholder={"User ID*"} />
           <NotificationScreenTextArea

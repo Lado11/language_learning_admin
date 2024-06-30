@@ -27,6 +27,23 @@ export const NativeLanguageScreen = () => {
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
+  const onChangePagination = (current) => {
+    const skip =( current -1 ) * listItemCountForShow;    
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(skip, listItemCountForShow)));
+  };
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+  const navigateNativeUpdate = (countryItem) => {
+    // localStorage.setItem("nativeId", countryItem?._id);
+    dispatch(nativeLanguageGetIdThunk(countryItem?._id));
+    navigate(`/native-language/${countryItem?._id}`);
+  };
+
   useEffect(() => {
     // Preload image URLs
     if (nativeLanguageData?.data?.list?.length) {
@@ -35,12 +52,6 @@ export const NativeLanguageScreen = () => {
       });
     }
   }, [nativeLanguageData]);
-
-  const fetchImage = (imageFileId) => {
-    if (!imageUrls[imageFileId]) {
-      dispatch(filesGetIdThunk(imageFileId));
-    }
-  };
 
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
@@ -51,12 +62,6 @@ export const NativeLanguageScreen = () => {
       }));
     }
   }, [categoryImageResponse]);
-
-  const navigateNativeUpdate = (countryItem) => {
-    // localStorage.setItem("nativeId", countryItem?._id);
-    dispatch(nativeLanguageGetIdThunk(countryItem?._id));
-    navigate(`/native-language/${countryItem?._id}`);
-  };
 
   useEffect(() => {
     dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
@@ -103,9 +108,7 @@ export const NativeLanguageScreen = () => {
                   </div>
                 }
                 <div className="nativeScreenPaginationDiv">
-                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={listItemCountForShow} func={() => {
-                    nativeLanguageGetThunk()
-                  }} />
+                  <CustomPagination length={nativeLanguageData?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
                 </div>
               </>}
           </div>

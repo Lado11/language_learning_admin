@@ -16,17 +16,15 @@ import {
   wordsLoadingData,
   wordsResponseData,
 } from "../../store/slices";
-import { WordsLevel, customTableColumns } from "../../data";
-import { Avatar, Popover, Radio } from 'antd';
+import { Popover, Radio } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { getIdWordsThunk } from "../../store/slices/words/getId-words";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import filterIcon from "../../assets/images/filterIcon.png"
 import { listItemCountForShow,} from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { WordsLevelData } from "./words-data";
-import { WordsStatus } from "./words-typing";
-import { filesGetIdThunk, getfilesGetIdResponse } from "../../store/slices/files/get-id-files";
+import { WordsLevelData, tableHeaderData } from "./words-data";
+import { WordsLevel, WordsStatus } from "./words-typing";
 
 
 const WordsFilterPopover = ({
@@ -111,7 +109,7 @@ const WordsFilterPopover = ({
     </Popover>
   );
 };
-const WordsListItem = ({count, words, onClick, key,icon }) => {
+const WordsListItem = ({count, words, onClick, key }) => {
   const getWordsLevelLabel = (status) => {
     switch (status) {
       case WordsLevel.BEGINNER:
@@ -179,35 +177,8 @@ export const WordsScreen = () => {
   const nativeLanguageData = useSelector(getNativeGetResponse)?.data?.list
   const categoryData = useSelector(getCategoryGetData)?.data?.list
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [imageUrls, setImageUrls] = useState({});
-  const categoryImageResponse = useSelector(getfilesGetIdResponse);
 
-  useEffect(() => {
-    // Preload image URLs
-    if (wordsResponse?.data?.list?.length) {
-      wordsResponse?.data?.list?.forEach((item) => {
-          fetchImage(item?.imageFile);
-      
-      });
-    }
-  }, [wordsResponse?.data?.list]);
-
-  const fetchImage = (imageFileId) => {
-    if (!imageUrls[imageFileId]) {
-      dispatch(filesGetIdThunk(imageFileId));
-    }
-  };
-
-  useEffect(() => {
-    // Update imageUrls state with fetched image URLs
-    if (categoryImageResponse?.data?.url) {
-      setImageUrls((prevUrls) => ({
-        ...prevUrls,
-        [categoryImageResponse.data.fileId]: categoryImageResponse.data.url,
-      }));
-    }
-  }, [categoryImageResponse]);
-
+  //es texapoxel filtri mej
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
     if (e.target.value !== "") {
@@ -224,7 +195,12 @@ export const WordsScreen = () => {
       setSearchFilter(undefined)
     }
   }
- 
+
+  const onChangePagination = (current) => {
+    const skip =( current -1 ) * listItemCountForShow;   
+    fetchFilteredData(skip);
+  };
+
   const [nativeLanguage, setNativeLanguage] = useState();
   const onChangeNativeLanguage = (e) => {
     setNativeLanguage(e.target.value);
@@ -242,7 +218,6 @@ export const WordsScreen = () => {
 
   const [valueLevel, setValueLevel] = useState();
   const [filterLevel, setFilterLevel] = useState(undefined);
-
   const onChangeLevel = (e) => {
     setValueLevel(e.target.value);
     if (e.target.value !== WordsLevel.All) {
@@ -252,30 +227,20 @@ export const WordsScreen = () => {
     }
   };
 
+
   const updateWords = (id) => {
     navigate(`/words/${id}`)
     dispatch(getIdWordsThunk(id));
   }
-
-  useEffect(() => {
-    !wordsResponse?.data?.list?.length && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
-
-
-  useEffect(() => {
-    dispatch(learningLanguagesThunk(ConstPagiantion(0, listItemCountForShow)));
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
-    dispatch(categoryGetThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
 
 
   const fetchData = useCallback(() => {
     dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback(() => {
+  const fetchFilteredData = useCallback((skip = 0) => {
     const filterData = {
-      skip: 0,
+      skip: skip,
       limit: listItemCountForShow,
       language: lerningLanguage,
       level: filterLevel,
@@ -301,6 +266,12 @@ export const WordsScreen = () => {
   const handleApplyFilter = () => {
     fetchFilteredData();
   };
+
+  useEffect(() => {
+    dispatch(learningLanguagesThunk(ConstPagiantion(0, listItemCountForShow)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
+    dispatch(categoryGetThunk(ConstPagiantion(0, listItemCountForShow)));
+  }, [dispatch]);
 
   useEffect(() => {
     fetchData();
@@ -340,7 +311,7 @@ export const WordsScreen = () => {
         <div className="wordsScreenTable">
           <div className="container">
             <ul className="responsive-table">
-              <TableHeader data={customTableColumns} />
+              <TableHeader data={tableHeaderData} />
               {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
               </div> :
@@ -348,14 +319,14 @@ export const WordsScreen = () => {
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
                       return (
-                        <WordsListItem  count={words?.translates?.length} icon={imageUrls[words.imageFile]} words={words} onClick={() => updateWords(words?._id)} key={index} />
+                        <WordsListItem  count={words?.translates?.length} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
                     }
                     )}
                 </>}
             </ul>
             {!wordsResponse?.data?.list?.length && !wordsLoading ? null : <div className="nativeScreenPaginationDiv">
-              <CustomPagination length={wordsResponse?.data?.total} pageLength={5} />
+              <CustomPagination length={wordsResponse?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
             </div>}
           </div>
         </div>
