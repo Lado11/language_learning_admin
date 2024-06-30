@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addLanguages, addLearnLanguageSelectedLanguages } from "../../store/slices";
-import { CustomSpin } from "../../components";
+import { CustomAsyncPaginate, CustomSpin } from "../../components";
 import { Colors } from "../../assets/colors";
 import { useEffect, useState } from "react";
 import deleteIcon from "../../assets/images/remove_icon.png"
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
-import { AsyncPaginate } from "react-select-async-paginate";
 
 export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name,loadOptions,current }) => {
     const dispatch = useDispatch();
@@ -48,7 +47,8 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name,loadOp
         dispatch(addLanguages(value));
         dispatch(addLearnLanguageSelectedLanguages(value));
       };
-      const customStyles = {
+
+    const customStyles = {
         option: (provided, state) => ({
           ...provided,
           backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
@@ -64,21 +64,12 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name,loadOp
           minHeight: "60px", // Minimum height of the control
           boxShadow: "none", // Remove box shadow
           borderRadius:"10px"
-
         }),
       };
+      
     return (
         <div>
-            <AsyncPaginate
-            styles={customStyles}
-            placeholder="Choose Native Language *"
-                onChange={handleChange}
-                loadOptions={loadOptions}
-                additional={{
-                  page: current, // Initial page
-                }}
-              />
-            
+          <CustomAsyncPaginate style={customStyles} placeholder={"Choose Native Language *"} onChange={handleChange} current={current}   loadOptions={loadOptions}/>
             <div className="selectedNativeItem">
                 {
                     dataLanguages?.map((lang) => {

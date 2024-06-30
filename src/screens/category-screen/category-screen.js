@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { categoryGetThunk, getCategoryGetData, getCategoryGetLoading } from "../../store/slices/category/get-category";
 import { useEffect, useState } from "react";
 import { CustomSpin } from "../../components/custom-spin/custom-spin";
-import { listItemCountForShow, page0, page6 } from "../../constants/constants";
+import { listItemCountForShow} from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import {  filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
+
 export const CategoryScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export const CategoryScreen = () => {
   const categoryImageLoading = useSelector(getfilesGetIdloading);
 
   const onChangePagination = (current) => {
-    const skip =( current -1 ) * listItemCountForShow;    
+    const skip = (current - 1) * listItemCountForShow;
     dispatch(categoryGetThunk(ConstPagiantion(skip, listItemCountForShow)));
   };
 
@@ -52,12 +53,12 @@ export const CategoryScreen = () => {
     }
   }, [categoryImageResponse]);
 
-  
+
   useEffect(() => {
     dispatch(categoryGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-const categoryUpdate = (id) => {
+  const categoryUpdate = (id) => {
     navigate(`/category/${id}`);
   };
 
@@ -84,9 +85,9 @@ const categoryUpdate = (id) => {
                 <div className="custom-card-item">
                   {categoryData?.data?.list?.map((countryItem, index) => (
                     <div className="pointer" key={index + 1} onClick={() => categoryUpdate(countryItem._id)}>
-                        <ImageItem
-                          loading={categoryImageLoading} icon={imageUrls[countryItem.imageFile]} title={countryItem.name}
-                          />
+                      <ImageItem
+                        loading={categoryImageLoading} icon={imageUrls[countryItem.imageFile]} title={countryItem.name}
+                      />
                     </div>
                   ))}
                 </div>

@@ -129,20 +129,14 @@ export const UserScreen = () => {
   const [searchValue, setSearchValue] = useState();
   const [searchFilter, setSearchFilter] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-
   const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
   const [subscribe, setSubscribe] = useState();
-
   const [filtterPhone, setFiltterPhone] = useState(undefined);
   const [phone, setPhone] = useState();
-
   const [filtterEmail, setFiltterEmail] = useState(undefined);
   const [email, setEmail] = useState();
-
   const [filtterRole, setFiltterRole] = useState(undefined);
   const [role, setRole] = useState();
-
-
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
@@ -226,7 +220,6 @@ export const UserScreen = () => {
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
   };
-
 
   const handleClearFilter = () => {
     setSubscribe("")

@@ -22,4 +22,5 @@ export * from "./custom-antd-select";
 export * from "./custom-upload";
 export * from "./custom-no-data";
 export * from "./custom-error-section";
-export * from "./custom-upload-element"
+export * from "./custom-upload-element";
+export * from "./custom-async-paginate";

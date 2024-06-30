@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Colors } from "../../assets/colors";
 import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   deleteUserCreateResponse,
@@ -26,14 +25,15 @@ export const UserCreateScreen = () => {
   const { t } = useTranslation();
   const [selected, setSelected] = useState();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const formData = new FormData();
-  const [categoryShow, setCategoryShow] = useState();
   const [messageApi, contextHolder] = message.useMessage();
   const createUserData = useSelector(getUserCreateData);
   const userLoading = useSelector(getUserCreateLoading);
   const messageError = createUserData?.message;
+  const str = messageError?.toString()
 
+  const onRemove = () => {
+    dispatch(deleteUserCreateResponse());
+  }
 
   const onFinish = (values) => {
     const onFinshData = {
@@ -61,11 +61,7 @@ export const UserCreateScreen = () => {
     // dispatch(deleteUserCreateResponse());
   }, [createUserData?.success]);
 
-  const str = messageError?.toString()
-  const onRemove = () => {
-    dispatch(deleteUserCreateResponse());
-  }
-
+  
 
   return (
     <div

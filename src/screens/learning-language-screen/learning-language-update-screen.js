@@ -30,14 +30,11 @@ import {
 import { useTranslation } from "react-i18next";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { SelectLearningLang } from "./select-learning-lang";
-import { ConstPagiantion } from "../../constants/const-pagination";
-import { listItemCountForShow } from "../../constants/constants";
 import { ShowImage } from "../category-screen/category-update";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 import axios from "axios";
-import { nativeLanguageGetService } from "../../services/native-language/native-language-get-service";
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
@@ -63,6 +60,14 @@ export const LearningLanguageUpdate = () => {
   const leraningLangugaeUpdateResponse = useSelector(getUpdatedLearnLanguageResponse);
   const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
 
+  const LIMIT = 10;
+  const token = localStorage.getItem("token")
+  const [current, setCurrent] = useState(0)
+  const URL = process.env.REACT_APP_BASE_URL;
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const learnignLanguageImageUpdate = useSelector(getfilesGetIdloading);
+
   const onFinish = (values) => {
     formData.append("nameEng", values.nameEng);
     formData.append("name", values.name);
@@ -78,7 +83,6 @@ export const LearningLanguageUpdate = () => {
     form.resetFields();
     setLearningLanguageFile("");
   };
-
 
   const onDeleteLang = () => {
     dispatch(learnLanguageDeleteThunk(learningData?.id));
@@ -108,10 +112,6 @@ export const LearningLanguageUpdate = () => {
     dispatch(deleteLearnResponse());
     dispatch(deleteLearnUpdateResponse());
   }, [leraningLangugaeUpdateResponse?.success, learningLanguageDeleteResposne?.success]);
-
-  const [imageUrls, setImageUrls] = useState({});
-  const categoryImageResponse = useSelector(getfilesGetIdResponse);
-  const learnignLanguageImageUpdate = useSelector(getfilesGetIdloading);
 
   useEffect(() => {
     // Preload image URLs
@@ -152,18 +152,18 @@ export const LearningLanguageUpdate = () => {
     }
   };
 
-  const LIMIT = 10;
-  const token = localStorage.getItem("token")
-  const [current, setCurrent] = useState(0)
-  const URL = process.env.REACT_APP_BASE_URL;
 
   async function loadOptions(_search, loadedOptions, { page }) {
     const start = (page) * LIMIT; // Calculate start index for pagination
     try {
-      const response = await nativeLanguageGetService({data:{
-        skip:start,
-        limit:listItemCountForShow
-      }})
+      const response = await axios.get(
+        `${URL}api/admin/language/native?skip=${start}&limit=${LIMIT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+          },
+        }
+      );
       const options = response.data.data.list.map((item) =>
       ({
         value: item._id,

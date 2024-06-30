@@ -25,6 +25,21 @@ export const UplaodProcessScreen = () => {
     const wordsIdResponse = useSelector(wordsExelGetIdResponse);
     const wordsIdLoading = useSelector(wordsExelGetIdLoading);
 
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const onTab = () => {
+        dispatch(wordsExelDeleteThunk(wordsProcessId));
+    };
+
+    useEffect(() => {
+        if (wordsProcessDeleteResponse?.success === true) {
+            navigate("/upload")
+        }
+        dispatch(deleteWordsDelete())
+    }, [wordsProcessDeleteResponse?.success])
+
     useEffect(() => {
         dispatch(wordsExelGetIdThunk(wordsProcessId))
     }, [])
@@ -44,21 +59,6 @@ export const UplaodProcessScreen = () => {
             })
         });
     }, [wordsIdResponse]);
-
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const onTab = () => {
-        dispatch(wordsExelDeleteThunk(wordsProcessId));
-    };
-
-    useEffect(() => {
-        if (wordsProcessDeleteResponse?.success === true) {
-            navigate("/upload")
-        }
-        dispatch(deleteWordsDelete())
-    }, [wordsProcessDeleteResponse?.success])
 
     return (
         <div className="nativeLanguageScreenMainDiv">

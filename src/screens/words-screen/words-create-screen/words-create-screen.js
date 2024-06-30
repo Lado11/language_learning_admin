@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Colors } from "../../../assets/colors";
 import { CreateWordsAdd } from "./components";
 import { Form, message } from "antd";
-import { CustomAntdButton, CustomAntdInput, CustomButton, Error, Success } from "../../../components";
+import { CustomAntdButton, CustomAntdInput,  Error, Success } from "../../../components";
 import "./words-create.css"
 import { useDispatch, useSelector } from "react-redux";
 import { createWordsLoadingData, createWordsResponseData, createWordsThunk, deleteWordCreateResponse } from "../../../store/slices";
@@ -26,8 +26,9 @@ export const WordsCreateScreen = () => {
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
   const [categoryShow, setCategoryShow] = useState();
-
   const [val, setVal] = useState()
+  const messageError = createWordData?.message;
+
   const onFinish = (values) => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
@@ -50,9 +51,7 @@ export const WordsCreateScreen = () => {
     });
     setVal(values)
     dispatch(createWordsThunk(formData))
-
   };
-  const messageError = createWordData?.message;
 
   useEffect(() => {
     if (createWordData?.success === true) {
@@ -72,7 +71,6 @@ export const WordsCreateScreen = () => {
       Error({ messageApi, messageError });
     dispatch(deleteWordCreateResponse());
   }, [createWordData?.success]);
-
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

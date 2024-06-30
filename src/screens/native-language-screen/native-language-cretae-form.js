@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Upload, message } from "antd";
+import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteNativeCreateBool,
@@ -30,6 +30,8 @@ export const NativeLanguageCretae = () => {
   const messageError = nativeLanguageData?.message;
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const str = messageError?.toString()
+
 
   const onFinish = (values) => {
     if (values.image.file != "") {
@@ -42,40 +44,10 @@ export const NativeLanguageCretae = () => {
     }
   };
 
-  useEffect(() => {
-    dispatch(deleteNativeCreateBool());
-  }, [nativeCreateBool]);
-
-
-
-  useEffect(() => {
-    if (nativeLanguageData?.success === true) {
-      form.resetFields();
-      setCategoryShow("");
-      setPreviewimgUrl("")
-      setCategoryShow(null);
-      dispatch(deleteNativeCreateResponse());
-    }
-  }, [nativeLanguageData?.success])
-
-  useEffect(() => {
-    nativeLanguageData?.success === true && Success({ messageApi });
-  }, [nativeLanguageData?.success]);
-
-  const str = messageError?.toString()
   const onRemove = () => {
     dispatch(deleteNativeCreateResponse())
   }
 
-   const props = {
-    accept: ".png,.svg,.jpg",
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList?.splice(index, 1);
-    },
-  };
-  
   const handleFileChange = async (
     event
   ) => {
@@ -91,6 +63,24 @@ export const NativeLanguageCretae = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    dispatch(deleteNativeCreateBool());
+  }, [nativeCreateBool]);
+
+  useEffect(() => {
+    if (nativeLanguageData?.success === true) {
+      form.resetFields();
+      setCategoryShow("");
+      setPreviewimgUrl("")
+      setCategoryShow(null);
+      dispatch(deleteNativeCreateResponse());
+    }
+  }, [nativeLanguageData?.success])
+
+  useEffect(() => {
+    nativeLanguageData?.success === true && Success({ messageApi });
+  }, [nativeLanguageData?.success]);
 
 
   return (

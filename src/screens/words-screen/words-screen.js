@@ -140,19 +140,6 @@ const WordsListItem = ({count, words, onClick, key }) => {
         <div className="wordsItemCount">
           {count}
         </div>
-        {/* <Avatar.Group
-          maxCount={4}
-          maxStyle={{
-            color: '#f56a00',
-            backgroundColor: '#fde3cf',
-          }}
-        >
-          {words?.translates.map((item, index) => {
-            return <div key={index}>
-              <Avatar src={icon} />
-            </div>
-          })}
-        </Avatar.Group> */}
       </div>
       <div className="col col-1 desc" data-label="Job Id">{words?.transcription}</div>
       <div className="col col-1 desc" data-label="Job Id">

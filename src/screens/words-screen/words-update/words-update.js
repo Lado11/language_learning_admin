@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { getIdWordsThunk, wordsIdLoading, wordsIdResponse } from "../../../store/slices/words/getId-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomSpin, CustomUpload } from "../../../components";
+import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomSpin } from "../../../components";
 import CustomModal from "../../../components/custom-modal/custom-modal";
 import { deleteWordsDeleteResponse, getWordsDeleteThunk, wordsDeleteLoading, wordsDeleteResponse } from "../../../store/slices/words/delete_words-slice";
 import { Colors } from "../../../assets/colors";
@@ -57,7 +57,10 @@ export const WordsUpdate = () => {
         skip: 0,
         limit: 12,
     };
-
+    const [imageUrls, setImageUrls] = useState({});
+    const [voiceUrls, setVoiceUrls] = useState({}); 
+    const categoryImageResponse = useSelector(getfilesGetIdResponse);
+    const wordsImageLoading = useSelector(getfilesGetIdloading);
 
     useEffect(() => {
         dispatch(learningLanguagesThunk(skipNative));
@@ -70,8 +73,6 @@ export const WordsUpdate = () => {
         setAudio(s)
     }
 
-
-
     const filteredResponseCategory = categoryData?.map((lang) => {
         return {
             _id: lang._id,
@@ -79,6 +80,7 @@ export const WordsUpdate = () => {
             value: lang.name,
         };
     });
+
     const filteredResponse = learningLanguagesData?.data?.list?.map((lang) => {
         return {
             _id: lang._id,
@@ -88,6 +90,7 @@ export const WordsUpdate = () => {
 
         };
     });
+
     const onFinish = (values) => {
         formData.append("id", wordsIdData?._id)
         values?.word != wordsIdData?.data?.word && formData.append("word", values?.word)
@@ -112,14 +115,13 @@ export const WordsUpdate = () => {
         learningLanguageWordSelectedValue && learningLanguageWordSelectedValue?.nativeLanguages.forEach((item, ind) => {
             formData.append(`translates[${ind}].nativeLanguage`, item?._id);
         });
-            dispatch(wordsUpdateThunk(formData))
-        
+        dispatch(wordsUpdateThunk(formData))
     };
-
 
     const showModal = () => {
         setIsModalOpen(true);
     };
+
     const onTab = () => {
         dispatch(getWordsDeleteThunk(wordId));
     };
@@ -138,8 +140,6 @@ export const WordsUpdate = () => {
         dispatch(getIdWordsThunk(wordId));
     }, [])
 
-
-
     useEffect(() => {
         if (updateWordsResponse?.success === true || wordDeleteData?.success === true) {
             navigate("/words")
@@ -149,11 +149,6 @@ export const WordsUpdate = () => {
 
     }, [updateWordsResponse?.success, wordDeleteData?.success])
 
-    const [imageUrls, setImageUrls] = useState({});
-    const [voiceUrls, setVoiceUrls] = useState({});
-
-    const categoryImageResponse = useSelector(getfilesGetIdResponse);
- const wordsImageLoading = useSelector(getfilesGetIdloading);
     useEffect(() => {
         // Preload image URLs
         if (wordsIdData) {
@@ -161,9 +156,9 @@ export const WordsUpdate = () => {
         }
     }, [wordsIdData]);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(voiceGetIdThunk(wordsIdData?.audioFile?._id));
-    },[wordsIdData])
+    }, [wordsIdData])
 
     const fetchImage = (imageFileId) => {
         if (!imageUrls[imageFileId]) {
@@ -178,9 +173,10 @@ export const WordsUpdate = () => {
                 ...prevUrls,
                 [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
             }));
-            setVoiceUrls((voice) => ({...voice,
+            setVoiceUrls((voice) => ({
+                ...voice,
                 [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
-            })) 
+            }))
         }
     }, [categoryImageResponse]);
 
@@ -220,201 +216,201 @@ export const WordsUpdate = () => {
                 >
 
                     <div className="update-words-section">
-                          <div className="update-words-row">
-                          <div>
-                          <p className="updateTitle">Update</p>
-                            <div className="addWordsFirstSelect bigSelect">
-                                <CustomAntdSelect
-                                    rules={true}
-                                    name="language"
-                                    // className="wordsSelectExel"
-                                    optinData={filteredResponse}
-                                    selected={learningLanguageWordSelectedValue}
-                                    setSelected={setLearningLanguageWordSelectedValue}
-                                    defaultValue={t("LEARNING_LANGUAGE")}
-                                    color={Colors.LIGHT_GRAY}
-                                />
-                            </div>
-                            <div className="updateWordsAddInputs">
-                                <div className="rowInputWords">
-                                    <div>
-                                        <p>Words</p>
-                                        <CustomAntdInput
-                                            placeholder="Words*"
-                                            name="word"
-                                            type={"text"}
-                                            min={4}
-                                            rules={true}
-                                        />
-                                    </div>
-                                    <div className="inputLeft">
-                                        <p>Transcribe</p>
-                                        <CustomAntdInput
-                                            placeholder="Transcribe*"
-                                            name="transcription"
-                                            type={"text"}
-                                            min={4}
-                                            message={"This field is required"}
-                                            rules={true}
+                        <div className="update-words-row">
+                            <div>
+                                <p className="updateTitle">Update</p>
+                                <div className="addWordsFirstSelect bigSelect">
+                                    <CustomAntdSelect
+                                        rules={true}
+                                        name="language"
+                                        // className="wordsSelectExel"
+                                        optinData={filteredResponse}
+                                        selected={learningLanguageWordSelectedValue}
+                                        setSelected={setLearningLanguageWordSelectedValue}
+                                        defaultValue={t("LEARNING_LANGUAGE")}
+                                        color={Colors.LIGHT_GRAY}
+                                    />
+                                </div>
+                                <div className="updateWordsAddInputs">
+                                    <div className="rowInputWords">
+                                        <div>
+                                            <p>Words</p>
+                                            <CustomAntdInput
+                                                placeholder="Words*"
+                                                name="word"
+                                                type={"text"}
+                                                min={4}
+                                                rules={true}
+                                            />
+                                        </div>
+                                        <div className="inputLeft">
+                                            <p>Transcribe</p>
+                                            <CustomAntdInput
+                                                placeholder="Transcribe*"
+                                                name="transcription"
+                                                type={"text"}
+                                                min={4}
+                                                message={"This field is required"}
+                                                rules={true}
 
-                                        />
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="rowInputWords">
+                                        <div>
+                                            <p>Level</p>
+                                            <CustomAntdSelect
+                                                rules={true}
+                                                name="level"
+                                                // width={172}
+                                                defaultValue="Level*"
+                                                optinData={wordlevel}
+                                                setSelected={setSelectedLevel}
+                                            />
+                                        </div>
+                                        <div>
+                                            <p>Category</p>
+                                            <CustomAntdSelect
+                                                rules={true}
+                                                name="category"
+                                                // width={172}
+                                                defaultValue="Category*"
+                                                optinData={filteredResponseCategory}
+                                                setSelected={setSelectedCategory}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="rowInputWords">
-                                    <div>
-                                        <p>Level</p>
-                                        <CustomAntdSelect
-                                            rules={true}
-                                            name="level"
-                                            // width={172}
-                                            defaultValue="Level*"
-                                            optinData={wordlevel}
-                                            setSelected={setSelectedLevel}
-                                        />
-                                    </div>
-                                    <div>
-                                        <p>Category</p>
-                                        <CustomAntdSelect
-                                            rules={true}
-                                            name="category"
-                                            // width={172}
-                                            defaultValue="Category*"
-                                            optinData={filteredResponseCategory}
-                                            setSelected={setSelectedCategory}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <p>Audio</p>
-                            <Form.Item
-                                // name="Audio"
-                                rules={[{
-                                    required: true,
-                                }]}>
+                                <p>Audio</p>
+                                <Form.Item
+                                    // name="Audio"
+                                    rules={[{
+                                        required: true,
+                                    }]}>
 
-                                {showVoice === false ? <div className="imgae_upload_design_voice">
-                                    <div className="remove_icon_div">
-                                        <img
-                                            src={remove_icon}
+                                    {showVoice === false ? <div className="imgae_upload_design_voice">
+                                        <div className="remove_icon_div">
+                                            <img
+                                                src={remove_icon}
+                                                onClick={() => {
+                                                    setAudio("")
+                                                    setShowVoice(!showVoice)
+                                                }}
+                                            />
+                                        </div>
+                                        <Waveform loading={voiceLoading} url={voiceResponse?.data?.url} />
+
+                                    </div> :
+                                        <>
+                                            {audio ? <div className="imgae_upload_design_voice">
+                                                <div className="remove_icon_div">
+                                                    <img
+                                                        src={remove_icon}
+                                                        onClick={() => {
+                                                            setAudio(null)
+                                                        }}
+                                                    />
+                                                </div>
+                                                <Waveform url={audio} />
+
+
+                                            </div> : <div className="file-upload">
+                                                <div className="voiceUpload">
+                                                    <p className="titleVoiceUpload">
+                                                        Voice Upload
+                                                    </p>
+                                                    <img src={logoVoice} />
+                                                </div>
+                                                <input accept="audio/*" type='file' onChange={addFile} />
+                                            </div>}
+                                        </>
+                                    }
+                                </Form.Item>
+                                <p>Image</p>
+                                <Form.Item
+                                    // name="image"
+                                    rules={[{
+                                        required: true
+                                    }]}
+                                >
+                                    {previewImgUrl?.length > 1 ? (
+                                        <ShowImage title={selectedImage?.name}
+                                            src={previewImgUrl}
                                             onClick={() => {
-                                                setAudio("")
-                                                setShowVoice(!showVoice)
-                                            }}
-                                        />
-                                    </div>
-                                    <Waveform loading={voiceLoading} url={voiceResponse?.data?.url} />
-
-                                </div> :
-                                    <>
-                                        {audio ? <div className="imgae_upload_design_voice">
-                                            <div className="remove_icon_div">
-                                                <img
-                                                    src={remove_icon}
-                                                    onClick={() => {
-                                                        setAudio(null)
-                                                    }}
-                                                />
-                                            </div>
-                                            <Waveform url={audio} />
-
-
-                                        </div> : <div className="file-upload">
-                                            <div className="voiceUpload">
-                                                <p className="titleVoiceUpload">
-                                                    Voice Upload
-                                                </p>
-                                                <img src={logoVoice} />
-                                            </div>
-                                            <input accept="audio/*" type='file' onChange={addFile} />
-                                        </div>}
-                                    </>
-                                }
-                            </Form.Item>
-                            <p>Image</p>
-                            <Form.Item
-                                // name="image"
-                                rules={[{
-                                    required: true
-                                }]}
-                            >
-                                {previewImgUrl?.length > 1 ? (
-                                    <ShowImage title={selectedImage?.name}
-                                        src={previewImgUrl}
-                                        onClick={() => {
+                                                setPreviewimgUrl(".")
+                                                setCategoryShow(null);
+                                            }} />
+                                    ) : wordsIdData?.imageFile && !previewImgUrl ? (
+                                        <ShowImage loading={wordsImageLoading} title={wordsIdData?.imageFile?.description} src={imageUrls[wordsIdData?.imageFile?._id]} onClick={() => {
                                             setPreviewimgUrl(".")
                                             setCategoryShow(null);
                                         }} />
-                                ) : wordsIdData?.imageFile && !previewImgUrl ? (
-                                    <ShowImage loading={wordsImageLoading} title={wordsIdData?.imageFile?.description} src={imageUrls[wordsIdData?.imageFile?._id]} onClick={() => {
-                                        setPreviewimgUrl(".")
-                                        setCategoryShow(null);
-                                    }} />
-                                ) : (
-                                    <ImageUpload onChange={handleFileChange} />
-                                )}
-                            </Form.Item>
-                          </div>
+                                    ) : (
+                                        <ImageUpload onChange={handleFileChange} />
+                                    )}
+                                </Form.Item>
+                            </div>
 
                             <div className="lerning-language-section">
-                            {learningLanguageWordSelectedValue?.nativeLanguages?.length && <p className="wordsTitle">Translate</p>}
-                            <div>
-                                {learningLanguageWordSelectedValue?.nativeLanguages?.length ?
-                                    learningLanguageWordSelectedValue?.nativeLanguages.map((item, index) => {
-                                        return (
-                                            <div>
-                                                <p className="wordsInputTitle">{item?.nameEng}</p>
-                                                <CustomAntdInput
-                                                    key={item}
-                                                    rules={true}
-                                                    className="inputTranslate"
-                                                    placeholder="Words*"
-                                                    name={`nativeInpust${index}`}
-                                                    type={"text"}
-                                                    min={4}
-                                                />
-                                            </div>
-                                        )
-                                    }) : null}
-                            </div>
-                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p className="wordsTitle">Translate</p>}
+                                {learningLanguageWordSelectedValue?.nativeLanguages?.length && <p className="wordsTitle">Translate</p>}
+                                <div>
+                                    {learningLanguageWordSelectedValue?.nativeLanguages?.length ?
+                                        learningLanguageWordSelectedValue?.nativeLanguages.map((item, index) => {
+                                            return (
+                                                <div>
+                                                    <p className="wordsInputTitle">{item?.nameEng}</p>
+                                                    <CustomAntdInput
+                                                        key={item}
+                                                        rules={true}
+                                                        className="inputTranslate"
+                                                        placeholder="Words*"
+                                                        name={`nativeInpust${index}`}
+                                                        type={"text"}
+                                                        min={4}
+                                                    />
+                                                </div>
+                                            )
+                                        }) : null}
+                                </div>
+                                {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p className="wordsTitle">Translate</p>}
 
-                            {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && wordsIdData?.translates?.map((item, index) => {
-                                return (
-                                    <div>
-                                        <p className="wordsInputTitle">{item?.nativeLanguage?.nameEng}</p>
-                                        <CustomAntdInput
-                                            key={item}
-                                            // rules={true}
-                                            className="inputTranslate"
-                                            placeholder="Words*"
-                                            name={`translate${index}`}
-                                            type={"text"}
-                                            min={4}
-                                            defaultValue={item.text?.map((language) => {
-                                                return `${language}`
-                                            })}
-                                        />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                          </div>
-
-                            <CustomAntdButton title="Update"
-                                loading={updateWordsLoading}
-                                background={Colors.PURPLE} />
-                            <div className="deleteButton">
-                                <CustomAntdButtonDelete
-                                    loading={deleteWordLoading}
-                                    title="Delete"
-                                    background={Colors.GRAY_COLOR}
-                                    onClick={() => {
-                                        showModal();
-                                    }}
-                                />
+                                {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && wordsIdData?.translates?.map((item, index) => {
+                                    return (
+                                        <div>
+                                            <p className="wordsInputTitle">{item?.nativeLanguage?.nameEng}</p>
+                                            <CustomAntdInput
+                                                key={item}
+                                                // rules={true}
+                                                className="inputTranslate"
+                                                placeholder="Words*"
+                                                name={`translate${index}`}
+                                                type={"text"}
+                                                min={4}
+                                                defaultValue={item.text?.map((language) => {
+                                                    return `${language}`
+                                                })}
+                                            />
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
-                       
+
+                        <CustomAntdButton title="Update"
+                            loading={updateWordsLoading}
+                            background={Colors.PURPLE} />
+                        <div className="deleteButton">
+                            <CustomAntdButtonDelete
+                                loading={deleteWordLoading}
+                                title="Delete"
+                                background={Colors.GRAY_COLOR}
+                                onClick={() => {
+                                    showModal();
+                                }}
+                            />
+                        </div>
+                    </div>
+
 
                 </Form>
             </div>}

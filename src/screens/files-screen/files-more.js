@@ -6,14 +6,13 @@ import { Colors } from "../../assets/colors";
 import { useEffect, useState } from "react";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteWordsDelete, wordsExelDeleteLoading, wordsExelDeleteResponse, wordsExelDeleteThunk } from "../../store/slices/words/delete-exel-words";
+import { deleteWordsDelete, wordsExelDeleteLoading, wordsExelDeleteResponse } from "../../store/slices/words/delete-exel-words";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Input } from "antd";
+import { Form } from "antd";
 import { wordsExelGetIdLoading, wordsExelGetIdResponse, wordsExelGetIdThunk } from "../../store/slices/words/getId-exel-words";
 import { filesDeleteThunk } from '../../store/slices/files/delete-files';
 
 export const FilesMore = () => {
-    const { TextArea } = Input;
     const [form] = Form.useForm();
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);

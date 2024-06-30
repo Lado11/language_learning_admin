@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Colors } from "../../assets/colors/colors";
 import "./notification-screen-style.css";
 import { Form } from "antd";
@@ -9,9 +9,6 @@ import { SelectNotification } from "./components/select-notification";
 import { userSubsriptionData, deviceTpesData } from "./notification-data";
 
 export const NotificationScreen = () => {
-  const [device, setDevice] = useState();
-  const [user, setUser] = useState();
-
   const onFinish = (values) => {
     console.log("Success:", values);
   };

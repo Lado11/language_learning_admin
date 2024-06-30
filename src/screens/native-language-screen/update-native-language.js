@@ -52,6 +52,11 @@ export const UpdateNativeLanguage = () => {
   const getIdNativeLoading = useSelector(getNativeGetIdloading);
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const nativeLanguageImageUpdate = useSelector(getfilesGetIdloading);
+  const messageError = nativeDeleteResponse?.message;
+  const messageErrorUpdate = nativeUpdateResponse?.message;
 
   const onFinish = (values) => {
     if (values.image.file != "") {
@@ -68,17 +73,39 @@ export const UpdateNativeLanguage = () => {
     }
   };
 
-
-  useEffect(() => {
-    dispatch(nativeLanguageGetIdThunk(nativeId));
-  }, []);
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const messageError = nativeDeleteResponse?.message;
-  const messageErrorUpdate = nativeUpdateResponse?.message;
+  const onTab = () => {
+    dispatch(nativeLanguageDeleteThunk(nativeLanguageData?.id));
+  };
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+  useEffect(() => {
+    dispatch(nativeLanguageGetIdThunk(nativeId));
+  }, []);
 
   useEffect(() => {
     nativeDeleteResponse?.success === true && Success({ messageApi });
@@ -105,26 +132,12 @@ export const UpdateNativeLanguage = () => {
     dispatch(deleteNativeUpdateResponse());
   }, [nativeDeleteResponse?.success, nativeUpdateResponse?.success]);
 
-  const onTab = () => {
-    dispatch(nativeLanguageDeleteThunk(nativeLanguageData?.id));
-  };
-
-  const [imageUrls, setImageUrls] = useState({});
-  const categoryImageResponse = useSelector(getfilesGetIdResponse);
-  const nativeLanguageImageUpdate = useSelector(getfilesGetIdloading);
-
   useEffect(() => {
     // Preload image URLs
     if (nativeLanguageData) {
       fetchImage(nativeLanguageData.imageFile?._id);
     }
   }, [nativeLanguageData]);
-
-  const fetchImage = (imageFileId) => {
-    if (!imageUrls[imageFileId]) {
-      dispatch(filesGetIdThunk(imageFileId));
-    }
-  };
 
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
@@ -136,21 +149,6 @@ export const UpdateNativeLanguage = () => {
     }
   }, [categoryImageResponse]);
 
-  const handleFileChange = async (
-    event
-  ) => {
-    const file = event.target.files;
-    setSelectedImage(file?.[0]);
-    if (!file) {
-      return;
-    }
-    try {
-      const imgUrl = await fileToDataString(file?.[0]);
-      setPreviewimgUrl(imgUrl);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">

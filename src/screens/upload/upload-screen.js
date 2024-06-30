@@ -72,11 +72,11 @@ const UploadFilterPopover = ({
             open={isPopoverOpen}
             onOpenChange={handlePopoverOpenChange}
         >
-<div className="fiterlIconSection">
-<img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
-    
-    </div>     
-       </Popover>
+            <div className="fiterlIconSection">
+                <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+
+            </div>
+        </Popover>
     );
 };
 
@@ -136,14 +136,12 @@ export const UplaodScreen = () => {
     const [filterUploadType, setFilterUploadType] = useState();
 
     const wordsExel = (val) => {
-        // localStorage.setItem("wordsExel", val);
-        // dispatch(userGetByIdThunk(id));
         navigate(`/upload/${val}`);
     }
 
     const onChangePagination = (current) => {
-        const skip =( current -1 ) * listItemCountForShow;   
-        dispatch(wordsExelGetThunk(ConstPagiantion(skip,listItemCountForShow)))
+        const skip = (current - 1) * listItemCountForShow;
+        dispatch(wordsExelGetThunk(ConstPagiantion(skip, listItemCountForShow)))
     };
 
     const handlePopoverOpenChange = (newOpen) => {
@@ -152,17 +150,15 @@ export const UplaodScreen = () => {
 
     const handleTypeChange = (e) => {
         setFilterUploadType(e.target.value);
-
     };
 
     const handleStatusChange = (e) => {
         setUploadStatus(e.target.value);
         setFiltterStatus(e.target.value !== UploadStatus.All ? e.target.value : undefined);
-
     };
 
     const fetchData = useCallback(() => {
-        dispatch(wordsExelGetThunk(ConstPagiantion(0,listItemCountForShow)))
+        dispatch(wordsExelGetThunk(ConstPagiantion(0, listItemCountForShow)))
     }, [dispatch]);
 
     const fetchFilteredData = useCallback(() => {

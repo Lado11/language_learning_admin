@@ -192,13 +192,10 @@ export const FilesScreen = () => {
     fetchData()
   };
   
-  const filesMore = (id) => {
-   
-  }
-
   const handleApplyFilter = () => {
     fetchFilteredData();
   };
+  
   useEffect(() => {
     // Update imageUrls state with fetched image URLs
     if (categoryImageResponse?.data?.url) {

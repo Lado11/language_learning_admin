@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Form, Upload, message } from "antd";
+import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { CustomAntdButton, CustomAntdInput, CustomErrorSection, CustomUploadElement } from "../../components";
+import { CustomAntdButton, CustomAntdInput, CustomErrorSection } from "../../components";
 import { Colors } from "../../assets/colors";
 import "../../global-styles/global-styles.css";
 import "./learning-language-screen-style.css";
@@ -15,8 +15,6 @@ import {
   removeLanguagesItem,
   removeAllLanguages,
   learnLanguageCreateLoading,
-  getNativeGetResponse,
-  getNativeGetloading,
 } from "../../store/slices";
 import { Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
@@ -25,25 +23,26 @@ import { ConstPagiantion, } from "../../constants/const-pagination";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import remove_icon from "../../assets/images/remove_icon.png";
-import axios from "axios";
 import { nativeLanguageGetService } from "../../services/native-language/native-language-get-service";
+import axios from "axios";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const formData = new FormData();
-  const [learningLanguageFileList, setLearningLanguageFileList] = useState([]);
   const [learningLanguageFile, setLearningLanguageFile] = useState();
-  const [showLearningLanguageUpload, setShowLearningLanguageUpload] = useState();
   const languages = useSelector(learnLanguageSelectedLanguages);
   const languageLoading = useSelector(learnLanguageCreateLoading);
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
-  const native = useSelector(getNativeGetResponse)
   const messageError = createLearnLanguageResponse?.message;
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
   const [categoryShow, setCategoryShow] = useState();
+  const token = localStorage.getItem("token")
+  const LIMIT = 10;
+  const [current, setCurrent] = useState(0)
+  const URL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
@@ -105,19 +104,17 @@ export const LearningLanguageCreateScreen = () => {
     }
   };
 
-
-  const LIMIT = 10;
-  const token = localStorage.getItem("token")
-  const [current, setCurrent] = useState(0)
-  const URL = process.env.REACT_APP_BASE_URL;
-
   async function loadOptions(_search, loadedOptions, { page }) {
     const start = (page) * LIMIT; // Calculate start index for pagination
     try {
-      const response = await nativeLanguageGetService({data:{
-        skip:start,
-        limit:listItemCountForShow
-      }})
+      const response = await axios.get(
+        `${URL}api/admin/language/native?skip=${start}&limit=${LIMIT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+          },
+        }
+      );
       const options = response.data.data.list.map((item) =>
       ({
         value: item._id,

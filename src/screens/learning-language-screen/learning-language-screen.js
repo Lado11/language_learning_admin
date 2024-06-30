@@ -21,6 +21,8 @@ export const LearningLanguageScreen = () => {
   const learningLanguagesData = useSelector(learningLanguages);
   const learnLanguagesLoading = useSelector(getLearnLanguagesLoading);
   const imageLoading  = useSelector(getfilesGetIdloading);
+  const [imageUrls, setImageUrls] = useState({});
+  const learningImageResponse = useSelector(getfilesGetIdResponse);
 
   const navigateToCreateScreen = () => {
     navigate("/learning-language/create");
@@ -45,10 +47,6 @@ export const LearningLanguageScreen = () => {
   useEffect(() => {
     dispatch(learningLanguagesThunk(ConstPagiantion(0,listItemCountForShow)));
   }, []);
-
-
-  const [imageUrls, setImageUrls] = useState({});
-  const learningImageResponse = useSelector(getfilesGetIdResponse);
 
   useEffect(() => {
     // Preload image URLs

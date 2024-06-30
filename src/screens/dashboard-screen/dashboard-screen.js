@@ -8,7 +8,7 @@ import { dashboardGetThunk, getDashboardGetResponse, getDashboardGetloading } fr
 import { getUserGetAllData, getUserGetAllLoading, userGetAllThunk, userGetByIdThunk } from "../../store/slices";
 import { useNavigate } from "react-router-dom";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import { listItemCountForShow} from "../../constants/constants";
+import { listItemCountForShow } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { UserListItem } from "../user-screen/user-screen";
 
@@ -23,15 +23,6 @@ export const DashboardScreen = () => {
   const dashboardLoading = useSelector(getDashboardGetloading);
   const dataList = userData?.list;
 
-  useEffect(() => {
-    dispatch(dashboardGetThunk())
-  }, [])
-
-
-  useEffect(() => {
-    dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
-
   const seeAllUsers = () => {
     navigate("/user")
     localStorage.setItem("item", "USER")
@@ -43,6 +34,14 @@ export const DashboardScreen = () => {
     dispatch(userGetByIdThunk(id));
     navigate(`/user/${id}`);
   }
+  useEffect(() => {
+    dispatch(dashboardGetThunk())
+  }, [])
+
+  useEffect(() => {
+    dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
+  }, []);
+
 
   return (
     <div className="nativeLanguageScreenMainDiv">

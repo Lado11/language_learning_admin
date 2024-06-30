@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin, CustomUploadElement } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomErrorSection, CustomSpin } from "../../components";
 import remove_icon from "../../assets/images/remove_icon.png";
 import {
   categoryDeleteThunk,
@@ -57,6 +57,10 @@ export const CategoryUpdate = () => {
   const catgeoryLoadingId = useSelector(getCategoryGetIdloading);
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
+  const [imageUrls, setImageUrls] = useState({});
+  const categoryImageResponse = useSelector(getfilesGetIdResponse);
+  const categoryImageLoading = useSelector(getfilesGetIdloading)
+
 
   const onFinish = (values) => {
     if (values.image.file != "") {
@@ -96,16 +100,14 @@ export const CategoryUpdate = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const onTab = () => {
     dispatch(categoryDeleteThunk(categoryId))
   }
+
   const onRemove = () => {
     dispatch(deleteCategoryDeleteResponse());
   }
-
-  const [imageUrls, setImageUrls] = useState({});
-  const categoryImageResponse = useSelector(getfilesGetIdResponse);
-const categoryImageLoading = useSelector(getfilesGetIdloading)
 
   useEffect(() => {
     // Preload image URLs
