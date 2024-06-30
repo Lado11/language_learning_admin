@@ -91,7 +91,6 @@ export const LearningLanguageScreen = () => {
               </div> :
                 <div className="learningLanguageCardItems">
                   {learningLanguagesData?.data?.list.map((lang, index) => {
-                    console.log(lang,"lang");
                     return (
                          <div
                           key={lang?._id}

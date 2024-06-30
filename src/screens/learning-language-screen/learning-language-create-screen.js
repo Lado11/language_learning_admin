@@ -15,14 +15,17 @@ import {
   removeLanguagesItem,
   removeAllLanguages,
   learnLanguageCreateLoading,
+  getNativeGetResponse,
+  getNativeGetloading,
 } from "../../store/slices";
 import { Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
-import { listItemCountForShow,  } from "../../constants/constants";
+import { listItemCountForShow, } from "../../constants/constants";
 import { ConstPagiantion, } from "../../constants/const-pagination";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import remove_icon from "../../assets/images/remove_icon.png";
+import axios from "axios";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
@@ -34,6 +37,7 @@ export const LearningLanguageCreateScreen = () => {
   const languages = useSelector(learnLanguageSelectedLanguages);
   const languageLoading = useSelector(learnLanguageCreateLoading);
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
+  const native = useSelector(getNativeGetResponse)
   const messageError = createLearnLanguageResponse?.message;
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedImage, setSelectedImage] = useState();
@@ -50,7 +54,7 @@ export const LearningLanguageCreateScreen = () => {
       formData.append("name", values.name);
       selectedImage && formData.append("image", selectedImage);
       languages.forEach((item, ind) => {
-        formData.append(`nativeLanguages[${ind}]`, item._id);
+        formData.append(`nativeLanguages[${ind}]`, item.value);
       });
       dispatch(createLearnLanguageThunk(formData));
 
@@ -70,14 +74,6 @@ export const LearningLanguageCreateScreen = () => {
     }
   }, [createLearnLanguageResponse?.success])
 
-  const handleChange = (info) => {
-    setLearningLanguageFile(info.file);
-    setShowLearningLanguageUpload(info.fileList?.[0]);
-    if (!info.fileList?.[0]) {
-      info.file = "";
-    }
-  };
-
 
   useEffect(() => {
     createLearnLanguageResponse?.success === true && Success({ messageApi });
@@ -91,14 +87,7 @@ export const LearningLanguageCreateScreen = () => {
   const onRemove = () => {
     dispatch(deleteLerningCreateResponse());
   }
-  const props = {
-    accept: ".png,.svg,.jpg",
-    onRemove: (file) => {
-      const index = learningLanguageFileList.indexOf(file);
-      const newFileList = learningLanguageFileList.slice();
-      newFileList.splice(index, 1);
-    },
-  };
+
   const handleFileChange = async (
     event
   ) => {
@@ -114,6 +103,48 @@ export const LearningLanguageCreateScreen = () => {
       console.log(error);
     }
   };
+
+
+  const LIMIT = 10;
+  const token = localStorage.getItem("token")
+  const [current, setCurrent] = useState(0)
+  const URL = process.env.REACT_APP_BASE_URL;
+
+  async function loadOptions(_search, loadedOptions, { page }) {
+    const start = (page) * LIMIT; // Calculate start index for pagination
+    try {
+      const response = await axios.get(
+        `${URL}api/admin/language/native?skip=${start}&limit=${LIMIT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+          },
+        }
+      );
+      const options = response.data.data.list.map((item) =>
+      ({
+        value: item._id,
+        label: item.name,
+        nameEng:item.nameEng,
+        image:item?.imageFile
+      }));
+
+      return {
+        options: options,
+        hasMore: options.length === LIMIT,
+        additional: {
+          page: page + 1,
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching options:", error);
+      return {
+        options: [],
+        hasMore: false,
+      };
+    }
+  };
+
 
   return (
     <div
@@ -131,7 +162,7 @@ export const LearningLanguageCreateScreen = () => {
         >
           <div className="createLearningLangRow">
             <div className="updateSection">
-              <div>
+              <div className="uploadLangInput">
                 {messageError && <CustomErrorSection error={messageError} onTab={onRemove} />}
                 <p className="nativeLanguageTitle">Add Learning Language</p>
                 <div className="createScreenRowInputs">
@@ -167,9 +198,11 @@ export const LearningLanguageCreateScreen = () => {
                     </div> : <ImageUpload onChange={handleFileChange} />}
                 </Form.Item>
               </div>
+              
+              {/* <AsyncPaginate loadOptions={loadOptions}/> */}
               <div className="learnLanguageSelectedLanguages">
                 <p className="selectLanguageTitle">Native Language</p>
-                <SelectLearningLang name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+                <SelectLearningLang loadOptions={loadOptions} current={current} name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
                   dispatch(removeLanguagesItem(id));
                 }} />
               </div>

@@ -44,9 +44,10 @@ export const learnLanguageByIdSlice = createSlice({
           state.learnLanguageByIdResponse.data.nativeLanguages;
       } else {
         state.learnLanguageUpdateSelectedLanguages = state.learnLanguageUpdateSelectedLanguages?.filter(
-          (item) => item._id !==payload._id 
+          (item) => item._id !== (payload._id ? payload._id  : payload.value )
         );
-        state.learnLanguageUpdateSelectedLanguages?.push(payload);
+        state.learnLanguageUpdateSelectedLanguages = [...state.learnLanguageUpdateSelectedLanguages,payload]
+        // state.learnLanguageUpdateSelectedLanguages?.push(payload);
       }
     },
   

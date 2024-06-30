@@ -11,6 +11,22 @@
   line-height: 25px;
   color: #7D8FB3;
 }
+
+.css-13cymwt-control{
+  height: 60px !important;
+  border-radius: 10px !important;
+  border-style: 1px solid #7D8FB326
+}
+.css-1u9des2-indicatorSeparator{
+  display: none;
+}
+
+.css-13cymwt-control {
+height: 60px !important;
+}
+.css-13cymwt-control:hover {
+border-color:  #7D8FB326 !important;
+}
 .rightSection{
 
 display: flex;
@@ -60,6 +76,11 @@ flex-direction: row;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+}
+
+.uploadLangInput{
+  width: 100%;
+  max-width: 420px;
 }
 .learningLanguageScreenLoadingDiv {
   display: flex;
@@ -122,9 +143,8 @@ flex-direction: row;
   border-radius: 10px;
 }
 
-.selectLanguageValuesDivItem:nth-child(-n +3){
-  margin-right: 12px;
-
+.selectLanguageValuesDivItem:nth-child(2n){
+  margin-left: 12px;
 }
 @media screen and (max-width: 1440px) {
   .learnLanguageUpdateScreenMainDiv {

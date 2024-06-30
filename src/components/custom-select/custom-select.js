@@ -9,6 +9,7 @@ const { Option } = Select;
 
 export const CustomSelect = ({ title, optionsData, width, backgroundColor, data, name, rules }) => {
   const dispatch = useDispatch();
+  
   const handleChange = (value) => {
     const selectedOption = optionsData?.find((option) => option?.name === value);
     dispatch(addLanguages(selectedOption));

@@ -37,6 +37,7 @@ import { ShowImage } from "../category-screen/category-update";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
+import axios from "axios";
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
@@ -48,7 +49,7 @@ export const LearningLanguageUpdate = () => {
   const navigate = useNavigate();
   const formData = new FormData();
   const [learningLanguageFile, setLearningLanguageFile] = useState();
-    useState();
+  useState();
   const learningLanguageData = useSelector(getLearnLanguageByIdResponse);
   const deleteLerningLoading = useSelector(learnLanguageDeleteLoading);
   const updateLearningLoading = useSelector(getUpdatedLearnLanguageLoading);
@@ -61,7 +62,7 @@ export const LearningLanguageUpdate = () => {
   const loadingLanguageId = useSelector(getLearnLanguageByIdLoading);
   const leraningLangugaeUpdateResponse = useSelector(getUpdatedLearnLanguageResponse);
   const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
-  
+
   const onFinish = (values) => {
     formData.append("nameEng", values.nameEng);
     formData.append("name", values.name);
@@ -69,7 +70,8 @@ export const LearningLanguageUpdate = () => {
     formData.append("id", learningData.id);
     formData.append("active", learningData?.active);
     lerningLangAllData.forEach((item, ind) => {
-      formData.append(`nativeLanguages[${ind}]`, item._id);
+      console.log(item,"item");
+      formData.append(`nativeLanguages[${ind}]`, item._id ?  item._id : item.value);
     });
 
     dispatch(learnLanguageUpdateThunk(formData));
@@ -78,7 +80,7 @@ export const LearningLanguageUpdate = () => {
   };
 
 
-  const onDelete = () => {
+  const onDeleteLang = () => {
     dispatch(learnLanguageDeleteThunk(learningData?.id));
   };
 
@@ -87,7 +89,7 @@ export const LearningLanguageUpdate = () => {
   };
 
   useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(0,listItemCountForShow)));
+    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, []);
 
   useEffect(() => {
@@ -111,12 +113,9 @@ export const LearningLanguageUpdate = () => {
     dispatch(deleteLearnUpdateResponse());
   }, [leraningLangugaeUpdateResponse?.success, learningLanguageDeleteResposne?.success]);
 
-  
-  
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
   const learnignLanguageImageUpdate = useSelector(getfilesGetIdloading);
-
 
   useEffect(() => {
     // Preload image URLs
@@ -140,7 +139,7 @@ export const LearningLanguageUpdate = () => {
       }));
     }
   }, [categoryImageResponse]);
-  
+
   const handleFileChange = async (
     event
   ) => {
@@ -157,6 +156,47 @@ export const LearningLanguageUpdate = () => {
     }
   };
 
+  const LIMIT = 10;
+  const token = localStorage.getItem("token")
+  const [current, setCurrent] = useState(0)
+  const URL = process.env.REACT_APP_BASE_URL;
+
+  async function loadOptions(_search, loadedOptions, { page }) {
+    const start = (page) * LIMIT; // Calculate start index for pagination
+    try {
+      const response = await axios.get(
+        `${URL}api/admin/language/native?skip=${start}&limit=${LIMIT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+          },
+        }
+      );
+      const options = response.data.data.list.map((item) =>
+      ({
+        value: item._id,
+        label: item.name,
+        nameEng:item.nameEng,
+        image:item?.imageFile
+      }));
+
+      return {
+        options: options,
+        hasMore: options.length === LIMIT,
+        additional: {
+          page: page + 1,
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching options:", error);
+      return {
+        options: [],
+        hasMore: false,
+      };
+    }
+  };
+
+
   return (
     <div
       className="nativeLanguageScreenMainDiv"
@@ -168,7 +208,7 @@ export const LearningLanguageUpdate = () => {
         <CustomModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
-          onTab={onDelete}
+          onTab={onDeleteLang}
         />
         <Form
           autoComplete="off"
@@ -179,66 +219,67 @@ export const LearningLanguageUpdate = () => {
           <div className="createLearningLangRow">
             <div className="updateSection">
               <div className="update-language-right-section">
-              <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
+                <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
 
-<p className="inputTitle">{t("LANGUAGE_ENGLISH_NAME")}</p>
-<CustomAntdInput
-  rules={true}
-  name="nameEng"
-  placeholder=" Language English Name*"
-/>
-<p className="inputTitle">{t("NATIVE_NAME")}</p>
+                <p className="inputTitle">{t("LANGUAGE_ENGLISH_NAME")}</p>
+                <CustomAntdInput
+                  rules={true}
+                  name="nameEng"
+                  placeholder=" Language English Name*"
+                />
+                <p className="inputTitle">{t("NATIVE_NAME")}</p>
 
-<CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
-<p className="inputTitle">{t("LANGUAGE_ICON")}</p>
+                <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
+                <p className="inputTitle">{t("LANGUAGE_ICON")}</p>
 
-<Form.Item
-  name="image"
-  rules={[{ required: true}]}
->
-   {previewImgUrl?.length > 1 ? (
-  <ShowImage title={selectedImage?.name}
-    src={previewImgUrl}
-    onClick={() => {
-      setPreviewimgUrl(".")
-      setCategoryShow(null);
-    }} />
-) : learningData?.imageFile && !previewImgUrl ? (
-  <ShowImage  loading={learnignLanguageImageUpdate} title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
-    setPreviewimgUrl(".")
-    setCategoryShow(null);
-  }} />
-) : (
-  <ImageUpload onChange={handleFileChange} />
-)}
-</Form.Item>
+                <Form.Item
+                  name="image"
+                  rules={[{ required: true }]}
+                >
+                  {previewImgUrl?.length > 1 ? (
+                    <ShowImage title={selectedImage?.name}
+                      src={previewImgUrl}
+                      onClick={() => {
+                        setPreviewimgUrl(".")
+                        setCategoryShow(null);
+                      }} />
+                  ) : learningData?.imageFile && !previewImgUrl ? (
+                    <ShowImage loading={learnignLanguageImageUpdate} title={learningData?.imageFile?.description} src={imageUrls[learningData?.imageFile?._id]} onClick={() => {
+                      setPreviewimgUrl(".")
+                      setCategoryShow(null);
+                    }} />
+                  ) : (
+                    <ImageUpload onChange={handleFileChange} />
+                  )}
+                </Form.Item>
               </div>
               <div className="learnLanguageSelectedLanguages">
-              <p className="inputTitle marginBottom">Native Language</p>
-              <SelectLearningLang  name={"Native Language"} dataLanguages={lerningLangAllData} onDelete={(id) => {
-                dispatch(removeSelectedLanguagesItem(id));
-              }} />
-            </div>
+                <p className="inputTitle marginBottom">Native Language</p>
+                <SelectLearningLang loadOptions={loadOptions} current={current} name={"Native Language"} dataLanguages={lerningLangAllData} onDelete={(id) => {
+                  console.log(id,"id");
+                  dispatch(removeSelectedLanguagesItem(id));
+                }} />
+              </div>
             </div>
 
-              <Form.Item>
-                <CustomAntdButton
-                  title="Update"
-                  background={Colors.PURPLE}
-                  loading={updateLearningLoading}
+            <Form.Item>
+              <CustomAntdButton
+                title="Update"
+                background={Colors.PURPLE}
+                loading={updateLearningLoading}
+              />
+              <div className="deleteButton">
+                <CustomAntdButtonDelete
+                  loading={deleteLerningLoading}
+                  title="Delete"
+                  background={Colors.GRAY_COLOR}
+                  onClick={() => {
+                    showModal();
+                  }}
                 />
-                <div className="deleteButton">
-                  <CustomAntdButtonDelete
-                    loading={deleteLerningLoading}
-                    title="Delete"
-                    background={Colors.GRAY_COLOR}
-                    onClick={() => {
-                      showModal();
-                    }}
-                  />
-                </div>
-              </Form.Item>
-          
+              </div>
+            </Form.Item>
+
           </div>
         </Form>
       </div>
