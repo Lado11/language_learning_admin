@@ -1,9 +1,7 @@
-import { Routes, Route, Navigate, useParams, useLocation, Outlet } from "react-router-dom";
-import { redirect, } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
 
 import {
   CategoryScreen,
-  HomeScreen,
   LearningLanguageScreen,
   LoginScreen,
   ResetPasswordEmail,
@@ -40,7 +38,6 @@ import { FilesMore } from "../screens/files-screen/files-more";
 export const MyRoutes = () => {
   const token = localStorage.getItem("token");
   const reduxToken = useSelector(getToken);
-  let { id } = useParams();
   const location = useLocation().pathname
 
 
