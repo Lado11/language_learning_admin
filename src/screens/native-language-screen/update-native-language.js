@@ -115,7 +115,7 @@ export const UpdateNativeLanguage = () => {
 
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
-const nativeLanguageImageUpdate = useSelector(getfilesGetIdloading);
+  const nativeLanguageImageUpdate = useSelector(getfilesGetIdloading);
 
   useEffect(() => {
     // Preload image URLs
