@@ -156,9 +156,9 @@ export const LearningLanguageUpdate = () => {
   async function loadOptions(_search, loadedOptions, { page }) {
     const start = (page) * LIMIT; // Calculate start index for pagination
     try {
-      const searchQuersy = _search !== undefined ? `?search=${_search}` : '';
+      const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
       const response = await axios.get(
-        `${URL}api/admin/language/native${searchQuersy}?skip=${start}&limit=${LIMIT}`,
+        `${URL}api/admin/language/native${searchQuersy}skip=${start}&limit=${LIMIT}`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Include authorization token from localStorage
