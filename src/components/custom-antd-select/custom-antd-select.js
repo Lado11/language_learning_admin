@@ -1,8 +1,7 @@
 import React from "react";
-import { Form, Select, Space } from "antd";
+import { Form, Select } from "antd";
 import "./custom-antd-select.css";
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { getLearnLanguagesLoading, learningLanguagesThunk } from "../../store/slices";
+import { getLearnLanguagesLoading } from "../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 export const CustomAntdSelect = ({
   user,
@@ -39,24 +38,15 @@ export const CustomAntdSelect = ({
 
   return (
     <div className="antd_custom_select_user">
-      {/* <InfiniteScroll
-                dataLength={optinData?.length  ? optinData?.length: 0}
-                next={() => { dispatch(learningLanguagesThunk({}))}}
-                hasMore={optinData?.meta?.hasNextPage}
-                loader={loading}
-                
-
-                scrollableTarget="scrollableDiv"
-            > */}
       <Form.Item
         name={name}
         rules={[{ required: rules }]}
       >
 
         <Select
-        placeholder={defaultValue}
+          placeholder={defaultValue}
           showSearch
-          onSearch={onSearch}
+          // onSearch={onSearch}
           filterOption={filterOption}
           onChange={handleChange}
           // defaultValue={defaultValue}
@@ -68,8 +58,6 @@ export const CustomAntdSelect = ({
           options={optinData}
         />
       </Form.Item>
-
-      {/* </InfiniteScroll> */}
     </div>
   );
 };

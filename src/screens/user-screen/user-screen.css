@@ -36,7 +36,7 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 25px;
-  color: #7D8FB3;
+  color: black;
   margin-left: 10px;
 }
 .ant-picker-input{
@@ -185,7 +185,7 @@ td:nth-child(n) {
   font-size: 16px;
   font-weight: 400;
   line-height: 25px;
-  color: black;
+  color: #7D8FB3;
 }
 .container {
   max-width: 100%;

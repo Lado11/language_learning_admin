@@ -51,7 +51,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name,loadOp
     const customStyles = {
         option: (provided, state) => ({
           ...provided,
-          backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+          backgroundColor: state.isSelected ? "#fff" : "#7D8FB326", // Background color for selected options
           color: state.isSelected ? "#fff" : "#333", // Text color for selected options
           padding: "8px 12px", // Padding for options
           fontSize: "14px", // Font size for options

@@ -82,7 +82,7 @@ export const UserScreenUpdate = () => {
             password: userList?.password,
             phoneNumber: userList?.phoneNumber,
             lastName: userList?.lastName,
-            role: userList?.role,
+            role: userList?.role ,
         });
     }, [userList]);
 
