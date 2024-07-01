@@ -35,6 +35,7 @@ export const UserScreenUpdate = () => {
     const userDeleteResponse = useSelector(getUserDeleteData);
     const userLoadingId = useSelector(getUserGetByIdLoading);
     const userList = userIdData?.data
+    console.log(userList,"log user");
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -65,15 +66,6 @@ export const UserScreenUpdate = () => {
          dispatch(userUpdateThunk(data))  
     };
 
-    useEffect(() => {
-        if (userList?.isSubscribed === true) {
-            setSelect4(true)
-        } else if (userList?.emailVerified === true) {
-            setSelect2(true)
-        } else if (userList?.phoneNumberVerified === true) {
-            select1(true)
-        }
-    }, [select4, select2, select1])
 
     useEffect(() => {
         form.setFieldsValue({
@@ -86,7 +78,6 @@ export const UserScreenUpdate = () => {
         });
     }, [userList]);
 
-    console.log(userList,"user list");
 
     useEffect(() => {
         dispatch(userGetByIdThunk(userId));
@@ -105,6 +96,10 @@ export const UserScreenUpdate = () => {
         userUpdateResponse?.success === false && Error({ messageApi, messageError });
         dispatch(deleteUserUpdateResponse())
     }, [userUpdateResponse?.success,]);
+
+    console.log(select4,"select 4");
+
+
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
@@ -179,7 +174,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch check={select1} setCheck={setSelect1} color={Colors.GREEN} />
+                                <CsutomSwitch  backSelected={userList?.phoneNumberVerified} check={select1} setCheck={setSelect1} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div className="category_row_input_user">
@@ -194,7 +189,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch check={select2} setCheck={setSelect2} color={Colors.GREEN} />
+                                <CsutomSwitch backSelected={userList?.emailVerified}  check={select2} setCheck={setSelect2} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div>
@@ -216,7 +211,7 @@ export const UserScreenUpdate = () => {
                             <p className="deleteTitle">
                                 Block User
                             </p>
-                            <CsutomSwitch check={select3} setCheck={setSelect3} color={Colors.RED} />
+                            <CsutomSwitch  backSelected={userList?.deleted} check={select3} setCheck={setSelect3} color={Colors.RED} />
                         </div>
                         <Form.Item>
                             {contextHolder}
@@ -243,7 +238,7 @@ export const UserScreenUpdate = () => {
                             <p className="switchTitle">
                                 Subscribed
                             </p>
-                            <CsutomSwitch check={select4} setCheck={setSelect4} color={Colors.PURPLE} />
+                            <CsutomSwitch check={select4} backSelected={userList?.isSubscribed} setCheck={setSelect4} color={Colors.PURPLE} />
                         </div>
                         <div>
                             <p className="subscriptionTitle">
