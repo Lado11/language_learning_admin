@@ -14,7 +14,7 @@ import {
   LearningLanguageCreateScreen,
   DashboardScreen,
   NativeLanguageScreen,
-  NativeLanguageCretae,
+  NativeLanguageCreate,
   CategoryCretae,
   FilesScreen,
   UserCreateScreen,
@@ -74,7 +74,7 @@ export const MyRoutes = () => {
                 <Route path="native-language/:id" element={<UpdateNativeLanguage />} />
                 <Route
                   path="/native-language/create"
-                  element={<NativeLanguageCretae />}
+                  element={<NativeLanguageCreate />}
                 />
                 <Route
                   path="/learning-language"

@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { nativeLanguageCreateService } from "../../../services/native-language/native-language-cretae-service";
+import { nativeLanguageCreateService } from "../../../services/native-language/native-language-create-service";
 
 const initialState = {
-  nativeCreateloading: false,
-  nativeCreateBool: false,
-  nativeCreateResponse: null,
-  nativeCreateErrors: null,
+  isLoading: false,
+  isSuccess: false,
+  response: null,
+  errors: null,
 };
 
-export const nativeLanguageCreateThunk = createAsyncThunk(
-  "nativeCreate",
+export const createNativeLanguage = createAsyncThunk(
+  "nativeLanguage/create",
   async (formData, { rejectWithValue }) => {
     try {
       const response = await nativeLanguageCreateService(formData);
@@ -21,49 +21,37 @@ export const nativeLanguageCreateThunk = createAsyncThunk(
 );
 
 export const nativeLanguageCreateSlice = createSlice({
-  name: "nativeCreate",
+  name: "nativeLanguageCreate",
   initialState,
   reducers: {
-    deleteNativeCreateResponse: (state) => {
-      state.nativeCreateResponse = "";
+    clearNativeCreateResponse: (state) => {
+      state.response = null;
     },
-    deleteNativeCreateBool: (state) => {
-      state.nativeCreateBool = false;
+    clearNativeCreateSuccess: (state) => {
+      state.isSuccess = false;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(nativeLanguageCreateThunk.pending, (state) => {
-      state.nativeCreateloading = true;
+    builder.addCase(createNativeLanguage.pending, (state) => {
+      state.isLoading = true;
     });
-    builder.addCase(
-      nativeLanguageCreateThunk.fulfilled,
-      (state, { payload }) => {
-        state.nativeCreateloading = false;
-        state.nativeCreateResponse = payload;
-        state.nativeCreateBool = true;
-      }
-    );
-    builder.addCase(
-      nativeLanguageCreateThunk.rejected,
-      (state, { payload }) => {
-        state.nativeCreateloading = false;
-        state.nativeCreateErrors = payload;
-      }
-    );
+    builder.addCase(createNativeLanguage.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.response = payload;
+      state.isSuccess = true;
+    });
+    builder.addCase(createNativeLanguage.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.errors = payload;
+    });
   },
 });
 
-export const { deleteNativeCreateBool ,deleteNativeCreateResponse } = nativeLanguageCreateSlice.actions;
+export const { clearNativeCreateSuccess, clearNativeCreateResponse } = nativeLanguageCreateSlice.actions;
 
-export const getNativeCreateLoading = (state) => {
-  return state.createNativeSlice.nativeCreateloading;
-};
-export const getNativeCreateBool = (state) => {
-  return state.createNativeSlice.nativeCreateBool;
-};
-export const getNativeCreateData = (state) => {
-  return state.createNativeSlice.nativeCreateResponse;
-};
-export const getNativeCreateError = (state) => {
-  return state.createNativeSlice.nativeCreateErrors;
-};
+export const selectNativeCreateLoading = (state) => state.nativeLanguageCreate.isLoading;
+export const selectNativeCreateSuccess = (state) => state.nativeLanguageCreate.isSuccess;
+export const selectNativeCreateResponse = (state) => state.nativeLanguageCreate.response;
+export const selectNativeCreateError = (state) => state.nativeLanguageCreate.errors;
+
+export default nativeLanguageCreateSlice.reducer;

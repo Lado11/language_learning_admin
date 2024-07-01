@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { nativeLanguageCreateService } from "../../../services/native-language/native-language-cretae-service";
 import { sendPushNotificationService } from "../../../services/notification";
 
 const initialState = {

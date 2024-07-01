@@ -10,7 +10,6 @@ import {
   deleteLerningCreateResponse,
   learnLanguageCreateResponse,
   removeAllCreateSelectedLanguages,
-  nativeLanguageGetThunk,
   learnLanguageSelectedLanguages,
   removeLanguagesItem,
   removeAllLanguages,
@@ -19,18 +18,15 @@ import {
 import { Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
 import { listItemCountForShow, } from "../../constants/constants";
-import { ConstPagiantion, } from "../../constants/const-pagination";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import remove_icon from "../../assets/images/remove_icon.png";
-import { nativeLanguageGetService } from "../../services/native-language/native-language-get-service";
 import axios from "axios";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const formData = new FormData();
-  const [learningLanguageFile, setLearningLanguageFile] = useState();
   const languages = useSelector(learnLanguageSelectedLanguages);
   const languageLoading = useSelector(learnLanguageCreateLoading);
   const createLearnLanguageResponse = useSelector(learnLanguageCreateResponse);
@@ -38,15 +34,9 @@ export const LearningLanguageCreateScreen = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
-  const [categoryShow, setCategoryShow] = useState();
   const token = localStorage.getItem("token")
-  const LIMIT = 10;
-  const [current, setCurrent] = useState(0)
+  const LIMIT = listItemCountForShow;
   const URL = process.env.REACT_APP_BASE_URL;
-
-  useEffect(() => {
-    dispatch(nativeLanguageGetThunk(ConstPagiantion(0, listItemCountForShow)));
-  }, []);
 
   const onFinish = (values) => {
     if (values.learningLanguageImage.file != "") {
@@ -66,10 +56,8 @@ export const LearningLanguageCreateScreen = () => {
   useEffect(() => {
     if (createLearnLanguageResponse?.success === true) {
       form.resetFields();
-      setLearningLanguageFile("");
       dispatch(removeAllLanguages())
       setPreviewimgUrl("")
-      setCategoryShow(null);
       dispatch(deleteLerningCreateResponse());
     }
   }, [createLearnLanguageResponse?.success])
@@ -179,7 +167,6 @@ export const LearningLanguageCreateScreen = () => {
                           src={remove_icon}
                           onClick={() => {
                             setPreviewimgUrl("")
-                            setCategoryShow(null);
                           }}
                         />
                       </div>
@@ -196,7 +183,7 @@ export const LearningLanguageCreateScreen = () => {
               {/* <AsyncPaginate loadOptions={loadOptions}/> */}
               <div className="learnLanguageSelectedLanguages">
                 <p className="selectLanguageTitle">Native Language</p>
-                <SelectLearningLang loadOptions={loadOptions} current={current} name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+                <SelectLearningLang loadOptions={loadOptions} current={0} name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
                   dispatch(removeLanguagesItem(id));
                 }} />
               </div>
