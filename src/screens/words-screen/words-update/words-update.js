@@ -67,7 +67,7 @@ export const WordsUpdate = () => {
         dispatch(categoryGetThunk(skipNative));
     }, []);
 
-    const addFile = (e) => {
+     const addFile = (e) => {
         const s = URL?.createObjectURL(e.target.files?.[0])
         setFileListVoice(e.target.files?.[0])
         setAudio(s)

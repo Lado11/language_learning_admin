@@ -33,7 +33,7 @@ export const WordsCreateScreen = () => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
     formData.append("level", selectedLevel?.value)
-    formData.append("language", learningLanguageWordSelectedValue?._id)
+    formData.append("language", learningLanguageWordSelectedValue?.value)
     formData.append("category", selectedCategory?._id)
     selectedImage && formData.append("image", selectedImage);
     formData.append("audio", fileListVoice)

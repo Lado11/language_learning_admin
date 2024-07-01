@@ -17,7 +17,6 @@ export const UserScreenUpdate = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const formData = new FormData();
     const [select1, setSelect1] = useState(false);
     const [select2, setSelect2] = useState(false);
     const [select3, setSelect3] = useState(false);
@@ -36,7 +35,6 @@ export const UserScreenUpdate = () => {
     const userDeleteResponse = useSelector(getUserDeleteData);
     const userLoadingId = useSelector(getUserGetByIdLoading);
     const userList = userIdData?.data
-
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -48,8 +46,15 @@ export const UserScreenUpdate = () => {
     };
 
     const onFinish = (values) => {
+        const newEmail = values.email !== userList.email ? values.email : undefined;
+        const newPhone = values.phoneNumber !== userList.phoneNumber ? values.phoneNumber : undefined;
         const data = {
-            ...values,
+            email: newEmail, 
+            phoneNumber:newPhone,
+            firstName:values?.firstName,
+            lastName:values?.lastName,
+            password:values?.password,
+            role:values?.role,
             id: userList?.id,
             phoneNumberVerified: select1,
             emailVerified: select2,
@@ -57,8 +62,18 @@ export const UserScreenUpdate = () => {
             isSubscribed: select4,
             subscriptionExpiresDt: calendar,
         }
-        dispatch(userUpdateThunk(data))
+         dispatch(userUpdateThunk(data))  
     };
+
+    useEffect(() => {
+        if (userList?.isSubscribed === true) {
+            setSelect4(true)
+        } else if (userList?.emailVerified === true) {
+            setSelect2(true)
+        } else if (userList?.phoneNumberVerified === true) {
+            select1(true)
+        }
+    }, [select4, select2, select1])
 
     useEffect(() => {
         form.setFieldsValue({
@@ -112,13 +127,6 @@ export const UserScreenUpdate = () => {
                     <div className="formColumn">
                         <div className="userHeader">
                             <p className="nativeLanguageTitle">Update User</p>
-                            {/* <div className="deleteDiv">
-                                <p className="deleteTitle">
-                                    Delete Block
-
-                                </p>
-                                <img className="delteIcon" src={delteIcon} alt="delet_icon" />
-                            </div> */}
                         </div>
                         <div className="row borderBottom">
                             <div className="row">
@@ -127,7 +135,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="row idLeft">
                                 <p className="inputTitle">ID:</p>
-                                <p className="ietmColor">455555</p>
+                                <p className="ietmColor">{userList?._id}</p>
                             </div>
                         </div>
                         <div className="row borderBottom">

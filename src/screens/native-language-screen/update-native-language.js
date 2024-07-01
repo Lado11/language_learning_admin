@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Upload, message } from "antd";
+import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
@@ -15,7 +15,6 @@ import {
 } from "../../store/slices/native-language/native-language-delete";
 import {
   deleteNativeUpdateResponse,
-  getNativeUpdateBool,
   getNativeUpdateData,
   getNativeUpdateLoading,
   nativeLanguageUpdateThunk,
@@ -46,7 +45,6 @@ export const UpdateNativeLanguage = () => {
   const nativeLanguageData = useSelector(getNativeGetIdResponse)?.data;
   const nativeUpdateLoading = useSelector(getNativeUpdateLoading);
   const nativeDeleteLoading = useSelector(getNativeDeleteloading);
-  const nativeUpdateBool = useSelector(getNativeUpdateBool);
   const nativeDeleteResponse = useSelector(getNativeDeleteResponse);
   const nativeUpdateResponse = useSelector(getNativeUpdateData);
   const getIdNativeLoading = useSelector(getNativeGetIdloading);

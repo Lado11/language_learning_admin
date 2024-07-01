@@ -5,6 +5,7 @@ const CsutomSwitch = ({color,check,setCheck}) => {
     // const [check,setCheck] = useState(false)
     
     const onChange = (checked) => {
+      console.log(check,"chekc");
         setCheck(checked)
       };
     return(

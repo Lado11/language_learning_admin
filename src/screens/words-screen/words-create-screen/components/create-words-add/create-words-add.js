@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./create-words-add-style.css";
 import {
   CustomAntdInput,
   CustomAntdSelect,
+  CustomAsyncPaginate,
   CustomUpload,
 } from "../../../../../components";
 import { Colors } from "../../../../../assets/colors";
@@ -14,6 +15,7 @@ import { Waveform } from "./music-player";
 import logo from "../../../../../assets/images/Vector (4).png"
 import { Form } from "antd";
 import remove_icon from "../../../../../assets/images//remove_icon.png"
+import axios from "axios";
 
 export const CreateWordsAdd = ({
   setCategoryShow,
@@ -38,6 +40,72 @@ export const CreateWordsAdd = ({
   const dispatch = useDispatch();
   const learningLanguagesData = useSelector(learningLanguages);
   const categoryData = useSelector(getCategoryGetData)?.data?.list;
+  const token = localStorage.getItem("token")
+  const LIMIT = 10;
+  const [current, setCurrent] = useState(0)
+  const URL = process.env.REACT_APP_BASE_URL;
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      with:"100%",
+      backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+      color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+      padding: "8px 12px", // Padding for options
+      fontSize: "14px", // Font size for options
+      height: "60px", // Height of each option
+      borderRadius:"10px",
+      border:"none",
+    }),
+    control: (provided) => ({
+      ...provided,
+      border:"none", // Border color
+      minHeight: "60px", // Minimum height of the control
+      boxShadow: "none", // Remove box shadow
+      borderRadius:"10px",
+      backgroundColor:"#F7F8FA"
+
+    }),
+  };
+  async function loadOptionsLang(_search, loadedOptions, { page }) {
+    const start = (page) * LIMIT; // Calculate start index for pagination
+    try {
+        const response = await axios.get(
+            `${URL}api/admin/language/learn?skip=${start}&limit=${LIMIT}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+                },
+            }
+        );
+        const options = response.data.data.list.map((item) =>
+        ({
+            value: item._id,
+            label: item.name,
+            nameEng: item.nameEng,
+            image: item?.imageFile
+        }));
+
+        return {
+            options: options,
+            hasMore: options.length === LIMIT,
+            additional: {
+                page: page + 1,
+            },
+        };
+    } catch (error) {
+        console.error("Error fetching options:", error);
+        return {
+            options: [],
+            hasMore: false,
+        };
+    }
+};
+
+const onChange = (value) => {
+  setLearningLanguageWordSelectedValue(value?.value)
+}
+
   const filteredResponseCategory = categoryData?.map((lang) => {
     return {
       _id: lang._id,
@@ -46,24 +114,17 @@ export const CreateWordsAdd = ({
     };
   });
 
-  const filteredResponse = learningLanguagesData?.data?.list?.map((lang) => {
-    return {
-      _id: lang._id,
-      label: lang.name.toLowerCase(),
-      value: lang.name,
-      nativeLanguages: lang?.nativeLanguages
-    };
-  });
 
   const skipNative = {
     skip: 0,
     limit: 12,
   };
+  
   const addFile = (e) => {
     const s = URL?.createObjectURL(e.target.files?.[0])
     setFileListVoice(e.target.files?.[0])
     setAudio(s)
-  }
+}
 
   useEffect(() => {
     dispatch(learningLanguagesThunk(skipNative));
@@ -74,7 +135,8 @@ export const CreateWordsAdd = ({
     <div className="createWordsAdd">
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
-        <CustomAntdSelect
+      <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
+        {/* <CustomAntdSelect
           rules={true}
           name={"Learning language"}
           // className="wordsSelectExel"
@@ -83,7 +145,7 @@ export const CreateWordsAdd = ({
           setSelected={setLearningLanguageWordSelectedValue}
           defaultValue={t("LEARNING_LANGUAGE")}
           color={Colors.LIGHT_GRAY}
-        />
+        /> */}
       </div>
       <div className="createWordsAddInputs createWordsRow">
         <div className="rowInputWords">
