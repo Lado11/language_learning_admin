@@ -86,6 +86,8 @@ export const CreateWordsAdd = ({
 
     }),
   };
+
+
   async function loadOptionsLang(_search, loadedOptions, { page }) {
     const start = (page) * LIMIT; // Calculate start index for pagination
     const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
@@ -103,7 +105,8 @@ export const CreateWordsAdd = ({
             value: item._id,
             label: item.name,
             nameEng: item.nameEng,
-            image: item?.imageFile
+            image: item?.imageFile,
+            nativeLanguages:item?.nativeLanguages
         }));
 
         return {
@@ -160,7 +163,8 @@ async function loadOptionsCategory(_search, loadedOptions, { page }) {
 };
 
 const onChange = (value) => {
-  setLearningLanguageWordSelectedValue(value?.value)
+  console.log(value,"log value");
+  setLearningLanguageWordSelectedValue(value)
 }
 
 const onChangeCategory = (value) => {
@@ -196,7 +200,8 @@ const onChangeCategory = (value) => {
     <div className="createWordsAdd">
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
-      <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
+      <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" 
+      loadOptions={loadOptionsLang} />
         {/* <CustomAntdSelect
           rules={true}
           name={"Learning language"}

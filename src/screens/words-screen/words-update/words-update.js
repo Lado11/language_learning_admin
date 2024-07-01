@@ -11,7 +11,7 @@ import { Form } from "antd";
 import remove_icon from "../../../assets/images//remove_icon.png"
 import { Waveform } from "../words-create-screen/components/create-words-add/music-player";
 import { wordlevel } from "../../../data";
-import { categoryGetThunk, getCategoryGetData, learningLanguages, learningLanguagesThunk } from "../../../store/slices";
+import { categoryGetThunk,  learningLanguagesThunk } from "../../../store/slices";
 import { useTranslation } from "react-i18next";
 import "./words-update.css"
 import logoVoice from "../../../assets/images/Vector (4).png"
@@ -41,12 +41,10 @@ export const WordsUpdate = () => {
     const [audio, setAudio] = useState();
     const [categoryShow, setCategoryShow] = useState();
     const wordsIdData = useSelector(wordsIdResponse)?.data;
-    console.log(wordsIdData,"log id ");
+    console.log(wordsIdData, "log id ");
     const wordsIdLoad = useSelector(wordsIdLoading);
     const wordDeleteData = useSelector(wordsDeleteResponse);
     const deleteWordLoading = useSelector(wordsDeleteLoading);
-    const categoryData = useSelector(getCategoryGetData)?.data?.list;
-    const learningLanguagesData = useSelector(learningLanguages);
     const updateWordsResponse = useSelector(wordsUpdateResponseData);
     const updateWordsLoading = useSelector(wordsUpdateLoading);
     const array = [];
@@ -59,7 +57,7 @@ export const WordsUpdate = () => {
         limit: 12,
     };
     const [imageUrls, setImageUrls] = useState({});
-    const [voiceUrls, setVoiceUrls] = useState({}); 
+    const [voiceUrls, setVoiceUrls] = useState({});
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const token = localStorage.getItem("token")
@@ -69,44 +67,45 @@ export const WordsUpdate = () => {
 
     const customStyles = {
         option: (provided, state) => ({
-          ...provided,
-          window: state.isSelected && "420px",
-          backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-          color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
-          padding: "8px 12px", // Padding for options
-          fontSize: "14px", // Font size for options
-          height: "60px", // Height of each option
-          borderRadius:"10px",
-          border:"none",
+            ...provided,
+            window: state.isSelected && "420px",
+            backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+            color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+            padding: "8px 12px", // Padding for options
+            fontSize: "14px", // Font size for options
+            height: "60px", // Height of each option
+            borderRadius: "10px",
+            border: "none",
         }),
         control: (provided) => ({
-          ...provided,
-          border:"none", // Border color
-          minHeight: "60px", // Minimum height of the control
-          boxShadow: "none", // Remove box shadow
-          borderRadius:"10px",
-          backgroundColor:"#F7F8FA"
-    
+            ...provided,
+            border: "none", // Border color
+            minHeight: "60px", // Minimum height of the control
+            boxShadow: "none", // Remove box shadow
+            borderRadius: "10px",
+            backgroundColor: "#F7F8FA"
+
         }),
-      };
+    };
     useEffect(() => {
         dispatch(learningLanguagesThunk(skipNative));
         dispatch(categoryGetThunk(skipNative));
     }, []);
 
-     const addFile = (e) => {
+    const addFile = (e) => {
         const s = URL?.createObjectURL(e.target.files?.[0])
         setFileListVoice(e.target.files?.[0])
         setAudio(s)
     }
 
     const onFinish = (values) => {
+        console.log(values, "values");
         formData.append("id", wordsIdData?._id)
         values?.word != wordsIdData?.data?.word && formData.append("word", values?.word)
         formData.append("transcription", values?.transcription)
         formData.append("level", values?.level)
-        formData.append("language", values?.language)
-        formData.append("category", values?.category)
+        formData.append("language", wordsIdData?.language?._id && !learningLanguageWordSelectedValue ? wordsIdData?.language?._id : learningLanguageWordSelectedValue?.value)
+        formData.append("category", wordsIdData?._id && !selectedCategory ? wordsIdData?._id : selectedCategory)
         selectedImage && formData.append("image", selectedImage);
         fileListVoice && formData.append("audio", fileListVoice)
 
@@ -118,12 +117,13 @@ export const WordsUpdate = () => {
         array?.map((values, ind) => {
             formData.append(`translates[${ind}].text[${0}]`, values);
         })
+
         wordsIdData?.data?.translates && wordsIdData?.data?.translates?.map((item, ind) => {
             formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
         })
-        learningLanguageWordSelectedValue && learningLanguageWordSelectedValue?.nativeLanguages.forEach((item, ind) => {
-            formData.append(`translates[${ind}].nativeLanguage`, item?._id);
-        });
+            (learningLanguageWordSelectedValue?.nativeLanguages).forEach((item, ind) => {
+                formData.append(`translates[${ind}].nativeLanguage`, item?._id);
+            });
         dispatch(wordsUpdateThunk(formData))
     };
 
@@ -223,9 +223,10 @@ export const WordsUpdate = () => {
                 value: item._id,
                 label: item.name,
                 nameEng: item.nameEng,
-                image: item?.imageFile
+                image: item?.imageFile,
+                nativeLanguages: item?.nativeLanguages
             }));
-    
+
             return {
                 options: options,
                 hasMore: options.length === LIMIT,
@@ -241,32 +242,33 @@ export const WordsUpdate = () => {
             };
         }
     };
-    
+
     const onChange = (value) => {
-      setLearningLanguageWordSelectedValue(value?.value)
+        setLearningLanguageWordSelectedValue(value)
     }
+
     const customStylesCategory = {
         option: (provided, state) => ({
-          ...provided,
-          backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-          color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
-          padding: "8px 12px", // Padding for options
-          fontSize: "14px", // Font size for options
-          height: "60px", // Height of each option
-          borderRadius:"10px",
-          border: "none",
+            ...provided,
+            backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+            color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+            padding: "8px 12px", // Padding for options
+            fontSize: "14px", // Font size for options
+            height: "60px", // Height of each option
+            borderRadius: "10px",
+            border: "none",
         }),
         control: (provided) => ({
-          ...provided,
-          window:"206px",
-          border: "1px solid #7D8FB326", // Border color
-          minHeight: "60px", // Minimum height of the control
-          boxShadow: "none", // Remove box shadow
-          borderRadius:"10px",
-          backgroundColor:"#fff"
-    
+            ...provided,
+            window: "206px",
+            border: "1px solid #7D8FB326", // Border color
+            minHeight: "60px", // Minimum height of the control
+            boxShadow: "none", // Remove box shadow
+            borderRadius: "10px",
+            backgroundColor: "#fff"
+
         }),
-      };
+    };
 
     async function loadOptionsCategory(_search, loadedOptions, { page }) {
         const start = (page) * LIMIT; // Calculate start index for pagination
@@ -287,7 +289,7 @@ export const WordsUpdate = () => {
                 nameEng: item.nameEng,
                 image: item?.imageFile
             }));
-      
+
             return {
                 options: options,
                 hasMore: options.length === LIMIT,
@@ -302,13 +304,13 @@ export const WordsUpdate = () => {
                 hasMore: false,
             };
         }
-      };
-   
-      
-      const onChangeCategory = (value) => {
+    };
+
+
+    const onChangeCategory = (value) => {
         setSelectedCategory(value?.value)
-      }
-      
+    }
+
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
@@ -333,7 +335,7 @@ export const WordsUpdate = () => {
                             <div>
                                 <p className="updateTitle">Update</p>
                                 <div className="addWordsFirstSelect bigSelect">
-                                <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
+                                    <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
 
                                     {/* <CustomAntdSelect
                                         rules={true}
@@ -385,8 +387,8 @@ export const WordsUpdate = () => {
                                         </div>
                                         <div>
                                             <p>Category</p>
-                                            <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name} style={customStylesCategory} 
-                                                    onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={loadOptionsCategory} />
+                                            <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name} style={customStylesCategory}
+                                                onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={loadOptionsCategory} />
                                             {/* <CustomAntdSelect
                                                 rules={true}
                                                 name="category"

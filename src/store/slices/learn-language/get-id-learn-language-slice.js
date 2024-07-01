@@ -28,10 +28,11 @@ export const learnLanguageByIdSlice = createSlice({
       state.learnLanguageUpdateSelectedLanguages =[]
        
     },
+    /// not owrking
     removeSelectedLanguagesItem: (state, action) => {
       state.learnLanguageUpdateSelectedLanguages =
         state.learnLanguageUpdateSelectedLanguages.filter(
-          (item) => item._id !== action.payload
+          (item) => (item._id ? item?._id : item?.value) !== action.payload
         );
     },
     addLearnLanguageSelected: (state, { payload }) => {

@@ -1,8 +1,7 @@
 import React from "react";
 import { Form, Select } from "antd";
 import "./custom-antd-select.css";
-import { getLearnLanguagesLoading } from "../../store/slices";
-import { useDispatch, useSelector } from "react-redux";
+
 export const CustomAntdSelect = ({
   user,
   rules,
@@ -25,15 +24,10 @@ export const CustomAntdSelect = ({
       setSelected(value)
     }
   };
-  const onSearch = (value) => {
-    console.log('search:', value);
-  };
 
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-  const dispatch = useDispatch()
-  const loading = useSelector(getLearnLanguagesLoading)
 
 
   return (
@@ -45,11 +39,8 @@ export const CustomAntdSelect = ({
 
         <Select
           placeholder={defaultValue}
-          showSearch
-          // onSearch={onSearch}
           filterOption={filterOption}
           onChange={handleChange}
-          // defaultValue={defaultValue}
           style={{
             color: color,
             width: `${width}`

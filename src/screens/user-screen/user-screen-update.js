@@ -35,7 +35,7 @@ export const UserScreenUpdate = () => {
     const userDeleteResponse = useSelector(getUserDeleteData);
     const userLoadingId = useSelector(getUserGetByIdLoading);
     const userList = userIdData?.data
-    console.log(userList,"log user");
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -57,10 +57,10 @@ export const UserScreenUpdate = () => {
             password:values?.password,
             role:values?.role,
             id: userList?.id,
-            phoneNumberVerified: select1,
-            emailVerified: select2,
+            phoneNumberVerified: select1 != undefined ? select1 : userList?.phoneNumberVerified,
+            emailVerified: select2 != undefined  ? select2 : userList?.emailVerified,
             deleted: select3,
-            isSubscribed: select4,
+            isSubscribed:  select4 != undefined  ? select4 :userList?.isSubscribed,
             subscriptionExpiresDt: calendar,
         }
          dispatch(userUpdateThunk(data))  
@@ -97,8 +97,28 @@ export const UserScreenUpdate = () => {
         dispatch(deleteUserUpdateResponse())
     }, [userUpdateResponse?.success,]);
 
-    console.log(select4,"select 4");
 
+    const onChangeBlockUser = (checked) => {
+        console.log(checked,"1");
+        setSelect3(checked)
+      };
+      
+    const onChangeEmail = (checked) => {
+        console.log(checked,"2");
+        setSelect2(checked)
+      };
+
+      
+    const onChangePhone = (checked) => {
+        console.log(checked,"3");
+        setSelect1(checked)
+      };
+
+      
+    const onChangeSub = (checked) => {
+        console.log(checked,"4");
+        setSelect4(checked)
+      };
 
 
     return (
@@ -174,7 +194,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch  backSelected={userList?.phoneNumberVerified} check={select1} setCheck={setSelect1} color={Colors.GREEN} />
+                                <CsutomSwitch onChange={onChangePhone}  backSelected={userList?.phoneNumberVerified} check={select1} setCheck={setSelect1} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div className="category_row_input_user">
@@ -189,7 +209,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch backSelected={userList?.emailVerified}  check={select2} setCheck={setSelect2} color={Colors.GREEN} />
+                                <CsutomSwitch onChange={onChangeEmail} backSelected={userList?.emailVerified}  check={select2} setCheck={setSelect2} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div>
@@ -211,7 +231,7 @@ export const UserScreenUpdate = () => {
                             <p className="deleteTitle">
                                 Block User
                             </p>
-                            <CsutomSwitch  backSelected={userList?.deleted} check={select3} setCheck={setSelect3} color={Colors.RED} />
+                            <CsutomSwitch  onChange={onChangeBlockUser} backSelected={userList?.deleted} check={select3} setCheck={setSelect3} color={Colors.RED} />
                         </div>
                         <Form.Item>
                             {contextHolder}
@@ -238,14 +258,22 @@ export const UserScreenUpdate = () => {
                             <p className="switchTitle">
                                 Subscribed
                             </p>
-                            <CsutomSwitch check={select4} backSelected={userList?.isSubscribed} setCheck={setSelect4} color={Colors.PURPLE} />
+                            <CsutomSwitch  onChange={onChangeSub} check={select4} backSelected={userList?.isSubscribed} setCheck={setSelect4} color={Colors.PURPLE} />
                         </div>
                         <div>
                             <p className="subscriptionTitle">
                                 Subscription Date
                             </p>
                             <Space direction="vertical" size={12}>
-                                <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} />
+                           { userList?.subscriptionStartDt != null  ? <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p> }
+                            </Space>
+                        </div>
+                        <div>
+                            <p className="subscriptionTitle">
+                            Subscription  Expiry Date
+                            </p>
+                            <Space direction="vertical" size={12}>
+                           { userList?.subscriptionExpiresDt != null  ? <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionExpiresDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p> }
                             </Space>
                         </div>
                     </div>

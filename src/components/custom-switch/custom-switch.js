@@ -1,15 +1,12 @@
 import React from 'react';
 import { Switch } from 'antd';
 
-const CsutomSwitch = ({color,check,setCheck ,backSelected}) => {
-    const onChange = (checked) => {
-      console.log(check,"chekc");
-        setCheck(checked)
-      };
+const CsutomSwitch = ({color,check,setCheck ,backSelected ,onChange}) => {
+
     return(
         <Switch 
         style={{
-           background: backSelected=== true ||  check=== true ? `${color}` : null
+           background: ( check === true ? `${color}` : null) && ( backSelected === true ? `${color}` : null )
         }}
          defaultChecked={backSelected}
          onChange={onChange} 
