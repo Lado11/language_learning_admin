@@ -1,9 +1,10 @@
 import { AsyncPaginate } from "react-select-async-paginate"
 
-export const CustomAsyncPaginate = ({placeholder,onChange,loadOptions,current,style}) => {
+export const CustomAsyncPaginate = ({defaultInputValue, placeholder,onChange,loadOptions,current,style}) => {
   
     return(
         <AsyncPaginate
+        defaultInputValue={defaultInputValue}
                 styles={style}
                 placeholder={placeholder}
                 onChange={onChange}

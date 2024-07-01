@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { getIdWordsThunk, wordsIdLoading, wordsIdResponse } from "../../../store/slices/words/getId-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomSpin } from "../../../components";
+import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomAsyncPaginate, CustomSpin } from "../../../components";
 import CustomModal from "../../../components/custom-modal/custom-modal";
 import { deleteWordsDeleteResponse, getWordsDeleteThunk, wordsDeleteLoading, wordsDeleteResponse } from "../../../store/slices/words/delete_words-slice";
 import { Colors } from "../../../assets/colors";
@@ -20,6 +20,7 @@ import { ImageUpload } from "../../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../../helper/file-build";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../../store/slices/files/get-id-files";
 import { getvoiceGetIdResponse, getvoiceGetIdloading, voiceGetIdThunk } from "../../../store/slices/files/get-id-voice";
+import axios from "axios";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
@@ -36,11 +37,11 @@ export const WordsUpdate = () => {
     const [showVoice, setShowVoice] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fileListVoice, setFileListVoice] = useState();
-    const [fileList, setFileList] = useState([]);
     const [learningLanguageWordSelectedValue, setLearningLanguageWordSelectedValue] = useState();
     const [audio, setAudio] = useState();
     const [categoryShow, setCategoryShow] = useState();
     const wordsIdData = useSelector(wordsIdResponse)?.data;
+    console.log(wordsIdData,"log id ");
     const wordsIdLoad = useSelector(wordsIdLoading);
     const wordDeleteData = useSelector(wordsDeleteResponse);
     const deleteWordLoading = useSelector(wordsDeleteLoading);
@@ -61,7 +62,33 @@ export const WordsUpdate = () => {
     const [voiceUrls, setVoiceUrls] = useState({}); 
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
     const wordsImageLoading = useSelector(getfilesGetIdloading);
+    const token = localStorage.getItem("token")
+    const LIMIT = 10;
+    const [current, setCurrent] = useState(0)
+    const URL = process.env.REACT_APP_BASE_URL;
 
+    const customStyles = {
+        option: (provided, state) => ({
+          ...provided,
+          window: state.isSelected && "420px",
+          backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+          color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+          padding: "8px 12px", // Padding for options
+          fontSize: "14px", // Font size for options
+          height: "60px", // Height of each option
+          borderRadius:"10px",
+          border:"none",
+        }),
+        control: (provided) => ({
+          ...provided,
+          border:"none", // Border color
+          minHeight: "60px", // Minimum height of the control
+          boxShadow: "none", // Remove box shadow
+          borderRadius:"10px",
+          backgroundColor:"#F7F8FA"
+    
+        }),
+      };
     useEffect(() => {
         dispatch(learningLanguagesThunk(skipNative));
         dispatch(categoryGetThunk(skipNative));
@@ -72,24 +99,6 @@ export const WordsUpdate = () => {
         setFileListVoice(e.target.files?.[0])
         setAudio(s)
     }
-
-    const filteredResponseCategory = categoryData?.map((lang) => {
-        return {
-            _id: lang._id,
-            label: lang.name.toLowerCase(),
-            value: lang.name,
-        };
-    });
-
-    const filteredResponse = learningLanguagesData?.data?.list?.map((lang) => {
-        return {
-            _id: lang._id,
-            label: lang.name.toLowerCase(),
-            value: lang.name,
-            nativeLanguages: lang?.nativeLanguages
-
-        };
-    });
 
     const onFinish = (values) => {
         formData.append("id", wordsIdData?._id)
@@ -197,6 +206,110 @@ export const WordsUpdate = () => {
         }
     };
 
+    async function loadOptionsLang(_search, loadedOptions, { page }) {
+        const start = (page) * LIMIT; // Calculate start index for pagination
+        const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
+        try {
+            const response = await axios.get(
+                `${URL}api/admin/language/learn${searchQuersy}skip=${start}&limit=${LIMIT}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+                    },
+                }
+            );
+            const options = response.data.data.list.map((item) =>
+            ({
+                value: item._id,
+                label: item.name,
+                nameEng: item.nameEng,
+                image: item?.imageFile
+            }));
+    
+            return {
+                options: options,
+                hasMore: options.length === LIMIT,
+                additional: {
+                    page: page + 1,
+                },
+            };
+        } catch (error) {
+            console.error("Error fetching options:", error);
+            return {
+                options: [],
+                hasMore: false,
+            };
+        }
+    };
+    
+    const onChange = (value) => {
+      setLearningLanguageWordSelectedValue(value?.value)
+    }
+    const customStylesCategory = {
+        option: (provided, state) => ({
+          ...provided,
+          backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+          color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+          padding: "8px 12px", // Padding for options
+          fontSize: "14px", // Font size for options
+          height: "60px", // Height of each option
+          borderRadius:"10px",
+          border: "none",
+        }),
+        control: (provided) => ({
+          ...provided,
+          window:"206px",
+          border: "1px solid #7D8FB326", // Border color
+          minHeight: "60px", // Minimum height of the control
+          boxShadow: "none", // Remove box shadow
+          borderRadius:"10px",
+          backgroundColor:"#fff"
+    
+        }),
+      };
+
+    async function loadOptionsCategory(_search, loadedOptions, { page }) {
+        const start = (page) * LIMIT; // Calculate start index for pagination
+        const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
+        try {
+            const response = await axios.get(
+                `${URL}api/admin/words/category${searchQuersy}skip=${start}&limit=${LIMIT}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+                    },
+                }
+            );
+            const options = response.data.data.list.map((item) =>
+            ({
+                value: item._id,
+                label: item.name,
+                nameEng: item.nameEng,
+                image: item?.imageFile
+            }));
+      
+            return {
+                options: options,
+                hasMore: options.length === LIMIT,
+                additional: {
+                    page: page + 1,
+                },
+            };
+        } catch (error) {
+            console.error("Error fetching options:", error);
+            return {
+                options: [],
+                hasMore: false,
+            };
+        }
+      };
+   
+      
+      const onChangeCategory = (value) => {
+        setSelectedCategory(value?.value)
+      }
+      
+
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
             {wordsIdLoad ? <div className="loadingDiv nativeLanguageScreenMainDiv">
@@ -220,7 +333,9 @@ export const WordsUpdate = () => {
                             <div>
                                 <p className="updateTitle">Update</p>
                                 <div className="addWordsFirstSelect bigSelect">
-                                    <CustomAntdSelect
+                                <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
+
+                                    {/* <CustomAntdSelect
                                         rules={true}
                                         name="language"
                                         // className="wordsSelectExel"
@@ -229,7 +344,7 @@ export const WordsUpdate = () => {
                                         setSelected={setLearningLanguageWordSelectedValue}
                                         defaultValue={t("LEARNING_LANGUAGE")}
                                         color={Colors.LIGHT_GRAY}
-                                    />
+                                    /> */}
                                 </div>
                                 <div className="updateWordsAddInputs">
                                     <div className="rowInputWords">
@@ -270,14 +385,16 @@ export const WordsUpdate = () => {
                                         </div>
                                         <div>
                                             <p>Category</p>
-                                            <CustomAntdSelect
+                                            <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name} style={customStylesCategory} 
+                                                    onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={loadOptionsCategory} />
+                                            {/* <CustomAntdSelect
                                                 rules={true}
                                                 name="category"
                                                 // width={172}
                                                 defaultValue="Category*"
                                                 optinData={filteredResponseCategory}
                                                 setSelected={setSelectedCategory}
-                                            />
+                                            /> */}
                                         </div>
                                     </div>
                                 </div>

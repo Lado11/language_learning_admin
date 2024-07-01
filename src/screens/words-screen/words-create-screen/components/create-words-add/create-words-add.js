@@ -6,9 +6,8 @@ import {
   CustomAsyncPaginate,
   CustomUpload,
 } from "../../../../../components";
-import { Colors } from "../../../../../assets/colors";
 import { useTranslation } from "react-i18next";
-import { categoryGetThunk, getCategoryGetData, learningLanguages, learningLanguagesThunk } from "../../../../../store/slices";
+import { categoryGetThunk, getCategoryGetData,  learningLanguagesThunk } from "../../../../../store/slices";
 import { useDispatch, useSelector } from "react-redux";
 import { wordlevel } from "../../../../../data";
 import { Waveform } from "./music-player";
@@ -33,12 +32,10 @@ export const CreateWordsAdd = ({
   setFileList,
   fileList,
   setSelectedCategory,
-  learningLanguageWordSelectedValue,
   setLearningLanguageWordSelectedValue
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const learningLanguagesData = useSelector(learningLanguages);
   const categoryData = useSelector(getCategoryGetData)?.data?.list;
   const token = localStorage.getItem("token")
   const LIMIT = 10;
@@ -48,7 +45,6 @@ export const CreateWordsAdd = ({
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
-      with:"100%",
       backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
       color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
       padding: "8px 12px", // Padding for options
@@ -67,11 +63,35 @@ export const CreateWordsAdd = ({
 
     }),
   };
+
+  const customStylesCategory = {
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
+      color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+      padding: "8px 12px", // Padding for options
+      fontSize: "14px", // Font size for options
+      height: "60px", // Height of each option
+      borderRadius:"10px",
+      border: "none",
+    }),
+    control: (provided) => ({
+      ...provided,
+      window:"206px",
+      border: "1px solid #7D8FB326", // Border color
+      minHeight: "60px", // Minimum height of the control
+      boxShadow: "none", // Remove box shadow
+      borderRadius:"10px",
+      backgroundColor:"#fff"
+
+    }),
+  };
   async function loadOptionsLang(_search, loadedOptions, { page }) {
     const start = (page) * LIMIT; // Calculate start index for pagination
+    const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
     try {
         const response = await axios.get(
-            `${URL}api/admin/language/learn?skip=${start}&limit=${LIMIT}`,
+            `${URL}api/admin/language/learn${searchQuersy}skip=${start}&limit=${LIMIT}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`, // Include authorization token from localStorage
@@ -102,8 +122,49 @@ export const CreateWordsAdd = ({
     }
 };
 
+
+async function loadOptionsCategory(_search, loadedOptions, { page }) {
+  const start = (page) * LIMIT; // Calculate start index for pagination
+  const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
+  try {
+      const response = await axios.get(
+          `${URL}api/admin/words/category${searchQuersy}skip=${start}&limit=${LIMIT}`,
+          {
+              headers: {
+                  Authorization: `Bearer ${token}`, // Include authorization token from localStorage
+              },
+          }
+      );
+      const options = response.data.data.list.map((item) =>
+      ({
+          value: item._id,
+          label: item.name,
+          nameEng: item.nameEng,
+          image: item?.imageFile
+      }));
+
+      return {
+          options: options,
+          hasMore: options.length === LIMIT,
+          additional: {
+              page: page + 1,
+          },
+      };
+  } catch (error) {
+      console.error("Error fetching options:", error);
+      return {
+          options: [],
+          hasMore: false,
+      };
+  }
+};
+
 const onChange = (value) => {
   setLearningLanguageWordSelectedValue(value?.value)
+}
+
+const onChangeCategory = (value) => {
+  setSelectedCategory(value?.value)
 }
 
   const filteredResponseCategory = categoryData?.map((lang) => {
@@ -177,14 +238,17 @@ const onChange = (value) => {
             optinData={wordlevel}
             setSelected={setSelectedLevel}
           />
-          <CustomAntdSelect
+          <CustomAsyncPaginate style={customStylesCategory} 
+          onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={loadOptionsCategory} />
+
+          {/* <CustomAntdSelect
             rules={true}
             name={"Category"}
             // width={172}
             defaultValue="Category*"
             optinData={filteredResponseCategory}
             setSelected={setSelectedCategory}
-          />
+          /> */}
         </div>
       </div>
 

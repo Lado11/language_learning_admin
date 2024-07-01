@@ -86,6 +86,8 @@ export const UserScreenUpdate = () => {
         });
     }, [userList]);
 
+    console.log(userList,"user list");
+
     useEffect(() => {
         dispatch(userGetByIdThunk(userId));
     }, []);
@@ -248,7 +250,7 @@ export const UserScreenUpdate = () => {
                                 Subscription Date
                             </p>
                             <Space direction="vertical" size={12}>
-                                <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs('2015/01/01', dateFormat)} format={dateFormat} />
+                                <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} />
                             </Space>
                         </div>
                     </div>

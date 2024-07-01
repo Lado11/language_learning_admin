@@ -21,6 +21,19 @@
   height: 100%;
 }
 
+.css-wtc9r8-control{
+  width: 200px;
+}
+.css-qbdosj-Input{
+  width: 170px;
+}
+.addWordsFirstSelect{
+  margin-bottom: 10px;
+  width: 420px;
+}
+.css-1uwsjis-control{
+  width: 420px;
+}
 .addWordsFirstSelect .antd_custom_select {
   margin: 0;
 }
@@ -61,6 +74,7 @@
 
 .bigSelect .ant-select-selection-item{
   color: #7D8FB3 !important;
+  margin-bottom: 10px;
 
 }
 .bigSelect .ant-select-selector{

@@ -15,7 +15,10 @@ width: 202px;
 .updateWordsAddInputs .ant-input{
    width: 203px !important;
 }
-
+.css-1uwsjis-control{
+    width: 420px;
+  }
+  
 .updateWordsAddInputs .ant-form-item-explain-error{
     width: 203px !important;
 }

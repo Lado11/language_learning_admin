@@ -16,7 +16,6 @@ import {
   getLearnLanguageByIdLoading,
   getLearnLanguageByIdResponse,
   getUpdatedLanguages,
-  getUpdatedLearnLanguageBool,
   getUpdatedLearnLanguageLoading,
   getUpdatedLearnLanguageResponse,
   learnLanguageByIdThunk,
@@ -248,8 +247,8 @@ export const LearningLanguageUpdate = () => {
               </div>
               <div className="learnLanguageSelectedLanguages">
                 <p className="inputTitle marginBottom">Native Language</p>
-                <SelectLearningLang loadOptions={loadOptions} current={current} name={"Native Language"} dataLanguages={lerningLangAllData} onDelete={(id) => {
-                  console.log(id,"id");
+                <SelectLearningLang loadOptions={loadOptions} current={current} name={"Native Language"}
+                 dataLanguages={lerningLangAllData} onDelete={(id) => {
                   dispatch(removeSelectedLanguagesItem(id));
                 }} />
               </div>

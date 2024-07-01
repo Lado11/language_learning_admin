@@ -30,9 +30,8 @@ export const createLearnLanguageSlice = createSlice({
     },
     addLanguages: (state, { payload }) => {
       state.selectedLanguages = state.selectedLanguages?.filter(
-        (item) => item?._id != (payload?._id ? payload?._id : payload?.value )
+        (item) => (item?.value ? item?.value : item?._id) != (payload?.value )  
       );
-      // state.selectedLanguages?.push(payload) 
       state.selectedLanguages = [...state.selectedLanguages,payload]
     },
     removeLanguagesItem: (state,  { payload }) => {
