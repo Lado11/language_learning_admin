@@ -113,6 +113,7 @@ justify-content: space-between;
 }
 
 .wordsCreateAddWords {
+  width: 100%;
   /* width: 45%; */
   /* height: 100%; */
 }

@@ -40,6 +40,7 @@ const FilesItem = ({ data, imageUrls, loading , naviagte }) => {
         return "Word";
     }
   };
+
   return (
     <div className="filesDataSection">
       {data?.map((file, index) => {
@@ -56,6 +57,7 @@ const FilesItem = ({ data, imageUrls, loading , naviagte }) => {
     </div>
   )
 }
+
 const FileFilterPopover = ({
   onChangeFileType,
   onChangeUserObj,
@@ -72,7 +74,6 @@ const FileFilterPopover = ({
     <Popover
       placement="bottomLeft"
       content={<div className="filterSection">
-
         <p className="popeverTitle">File Type</p>
         <Radio.Group onChange={onChangeFileType} value={file}>
           <div className="statusGroup">
@@ -106,6 +107,7 @@ const FileFilterPopover = ({
     </Popover>
   );
 };
+
 export const FilesScreen = () => {
   const { t } = useTranslation();
   const naviagte = useNavigate();
@@ -254,3 +256,4 @@ export const FilesScreen = () => {
     </div>
   );
 };
+ 

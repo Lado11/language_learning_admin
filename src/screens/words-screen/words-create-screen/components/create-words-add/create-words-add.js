@@ -7,14 +7,16 @@ import {
   CustomUpload,
 } from "../../../../../components";
 import { useTranslation } from "react-i18next";
-import { categoryGetThunk, getCategoryGetData,  learningLanguagesThunk } from "../../../../../store/slices";
-import { useDispatch, useSelector } from "react-redux";
+import { categoryGetThunk,   learningLanguagesThunk } from "../../../../../store/slices";
+import { useDispatch } from "react-redux";
 import { wordlevel } from "../../../../../data";
 import { Waveform } from "./music-player";
 import logo from "../../../../../assets/images/Vector (4).png"
 import { Form } from "antd";
 import remove_icon from "../../../../../assets/images//remove_icon.png"
-import axios from "axios";
+import { customStyles, customStylesCategory } from "../../../../../global-styles/loadOptionsStyles";
+import { loadOptions } from "../../../../../helper/loadOptions";
+import { categoryUrl, learningLanguageUrl } from "../../../../learning-language-screen/learning-langauge-constant";
 
 export const CreateWordsAdd = ({
   setCategoryShow,
@@ -36,131 +38,32 @@ export const CreateWordsAdd = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const categoryData = useSelector(getCategoryGetData)?.data?.list;
-  const token = localStorage.getItem("token")
-  const LIMIT = 10;
   const [current, setCurrent] = useState(0)
-  const URL = process.env.REACT_APP_BASE_URL;
 
-  const customStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-      color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
-      padding: "8px 12px", // Padding for options
-      fontSize: "14px", // Font size for options
-      height: "60px", // Height of each option
-      borderRadius:"10px",
-      border:"none",
-    }),
-    control: (provided) => ({
-      ...provided,
-      border:"none", // Border color
-      minHeight: "60px", // Minimum height of the control
-      boxShadow: "none", // Remove box shadow
-      borderRadius:"10px",
-      backgroundColor:"#F7F8FA"
-
-    }),
+  
+const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+  const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
+  return {
+    options: options,
+    hasMore: hasMore,
+    additional: {
+      page: page + 1,
+    },
   };
-
-  const customStylesCategory = {
-    option: (provided, state) => ({
-      ...provided,
-      backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-      color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
-      padding: "8px 12px", // Padding for options
-      fontSize: "14px", // Font size for options
-      height: "60px", // Height of each option
-      borderRadius:"10px",
-      border: "none",
-    }),
-    control: (provided) => ({
-      ...provided,
-      window:"206px",
-      border: "1px solid #7D8FB326", // Border color
-      minHeight: "60px", // Minimum height of the control
-      boxShadow: "none", // Remove box shadow
-      borderRadius:"10px",
-      backgroundColor:"#fff"
-
-    }),
-  };
-
-
-  async function loadOptionsLang(_search, loadedOptions, { page }) {
-    const start = (page) * LIMIT; // Calculate start index for pagination
-    const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-    try {
-        const response = await axios.get(
-            `${URL}api/admin/language/learn${searchQuersy}skip=${start}&limit=${LIMIT}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-                },
-            }
-        );
-        const options = response.data.data.list.map((item) =>
-        ({
-            value: item._id,
-            label: item.name,
-            nameEng: item.nameEng,
-            image: item?.imageFile,
-            nativeLanguages:item?.nativeLanguages
-        }));
-
-        return {
-            options: options,
-            hasMore: options.length === LIMIT,
-            additional: {
-                page: page + 1,
-            },
-        };
-    } catch (error) {
-        console.error("Error fetching options:", error);
-        return {
-            options: [],
-            hasMore: false,
-        };
-    }
 };
 
+const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
+  const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, categoryUrl);
+  return {
+    options: options,
+    hasMore: hasMore,
 
-async function loadOptionsCategory(_search, loadedOptions, { page }) {
-  const start = (page) * LIMIT; // Calculate start index for pagination
-  const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-  try {
-      const response = await axios.get(
-          `${URL}api/admin/words/category${searchQuersy}skip=${start}&limit=${LIMIT}`,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-              },
-          }
-      );
-      const options = response.data.data.list.map((item) =>
-      ({
-          value: item._id,
-          label: item.name,
-          nameEng: item.nameEng,
-          image: item?.imageFile
-      }));
-
-      return {
-          options: options,
-          hasMore: options.length === LIMIT,
-          additional: {
-              page: page + 1,
-          },
-      };
-  } catch (error) {
-      console.error("Error fetching options:", error);
-      return {
-          options: [],
-          hasMore: false,
-      };
-  }
+    additional: {
+      page: page + 1,
+    },
+  };
 };
+
 
 const onChange = (value) => {
   console.log(value,"log value");
@@ -171,22 +74,13 @@ const onChangeCategory = (value) => {
   setSelectedCategory(value?.value)
 }
 
-  const filteredResponseCategory = categoryData?.map((lang) => {
-    return {
-      _id: lang._id,
-      label: lang.name.toLowerCase(),
-      value: lang.name,
-    };
-  });
-
-
   const skipNative = {
     skip: 0,
     limit: 12,
   };
   
   const addFile = (e) => {
-    const s = URL?.createObjectURL(e.target.files?.[0])
+    const s = window.URL?.createObjectURL(e.target.files?.[0])
     setFileListVoice(e.target.files?.[0])
     setAudio(s)
 }
@@ -201,7 +95,7 @@ const onChangeCategory = (value) => {
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
       <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" 
-      loadOptions={loadOptionsLang} />
+      loadOptions={handleLoadOptions} />
         {/* <CustomAntdSelect
           rules={true}
           name={"Learning language"}
@@ -244,7 +138,7 @@ const onChangeCategory = (value) => {
             setSelected={setSelectedLevel}
           />
           <CustomAsyncPaginate style={customStylesCategory} 
-          onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={loadOptionsCategory} />
+          onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
 
           {/* <CustomAntdSelect
             rules={true}
@@ -256,6 +150,7 @@ const onChangeCategory = (value) => {
           /> */}
         </div>
       </div>
+    
 
       <>
         {audio ? <div className="imgae_upload_design_voice">
@@ -268,7 +163,6 @@ const onChangeCategory = (value) => {
             />
           </div>
           <Waveform url={audio} />
-
 
         </div> : <Form.Item
           name={"Words voice"}
@@ -283,24 +177,6 @@ const onChangeCategory = (value) => {
             <input accept="audio/*" type='file' onChange={addFile} />
           </div> </Form.Item>}
       </>
-      {/* } */}
-
-      {/* {audio ? <Waveform url={audio} /> : null}
-      <Form.Item
-        name={"Words voice"}
-        rules={[{ required: true }]}
-      >
-      <div className="file-upload">
-        <div className="voiceUpload">
-          <p className="titleVoiceUpload">
-            Voice Upload
-          </p>
-          <img src={logo} />
-        </div>
-        <input accept="audio/*" type='file' onChange={addFile} />
-      </div>
-      </Form.Item> */}
-
       <CustomUpload previewImgUrl={previewImgUrl}
         setPreviewimgUrl={setPreviewimgUrl}
         categoryShow={categoryShow}

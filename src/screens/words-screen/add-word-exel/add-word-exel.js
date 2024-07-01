@@ -6,13 +6,15 @@ import { useTranslation } from "react-i18next";
 import "./add-word-exel.css";
 import { SelectLearningLang } from "../../learning-language-screen/select-learning-lang";
 import { useDispatch, useSelector } from "react-redux";
-import { learnLanguageSelectedLanguages, learningLanguages, learningLanguagesThunk, nativeLanguageGetThunk, removeAllLanguages, removeLanguagesItem } from "../../../store/slices";
+import { learnLanguageSelectedLanguages,  learningLanguagesThunk, nativeLanguageGetThunk, removeAllLanguages, removeLanguagesItem } from "../../../store/slices";
 import { createExelWordsLoadingData, createExelWordsResponseData, createExelWordsThunk, deleteAddWordExelResponse } from "../../../store/slices/words/post-exel-word";
 import { beforeUpload } from "../../utils/helper";
 import { listItemCountForShow } from "../../../constants/constants";
 import { ConstPagiantion } from "../../../constants/const-pagination";
-import axios from "axios";
 import logoVoice from "../../../assets/images/Vector (4).png";
+import { learningLanguageUrl, nativeGetUrl } from "../../learning-language-screen/learning-langauge-constant";
+import { loadOptions } from "../../../helper/loadOptions";
+import { customStyles } from "../../../global-styles/loadOptionsStyles";
 
 export const AddWordExel = () => {
     const [form] = Form.useForm();
@@ -25,97 +27,33 @@ export const AddWordExel = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const [learningLanguageWordSelectedValue, setLearningLanguageWordSelectedValue] = useState();
     const languages = useSelector(learnLanguageSelectedLanguages);
-    const learningLanguagesData = useSelector(learningLanguages);
     const addWordFormExelLoading = useSelector(createExelWordsLoadingData);
     const addWordExel = useSelector(createExelWordsResponseData);
-    const token = localStorage.getItem("token")
-    const LIMIT = 10;
     const [current, setCurrent] = useState(0)
-    const URL = process.env.REACT_APP_BASE_URL;
 
-    const filteredResponse = learningLanguagesData?.data?.list.map((lang) => {
+
+    const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
         return {
-            _id: lang._id,
-            label: lang.name.toLowerCase(),
-            value: lang.name,
+          options: options,
+          hasMore: hasMore,
+          additional: {
+            page: page + 1,
+          },
         };
-    });
-
-
-    async function loadOptions(_search, loadedOptions, { page }) {
-        const start = (page) * LIMIT; // Calculate start index for pagination
-        const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-        try {
-            const response = await axios.get(
-                `${URL}api/admin/language/native${searchQuersy}skip=${start}&limit=${LIMIT}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-                    },
-                }
-            );
-            const options = response.data.data.list.map((item) =>
-            ({
-                value: item._id,
-                label: item.name,
-                nameEng: item.nameEng,
-                image: item?.imageFile
-            }));
-
-            return {
-                options: options,
-                hasMore: options.length === LIMIT,
-                additional: {
-                    page: page + 1,
-                },
-            };
-        } catch (error) {
-            console.error("Error fetching options:", error);
-            return {
-                options: [],
-                hasMore: false,
-            };
-        }
-    };
-
-    async function loadOptionsLang(_search, loadedOptions, { page }) {
-        const start = (page) * LIMIT; // Calculate start index for pagination
-        const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-
-        try {
-            const response = await axios.get(
-                `${URL}api/admin/language/learn${searchQuersy}skip=${start}&limit=${LIMIT}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-                    },
-                }
-            );
-            const options = response.data.data.list.map((item) =>
-            ({
-                value: item._id,
-                label: item.name,
-                nameEng: item.nameEng,
-                image: item?.imageFile
-            }));
-
-            return {
-                options: options,
-                hasMore: options.length === LIMIT,
-                additional: {
-                    page: page + 1,
-                },
-            };
-        } catch (error) {
-            console.error("Error fetching options:", error);
-            return {
-                options: [],
-                hasMore: false,
-            };
-        }
-    };
-
-
+      };
+    
+      const handleLoadOptionsNative = async (inputValue, loadedOptions, { page }) => {
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, nativeGetUrl);
+        return {
+          options: options,
+          hasMore: hasMore,
+          additional: {
+            page: page + 1,
+          },
+        };
+      };
+    
 
     const onFinish = (values) => {
         languages.forEach((item, ind) => {
@@ -165,29 +103,6 @@ export const AddWordExel = () => {
         setLearningLanguageWordSelectedValue(value?.value)
     }
 
-    const customStyles = {
-        option: (provided, state) => ({
-          ...provided,
-          with:"100%",
-          backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-          color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
-          padding: "8px 12px", // Padding for options
-          fontSize: "14px", // Font size for options
-          height: "60px", // Height of each option
-          borderRadius:"10px",
-          border:"none",
-        }),
-        control: (provided) => ({
-          ...provided,
-          border:"none", // Border color
-          minHeight: "60px", // Minimum height of the control
-          boxShadow: "none", // Remove box shadow
-          borderRadius:"10px",
-          backgroundColor:"#F7F8FA"
-
-        }),
-      };
-
     return (
         <div className="nativeLanguageCreateScreenMainDiv ">
             <Form
@@ -200,7 +115,7 @@ export const AddWordExel = () => {
                     <div className="addWordExel">
                         <div>
                             <p className="nativeLanguageTitle "> Add Words From Excel</p>
-                            <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
+                            <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={handleLoadOptions} />
                             {/* <CustomAntdSelect
                                 name={"Learning Language"}
                                 rules={"true"}
@@ -237,7 +152,7 @@ export const AddWordExel = () => {
                         </div>
                         <div className="learnLanguageSelectedLanguages">
                             <p className="selectLanguageTitle">Native Language</p>
-                            <SelectLearningLang loadOptions={loadOptions} current={current} rules={true} name={"Native Language"} dataLanguages={languages} onDelete={(id) => {
+                            <SelectLearningLang loadOptions={handleLoadOptionsNative} current={current} rules={true} name={"Native Language"} dataLanguages={languages} onDelete={(id) => {
                                 dispatch(removeLanguagesItem(id));
                             }} />
                         </div>

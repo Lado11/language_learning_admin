@@ -33,7 +33,9 @@ import { ShowImage } from "../category-screen/category-update";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
-import axios from "axios";
+import { nativeGetUrl } from "./learning-langauge-constant";
+import { loadOptions } from "../../helper/loadOptions";
+
 const { Option } = Select;
 
 export const LearningLanguageUpdate = () => {
@@ -58,11 +60,7 @@ export const LearningLanguageUpdate = () => {
   const loadingLanguageId = useSelector(getLearnLanguageByIdLoading);
   const leraningLangugaeUpdateResponse = useSelector(getUpdatedLearnLanguageResponse);
   const learningLanguageDeleteResposne = useSelector(learnLanguageDeleteResponse);
-
-  const LIMIT = 10;
-  const token = localStorage.getItem("token")
   const [current, setCurrent] = useState(0)
-  const URL = process.env.REACT_APP_BASE_URL;
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
   const learnignLanguageImageUpdate = useSelector(getfilesGetIdloading);
@@ -77,7 +75,6 @@ export const LearningLanguageUpdate = () => {
       console.log(item,"item");
       formData.append(`nativeLanguages[${ind}]`, item._id ?  item._id : item.value);
     });
-
     dispatch(learnLanguageUpdateThunk(formData));
     form.resetFields();
     setLearningLanguageFile("");
@@ -151,41 +148,15 @@ export const LearningLanguageUpdate = () => {
     }
   };
 
-
-  async function loadOptions(_search, loadedOptions, { page }) {
-    const start = (page) * LIMIT; // Calculate start index for pagination
-    try {
-      const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-      const response = await axios.get(
-        `${URL}api/admin/language/native${searchQuersy}skip=${start}&limit=${LIMIT}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-          },
-        }
-      );
-      const options = response.data.data.list.map((item) =>
-      ({
-        value: item._id,
-        label: item.name,
-        nameEng:item.nameEng,
-        image:item?.imageFile
-      }));
-
-      return {
-        options: options,
-        hasMore: options.length === LIMIT,
-        additional: {
-          page: page + 1,
-        },
-      };
-    } catch (error) {
-      console.error("Error fetching options:", error);
-      return {
-        options: [],
-        hasMore: false,
-      };
-    }
+   const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, nativeGetUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
+      additional: {
+        page: page + 1,
+      },
+    };
   };
 
 
@@ -247,7 +218,7 @@ export const LearningLanguageUpdate = () => {
               </div>
               <div className="learnLanguageSelectedLanguages">
                 <p className="inputTitle marginBottom">Native Language</p>
-                <SelectLearningLang loadOptions={loadOptions} current={current} name={"Native Language"}
+                <SelectLearningLang loadOptions={handleLoadOptions} current={current} name={"Native Language"}
                  dataLanguages={lerningLangAllData} onDelete={(id) => {
                   dispatch(removeSelectedLanguagesItem(id));
                 }} />

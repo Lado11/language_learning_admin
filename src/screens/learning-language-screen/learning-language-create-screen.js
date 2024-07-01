@@ -17,11 +17,11 @@ import {
 } from "../../store/slices";
 import { Success } from "../../components";
 import { SelectLearningLang } from "./select-learning-lang";
-import { listItemCountForShow, } from "../../constants/constants";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../helper/file-build";
 import remove_icon from "../../assets/images/remove_icon.png";
-import axios from "axios";
+import { loadOptions } from "../../helper/loadOptions";
+import { nativeGetUrl } from "./learning-langauge-constant";
 
 export const LearningLanguageCreateScreen = () => {
   const dispatch = useDispatch();
@@ -34,9 +34,6 @@ export const LearningLanguageCreateScreen = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedImage, setSelectedImage] = useState();
   const [previewImgUrl, setPreviewimgUrl] = useState("");
-  const token = localStorage.getItem("token")
-  const LIMIT = listItemCountForShow;
-  const URL = process.env.REACT_APP_BASE_URL;
 
   const onFinish = (values) => {
     if (values.learningLanguageImage.file != "") {
@@ -47,7 +44,6 @@ export const LearningLanguageCreateScreen = () => {
         formData.append(`nativeLanguages[${ind}]`, item.value);
       });
       dispatch(createLearnLanguageThunk(formData));
-
     } else {
       console.log(values);
     }
@@ -65,9 +61,6 @@ export const LearningLanguageCreateScreen = () => {
 
   useEffect(() => {
     createLearnLanguageResponse?.success === true && Success({ messageApi });
-    // createLearnLanguageResponse?.success === false &&
-    //   Error({ messageApi, messageError });
-    // dispatch(deleteLerningCreateResponse());
     dispatch(removeAllCreateSelectedLanguages());
   }, [createLearnLanguageResponse?.success]);
 
@@ -92,44 +85,20 @@ export const LearningLanguageCreateScreen = () => {
     }
   };
 
-  async function loadOptions(_search, loadedOptions, { page }) {
-    const start = (page) * LIMIT; // Calculate start index for pagination
-    const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-    try {
-      const response = await axios.get(
-        `${URL}api/admin/language/native${searchQuersy}skip=${start}&limit=${LIMIT}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-          },
-        }
-      );
-      const options = response.data.data.list.map((item) =>
-      ({
-        value: item._id,
-        label: item.name,
-        nameEng:item.nameEng,
-        image:item?.imageFile
-      }));
-
-      return {
-        options: options,
-        hasMore: options.length === LIMIT,
-        additional: {
-          page: page + 1,
-        },
-      };
-    } catch (error) {
-      console.error("Error fetching options:", error);
-      return {
-        options: [],
-        hasMore: false,
-      };
-    }
+  
+  const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, nativeGetUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
+      additional: {
+        page: page + 1,
+      },
+    };
   };
 
 
-  return (
+ return (
     <div
       // className="authScreenMainDiv learnLanguageCreateScreenMainDiv"
       className="nativeLanguageScreenMainDiv"
@@ -184,7 +153,7 @@ export const LearningLanguageCreateScreen = () => {
               {/* <AsyncPaginate loadOptions={loadOptions}/> */}
               <div className="learnLanguageSelectedLanguages">
                 <p className="selectLanguageTitle">Native Language</p>
-                <SelectLearningLang loadOptions={loadOptions} current={0} name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
+                <SelectLearningLang loadOptions={handleLoadOptions} current={0} name={"Native Language"} rules={true} dataLanguages={languages} onDelete={(id) => {
                   dispatch(removeLanguagesItem(id));
                 }} />
               </div>

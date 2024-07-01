@@ -17,8 +17,7 @@ const formWaveSurferOptions = ref => ({
   partialRender: true
 });
 
-export function Waveform({ url ,loading}) {
-  console.log(url,"url");
+export function Waveform({ url, loading }) {
   const waveformRef = useRef(null);
   const wavesurfer = useRef(null);
   const [playing, setPlaying] = useState(false);
@@ -38,7 +37,7 @@ export function Waveform({ url ,loading}) {
     if (!url) return;
 
     wavesurfer.current = WaveSurfer.create(formWaveSurferOptions(waveformRef.current));
-  
+
     wavesurfer.current.load(url)
       .then(() => {
         setIsReady(true);
@@ -51,7 +50,7 @@ export function Waveform({ url ,loading}) {
         console.error('Error loading audio:', error);
         // Handle error state or show a message to the user
       });
-  
+
     return () => {
       if (wavesurfer.current) {
         wavesurfer.current.destroy();
@@ -60,29 +59,33 @@ export function Waveform({ url ,loading}) {
     };
   }, [url]);
 
-
   const handlePlayPause = () => {
-    if (!wavesurfer.current) return;
-
     setPlaying(!playing); // Toggle `playing` state
-
-    if (!playing && isReady) {
-      wavesurfer.current.play();
-    } else {
-      wavesurfer.current.pause();
-    }
   };
 
-
+  useEffect(() => {
+    if (wavesurfer.current && isReady) {
+      if (playing) {
+        wavesurfer.current.play();
+      } else {
+        wavesurfer.current.pause();
+      }
+    }
+  }, [playing, isReady]);
 
   return (
     <div className="audio">
-      { loading ? <CustomSpin size={37} color={Colors.GRAY_COLOR} /> :url && (
+      {loading ? (
+        <CustomSpin size={37} color={Colors.GRAY_COLOR} />
+      ) : url && (
         <button onClick={handlePlayPause}>
-          {!playing ? <img src={play} alt="Play" /> : <img src={play} alt="Pause" />}
+          {!playing ? (
+            <img src={play} alt="Play" />
+          ) : (
+            <img src={play} alt="Pause" />
+          )}
         </button>
       )}
-      
       <div id="waveform" ref={waveformRef} className="audioListen" />
     </div>
   );

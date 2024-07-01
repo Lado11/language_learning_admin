@@ -20,7 +20,9 @@ import { ImageUpload } from "../../category-screen/category-screen-create-from";
 import { fileToDataString } from "../../../helper/file-build";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../../store/slices/files/get-id-files";
 import { getvoiceGetIdResponse, getvoiceGetIdloading, voiceGetIdThunk } from "../../../store/slices/files/get-id-voice";
-import axios from "axios";
+import { categoryUrl, learningLanguageUrl } from "../../learning-language-screen/learning-langauge-constant";
+import { loadOptions } from "../../../helper/loadOptions";
+import { customStylesCategory } from "../../../global-styles/loadOptionsStyles";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
@@ -60,10 +62,7 @@ export const WordsUpdate = () => {
     const [voiceUrls, setVoiceUrls] = useState({});
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
     const wordsImageLoading = useSelector(getfilesGetIdloading);
-    const token = localStorage.getItem("token")
-    const LIMIT = 10;
     const [current, setCurrent] = useState(0)
-    const URL = process.env.REACT_APP_BASE_URL;
 
     const customStyles = {
         option: (provided, state) => ({
@@ -205,107 +204,33 @@ export const WordsUpdate = () => {
             console.log(error);
         }
     };
+    const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
+        return {
+          options: options,
+          hasMore: hasMore,
+          additional: {
+            page: page + 1,
+          },
+        };
+      };
+      
+      const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, categoryUrl);
+        return {
+          options: options,
+          hasMore: hasMore,
+      
+          additional: {
+            page: page + 1,
+          },
+        };
+      };
 
-    async function loadOptionsLang(_search, loadedOptions, { page }) {
-        const start = (page) * LIMIT; // Calculate start index for pagination
-        const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-        try {
-            const response = await axios.get(
-                `${URL}api/admin/language/learn${searchQuersy}skip=${start}&limit=${LIMIT}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-                    },
-                }
-            );
-            const options = response.data.data.list.map((item) =>
-            ({
-                value: item._id,
-                label: item.name,
-                nameEng: item.nameEng,
-                image: item?.imageFile,
-                nativeLanguages: item?.nativeLanguages
-            }));
-
-            return {
-                options: options,
-                hasMore: options.length === LIMIT,
-                additional: {
-                    page: page + 1,
-                },
-            };
-        } catch (error) {
-            console.error("Error fetching options:", error);
-            return {
-                options: [],
-                hasMore: false,
-            };
-        }
-    };
 
     const onChange = (value) => {
         setLearningLanguageWordSelectedValue(value)
     }
-
-    const customStylesCategory = {
-        option: (provided, state) => ({
-            ...provided,
-            backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-            color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
-            padding: "8px 12px", // Padding for options
-            fontSize: "14px", // Font size for options
-            height: "60px", // Height of each option
-            borderRadius: "10px",
-            border: "none",
-        }),
-        control: (provided) => ({
-            ...provided,
-            window: "206px",
-            border: "1px solid #7D8FB326", // Border color
-            minHeight: "60px", // Minimum height of the control
-            boxShadow: "none", // Remove box shadow
-            borderRadius: "10px",
-            backgroundColor: "#fff"
-
-        }),
-    };
-
-    async function loadOptionsCategory(_search, loadedOptions, { page }) {
-        const start = (page) * LIMIT; // Calculate start index for pagination
-        const searchQuersy = _search !== undefined && _search != "" ? `?search=${_search}&` : '?';
-        try {
-            const response = await axios.get(
-                `${URL}api/admin/words/category${searchQuersy}skip=${start}&limit=${LIMIT}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Include authorization token from localStorage
-                    },
-                }
-            );
-            const options = response.data.data.list.map((item) =>
-            ({
-                value: item._id,
-                label: item.name,
-                nameEng: item.nameEng,
-                image: item?.imageFile
-            }));
-
-            return {
-                options: options,
-                hasMore: options.length === LIMIT,
-                additional: {
-                    page: page + 1,
-                },
-            };
-        } catch (error) {
-            console.error("Error fetching options:", error);
-            return {
-                options: [],
-                hasMore: false,
-            };
-        }
-    };
-
 
     const onChangeCategory = (value) => {
         setSelectedCategory(value?.value)
@@ -335,7 +260,7 @@ export const WordsUpdate = () => {
                             <div>
                                 <p className="updateTitle">Update</p>
                                 <div className="addWordsFirstSelect bigSelect">
-                                    <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={loadOptionsLang} />
+                                    <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={handleLoadOptions} />
 
                                     {/* <CustomAntdSelect
                                         rules={true}
@@ -388,7 +313,7 @@ export const WordsUpdate = () => {
                                         <div>
                                             <p>Category</p>
                                             <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name} style={customStylesCategory}
-                                                onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={loadOptionsCategory} />
+                                                onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
                                             {/* <CustomAntdSelect
                                                 rules={true}
                                                 name="category"

@@ -11,7 +11,7 @@ export const voiceGetIdService = (id) => {
 };
 
 export const filesIdGetService = (id) => {
-  return api.get(`api/admin/files/${id}`);
+  return api.get(`api/admin/files/details/${id}`);
 };
 
 

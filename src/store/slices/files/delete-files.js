@@ -24,9 +24,9 @@ export const  filesDeleteSlice = createSlice({
   name: "filesDelete",
   initialState,
   reducers: {
-    // deleteNativeCreateBool: (state) => {
-    //   state.nativeCreateBool = false;
-    // },
+    deleteFilesResponse: (state) => {
+      state.filesDeleteResponse = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(filesDeleteThunk.pending, (state) => {
@@ -47,7 +47,7 @@ export const  filesDeleteSlice = createSlice({
   },
 });
 
-// export const { deleteNativeCreateBool } = nativeLanguageCreateSlice.actions;
+export const { deleteFilesResponse } = filesDeleteSlice.actions;
 
 export const Deletefilesloading = (state) => {
   return state.filesDeleteSlice.filesDeleteloading;

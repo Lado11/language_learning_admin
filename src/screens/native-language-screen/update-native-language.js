@@ -4,11 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
 import { Colors } from "../../assets/colors";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin, CustomUploadElement } from "../../components";
+import { CustomAntdButtonDelete, CustomAntdInput, CustomSpin} from "../../components";
 import {
   deleteNativeDeleteBool,
   deleteNativeDeleteResponse,
-  getNativeDeleteBool,
   getNativeDeleteResponse,
   getNativeDeleteloading,
   nativeLanguageDeleteThunk,
