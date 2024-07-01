@@ -52,7 +52,7 @@ export const store = configureStore({
     sendEmailSlice: sendEmailSlice.reducer,
     sendCodeSlice: sendCodeSlice.reducer,
     resetPasswordSlice: resetPasswordSlice.reducer,
-    createNativeSlice: nativeLanguageCreateSlice.reducer,
+    nativeLanguageCreate: nativeLanguageCreateSlice.reducer,
     getNativeSlice: nativeLanguageGetSlice.reducer,
     nativeLanguageDeleteSlice: nativeLanguageDeleteSlice.reducer,
     nativeLanguageUpdateSlice: nativeLanguageUpdateSlice.reducer,

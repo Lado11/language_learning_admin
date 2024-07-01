@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { nativeLanguageCreateService } from "../../../services/native-language/native-language-cretae-service";
 import { categoryCreateService } from "../../../services/category/category-create-service";
 
 const initialState = {

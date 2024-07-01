@@ -41,8 +41,6 @@ export const UpdateNativeLanguage = () => {
   const formData = new FormData();
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [categoryShow, setCategoryShow] = useState();
-  const deleteBool = useSelector(getNativeDeleteBool);
   const nativeLanguageData = useSelector(getNativeGetIdResponse)?.data;
   const nativeUpdateLoading = useSelector(getNativeUpdateLoading);
   const nativeDeleteLoading = useSelector(getNativeDeleteloading);
@@ -67,7 +65,6 @@ export const UpdateNativeLanguage = () => {
       formData.append("active", nativeLanguageData?.active);
       dispatch(nativeLanguageUpdateThunk(formData));
       form.resetFields();
-      setCategoryShow("");
     } else {
       console.log(values, "values");
     }
@@ -185,12 +182,10 @@ export const UpdateNativeLanguage = () => {
                 src={previewImgUrl}
                 onClick={() => {
                   setPreviewimgUrl(".")
-                  setCategoryShow(null);
                 }} />
             ) : nativeLanguageData?.imageFile && !previewImgUrl ? (
               <ShowImage loading={nativeLanguageImageUpdate} title={nativeLanguageData?.imageFile?.description} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
                 setPreviewimgUrl(".")
-                setCategoryShow(null);
               }} />
             ) : (
               <ImageUpload onChange={handleFileChange} />

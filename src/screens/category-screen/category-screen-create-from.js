@@ -86,7 +86,7 @@ export const CategoryCretae = () => {
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
       {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
-      <p className="categoryCraeteTitle">Add Category</p>
+      <p className="categoryCreateTitle">Add Category</p>
       <Form
         autoComplete="off"
         form={form}

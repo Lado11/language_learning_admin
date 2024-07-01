@@ -2,120 +2,108 @@ import React, { useEffect, useState } from "react";
 import { Form, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteNativeCreateBool,
-  deleteNativeCreateResponse,
-  getNativeCreateBool,
-  getNativeCreateData,
-  getNativeCreateLoading,
-  nativeLanguageCreateThunk,
+  clearNativeCreateSuccess,
+  clearNativeCreateResponse,
+  selectNativeCreateSuccess,
+  selectNativeCreateResponse,
+  selectNativeCreateLoading,
+  createNativeLanguage,
 } from "../../store/slices/native-language/native-language-create";
-import { CustomAntdButton } from "../../components/custom-antd-button/custom-antd-button";
+import { CustomAntdButton, CustomAntdInput, CustomErrorSection, Success } from "../../components";
 import { Colors } from "../../assets/colors";
-import { CustomAntdInput, CustomErrorSection } from "../../components";
-import { Success } from "../../components/custom-message/custom-message";
 import { ImageUpload } from "../category-screen/category-screen-create-from";
-import remove_icon from "../../assets/images/remove_icon.png";
+import removeIcon from "../../assets/images/remove_icon.png";
 import { fileToDataString } from "../../helper/file-build";
+import "../../global-styles/global-styles.css";
+import "./native-language-style.css";
 
-export const NativeLanguageCretae = () => {
+export const NativeLanguageCreate = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const formData = new FormData();
-  const nativeCreateBool = useSelector(getNativeCreateBool);
-  const [fileList, setFileList] = useState([]);
-  const [categoryShow, setCategoryShow] = useState();
-  const nativeLanguageData = useSelector(getNativeCreateData);
+  const isNativeCreateSuccess = useSelector(selectNativeCreateSuccess);
+  const nativeLanguageResponse = useSelector(selectNativeCreateResponse);
+  const isLoading = useSelector(selectNativeCreateLoading);
+  const errorMessage = nativeLanguageResponse?.message;
   const [messageApi, contextHolder] = message.useMessage();
-  const craeteLoading = useSelector(getNativeCreateLoading);
-  const messageError = nativeLanguageData?.message;
   const [selectedImage, setSelectedImage] = useState();
-  const [previewImgUrl, setPreviewimgUrl] = useState("");
-  const str = messageError?.toString()
+  const [previewImgUrl, setPreviewImgUrl] = useState("");
 
-
-  const onFinish = (values) => {
-    if (values.image.file != "") {
+  // Handle form submission
+  const handleFinish = (values) => {
+    if (values.image.file !== "") {
       formData.append("nameEng", values.nameEng);
       formData.append("name", values.name);
-      selectedImage && formData.append("image", selectedImage);
-      dispatch(nativeLanguageCreateThunk(formData));
+      if (selectedImage) {
+        formData.append("image", selectedImage);
+      }
+      dispatch(createNativeLanguage(formData));
     } else {
-      console.log(values, "values");
+      console.log(values);
     }
   };
 
-  const onRemove = () => {
-    dispatch(deleteNativeCreateResponse())
-  }
+  // Clear error message
+  const handleRemoveError = () => {
+    dispatch(clearNativeCreateResponse());
+  };
 
-  const handleFileChange = async (
-    event
-  ) => {
-    const file = event.target.files;
-    setSelectedImage(file?.[0]);
+  // Handle file input change
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
     if (!file) {
       return;
     }
     try {
-      const imgUrl = await fileToDataString(file?.[0]);
-      setPreviewimgUrl(imgUrl);
+      const imgUrl = await fileToDataString(file);
+      setPreviewImgUrl(imgUrl);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
+  // Clear form and state on success
   useEffect(() => {
-    dispatch(deleteNativeCreateBool());
-  }, [nativeCreateBool]);
-
-  useEffect(() => {
-    if (nativeLanguageData?.success === true) {
+    if (isNativeCreateSuccess) {
       form.resetFields();
-      setCategoryShow("");
-      setPreviewimgUrl("")
-      setCategoryShow(null);
-      dispatch(deleteNativeCreateResponse());
+      setPreviewImgUrl("");
+      dispatch(clearNativeCreateResponse());
     }
-  }, [nativeLanguageData?.success])
+  }, [isNativeCreateSuccess, dispatch, form]);
 
+  // Show success message
   useEffect(() => {
-    nativeLanguageData?.success === true && Success({ messageApi });
-  }, [nativeLanguageData?.success]);
-
+    if (isNativeCreateSuccess) {
+      Success({ messageApi });
+      dispatch(clearNativeCreateSuccess());
+    }
+  }, [isNativeCreateSuccess, messageApi, dispatch]);
 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
-      {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
-      <p className="categoryCraeteTitle">Add Native Language</p>
+      {errorMessage && <CustomErrorSection error={errorMessage} onTab={handleRemoveError} />}
+      <p className="categoryCreateTitle">Add Native Language</p>
       <Form
         className="formAntd"
         autoComplete="off"
         form={form}
-        name="control-hooks"
-        onFinish={onFinish}
+        name="create-native-language"
+        onFinish={handleFinish}
       >
         <div className="nativeInput">
-          <CustomAntdInput rules={true} name="nameEng" placeholder=" Language English Name*" />
+          <CustomAntdInput rules={true} name="nameEng" placeholder="Language English Name*" />
           <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
         </div>
-        <Form.Item
-          name="image"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-           {previewImgUrl?.length ?
+        <Form.Item name="image" rules={[{ required: true }]}>
+          {previewImgUrl ? (
             <div className="imgae_upload_design">
               <div className="remove_icon_div">
                 <img
                   className="remove_button"
-                  src={remove_icon}
-                  onClick={() => {
-                    setPreviewimgUrl("")
-                    setCategoryShow(null);
-                  }}
+                  src={removeIcon}
+                  alt="Remove"
+                  onClick={() => setPreviewImgUrl("")}
                 />
               </div>
               <div className="imgae_name">
@@ -124,16 +112,14 @@ export const NativeLanguageCretae = () => {
                   <img className="imageItem" src={previewImgUrl} />
                 </div>
               </div>
-            </div> : <ImageUpload onChange={handleFileChange} />}
-        
+            </div>
+          ) : (
+            <ImageUpload onChange={handleFileChange} />
+          )}
         </Form.Item>
         <Form.Item>
           {contextHolder}
-          <CustomAntdButton
-            title="Add"
-            background={Colors.PURPLE}
-            loading={craeteLoading}
-          />
+          <CustomAntdButton title="Add" background={Colors.PURPLE} loading={isLoading} />
         </Form.Item>
       </Form>
     </div>
