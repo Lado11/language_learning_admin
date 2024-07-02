@@ -2,7 +2,8 @@
 
 import axios from 'axios';
 
-export async function loadOptions(_search, loadedOptions, { page }, dynamic) {
+export async function loadOptions(_search, loadedOptions, { page }, dynamic,selected) {
+    console.log(selected,"log selcterd");
     const LIMIT = 10;
     const token = localStorage.getItem("token");
     const URL = process.env.REACT_APP_BASE_URL;
@@ -10,7 +11,7 @@ export async function loadOptions(_search, loadedOptions, { page }, dynamic) {
     const start = page * LIMIT; // Calculate start index for pagination
 
     try {
-        const searchQuery = _search !== undefined && _search !== "" ? `?search=${_search}&` : '?';
+        const searchQuery = (selected != undefined && !_search)  && (_search !== undefined && _search !== "") ? `?search=${_search}&` : '?';
         const response = await axios.get(
             `${URL}${dynamic}${searchQuery}skip=${start}&limit=${LIMIT}`,
             {

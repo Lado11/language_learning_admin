@@ -205,7 +205,7 @@ export const WordsUpdate = () => {
         }
     };
     const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
-        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl,learningLanguageWordSelectedValue);
         return {
           options: options,
           hasMore: hasMore,

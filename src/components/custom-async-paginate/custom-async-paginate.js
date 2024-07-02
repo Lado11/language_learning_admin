@@ -4,7 +4,7 @@ export const CustomAsyncPaginate = ({defaultInputValue, placeholder,onChange,loa
   
     return(
         <AsyncPaginate
-        defaultInputValue={defaultInputValue}
+                defaultInputValue={defaultInputValue}
                 styles={style}
                 placeholder={placeholder}
                 onChange={onChange}

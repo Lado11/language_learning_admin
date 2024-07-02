@@ -6,26 +6,54 @@ import { Colors } from "../../assets/colors";
 import { useEffect, useState } from "react";
 import CustomModal from "../../components/custom-modal/custom-modal";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteWordsDelete } from "../../store/slices/words/delete-exel-words";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form } from "antd";
 import { wordsExelGetIdLoading } from "../../store/slices/words/getId-exel-words";
 import { DeletefilesResponse, Deletefilesloading, deleteFilesResponse, filesDeleteThunk } from '../../store/slices/files/delete-files';
 import { filesIdGetThunk, getfilesIdGetResponse } from '../../store/slices/files/get-files-id';
 import { MediaTypes, UserObjectType } from './files-typing';
+import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from '../../store/slices/files/get-id-files';
 
 export const FilesMore = () => {
     const [form] = Form.useForm();
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [imageUrls, setImageUrls] = useState({});
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     let location = useLocation();
     const filesId = location?.pathname.slice(12);
     const wordsIdLoading = useSelector(wordsExelGetIdLoading);
     const filesIdRspsonse = useSelector(getfilesIdGetResponse);
+    console.log(filesIdRspsonse,"response");
     const filesDeleteloading = useSelector(Deletefilesloading);
     const filesDeleteResponse = useSelector(DeletefilesResponse)
+    const filesImageResponse = useSelector(getfilesGetIdResponse);
+    const filesImageLoading = useSelector(getfilesGetIdloading);
+
+    const fetchImage = (imageFileId) => {
+        if (!imageUrls[imageFileId]) {
+          dispatch(filesGetIdThunk(imageFileId));
+        }
+      };
+    
+      useEffect(() => {
+        // Preload image URLs
+        if (filesIdRspsonse) {
+            fetchImage(filesIdRspsonse?.data?._id);         
+        }
+      }, [filesIdRspsonse]);
+    
+      useEffect(() => {
+        // Update imageUrls state with fetched image URLs
+        if (filesImageResponse?.data?.url) {
+          setImageUrls((prevUrls) => ({
+            ...prevUrls,
+            [filesImageResponse.data.fileId]: filesImageResponse.data.url,
+          }));
+        }
+      }, [filesImageResponse]);
 
     const getFilesUsedObject = (type) => {
         switch (type) {
@@ -48,6 +76,21 @@ export const FilesMore = () => {
             case MediaTypes.AUDIO:
             default:
                 return "Audio";
+        }
+    };
+
+    
+    const getFilesTypeImage = (type) => {
+        switch (type) {
+            case MediaTypes.IMAGE:
+                return <div className='filesImageSection'>
+                    <img className='filesImage' src={imageUrls[filesIdRspsonse?.data?._id]} alt='files image'/>
+                </div>;
+            case MediaTypes.AUDIO:
+            default:
+                return <div>
+                <img alt='files audio'/>
+            </div>;
         }
     };
 
@@ -97,12 +140,11 @@ export const FilesMore = () => {
                     form={form}
                     name="control-hooks"
                 >
-                    <div className="exelRowSection">
+                    <div className="filesMoreSection">
                         <div>
                             <p className="feedbackTitle uploadTitle">{t("Files details")}</p>
                             <div className="category_row_input_user">
                                 <div className='inputLabel'>
-
                                     <p className="labelTextArea">ID</p>
                                     <CustomAntdInput
                                         disabled={true}
@@ -169,6 +211,9 @@ export const FilesMore = () => {
                                     />
                                 </div>
                             </div>
+                        </div>
+                        <div className='filesTypesSection'>
+                       { getFilesTypeImage(filesIdRspsonse?.data?.type)}
                         </div>
 
                     </div>
