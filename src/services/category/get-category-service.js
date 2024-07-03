@@ -1,5 +1,13 @@
 import { api } from "..";
+import { buildUrl } from "../../helper/build-url";
 
 export const categoryGetService = (data) => {
-  return api.get(`api/admin/words/category?skip=${data.skip}&limit=${data.limit}`);
+  const params ={
+    skip:data.skip,
+    limit:data.limit,
+    search:data.search
+  }
+
+  const url = buildUrl(`api/admin/words/category/`,params);
+  return api.get(url);
 };

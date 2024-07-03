@@ -78,7 +78,7 @@ const FileFilterPopover = ({
         <Radio.Group onChange={onChangeFileType} value={file}>
           <div className="statusGroup">
             {fileTypes?.map((option) => {
-              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+              return <Radio key={option.title} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
             })}
           </div>
         </Radio.Group>
@@ -88,7 +88,7 @@ const FileFilterPopover = ({
         <Radio.Group onChange={onChangeUserObj} value={userObj}>
           <div className="statusGroup">
             {fileUsedObj?.map((option) => {
-              return <Radio key={option.key} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
+              return <Radio key={option.title} className="radio" value={option.key}><p className="optiontitle">{option.title}</p></Radio>
             })}
           </div>
         </Radio.Group>

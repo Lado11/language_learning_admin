@@ -27,7 +27,6 @@ import { WordsLevel } from "../words-typing";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
-    console.log(words);
     let location = useLocation();
     const wordId = location?.pathname.slice(7);
     const [form] = Form.useForm();
@@ -44,7 +43,6 @@ export const WordsUpdate = () => {
     const [audio, setAudio] = useState();
     const [categoryShow, setCategoryShow] = useState();
     const wordsIdData = useSelector(wordsIdResponse)?.data;
-    console.log(wordsIdData, "log id ");
     const wordsIdLoad = useSelector(wordsIdLoading);
     const wordDeleteData = useSelector(wordsDeleteResponse);
     const deleteWordLoading = useSelector(wordsDeleteLoading);
@@ -94,7 +92,7 @@ export const WordsUpdate = () => {
             ...provided,
             window: state.isSelected && "420px",
             backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-            color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+            color: state.isSelected ?  Colors.PURPLE : "black", // Text color for selected options
             padding: "8px 12px", // Padding for options
             fontSize: "14px", // Font size for options
             height: "60px", // Height of each option
@@ -123,13 +121,14 @@ export const WordsUpdate = () => {
     }
 
     const onFinish = (values) => {
-        console.log(values, "values");
+        const newWord = values.word !== wordsIdData?.word ? values.email : undefined;
+        const newTranslate = values?.transcription !== wordsIdData?.transcription ? values?.transcription : undefined;
         formData.append("id", wordsIdData?._id)
-        values?.word != wordsIdData?.data?.word && formData.append("word", values?.word)
-        formData.append("transcription", values?.transcription)
+        newWord != undefined &&  formData.append("word", newWord)
+        newTranslate != undefined && formData.append("transcription",newTranslate)
         formData.append("level",getLevelTypeValues(values?.level))
         formData.append("language", wordsIdData?.language?._id && !learningLanguageWordSelectedValue ? wordsIdData?.language?._id : learningLanguageWordSelectedValue?.value)
-        formData.append("category", wordsIdData?._id && !selectedCategory ? wordsIdData?._id : selectedCategory)
+        selectedCategory && formData.append("category", selectedCategory )
         selectedImage && formData.append("image", selectedImage);
         fileListVoice && formData.append("audio", fileListVoice)
 
@@ -138,17 +137,29 @@ export const WordsUpdate = () => {
                 array.push(values[date])
             }
         })
+
         array?.map((values, ind) => {
-            console.log(values,"values8888");
-            formData.append(`translates[${ind}].text[${0}]`, values);
+            values != undefined &&    formData.append(`translates[${ind}].text[${0}]`, values);
         })
 
-        wordsIdData?.data?.translates && wordsIdData?.data?.translates?.map((item, ind) => {
-            formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
+        Object.keys(values).map((date, index) => {
+            if (date.includes("nativeInpust")) {
+                array.push(values[date])
+            }
         })
-            (learningLanguageWordSelectedValue?.nativeLanguages).forEach((item, ind) => {
-                formData.append(`translates[${ind}].nativeLanguage`, item?._id);
-            });
+
+        array?.map((values, ind) => {
+            values != undefined &&    formData.append(`translates[${ind}].text[${0}]`, values);
+        })
+
+        // !learningLanguageWordSelectedValue && wordsIdData?.translates?.map((item, ind) => {
+        //     formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
+        // })
+
+        learningLanguageWordSelectedValue?.nativeLanguages.map((item, ind) => {
+            formData.append(`translates[${ind}].nativeLanguage`, item?._id);
+        });
+
         dispatch(wordsUpdateThunk(formData))
     };
 
@@ -230,6 +241,7 @@ export const WordsUpdate = () => {
             console.log(error);
         }
     };
+
     const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
     const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl,learningLanguageWordSelectedValue);
         return {
@@ -430,7 +442,7 @@ export const WordsUpdate = () => {
                                                 <div>
                                                     <p className="wordsInputTitle">{item?.nameEng}</p>
                                                     <CustomAntdInput
-                                                        key={item}
+                                                        key={item?._id}
                                                         rules={true}
                                                         className="inputTranslate"
                                                         placeholder="Words*"
@@ -442,6 +454,7 @@ export const WordsUpdate = () => {
                                             )
                                         }) : null}
                                 </div>
+
                                 {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p className="wordsTitle">Translate</p>}
 
                                 {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && wordsIdData?.translates?.map((item, index) => {

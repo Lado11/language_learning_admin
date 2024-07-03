@@ -25,6 +25,91 @@ import { listItemCountForShow,} from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { WordsLevelData, tableHeaderData } from "./words-data";
 import { WordsLevel, WordsStatus } from "./words-typing";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { api } from "../../services";
+
+
+// Custom hook to manage three pieces of state dynamically
+const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCallback) => {
+  const [state1, setState1] = useState(initialValue1);
+  const [state2, setState2] = useState(initialValue2);
+  const [state3, setState3] = useState(initialValue3);
+  const dispatch = useDispatch()
+
+  const updateState = (index, value) => {
+    switch (index) {
+      case 1:
+        setState1(value);
+        break;
+      case 2:
+        setState2(value);
+        break;
+      case 3:
+        setState3(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const getState = (index) => {
+    switch (index) {
+      case 1:
+        return state1;
+      case 2:
+        return state2;
+      case 3:
+        return state3;
+      default:
+        return undefined;
+    }
+  };
+
+  const onChangeState = (index, value) => {
+    if (index === 2 )  {
+      let data = {
+        skip: 0,
+        limit: listItemCountForShow,
+        search: value.length ? value : undefined
+      }
+      dispatch(nativeLanguageGetThunk(data));
+
+    } else if(index === 1){
+      let data = {
+        skip: 0,
+        limit: listItemCountForShow,
+        search: value.length ? value : undefined
+      }
+      dispatch(learningLanguagesThunk(data));
+     
+    }else if(index === 3){
+      let data = {
+        skip: 0,
+        limit: listItemCountForShow,
+        search: value.length ? value : undefined
+      }
+      dispatch(categoryGetThunk(data));
+    }
+    updateState(index, value);
+
+    // Example of handling state changes and triggering data fetch/callback
+    if (getDataCallback) {
+      getDataCallback({
+        state1,
+        state2,
+        state3
+      });
+    }
+  };
+
+  return {
+    state1,
+    state2,
+    state3,
+    onChangeState,
+    getState
+  };
+};
 
 
 const WordsFilterPopover = ({
@@ -43,41 +128,88 @@ const WordsFilterPopover = ({
   onApplyFilter,
   isPopoverOpen,
   handlePopoverOpenChange,
+  onChangeSearch,
+  searchValue,
+  setSearchValue
 }) => {
   const { t } = useTranslation();
+  const { state1, state2, state3, onChangeState } = useDynamicState('', '', '',);
 
+  const dispatch = useDispatch();
+  const [hasMore, setHasMore] = useState(true);
+  const [skip, setPage] = useState(1);
+
+  const fetchData = () => {
+    console.log("Fetching data for page:", skip);
+    const data = {
+      skip:skip,
+      limit:skip*listItemCountForShow
+    }
+    dispatch(learningLanguagesThunk(data));
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [skip]); // Вызывать fetchData при изменении page
+
+  const handleNext = () => {
+    setPage(skip + 1); // Увеличиваем номер страницы для следующей загрузки данных
+  };
+
+ 
   return (
     <Popover
       placement="bottomLeft"
       content={<div className="filterSection">
         <div className="radioRowSection">
+        <InfiniteScroll
+            dataLength={learningLanguagesData?.length || 0}
+            next={handleNext}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+            endMessage={<p>No more items to load</p>}
+          >
           <div className="radioItem">
+          
             <p className="popeverTitle">Learning Language</p>
-
+            <div className="filterSearch">
+            <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
+            </div>
             <Radio.Group key={1} onChange={onChangeLerningLanguage} value={lerningLanguage}>
               <div className="statusGroupWords">
                 {learningLanguagesData?.map((option) => {
-                  return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+                  return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
                 })}
               </div>
             </Radio.Group>
+
           </div>
+          </InfiniteScroll>
+
+
           <div className="radioItem">
             <p className="popeverTitle">Neative Language</p>
-            <Radio.Group key={2} onChange={onChangeNativeLanguage} value={nativeLanguage}>
+            <div className="filterSearch"   >
+            <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(2, e.target.value)}/>
+            </div>
+            <Radio.Group key={2} onChange={onChangeNativeLanguage} value={nativeLanguage} >
               <div className="statusGroupWords">
                 {nativeLanguageData?.map((option) => {
-                  return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+                  return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
                 })}
               </div>
             </Radio.Group>
           </div>
+
           <div className="radioItem">
             <p className="popeverTitle">Category</p>
+            <div className="filterSearch">
+            <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue}  onChangeSearch={(e) => onChangeState(3, e.target.value)}  />
+            </div>
             <Radio.Group key={3} onChange={onChangeCategory} value={valueCategory}>
               <div className="statusGroupWords">
                 {categoryData?.map((option) => {
-                  return <Radio className="radio" key={option?.key} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
+                  return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
                 })}
               </div>
             </Radio.Group>
@@ -93,8 +225,8 @@ const WordsFilterPopover = ({
               return <Radio className="radio" key={option?.key} value={option?.key}><p className="optiontitle">{option.title}</p></Radio>
             })}
           </div>
-
         </Radio.Group>
+
         <div className="buttonSection">
           <button onClick={onClearFilter} className="button">Clear</button>
           <button onClick={onApplyFilter} className="buttonApply">Apply</button>
@@ -165,10 +297,10 @@ export const WordsScreen = () => {
   const categoryData = useSelector(getCategoryGetData)?.data?.list
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-  //es texapoxel filtri mej
+
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
-    if (e.target.value !== "") {
+    if (e.target.value !== "" && e.target.value.length > 2)  {
       setSearchFilter(e.target.value)
       let data = {
         skip: 0,
@@ -178,7 +310,7 @@ export const WordsScreen = () => {
       dispatch(getWordsThunk(data));
 
     } else {
-      dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
+      !e.target.value  && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
@@ -205,6 +337,7 @@ export const WordsScreen = () => {
 
   const [valueLevel, setValueLevel] = useState();
   const [filterLevel, setFilterLevel] = useState(undefined);
+
   const onChangeLevel = (e) => {
     setValueLevel(e.target.value);
     if (e.target.value !== WordsLevel.All) {
@@ -233,6 +366,7 @@ export const WordsScreen = () => {
       level: filterLevel,
       category: valueCategory,
       translateLanguage: nativeLanguage,
+      search:searchFilter
     };
     dispatch(getWordsThunk(filterData));
   }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage]);
@@ -275,6 +409,9 @@ export const WordsScreen = () => {
         <p className="wordsScreenTitle">{t("WORDS")}</p>
         <div className="filterDiv">
           <WordsFilterPopover
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          onChangeSearch={onChangeSearch}
             valueLevel={valueLevel}
             categoryData={categoryData}
             nativeLanguageData={nativeLanguageData}
@@ -292,7 +429,8 @@ export const WordsScreen = () => {
             handlePopoverOpenChange={handlePopoverOpenChange}
           />
 
-          <CustomSearchInput searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
+          <CustomSearchInput  plaseholder="Search ID, name, device ID, email, phone number"
+           searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
         </div>
 
         <div className="wordsScreenTable">

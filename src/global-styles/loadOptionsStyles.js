@@ -1,9 +1,11 @@
+import { Colors } from "../assets/colors";
+
 export const customStyles = {
     option: (provided, state) => ({
       ...provided,
       with:"100%",
       backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-      color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+      color: state.isSelected ?  Colors.PURPLE : "black", // Text color for selected options
       padding: "8px 12px", // Padding for options
       fontSize: "14px", // Font size for options
       height: "60px", // Height of each option
@@ -26,7 +28,7 @@ export const customStyles = {
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-      color: state.isSelected ? "#fff" : "#fff", // Text color for selected options
+      color: state.isSelected ?  Colors.PURPLE : "black", // Text color for selected options
       padding: "8px 12px", // Padding for options
       fontSize: "14px", // Font size for options
       height: "60px", // Height of each option

@@ -26,9 +26,8 @@ export const NativeLanguageScreen = () => {
   const imageLoading = useSelector(getfilesGetIdloading);
   const [imageUrls, setImageUrls] = useState({});
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
-
   const onChangePagination = (current) => {
-    const skip =( current -1 ) * listItemCountForShow;    
+    const skip = ( current -1 ) * listItemCountForShow;    
     dispatch(nativeLanguageGetThunk(ConstPagiantion(skip, listItemCountForShow)));
   };
 
