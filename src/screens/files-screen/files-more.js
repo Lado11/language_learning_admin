@@ -26,7 +26,6 @@ export const FilesMore = () => {
     const filesId = location?.pathname.slice(12);
     const wordsIdLoading = useSelector(wordsExelGetIdLoading);
     const filesIdRspsonse = useSelector(getfilesIdGetResponse);
-    console.log(filesIdRspsonse,"response");
     const filesDeleteloading = useSelector(Deletefilesloading);
     const filesDeleteResponse = useSelector(DeletefilesResponse)
     const filesImageResponse = useSelector(getfilesGetIdResponse);
@@ -84,7 +83,7 @@ export const FilesMore = () => {
         switch (type) {
             case MediaTypes.IMAGE:
                 return <div className='filesImageSection'>
-                    <img className='filesImage' src={imageUrls[filesIdRspsonse?.data?._id]} alt='files image'/>
+                  {filesImageLoading ? <CustomSpin size={64} color={Colors.GRAY_COLOR}/>:  <img className='filesImage' src={imageUrls[filesIdRspsonse?.data?._id]} alt='files image'/>}
                 </div>;
             case MediaTypes.AUDIO:
             default:

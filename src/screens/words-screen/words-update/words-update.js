@@ -23,6 +23,7 @@ import { getvoiceGetIdResponse, getvoiceGetIdloading, voiceGetIdThunk } from "..
 import { categoryUrl, learningLanguageUrl } from "../../learning-language-screen/learning-langauge-constant";
 import { loadOptions } from "../../../helper/loadOptions";
 import { customStylesCategory } from "../../../global-styles/loadOptionsStyles";
+import { WordsLevel } from "../words-typing";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
@@ -64,6 +65,30 @@ export const WordsUpdate = () => {
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const [current, setCurrent] = useState(0)
 
+    const getLevelTypeLabel = (type) => {
+        switch (type) {
+          case WordsLevel.BEGINNER:
+            return "Beginner";
+          case WordsLevel.INTERMIDATE:
+            return "Intermitade";
+          case WordsLevel.ADVANCED:
+          default:
+            return "Adnvached";
+        }
+      };
+      const getLevelTypeValues = (type) => {
+        switch (type) {
+          case "Beginner":
+            return WordsLevel.BEGINNER;
+          case "Intermitade":
+            return WordsLevel.INTERMIDATE;
+          case "Adnvached":
+          default:
+            return WordsLevel.ADVANCED;
+        }
+      };
+
+
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
@@ -102,7 +127,7 @@ export const WordsUpdate = () => {
         formData.append("id", wordsIdData?._id)
         values?.word != wordsIdData?.data?.word && formData.append("word", values?.word)
         formData.append("transcription", values?.transcription)
-        formData.append("level", values?.level)
+        formData.append("level",getLevelTypeValues(values?.level))
         formData.append("language", wordsIdData?.language?._id && !learningLanguageWordSelectedValue ? wordsIdData?.language?._id : learningLanguageWordSelectedValue?.value)
         formData.append("category", wordsIdData?._id && !selectedCategory ? wordsIdData?._id : selectedCategory)
         selectedImage && formData.append("image", selectedImage);
@@ -114,6 +139,7 @@ export const WordsUpdate = () => {
             }
         })
         array?.map((values, ind) => {
+            console.log(values,"values8888");
             formData.append(`translates[${ind}].text[${0}]`, values);
         })
 
@@ -139,7 +165,7 @@ export const WordsUpdate = () => {
             language: wordsIdData?.language?.nameEng,
             category: wordsIdData?.category?.name,
             transcription: wordsIdData?.transcription,
-            level: wordsIdData?.level === 0 ? "beginner" : wordsIdData?.level === 1 ? "intermediate" : wordsIdData?.level === 2 ? "advanced" : null,
+            level: getLevelTypeLabel(wordsIdData?.level),
             word: wordsIdData?.word,
         });
     }, [wordsIdData]);

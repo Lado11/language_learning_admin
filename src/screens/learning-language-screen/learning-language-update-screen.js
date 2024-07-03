@@ -52,6 +52,7 @@ export const LearningLanguageUpdate = () => {
   const deleteLerningLoading = useSelector(learnLanguageDeleteLoading);
   const updateLearningLoading = useSelector(getUpdatedLearnLanguageLoading);
   const learningData = learningLanguageData?.data;
+  console.log(learningData,"log data 8");
   const lerningLangAllData = useSelector(getUpdatedLanguages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
@@ -218,7 +219,7 @@ export const LearningLanguageUpdate = () => {
               </div>
               <div className="learnLanguageSelectedLanguages">
                 <p className="inputTitle marginBottom">Native Language</p>
-                <SelectLearningLang loadOptions={handleLoadOptions} current={current} name={"Native Language"}
+                <SelectLearningLang  loadOptions={handleLoadOptions} current={current} name={"Native Language"}
                  dataLanguages={lerningLangAllData} onDelete={(id) => {
                   dispatch(removeSelectedLanguagesItem(id));
                 }} />
