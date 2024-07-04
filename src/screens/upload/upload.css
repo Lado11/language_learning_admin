@@ -67,7 +67,7 @@
 }
 .ant-popover .ant-popover-inner{
     padding: 22px !important;
-    width: 655px;
+    /* width: 655px; */
 }
 .filterSection{
     display: flex;
@@ -80,6 +80,10 @@
    
 }
 
+
+.uploadPopever .ant-popover .ant-popover-inner{
+    width: 244px !important;
+}
 .uploadTitle{
     margin-bottom: 20px;
 }

@@ -13,6 +13,8 @@ import { DeletefilesResponse, Deletefilesloading, deleteFilesResponse, filesDele
 import { filesIdGetThunk, getfilesIdGetResponse } from '../../store/slices/files/get-files-id';
 import { MediaTypes, UserObjectType } from './files-typing';
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from '../../store/slices/files/get-id-files';
+import { Waveform } from '../words-screen/words-create-screen/components/create-words-add/music-player';
+import { getvoiceGetIdResponse, getvoiceGetIdloading } from '../../store/slices/files/get-id-voice';
 
 export const FilesMore = () => {
     const [form] = Form.useForm();
@@ -30,29 +32,36 @@ export const FilesMore = () => {
     const filesDeleteResponse = useSelector(DeletefilesResponse)
     const filesImageResponse = useSelector(getfilesGetIdResponse);
     const filesImageLoading = useSelector(getfilesGetIdloading);
+console.log(filesImageResponse,"log");
+    const voiceLoading = useSelector(getvoiceGetIdloading)
+    const [voiceUrls, setVoiceUrls] = useState({});
 
     const fetchImage = (imageFileId) => {
         if (!imageUrls[imageFileId]) {
-          dispatch(filesGetIdThunk(imageFileId));
+            dispatch(filesGetIdThunk(imageFileId));
         }
-      };
-    
-      useEffect(() => {
+    };
+
+   
+
+    useEffect(() => {
         // Preload image URLs
         if (filesIdRspsonse) {
-            fetchImage(filesIdRspsonse?.data?._id);         
+            fetchImage(filesIdRspsonse?.data?._id);
         }
-      }, [filesIdRspsonse]);
-    
-      useEffect(() => {
+    }, [filesIdRspsonse]);
+
+    useEffect(() => {
         // Update imageUrls state with fetched image URLs
         if (filesImageResponse?.data?.url) {
-          setImageUrls((prevUrls) => ({
-            ...prevUrls,
-            [filesImageResponse.data.fileId]: filesImageResponse.data.url,
-          }));
+            setImageUrls((prevUrls) => ({
+                ...prevUrls,
+                [filesImageResponse.data.fileId]: filesImageResponse.data.url,
+            }));
+
         }
-      }, [filesImageResponse]);
+         
+    }, [filesImageResponse]);
 
     const getFilesUsedObject = (type) => {
         switch (type) {
@@ -78,18 +87,18 @@ export const FilesMore = () => {
         }
     };
 
-    
+
     const getFilesTypeImage = (type) => {
         switch (type) {
             case MediaTypes.IMAGE:
                 return <div className='filesImageSection'>
-                  {filesImageLoading ? <CustomSpin size={64} color={Colors.GRAY_COLOR}/>:  <img className='filesImage' src={imageUrls[filesIdRspsonse?.data?._id]} alt='files image'/>}
+                    {filesImageLoading ? <CustomSpin size={64} color={Colors.GRAY_COLOR} /> : <img className='filesImage' src={imageUrls[filesIdRspsonse?.data?._id]} alt='files image' />}
                 </div>;
             case MediaTypes.AUDIO:
             default:
                 return <div>
-                <img alt='files audio'/>
-            </div>;
+                    {filesImageLoading ? <CustomSpin size={64} color={Colors.GRAY_COLOR} /> :   <Waveform loading={voiceLoading} url={filesImageResponse?.data?.url} />}
+                </div>;
         }
     };
 
@@ -212,7 +221,7 @@ export const FilesMore = () => {
                             </div>
                         </div>
                         <div className='filesTypesSection'>
-                       { getFilesTypeImage(filesIdRspsonse?.data?.type)}
+                            {getFilesTypeImage(filesIdRspsonse?.data?.type)}
                         </div>
 
                     </div>

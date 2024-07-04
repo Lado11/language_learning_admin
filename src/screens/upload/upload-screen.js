@@ -34,10 +34,12 @@ const UploadFilterPopover = ({
     const { t } = useTranslation();
 
     return (
-        <Popover
+       
+           <Popover
+           style={{width:"244px"}}
             placement="bottomLeft"
             content={
-                <div className="filterSection">
+                <div className="filterSection ">
                     <p className="popeverTitle">{t("Status")}</p>
                     <Radio.Group onChange={onStatusChange} value={currentStatus}>
                         <div className="statusGroup">
@@ -189,10 +191,11 @@ export const UplaodScreen = () => {
 
     return (
         <div className="nativeLanguageScreenMainDiv">
-            <div>
+            <div className="uploadList">
                 <UploadScreenAddFields />
                 <p className="feedbackTitle">{t("Upload from Exel")}</p>
-                <UploadFilterPopover
+               <div className="uploadPopever">
+               <UploadFilterPopover
                     currentType={filterUploadType}
                     currentStatus={uploadStatus}
                     onTypeChange={handleTypeChange}
@@ -202,6 +205,7 @@ export const UplaodScreen = () => {
                     isPopoverOpen={isPopoverOpen}
                     handlePopoverOpenChange={handlePopoverOpenChange}
                 />
+               </div>
                 <div className="container">
                     <ul className="responsive-table">
                         <TableHeader data={tableHeaderData} />

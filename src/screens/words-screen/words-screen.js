@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   categoryGetThunk,
   getCategoryGetData,
+  getCategoryGetLoading,
+  getLearnLanguagesLoading,
   getNativeGetResponse,
+  getNativeGetloading,
   getWordsThunk,
   learningLanguages,
   learningLanguagesThunk,
@@ -113,8 +116,10 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
 
 
 const WordsFilterPopover = ({
+  nativeLoading,
   categoryData,
   valueLevel,
+  categoryLoading,
   nativeLanguageData,
   learningLanguagesData,
   onChangeLevel,
@@ -128,7 +133,6 @@ const WordsFilterPopover = ({
   onApplyFilter,
   isPopoverOpen,
   handlePopoverOpenChange,
-  onChangeSearch,
   searchValue,
   setSearchValue
 }) => {
@@ -139,8 +143,23 @@ const WordsFilterPopover = ({
   const [hasMore, setHasMore] = useState(true);
   const [skip, setPage] = useState(1);
 
+  const languageLoading  = useSelector(getLearnLanguagesLoading)
   const fetchData = () => {
-    console.log("Fetching data for page:", skip);
+    const data = {
+      skip:skip,
+      limit:skip*listItemCountForShow
+    }
+    dispatch(learningLanguagesThunk(data));
+  };
+
+  const fetchDataNative = () => {
+    const data = {
+      skip:skip,
+      limit:skip*listItemCountForShow
+    }
+    dispatch(learningLanguagesThunk(data));
+  };
+  const fetchDataCategory = () => {
     const data = {
       skip:skip,
       limit:skip*listItemCountForShow
@@ -150,13 +169,15 @@ const WordsFilterPopover = ({
 
   useEffect(() => {
     fetchData();
+    fetchDataCategory()
+    fetchDataNative()
   }, [skip]); // Вызывать fetchData при изменении page
 
   const handleNext = () => {
     setPage(skip + 1); // Увеличиваем номер страницы для следующей загрузки данных
   };
 
- 
+ console.log(hasMore,"log hasmore");
   return (
     <Popover
       placement="bottomLeft"
@@ -165,12 +186,11 @@ const WordsFilterPopover = ({
         <InfiniteScroll
             dataLength={learningLanguagesData?.length || 0}
             next={handleNext}
-            hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
-            endMessage={<p>No more items to load</p>}
+            hasMore={languageLoading}
+            loader={ languageLoading ?<div><CustomSpin size={14}color={Colors.GRAY_COLOR}/></div> :null}
+            // endMessage={<p>No more items to load</p>}
           >
           <div className="radioItem">
-          
             <p className="popeverTitle">Learning Language</p>
             <div className="filterSearch">
             <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
@@ -186,6 +206,12 @@ const WordsFilterPopover = ({
           </div>
           </InfiniteScroll>
 
+          <InfiniteScroll
+            dataLength={nativeLanguageData?.length || 0}
+            next={handleNext}
+            hasMore={nativeLoading}
+            loader={nativeLoading ?<div><CustomSpin size={14}color={Colors.GRAY_COLOR}/></div> :null}
+          >
 
           <div className="radioItem">
             <p className="popeverTitle">Neative Language</p>
@@ -200,6 +226,14 @@ const WordsFilterPopover = ({
               </div>
             </Radio.Group>
           </div>
+          </InfiniteScroll>
+          <InfiniteScroll
+            dataLength={categoryData?.length || 0}
+            next={handleNext}
+            hasMore={categoryLoading}
+            loader={categoryLoading ?<div><CustomSpin size={14}color={Colors.GRAY_COLOR}/></div> :null}
+          >
+
 
           <div className="radioItem">
             <p className="popeverTitle">Category</p>
@@ -214,6 +248,7 @@ const WordsFilterPopover = ({
               </div>
             </Radio.Group>
           </div>
+          </InfiniteScroll>
         </div>
 
         <hr className="poepverHr" />
@@ -294,7 +329,9 @@ export const WordsScreen = () => {
   const wordsLoading = useSelector(wordsLoadingData);
   const learningLanguagesData = useSelector(learningLanguages)?.data?.list;
   const nativeLanguageData = useSelector(getNativeGetResponse)?.data?.list
+  const nativeLoading = useSelector(getNativeGetloading);
   const categoryData = useSelector(getCategoryGetData)?.data?.list
+  const categoryLoading = useSelector(getCategoryGetLoading)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
 
@@ -413,7 +450,9 @@ export const WordsScreen = () => {
           setSearchValue={setSearchValue}
           onChangeSearch={onChangeSearch}
             valueLevel={valueLevel}
+            nativeLoading={nativeLoading}
             categoryData={categoryData}
+            categoryLoading={categoryLoading}
             nativeLanguageData={nativeLanguageData}
             learningLanguagesData={learningLanguagesData}
             nativeLanguage={nativeLanguage}
