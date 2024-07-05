@@ -43,6 +43,15 @@
   margin-right: 30px;
 }
 
+.radioListItem{
+  height: 250px;
+  /* border: 1px solid red; */
+}
+
+.ant-radio-group{
+  width: 100%;
+}
+
 .radioItem:nth-child(3){
   margin-right: 0;
 }

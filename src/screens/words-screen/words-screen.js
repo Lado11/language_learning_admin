@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { getIdWordsThunk } from "../../store/slices/words/getId-words";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import filterIcon from "../../assets/images/filterIcon.png"
-import { listItemCountForShow,} from "../../constants/constants";
+import { listItemCountForShow, } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { WordsLevelData, tableHeaderData } from "./words-data";
 import { WordsLevel, WordsStatus } from "./words-typing";
@@ -68,7 +68,7 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
   };
 
   const onChangeState = (index, value) => {
-    if (index === 2 )  {
+    if (index === 2) {
       let data = {
         skip: 0,
         limit: listItemCountForShow,
@@ -76,15 +76,15 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
       }
       dispatch(nativeLanguageGetThunk(data));
 
-    } else if(index === 1){
+    } else if (index === 1) {
       let data = {
         skip: 0,
         limit: listItemCountForShow,
         search: value.length ? value : undefined
       }
       dispatch(learningLanguagesThunk(data));
-     
-    }else if(index === 3){
+
+    } else if (index === 3) {
       let data = {
         skip: 0,
         limit: listItemCountForShow,
@@ -140,30 +140,30 @@ const WordsFilterPopover = ({
 
   const dispatch = useDispatch();
   const [skip, setPage] = useState(1);
-  const languageLoading  = useSelector(getLearnLanguagesLoading)
+  const languageLoading = useSelector(getLearnLanguagesLoading)
 
   const fetchData = () => {
     const data = {
-      skip:skip,
-      limit:skip*listItemCountForShow
+      skip: skip,
+      limit: skip * listItemCountForShow
     }
     dispatch(learningLanguagesThunk(data));
   };
 
   const fetchDataNative = () => {
     const data = {
-      skip:skip,
-      limit:skip*listItemCountForShow
+      skip: skip,
+      limit: skip * listItemCountForShow
     }
-    dispatch(learningLanguagesThunk(data));
+    dispatch(nativeLanguageGetThunk(data));
   };
 
   const fetchDataCategory = () => {
     const data = {
-      skip:skip,
-      limit:skip*listItemCountForShow
+      skip: skip,
+      limit: skip * listItemCountForShow
     }
-    dispatch(learningLanguagesThunk(data));
+    dispatch(categoryGetThunk(data));
   };
 
   useEffect(() => {
@@ -181,73 +181,83 @@ const WordsFilterPopover = ({
       placement="bottomLeft"
       content={<div className="filterSection">
         <div className="radioRowSection">
-        <InfiniteScroll
-            dataLength={learningLanguagesData?.length || 0}
-            next={handleNext}
-            hasMore={languageLoading}
-            loader={ languageLoading ?<div><CustomSpin size={14}color={Colors.GRAY_COLOR}/></div> :null}
-            // endMessage={<p>No more items to load</p>}
-          >
+
           <div className="radioItem">
-         
             <p className="popeverTitle">Learning Language</p>
             <div className="filterSearch">
-            <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
+              <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
             </div>
-            <Radio.Group key={1} onChange={onChangeLerningLanguage} value={lerningLanguage}>
-              <div className="statusGroupWords">
-                {learningLanguagesData?.map((option) => {
-                  return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
-                })}
-              </div>
-            </Radio.Group>
-
+            <div className="radioListItem" id="scrollableDiv">
+              <InfiniteScroll
+                scrollableTarget="scrollableDiv"
+                dataLength={learningLanguagesData?.length || 0}
+                next={handleNext}
+                hasMore={languageLoading}
+                loader={languageLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
+              >
+                <Radio.Group key={1} onChange={onChangeLerningLanguage} value={lerningLanguage}>
+                  <div className="statusGroupWords">
+                    {learningLanguagesData?.map((option) => {
+                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+                    })}
+                  </div>
+                </Radio.Group>
+              </InfiniteScroll>
+            </div>
           </div>
-          </InfiniteScroll>
-
-          <InfiniteScroll
-            dataLength={nativeLanguageData?.length || 0}
-            next={handleNext}
-            hasMore={nativeLoading}
-            loader={nativeLoading ?<div><CustomSpin size={14}color={Colors.GRAY_COLOR}/></div> :null}
-          >
 
           <div className="radioItem">
             <p className="popeverTitle">Neative Language</p>
             <div className="filterSearch"   >
-            <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(2, e.target.value)}/>
+              <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(2, e.target.value)} />
             </div>
-            <Radio.Group key={2} onChange={onChangeNativeLanguage} value={nativeLanguage} >
-              <div className="statusGroupWords">
-                {nativeLanguageData?.map((option) => {
-                  return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
-                })}
-              </div>
-            </Radio.Group>
+            <div className="radioListItem" id="scrollableDivNative">
+
+              <InfiniteScroll
+                scrollableTarget="scrollableDivNative"
+                dataLength={nativeLanguageData?.length || 0}
+                next={handleNext}
+                hasMore={nativeLoading}
+                loader={nativeLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
+              >
+
+                <Radio.Group key={2} onChange={onChangeNativeLanguage} value={nativeLanguage} >
+                  <div className="statusGroupWords">
+                    {nativeLanguageData?.map((option) => {
+                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+                    })}
+                  </div>
+                </Radio.Group>
+              </InfiniteScroll>
+            </div>
           </div>
-          </InfiniteScroll>
-          <InfiniteScroll
-            dataLength={categoryData?.length || 0}
-            next={handleNext}
-            hasMore={categoryLoading}
-            loader={categoryLoading ?<div><CustomSpin size={14}color={Colors.GRAY_COLOR}/></div> :null}
-          >
+
 
 
           <div className="radioItem">
             <p className="popeverTitle">Category</p>
             <div className="filterSearch">
-            <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue}  onChangeSearch={(e) => onChangeState(3, e.target.value)}  />
+              <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(3, e.target.value)} />
             </div>
-            <Radio.Group key={3} onChange={onChangeCategory} value={valueCategory}>
-              <div className="statusGroupWords">
-                {categoryData?.map((option) => {
-                  return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
-                })}
-              </div>
-            </Radio.Group>
+            <div className="radioListItem" id="scrollableDivCategory">
+              <InfiniteScroll
+                scrollableTarget="scrollableDivCategory"
+                dataLength={categoryData?.length || 0}
+                next={handleNext}
+                hasMore={categoryLoading}
+                loader={categoryLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
+              >
+                <Radio.Group key={3} onChange={onChangeCategory} value={valueCategory}>
+                  <div className="statusGroupWords">
+                    {categoryData?.map((option) => {
+                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
+                    })}
+                  </div>
+                </Radio.Group>
+              </InfiniteScroll>
+
+            </div>
           </div>
-          </InfiniteScroll>
         </div>
 
         <hr className="poepverHr" />
@@ -275,7 +285,7 @@ const WordsFilterPopover = ({
     </Popover>
   );
 };
-const WordsListItem = ({count, words, onClick, key }) => {
+const WordsListItem = ({ count, words, onClick, key }) => {
   const getWordsLevelLabel = (status) => {
     switch (status) {
       case WordsLevel.BEGINNER:
@@ -300,7 +310,7 @@ const WordsListItem = ({count, words, onClick, key }) => {
 
   return (
     <li className="table-row" key={key} onClick={onClick}>
-      <div className="col col-1 desc" data-label="Job Id">{(words?.word.slice(0,10))}</div>
+      <div className="col col-1 desc" data-label="Job Id">{(words?.word.slice(0, 10))}</div>
       <div className="col col-1 desc" data-label="Job Id">{words?.language?.name}</div>
       <div className="col col-1 desc count" data-label="Job Id">
         <div className="wordsItemCount">
@@ -336,7 +346,7 @@ export const WordsScreen = () => {
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
-    if (e.target.value !== "" && e.target.value.length > 2)  {
+    if (e.target.value !== "" && e.target.value.length > 2) {
       setSearchFilter(e.target.value)
       let data = {
         skip: 0,
@@ -346,13 +356,13 @@ export const WordsScreen = () => {
       dispatch(getWordsThunk(data));
 
     } else {
-      !e.target.value  && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
+      !e.target.value && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
 
   const onChangePagination = (current) => {
-    const skip =( current -1 ) * listItemCountForShow;   
+    const skip = (current - 1) * listItemCountForShow;
     fetchFilteredData(skip);
   };
 
@@ -402,10 +412,10 @@ export const WordsScreen = () => {
       level: filterLevel,
       category: valueCategory,
       translateLanguage: nativeLanguage,
-      search:searchFilter
+      search: searchFilter
     };
     dispatch(getWordsThunk(filterData));
-  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage,searchFilter]);
+  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage, searchFilter]);
 
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
@@ -466,9 +476,8 @@ export const WordsScreen = () => {
             isPopoverOpen={isPopoverOpen}
             handlePopoverOpenChange={handlePopoverOpenChange}
           />
-
-          <CustomSearchInput  plaseholder="Search ID, name, device ID, email, phone number"
-           searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
+          <CustomSearchInput plaseholder="Search ID, name, device ID, email, phone number"
+            searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
         </div>
 
         <div className="wordsScreenTable">
@@ -482,7 +491,7 @@ export const WordsScreen = () => {
                   {!wordsResponse?.data?.list?.length && !wordsLoading ?
                     <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
                       return (
-                        <WordsListItem  count={words?.translates?.length} words={words} onClick={() => updateWords(words?._id)} key={index} />
+                        <WordsListItem count={words?.translates?.length} words={words} onClick={() => updateWords(words?._id)} key={index} />
                       )
                     }
                     )}
