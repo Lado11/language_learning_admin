@@ -84,8 +84,6 @@ export const CreateWordsAdd = ({
     setSelectedLevel(value?.value)
   }
 
-
-
   const addFile = (e) => {
     const s = window.URL?.createObjectURL(e.target.files?.[0])
     setFileListVoice(e.target.files?.[0])
@@ -204,4 +202,5 @@ export const CreateWordsAdd = ({
         setCategoryShow={setCategoryShow} selectedImage={selectedImage} setSelectedImage={setSelectedImage} setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
     </div>
   );
+  
 };

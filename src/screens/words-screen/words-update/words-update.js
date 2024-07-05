@@ -11,7 +11,6 @@ import { Form } from "antd";
 import remove_icon from "../../../assets/images//remove_icon.png"
 import { Waveform } from "../words-create-screen/components/create-words-add/music-player";
 import { wordlevel } from "../../../data";
-import { categoryGetThunk,  learningLanguagesThunk } from "../../../store/slices";
 import { useTranslation } from "react-i18next";
 import "./words-update.css"
 import logoVoice from "../../../assets/images/Vector (4).png"
@@ -63,6 +62,7 @@ export const WordsUpdate = () => {
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const [current, setCurrent] = useState(0)
+    
 
     const getLevelTypeLabel = (type) => {
         switch (type) {
@@ -75,18 +75,10 @@ export const WordsUpdate = () => {
             return "Adnvached";
         }
       };
-      const getLevelTypeValues = (type) => {
-        switch (type) {
-          case "Beginner":
-            return WordsLevel.BEGINNER;
-          case "Intermitade":
-            return WordsLevel.INTERMIDATE;
-          case "Adnvached":
-          default:
-            return WordsLevel.ADVANCED;
-        }
-      };
-
+    
+      const name = wordsIdData?.language?.name
+      const categoryName = wordsIdData?.category?.name
+      const levelName = getLevelTypeLabel(wordsIdData?.level)
 
     const customStyles = {
         option: (provided, state) => ({
@@ -110,16 +102,13 @@ export const WordsUpdate = () => {
 
         }),
     };
-    useEffect(() => {
-        dispatch(learningLanguagesThunk(skipNative));
-        dispatch(categoryGetThunk(skipNative));
-    }, []);
 
     const addFile = (e) => {
         const s = URL?.createObjectURL(e.target.files?.[0])
         setFileListVoice(e.target.files?.[0])
         setAudio(s)
     }
+
     const onFinish = (values) => {
         const newWord = values.word !== wordsIdData?.word ? values.email : undefined;
         const newTranslate = values?.transcription !== wordsIdData?.transcription ? values?.transcription : undefined;
@@ -241,9 +230,7 @@ export const WordsUpdate = () => {
             console.log(error);
         }
     };
-    const name = wordsIdData?.language?.name
-    const categoryName = wordsIdData?.category?.name
-    const levelName = getLevelTypeLabel(wordsIdData?.level)
+    
 
     const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
     const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page,name }, learningLanguageUrl,learningLanguageWordSelectedValue,);
@@ -270,11 +257,13 @@ export const WordsUpdate = () => {
       };
 
       const handleLoadOptionsLevel = async (inputValue, loadedOptions) => {
-        const { options } = await loadOptions(inputValue, loadedOptions, { levelName},);
+        const { options } = await loadOptions(inputValue, loadedOptions,{levelName});
         return {
           options: wordlevel,
         };
       };
+    
+    
 
     const onChange = (value) => {
         setLearningLanguageWordSelectedValue(value)
@@ -357,12 +346,22 @@ export const WordsUpdate = () => {
                                     <div className="rowInputWords">
                                         <div >
                                             <p>Level</p>
-                                            <CustomAsyncPaginate defaultInputValue={getLevelTypeLabel(wordsIdData?.level)}
-                                             style={customStylesCategory}
+                                            <AsyncPaginate
+                                                defaultInputValue={getLevelTypeLabel(wordsIdData?.level)}
+                                                styles={customStylesCategory}
+                                                placeholder={"Level"}
                                                 onChange={onChangeLevel}
-                                                 current={current} 
-                                                 placeholder="Level"
-                                                  loadOptions={handleLoadOptionsLevel} />
+                                                loadOptions={handleLoadOptionsLevel}
+                                                // Assuming `localData` is an array of local options
+                                                options={wordlevel}
+                                            />
+                                                                                {/* <CustomAsyncPaginate 
+                                                defaultInputValue={getLevelTypeLabel(wordsIdData?.level)}
+                                                style={customStylesCategory}
+                                                onChange={onChangeLevel}
+                                                current={current} 
+                                                placeholder="Level"
+                                                loadOptions={handleLoadOptionsLevel} /> */}
                                            
 
                                             {/* <CustomAntdSelect
@@ -376,12 +375,13 @@ export const WordsUpdate = () => {
                                         </div>
                                         <div className="categoryLeft">
                                             <p>Category</p>
-                                            <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name}
-                                             style={customStylesCategory}
+                                            <CustomAsyncPaginate 
+                                                defaultInputValue={wordsIdData?.category?.name}
+                                                style={customStylesCategory}
                                                 onChange={onChangeCategory}
-                                                 current={current} 
-                                                 placeholder="Category*"
-                                                  loadOptions={handleLoadOptionsCategory} />
+                                                current={current} 
+                                                placeholder="Category*"
+                                                loadOptions={handleLoadOptionsCategory} />
 
 
                                             {/* <CustomAntdSelect
