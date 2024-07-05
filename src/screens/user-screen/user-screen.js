@@ -141,12 +141,14 @@ export const UserScreen = () => {
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
+    const search = e.target.value
     if (e.target.value !== "") {
       setSearchFilter(e.target.value)
-      const skip = 0
-      fetchFilteredData(skip)
+      
+      fetchFilteredData(0,search)
     } else {
-      dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
+      fetchFilteredData(0,search)
+      // dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
@@ -201,7 +203,7 @@ export const UserScreen = () => {
     dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback((skip = 0) => {
+  const fetchFilteredData = useCallback((skip = 0,search) => {
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
@@ -209,7 +211,7 @@ export const UserScreen = () => {
       phoneNumberVerified: filtterPhone,
       emailVerified: filtterEmail,
       role: filtterRole,
-      search: searchFilter
+      search:search ? search :searchFilter
     };
     console.log(filterData,"filter Data");
     dispatch(userGetAllThunk(filterData));

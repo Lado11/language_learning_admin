@@ -346,17 +346,21 @@ export const WordsScreen = () => {
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
+    const search = e.target.value
+
     if (e.target.value !== "" && e.target.value.length > 2) {
       setSearchFilter(e.target.value)
-      let data = {
-        skip: 0,
-        limit: listItemCountForShow,
-        search: e.target.value
-      }
-      dispatch(getWordsThunk(data));
+      fetchFilteredData(0,search)
+      // let data = {
+      //   skip: 0,
+      //   limit: listItemCountForShow,
+      //   search: e.target.value
+      // }
+      // dispatch(getWordsThunk(data));
 
     } else {
-      !e.target.value && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
+      fetchFilteredData(0,search)
+      // !e.target.value && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
@@ -404,7 +408,7 @@ export const WordsScreen = () => {
     dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback((skip = 0) => {
+  const fetchFilteredData = useCallback((skip = 0,search) => {
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
@@ -412,10 +416,10 @@ export const WordsScreen = () => {
       level: filterLevel,
       category: valueCategory,
       translateLanguage: nativeLanguage,
-      search: searchFilter
+      search: search ? search : searchFilter
     };
     dispatch(getWordsThunk(filterData));
-  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage, searchFilter]);
+  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage,searchFilter]);
 
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
