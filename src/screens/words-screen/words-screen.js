@@ -351,16 +351,8 @@ export const WordsScreen = () => {
     if (e.target.value !== "" && e.target.value.length > 2) {
       setSearchFilter(e.target.value)
       fetchFilteredData(0,search)
-      // let data = {
-      //   skip: 0,
-      //   limit: listItemCountForShow,
-      //   search: e.target.value
-      // }
-      // dispatch(getWordsThunk(data));
-
     } else {
       fetchFilteredData(0,search)
-      // !e.target.value && dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
     }
   }
@@ -409,6 +401,7 @@ export const WordsScreen = () => {
   }, [dispatch]);
 
   const fetchFilteredData = useCallback((skip = 0,search) => {
+    console.log(search,"search");
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,

@@ -141,8 +141,8 @@ export const UserScreen = () => {
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
-    const search = e.target.value
-    if (e.target.value !== "") {
+    const search = e.target.value != "" ? e.target.value : undefined
+    if (e.target.value !== " ") {
       setSearchFilter(e.target.value)
       
       fetchFilteredData(0,search)
@@ -204,6 +204,8 @@ export const UserScreen = () => {
   }, [dispatch]);
 
   const fetchFilteredData = useCallback((skip = 0,search) => {
+    console.log(search,"searchh");
+    console.log(searchFilter,"search filter");
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
@@ -211,7 +213,7 @@ export const UserScreen = () => {
       phoneNumberVerified: filtterPhone,
       emailVerified: filtterEmail,
       role: filtterRole,
-      search:search ? search :searchFilter
+      search:search 
     };
     console.log(filterData,"filter Data");
     dispatch(userGetAllThunk(filterData));
