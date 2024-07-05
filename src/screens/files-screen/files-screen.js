@@ -97,8 +97,8 @@ const FileFilterPopover = ({
           <button onClick={onClearFilter} className="button">Clear</button>
           <button onClick={onApplyFilter} className="buttonApply">Apply</button>
         </div>
-
       </div>}
+
       trigger="click"
       open={isPopoverOpen}
       onOpenChange={handlePopoverOpenChange}
@@ -114,7 +114,6 @@ export const FilesScreen = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [searchValue, setSearchValue] = useState();
-  const [searchFilter, setSearchFilter] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const filesResponse = useSelector(getfilesGetResponse)?.data;
   const filesLoading = useSelector(getfilesGetloading);
@@ -141,7 +140,6 @@ export const FilesScreen = () => {
       fetchFilteredData()
     }
   }
-
 
   const onChangeFileType = (e) => {
     setSubscribe(e.target.value);
@@ -181,6 +179,7 @@ export const FilesScreen = () => {
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
   };
+
   const handlePopoverCloseChange = (newOpen) => {
     setIsPopoverOpen(false);
   };
@@ -194,6 +193,7 @@ export const FilesScreen = () => {
     setSubscribe("")
     setPhone("")
     fetchData()
+    setSearchValue(undefined)
     form.resetFields()
   };
   
