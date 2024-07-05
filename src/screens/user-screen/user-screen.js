@@ -15,7 +15,7 @@ import { tableHeaderData, dataEmail, dataPhone, dataRole, dataUser } from "./use
 import { UserInfo, UserRole, UserSubscription } from "./user-typing";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import filterIcon from "../../assets/images/filterIcon.png"
-import { Popover, Radio } from "antd";
+import { Form, Popover, Radio } from "antd";
 import { ConstPagiantion } from "../../constants/const-pagination";
 import { listItemCountForShow } from "../../constants/constants";
 
@@ -106,13 +106,13 @@ export const UserListItem = ({ user, onClick, key }) => {
 
   return (
     <li className="table-row" key={key} onClick={onClick}>
-      <div className="col col-1 desc" data-label="Job Id">{(user?._id).slice(0,10)}</div>
+      <div className="col col-1 desc" data-label="Job Id">{(user?._id).slice(0, 10)}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.email}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.firstName}</div>
       <div className="col col-1 desc" data-label="Job Id">{user?.phoneNumber}</div>
-      <div className="col col-1 desc buttonCol" style={{backgroundColor: user?.isSubscribed === true ? Colors.GREEN : Colors.LIGHT_PURPLE}} data-label="Job Id"><p className="titleCol">{
+      <div className="col col-1 desc buttonCol" style={{ backgroundColor: user?.isSubscribed === true ? Colors.GREEN : Colors.LIGHT_PURPLE }} data-label="Job Id"><p className="titleCol">{
         getUploadSubscribedLabel(user?.isSubscribed)
       }</p></div>
     </li>
@@ -141,14 +141,13 @@ export const UserScreen = () => {
 
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
+    console.log(e.target.value, "log value");
     const search = e.target.value != "" ? e.target.value : undefined
     if (e.target.value !== " ") {
       setSearchFilter(e.target.value)
-      
-      fetchFilteredData(0,search)
+      fetchFilteredData(0, search)
     } else {
-      fetchFilteredData(0,search)
-      // dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
+      fetchFilteredData(0, search)
       setSearchFilter(undefined)
     }
   }
@@ -159,7 +158,7 @@ export const UserScreen = () => {
   }
 
   const onChangePagination = (current) => {
-    const skip =( current -1 ) * listItemCountForShow;    
+    const skip = (current - 1) * listItemCountForShow;
     fetchFilteredData(skip);
   };
 
@@ -203,9 +202,9 @@ export const UserScreen = () => {
     dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback((skip = 0,search) => {
-    console.log(search,"searchh");
-    console.log(searchFilter,"search filter");
+  const fetchFilteredData = useCallback((skip = 0, search) => {
+    console.log(search, "searchh");
+    console.log(searchFilter, "search filter");
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
@@ -213,9 +212,9 @@ export const UserScreen = () => {
       phoneNumberVerified: filtterPhone,
       emailVerified: filtterEmail,
       role: filtterRole,
-      search:search 
+      search: search
     };
-    console.log(filterData,"filter Data");
+    console.log(filterData, "filter Data");
     dispatch(userGetAllThunk(filterData));
   }, [dispatch, filtterSsubscribe, filtterPhone, filtterEmail, filtterRole, searchFilter]);
 
@@ -243,11 +242,12 @@ export const UserScreen = () => {
     fetchData();
   }, [fetchData]);
 
- return (
+  return (
     <div
       className="nativeLanguageScreenMainDiv "
       style={{ backgroundColor: Colors.WHITE }}
     >
+      <Form>
       <div>
         <CustomAddNew
           title={"Add New User"}
@@ -271,7 +271,11 @@ export const UserScreen = () => {
             isPopoverOpen={isPopoverOpen}
             handlePopoverOpenChange={handlePopoverOpenChange}
           />
-          <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
+          <Form.Item
+            name="search"
+          >
+            <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
+          </Form.Item>
         </div>
 
         {userGetLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
@@ -292,7 +296,7 @@ export const UserScreen = () => {
           <CustomPagination length={userData?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
         </div>
       </div>
-
+      </Form>
     </div>
   );
 };

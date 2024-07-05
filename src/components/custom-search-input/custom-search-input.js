@@ -3,7 +3,7 @@ import "./custom-search-input-style.css";
 import { Colors } from "../../assets/colors/colors";
 import searchIcon from "../../assets/images/searchIcon.svg";
 
-export const CustomSearchInput = ({searchValue,setSearchValue,onChangeSearch,plaseholder}) => {
+export const CustomSearchInput = ({onChangeSearch,plaseholder}) => {
  
   return (
     <div
