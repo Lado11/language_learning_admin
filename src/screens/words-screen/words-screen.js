@@ -333,7 +333,6 @@ export const WordsScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState();
-  const [searchFilter, setSearchFilter] = useState();
   const wordsResponse = useSelector(wordsResponseData);
   const wordsLoading = useSelector(wordsLoadingData);
   const learningLanguagesData = useSelector(learningLanguages)?.data?.list;
@@ -345,15 +344,12 @@ export const WordsScreen = () => {
 
 
   const onChangeSearch = (e) => {
-    setSearchValue(e.target.value);
-    const search = e.target.value
-
-    if (e.target.value !== "" && e.target.value.length > 2) {
-      setSearchFilter(e.target.value)
-      fetchFilteredData(0,search)
+    if (e.target.value !== " ") {
+      setSearchValue(e.target.value);
+      fetchFilteredData()
     } else {
-      fetchFilteredData(0,search)
-      setSearchFilter(undefined)
+      setSearchValue(undefined);
+      fetchFilteredData()
     }
   }
 
@@ -400,8 +396,7 @@ export const WordsScreen = () => {
     dispatch(getWordsThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback((skip = 0,search) => {
-    console.log(search,"search");
+  const fetchFilteredData = useCallback((skip = 0) => {
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
@@ -409,10 +404,10 @@ export const WordsScreen = () => {
       level: filterLevel,
       category: valueCategory,
       translateLanguage: nativeLanguage,
-      search: search ? search : searchFilter
+      search: searchValue
     };
     dispatch(getWordsThunk(filterData));
-  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage,searchFilter]);
+  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage, searchValue]);
 
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
@@ -424,6 +419,7 @@ export const WordsScreen = () => {
     setValueLevel()
     setFilterLevel()
     setNativeLanguage()
+    setSearchValue(undefined)
     fetchData()
   };
 

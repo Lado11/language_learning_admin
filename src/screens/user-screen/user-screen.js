@@ -127,9 +127,8 @@ export const UserScreen = () => {
   const userData = useSelector(getUserGetAllData)?.data;
   const dataList = userData?.list;
   const [searchValue, setSearchValue] = useState();
-  const [searchFilter, setSearchFilter] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [filtterSsubscribe, setFiltterSsubscribe] = useState(undefined);
+  const [filtterSubscribe, setfiltterSubscribe] = useState(undefined);
   const [subscribe, setSubscribe] = useState();
   const [filtterPhone, setFiltterPhone] = useState(undefined);
   const [phone, setPhone] = useState();
@@ -140,16 +139,12 @@ export const UserScreen = () => {
 
 
   const onChangeSearch = (e) => {
-    setSearchValue(e.target.value);
-    const search = e.target.value != "" ? e.target.value : undefined
     if (e.target.value !== " ") {
-      setSearchFilter(e.target.value)
-      
-      fetchFilteredData(0,search)
+      setSearchValue(e.target.value);
+      fetchFilteredData()
     } else {
-      fetchFilteredData(0,search)
-      // dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
-      setSearchFilter(undefined)
+      setSearchValue(undefined);
+      fetchFilteredData()
     }
   }
 
@@ -166,9 +161,9 @@ export const UserScreen = () => {
   const onChangeSubscribe = (e) => {
     setSubscribe(e.target.value);
     if (e.target.value !== UserSubscription.All) {
-      setFiltterSsubscribe(e.target.value)
+      setfiltterSubscribe(e.target.value)
     } else {
-      setFiltterSsubscribe(undefined)
+      setfiltterSubscribe(undefined)
     }
   };
 
@@ -203,21 +198,19 @@ export const UserScreen = () => {
     dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback((skip = 0,search) => {
-    console.log(search,"searchh");
-    console.log(searchFilter,"search filter");
+  const fetchFilteredData = useCallback((skip = 0) => {
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
-      isSubscribed: filtterSsubscribe,
+      isSubscribed: filtterSubscribe,
       phoneNumberVerified: filtterPhone,
       emailVerified: filtterEmail,
       role: filtterRole,
-      search:search 
+      search:searchValue 
     };
     console.log(filterData,"filter Data");
     dispatch(userGetAllThunk(filterData));
-  }, [dispatch, filtterSsubscribe, filtterPhone, filtterEmail, filtterRole, searchFilter]);
+  }, [dispatch, filtterSubscribe, filtterPhone, filtterEmail, filtterRole, searchValue]);
 
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
@@ -229,7 +222,8 @@ export const UserScreen = () => {
     setFiltterEmail(undefined)
     setFiltterPhone(undefined)
     setFiltterRole(undefined)
-    setFiltterSsubscribe(undefined)
+    setSearchValue(undefined)
+    setfiltterSubscribe(undefined)
     setEmail("")
     setRole("")
     fetchData()
