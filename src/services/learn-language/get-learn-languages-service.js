@@ -2,7 +2,6 @@ import { api } from "..";
 import { buildUrl } from "../../helper/build-url";
 
 export const learnLanguageGetService = (data) => {
-  console.log(data,"dta skip");
   const params ={
     skip:data.skip,
     limit:data.limit,

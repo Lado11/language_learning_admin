@@ -37,7 +37,7 @@ export const customStyles = {
     }),
     control: (provided) => ({
       ...provided,
-      window:"206px",
+      width:"203px",
       border: "1px solid #7D8FB326", // Border color
       minHeight: "60px", // Minimum height of the control
       boxShadow: "none", // Remove box shadow

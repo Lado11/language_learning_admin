@@ -32,7 +32,6 @@ export const FilesMore = () => {
     const filesDeleteResponse = useSelector(DeletefilesResponse)
     const filesImageResponse = useSelector(getfilesGetIdResponse);
     const filesImageLoading = useSelector(getfilesGetIdloading);
-console.log(filesImageResponse,"log");
     const voiceLoading = useSelector(getvoiceGetIdloading)
     const [voiceUrls, setVoiceUrls] = useState({});
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { getIdWordsThunk, wordsIdLoading, wordsIdResponse } from "../../../store/slices/words/getId-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomAsyncPaginate, CustomSpin } from "../../../components";
+import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomAsyncPaginate, CustomErrorSection, CustomSpin } from "../../../components";
 import CustomModal from "../../../components/custom-modal/custom-modal";
 import { deleteWordsDeleteResponse, getWordsDeleteThunk, wordsDeleteLoading, wordsDeleteResponse } from "../../../store/slices/words/delete_words-slice";
 import { Colors } from "../../../assets/colors";
@@ -24,6 +24,7 @@ import { categoryUrl, learningLanguageUrl } from "../../learning-language-screen
 import { loadOptions } from "../../../helper/loadOptions";
 import { customStylesCategory } from "../../../global-styles/loadOptionsStyles";
 import { WordsLevel } from "../words-typing";
+import { AsyncPaginate } from "react-select-async-paginate";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
@@ -119,14 +120,13 @@ export const WordsUpdate = () => {
         setFileListVoice(e.target.files?.[0])
         setAudio(s)
     }
-
     const onFinish = (values) => {
         const newWord = values.word !== wordsIdData?.word ? values.email : undefined;
         const newTranslate = values?.transcription !== wordsIdData?.transcription ? values?.transcription : undefined;
         formData.append("id", wordsIdData?._id)
         newWord != undefined &&  formData.append("word", newWord)
         newTranslate != undefined && formData.append("transcription",newTranslate)
-        formData.append("level",getLevelTypeValues(values?.level))
+        selectedLevel && formData.append("level", selectedLevel)
         formData.append("language", wordsIdData?.language?._id && !learningLanguageWordSelectedValue ? wordsIdData?.language?._id : learningLanguageWordSelectedValue?.value)
         selectedCategory && formData.append("category", selectedCategory )
         selectedImage && formData.append("image", selectedImage);
@@ -241,9 +241,12 @@ export const WordsUpdate = () => {
             console.log(error);
         }
     };
+    const name = wordsIdData?.language?.name
+    const categoryName = wordsIdData?.category?.name
+    const levelName = getLevelTypeLabel(wordsIdData?.level)
 
     const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
-    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl,learningLanguageWordSelectedValue);
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page,name }, learningLanguageUrl,learningLanguageWordSelectedValue,);
         return {
           options: options,
           hasMore: hasMore,
@@ -252,9 +255,10 @@ export const WordsUpdate = () => {
           },
         };
       };
+   
       
       const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
-        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, categoryUrl);
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page,categoryName}, categoryUrl,);
         return {
           options: options,
           hasMore: hasMore,
@@ -265,6 +269,12 @@ export const WordsUpdate = () => {
         };
       };
 
+      const handleLoadOptionsLevel = async (inputValue, loadedOptions) => {
+        const { options } = await loadOptions(inputValue, loadedOptions, { levelName},);
+        return {
+          options: wordlevel,
+        };
+      };
 
     const onChange = (value) => {
         setLearningLanguageWordSelectedValue(value)
@@ -273,10 +283,18 @@ export const WordsUpdate = () => {
     const onChangeCategory = (value) => {
         setSelectedCategory(value?.value)
     }
+    const onChangeLevel = (value) => {
+        setSelectedLevel(value?.value)
+    }
 
+    const handleRemoveError = () => {
+        // dispatch(clearNativeCreateResponse());
+      };
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
+                  {/* {errorMessage && <CustomErrorSection error={errorMessage} onTab={handleRemoveError} />} */}
+
             {wordsIdLoad ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
             </div> : <div>
@@ -337,21 +355,35 @@ export const WordsUpdate = () => {
                                         </div>
                                     </div>
                                     <div className="rowInputWords">
-                                        <div>
+                                        <div >
                                             <p>Level</p>
-                                            <CustomAntdSelect
+                                            <CustomAsyncPaginate defaultInputValue={getLevelTypeLabel(wordsIdData?.level)}
+                                             style={customStylesCategory}
+                                                onChange={onChangeLevel}
+                                                 current={current} 
+                                                 placeholder="Level"
+                                                  loadOptions={handleLoadOptionsLevel} />
+                                           
+
+                                            {/* <CustomAntdSelect
                                                 rules={true}
                                                 name="level"
                                                 // width={172}
                                                 defaultValue="Level*"
                                                 optinData={wordlevel}
                                                 setSelected={setSelectedLevel}
-                                            />
+                                            /> */}
                                         </div>
-                                        <div>
+                                        <div className="categoryLeft">
                                             <p>Category</p>
-                                            <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name} style={customStylesCategory}
-                                                onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
+                                            <CustomAsyncPaginate defaultInputValue={wordsIdData?.category?.name}
+                                             style={customStylesCategory}
+                                                onChange={onChangeCategory}
+                                                 current={current} 
+                                                 placeholder="Category*"
+                                                  loadOptions={handleLoadOptionsCategory} />
+
+
                                             {/* <CustomAntdSelect
                                                 rules={true}
                                                 name="category"

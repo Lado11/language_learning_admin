@@ -32,9 +32,9 @@ export const WordsCreateScreen = () => {
   const onFinish = (values) => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
-    formData.append("level", selectedLevel?.value)
+    formData.append("level", selectedLevel)
     formData.append("language", learningLanguageWordSelectedValue?.value)
-    formData.append("category", selectedCategory?._id)
+    formData.append("category", selectedCategory)
     selectedImage && formData.append("image", selectedImage);
     formData.append("audio", fileListVoice)
 
@@ -57,7 +57,9 @@ export const WordsCreateScreen = () => {
     if (createWordData?.success === true) {
       setAudio()
       setIamge()
+      setSelectedCategory("")
       setPreviewimgUrl("")
+      setSelectedLevel("")
       setCategoryShow(null);
       setLearningLanguageWordSelectedValue()
       form.resetFields()

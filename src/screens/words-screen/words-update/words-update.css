@@ -39,7 +39,13 @@
     line-height: 30px;
 
 }
+.css-1jqq78o-placeholder{
+color: #7D8FB359 !important;
+}
 
+.categoryLeft{
+    margin-left: 15px;
+}
 .wordsTitle {
     font-family: Roboto;
     font-size: 16px;

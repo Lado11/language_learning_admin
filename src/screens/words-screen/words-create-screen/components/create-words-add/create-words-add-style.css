@@ -13,6 +13,10 @@
   flex-direction: row;
 }
 
+.asyncselect{
+  margin-bottom: 10px;
+}
+
 .createWordsAdd {
   display: flex;
   flex-direction: column;
@@ -132,6 +136,7 @@
   /* height: 180px; */
   border: 1px solid #7d8fb326;
   border-radius: 10px;
+  margin-bottom: 10px;
 }
 .voiceUpload{
   width: 100%;

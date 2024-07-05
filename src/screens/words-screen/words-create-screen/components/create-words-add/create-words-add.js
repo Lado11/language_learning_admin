@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./create-words-add-style.css";
 import {
   CustomAntdInput,
@@ -7,7 +7,6 @@ import {
   CustomUpload,
 } from "../../../../../components";
 import { useTranslation } from "react-i18next";
-import { categoryGetThunk,   learningLanguagesThunk } from "../../../../../store/slices";
 import { useDispatch } from "react-redux";
 import { wordlevel } from "../../../../../data";
 import { Waveform } from "./music-player";
@@ -17,6 +16,7 @@ import remove_icon from "../../../../../assets/images//remove_icon.png"
 import { customStyles, customStylesCategory } from "../../../../../global-styles/loadOptionsStyles";
 import { loadOptions } from "../../../../../helper/loadOptions";
 import { categoryUrl, learningLanguageUrl } from "../../../../learning-language-screen/learning-langauge-constant";
+import { AsyncPaginate } from "react-select-async-paginate";
 
 export const CreateWordsAdd = ({
   setCategoryShow,
@@ -40,62 +40,69 @@ export const CreateWordsAdd = ({
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0)
 
-  
-const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
-  const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
-  return {
-    options: options,
-    hasMore: hasMore,
-    additional: {
-      page: page + 1,
-    },
+
+  const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
+      additional: {
+        page: page + 1,
+      },
+    };
   };
-};
 
-const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
-  const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, categoryUrl);
-  return {
-    options: options,
-    hasMore: hasMore,
+  const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, categoryUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
 
-    additional: {
-      page: page + 1,
-    },
+      additional: {
+        page: page + 1,
+      },
+    };
   };
-};
 
-
-const onChange = (value) => {
-  console.log(value,"log value");
-  setLearningLanguageWordSelectedValue(value)
-}
-
-const onChangeCategory = (value) => {
-  setSelectedCategory(value?.value)
-}
-
-  const skipNative = {
-    skip: 0,
-    limit: 12,
+  const handleLoadOptionsLevel = async (inputValue, loadedOptions) => {
+    const { wordlevel } = await loadOptions(inputValue, loadedOptions,);
+    return {
+      options: wordlevel,
+    };
   };
-  
+
+
+  const onChange = (value) => {
+    setLearningLanguageWordSelectedValue(value)
+  }
+
+  const onChangeCategory = (value) => {
+    setSelectedCategory(value?.value)
+  }
+
+  const onChangeLevel = (value) => {
+    setSelectedLevel(value?.value)
+  }
+
+
+
   const addFile = (e) => {
     const s = window.URL?.createObjectURL(e.target.files?.[0])
     setFileListVoice(e.target.files?.[0])
     setAudio(s)
-}
+  }
 
-  useEffect(() => {
-    dispatch(learningLanguagesThunk(skipNative));
-    dispatch(categoryGetThunk(skipNative));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(learningLanguagesThunk(skipNative));
+  //   dispatch(categoryGetThunk(skipNative));
+  // }, []);
 
   return (
     <div className="createWordsAdd">
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
-      <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English" 
-      loadOptions={handleLoadOptions} />
+        <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English"
+          loadOptions={handleLoadOptions} />
         {/* <CustomAntdSelect
           rules={true}
           name={"Learning language"}
@@ -128,18 +135,32 @@ const onChangeCategory = (value) => {
             />
           </div>
         </div>
-        <div className="rowInputWords">
-          <CustomAntdSelect
+        <div className="rowInputWords asyncselect">
+          <AsyncPaginate
+            styles={customStylesCategory}
+            placeholder={"Level"}
+            onChange={onChangeLevel}
+            loadOptions={handleLoadOptionsLevel}
+            additional={{
+              page: current, // Initial page
+            }}
+            // Assuming `localData` is an array of local options
+            options={wordlevel}
+          />
+         
+          {/* <CustomAntdSelect
             name={"Level"}
             rules={true}
             // width={172}
             defaultValue="Level*"
             optinData={wordlevel}
             setSelected={setSelectedLevel}
-          />
-          <CustomAsyncPaginate style={customStylesCategory} 
-          onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
+          /> */}
+          <div className="categoryLeft">
+          <CustomAsyncPaginate style={customStylesCategory}
+            onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
 
+          </div>
           {/* <CustomAntdSelect
             rules={true}
             name={"Category"}
@@ -150,7 +171,7 @@ const onChangeCategory = (value) => {
           /> */}
         </div>
       </div>
-    
+
 
       <>
         {audio ? <div className="imgae_upload_design_voice">

@@ -29,26 +29,25 @@ import { ConstPagiantion } from "../../constants/const-pagination";
 import { WordsLevelData, tableHeaderData } from "./words-data";
 import { WordsLevel, WordsStatus } from "./words-typing";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { api } from "../../services";
 
 
 // Custom hook to manage three pieces of state dynamically
 const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCallback) => {
-  const [state1, setState1] = useState(initialValue1);
-  const [state2, setState2] = useState(initialValue2);
-  const [state3, setState3] = useState(initialValue3);
+  const [learningState, setLearningState] = useState(initialValue1);
+  const [nativeState, setNativeState] = useState(initialValue2);
+  const [categoryState, setCategoryState] = useState(initialValue3);
   const dispatch = useDispatch()
 
   const updateState = (index, value) => {
     switch (index) {
       case 1:
-        setState1(value);
+        setLearningState(value);
         break;
       case 2:
-        setState2(value);
+        setNativeState(value);
         break;
       case 3:
-        setState3(value);
+        setCategoryState(value);
         break;
       default:
         break;
@@ -58,11 +57,11 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
   const getState = (index) => {
     switch (index) {
       case 1:
-        return state1;
+        return learningState;
       case 2:
-        return state2;
+        return nativeState;
       case 3:
-        return state3;
+        return categoryState;
       default:
         return undefined;
     }
@@ -98,17 +97,17 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
     // Example of handling state changes and triggering data fetch/callback
     if (getDataCallback) {
       getDataCallback({
-        state1,
-        state2,
-        state3
+        learningState,
+        nativeState,
+        categoryState
       });
     }
   };
 
   return {
-    state1,
-    state2,
-    state3,
+    learningState,
+    nativeState,
+    categoryState,
     onChangeState,
     getState
   };
@@ -137,13 +136,12 @@ const WordsFilterPopover = ({
   setSearchValue
 }) => {
   const { t } = useTranslation();
-  const { state1, state2, state3, onChangeState } = useDynamicState('', '', '',);
+  const { learningState, nativeState, categoryState, onChangeState } = useDynamicState('', '', '',);
 
   const dispatch = useDispatch();
-  const [hasMore, setHasMore] = useState(true);
   const [skip, setPage] = useState(1);
-
   const languageLoading  = useSelector(getLearnLanguagesLoading)
+
   const fetchData = () => {
     const data = {
       skip:skip,
@@ -159,6 +157,7 @@ const WordsFilterPopover = ({
     }
     dispatch(learningLanguagesThunk(data));
   };
+
   const fetchDataCategory = () => {
     const data = {
       skip:skip,
@@ -177,7 +176,6 @@ const WordsFilterPopover = ({
     setPage(skip + 1); // Увеличиваем номер страницы для следующей загрузки данных
   };
 
- console.log(hasMore,"log hasmore");
   return (
     <Popover
       placement="bottomLeft"
@@ -191,6 +189,7 @@ const WordsFilterPopover = ({
             // endMessage={<p>No more items to load</p>}
           >
           <div className="radioItem">
+         
             <p className="popeverTitle">Learning Language</p>
             <div className="filterSearch">
             <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
@@ -301,7 +300,7 @@ const WordsListItem = ({count, words, onClick, key }) => {
 
   return (
     <li className="table-row" key={key} onClick={onClick}>
-      <div className="col col-1 desc" data-label="Job Id">{words?.word}</div>
+      <div className="col col-1 desc" data-label="Job Id">{(words?.word.slice(0,10))}</div>
       <div className="col col-1 desc" data-label="Job Id">{words?.language?.name}</div>
       <div className="col col-1 desc count" data-label="Job Id">
         <div className="wordsItemCount">
@@ -406,7 +405,7 @@ export const WordsScreen = () => {
       search:searchFilter
     };
     dispatch(getWordsThunk(filterData));
-  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage]);
+  }, [dispatch, lerningLanguage, filterLevel, valueCategory, nativeLanguage,searchFilter]);
 
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
@@ -446,9 +445,9 @@ export const WordsScreen = () => {
         <p className="wordsScreenTitle">{t("WORDS")}</p>
         <div className="filterDiv">
           <WordsFilterPopover
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-          onChangeSearch={onChangeSearch}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            onChangeSearch={onChangeSearch}
             valueLevel={valueLevel}
             nativeLoading={nativeLoading}
             categoryData={categoryData}
