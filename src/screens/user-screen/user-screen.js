@@ -138,16 +138,13 @@ export const UserScreen = () => {
   const [filtterRole, setFiltterRole] = useState(undefined);
   const [role, setRole] = useState();
 
+
   const onChangeSearch = (e) => {
     setSearchValue(e.target.value);
     if (e.target.value !== "") {
       setSearchFilter(e.target.value)
-      let data = {
-        skip: 0,
-        limit: listItemCountForShow,
-        search: e.target.value
-      }
-      dispatch(userGetAllThunk(data));
+      const skip = 0
+      fetchFilteredData(skip)
     } else {
       dispatch(userGetAllThunk(ConstPagiantion(0, listItemCountForShow)));
       setSearchFilter(undefined)
@@ -214,6 +211,7 @@ export const UserScreen = () => {
       role: filtterRole,
       search: searchFilter
     };
+    console.log(filterData,"filter Data");
     dispatch(userGetAllThunk(filterData));
   }, [dispatch, filtterSsubscribe, filtterPhone, filtterEmail, filtterRole, searchFilter]);
 
@@ -224,6 +222,10 @@ export const UserScreen = () => {
   const handleClearFilter = () => {
     setSubscribe("")
     setPhone("")
+    setFiltterEmail(undefined)
+    setFiltterPhone(undefined)
+    setFiltterRole(undefined)
+    setFiltterSsubscribe(undefined)
     setEmail("")
     setRole("")
     fetchData()
