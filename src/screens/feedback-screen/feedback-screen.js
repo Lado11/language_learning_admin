@@ -195,9 +195,13 @@ export const FeedbackScreen = () => {
     fetchData()
     // fetchFilteredData();
   };
+  const handlePopoverCloseChange = (newOpen) => {
+    setIsPopoverOpen(false);
+  };
 
   const handleApplyFilter = () => {
     fetchFilteredData();
+    handlePopoverCloseChange();
   };
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Popover, Radio } from "antd";
+import { Form, Popover, Radio } from "antd";
 import { filesGetIdThunk, getfilesGetIdResponse, getfilesGetIdloading } from "../../store/slices/files/get-id-files";
 import { filesGetThunk, getfilesGetResponse, getfilesGetloading } from "../../store/slices/files/get-files";
 import { ConstPagiantion } from "../../constants/const-pagination";
@@ -112,6 +112,7 @@ export const FilesScreen = () => {
   const { t } = useTranslation();
   const naviagte = useNavigate();
   const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const [searchValue, setSearchValue] = useState();
   const [searchFilter, setSearchFilter] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -132,20 +133,16 @@ export const FilesScreen = () => {
   };
 
   const onChangeSearch = (e) => {
-    setSearchValue(e.target.value);
-    if (e.target.value !== "") {
-      setSearchFilter(e.target.value)
-      let data = {
-        skip: 0,
-        limit: listItemCountForShow,
-        search: e.target.value
-      }
-      dispatch(filesGetThunk(data));
+    if (e.target.value !== " ") {
+      setSearchValue(e.target.value);
+      fetchFilteredData()
     } else {
-      dispatch(filesGetThunk(ConstPagiantion(0, listItemCountForShow)));
-      setSearchFilter(undefined)
+      setSearchValue(undefined);
+      fetchFilteredData()
     }
   }
+
+
   const onChangeFileType = (e) => {
     setSubscribe(e.target.value);
     if (e.target.value !== fileTypes.All) {
@@ -168,19 +165,24 @@ export const FilesScreen = () => {
     dispatch(filesGetThunk(ConstPagiantion(0, listItemCountForShow)));
   }, [dispatch]);
 
-  const fetchFilteredData = useCallback(() => {
+
+
+  const fetchFilteredData = useCallback((skip = 0) => {
     const filterData = {
       skip: 0,
       limit: listItemCountForShow,
       mediaType: filtterSsubscribe,
       usedObjectType: filtterPhone,
-      search: searchFilter
+      search: searchValue
     };
     dispatch(filesGetThunk(filterData));
-  }, [dispatch, filtterSsubscribe, filtterPhone, searchFilter]);
+  }, [dispatch, filtterSsubscribe, filtterPhone, searchValue]);
 
   const handlePopoverOpenChange = (newOpen) => {
     setIsPopoverOpen(newOpen);
+  };
+  const handlePopoverCloseChange = (newOpen) => {
+    setIsPopoverOpen(false);
   };
 
   const onChangePagination = (current) => {
@@ -192,10 +194,12 @@ export const FilesScreen = () => {
     setSubscribe("")
     setPhone("")
     fetchData()
+    form.resetFields()
   };
   
   const handleApplyFilter = () => {
     fetchFilteredData();
+    handlePopoverCloseChange();
   };
   
   useEffect(() => {
@@ -226,6 +230,8 @@ export const FilesScreen = () => {
       className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
+         <Form  autoComplete="off"
+        form={form}>
       <div>
         <p className="filesTitle">File</p>
         <div className="filterDiv">
@@ -239,7 +245,11 @@ export const FilesScreen = () => {
             isPopoverOpen={isPopoverOpen}
             handlePopoverOpenChange={handlePopoverOpenChange}
           />
+          <Form.Item
+            name="search"
+          >
           <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
+          </Form.Item>
         </div>
         {!filesResponse?.list?.length && !filesLoading ? (
           <CustomNoData />
@@ -253,6 +263,7 @@ export const FilesScreen = () => {
       <div className="category-pagination">
         <CustomPagination length={filesResponse?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
       </div>
+      </Form>
     </div>
   );
 };

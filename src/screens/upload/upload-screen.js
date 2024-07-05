@@ -149,6 +149,10 @@ export const UplaodScreen = () => {
     const handlePopoverOpenChange = (newOpen) => {
         setIsPopoverOpen(newOpen);
     };
+    const handlePopoverCloseChange = (newOpen) => {
+        setIsPopoverOpen(false);
+      };
+    
 
     const handleTypeChange = (e) => {
         setFilterUploadType(e.target.value);
@@ -182,6 +186,7 @@ export const UplaodScreen = () => {
 
     const handleApplyFilter = () => {
         fetchFilteredData();
+        handlePopoverCloseChange();
     };
 
     useEffect(() => {
