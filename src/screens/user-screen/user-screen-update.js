@@ -10,6 +10,7 @@ import { Colors } from "../../assets/colors";
 import CsutomSwitch from "../../components/custom-switch/custom-switch";
 import { UserValue } from "../../data/custom-table-columns";
 import CustomModal from "../../components/custom-modal/custom-modal";
+import { UserRole } from "./user-typing";
 
 export const UserScreenUpdate = () => {
     let location = useLocation();
@@ -17,10 +18,10 @@ export const UserScreenUpdate = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [select1, setSelect1] = useState(false);
-    const [select2, setSelect2] = useState(false);
-    const [select3, setSelect3] = useState(false);
-    const [select4, setSelect4] = useState(false);
+    const [select1, setSelect1] = useState();
+    const [select2, setSelect2] = useState();
+    const [select3, setSelect3] = useState();
+    const [select4, setSelect4] = useState();
     const [calendar, setCalendar] = useState();
     dayjs.extend(customParseFormat);
     const dateFormat = 'YYYY/MM/DD';
@@ -46,9 +47,28 @@ export const UserScreenUpdate = () => {
         dispatch(userDeleteThunk(userList?.id,));
     };
 
+    
+  const getUserRoleType = (status) => {
+    switch (status) {
+      case UserRole.ADMIN:
+        return "Admin";
+      case UserRole.OPERATOR:
+        return "Operator";
+      case UserRole.USER:
+      default:
+        return "User";
+    }
+  };
+  
+
     const onFinish = (values) => {
         const newEmail = values.email !== userList.email ? values.email : undefined;
         const newPhone = values.phoneNumber !== userList.phoneNumber ? values.phoneNumber : undefined;
+        const phone = userList.phoneNumberVerified === true && select1 === true ? true : userList.phoneNumberVerified === false && select1 === true  ? true :userList.phoneNumberVerified === true && select1 === undefined ? true  :  false
+        const email = userList.emailVerified === true && select2 === true ? true : userList.emailVerified === false && select2 === true  ? true :  userList.emailVerified === true && select2 === undefined ? true  :  false
+        const subscribe = userList.isSubscribed === true && select4 === true ? true : userList.isSubscribed === false && select4 === true  ? true :  userList.isSubscribed === true && select4 === undefined ? true :  false
+        const deleteUser =userList.deleted === true && select3 === true ? true : userList.deleted === false && select3 === true  ? true :   userList.deleted === true && select3 === undefined ? true : false
+
         const data = {
             email: newEmail, 
             phoneNumber:newPhone,
@@ -57,10 +77,10 @@ export const UserScreenUpdate = () => {
             password:values?.password,
             role:values?.role,
             id: userList?.id,
-            phoneNumberVerified: select1 != undefined ? select1 : userList?.phoneNumberVerified,
-            emailVerified: select2 != undefined  ? select2 : userList?.emailVerified,
-            deleted: select3,
-            isSubscribed:  select4 != undefined  ? select4 :userList?.isSubscribed,
+            phoneNumberVerified: phone,
+            emailVerified:email,
+            deleted: deleteUser,
+            isSubscribed: subscribe,
             subscriptionExpiresDt: calendar,
         }
          dispatch(userUpdateThunk(data))  
@@ -74,7 +94,7 @@ export const UserScreenUpdate = () => {
             password: userList?.password,
             phoneNumber: userList?.phoneNumber,
             lastName: userList?.lastName,
-            role: userList?.role ,
+            role:getUserRoleType(userList?.role) ,
         });
     }, [userList]);
 
@@ -99,24 +119,19 @@ export const UserScreenUpdate = () => {
 
 
     const onChangeBlockUser = (checked) => {
-        console.log(checked,"1");
         setSelect3(checked)
       };
       
     const onChangeEmail = (checked) => {
-        console.log(checked,"2");
         setSelect2(checked)
       };
 
-      
     const onChangePhone = (checked) => {
-        console.log(checked,"3");
-        setSelect1(checked)
+          setSelect1(checked)
       };
 
       
     const onChangeSub = (checked) => {
-        console.log(checked,"4");
         setSelect4(checked)
       };
 

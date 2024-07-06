@@ -278,7 +278,7 @@ export const UserScreen = () => {
           <Form.Item
             name="search"
           >
-            <CustomSearchInput searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
+            <CustomSearchInput plaseholder={"Search ID, name, device ID, email, phone number"} searchValue={searchValue} onChangeSearch={onChangeSearch} setSearchValue={setSearchValue} />
           </Form.Item>
         </div>
 

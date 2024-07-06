@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { getIdWordsThunk, wordsIdLoading, wordsIdResponse } from "../../../store/slices/words/getId-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAntdSelect, CustomAsyncPaginate, CustomErrorSection, CustomSpin } from "../../../components";
+import { CustomAntdButton, CustomAntdButtonDelete, CustomAntdInput, CustomAsyncPaginate, CustomSpin } from "../../../components";
 import CustomModal from "../../../components/custom-modal/custom-modal";
 import { deleteWordsDeleteResponse, getWordsDeleteThunk, wordsDeleteLoading, wordsDeleteResponse } from "../../../store/slices/words/delete_words-slice";
 import { Colors } from "../../../assets/colors";
@@ -53,39 +53,35 @@ export const WordsUpdate = () => {
     const [previewImgUrl, setPreviewimgUrl] = useState("");
     const voiceResponse = useSelector(getvoiceGetIdResponse)
     const voiceLoading = useSelector(getvoiceGetIdloading)
-    const skipNative = {
-        skip: 0,
-        limit: 12,
-    };
     const [imageUrls, setImageUrls] = useState({});
     const [voiceUrls, setVoiceUrls] = useState({});
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const [current, setCurrent] = useState(0)
-    
+
 
     const getLevelTypeLabel = (type) => {
         switch (type) {
-          case WordsLevel.BEGINNER:
-            return "Beginner";
-          case WordsLevel.INTERMIDATE:
-            return "Intermitade";
-          case WordsLevel.ADVANCED:
-          default:
-            return "Adnvached";
+            case WordsLevel.BEGINNER:
+                return "Beginner";
+            case WordsLevel.INTERMIDATE:
+                return "Intermitade";
+            case WordsLevel.ADVANCED:
+            default:
+                return "Adnvached";
         }
-      };
-    
-      const name = wordsIdData?.language?.name
-      const categoryName = wordsIdData?.category?.name
-      const levelName = getLevelTypeLabel(wordsIdData?.level)
+    };
+
+    const name = wordsIdData?.language?.name
+    const categoryName = wordsIdData?.category?.name
+    const levelName = getLevelTypeLabel(wordsIdData?.level)
 
     const customStyles = {
         option: (provided, state) => ({
             ...provided,
             window: state.isSelected && "420px",
             backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-            color: state.isSelected ?  Colors.PURPLE : "black", // Text color for selected options
+            color: state.isSelected ? Colors.PURPLE : "black", // Text color for selected options
             padding: "8px 12px", // Padding for options
             fontSize: "14px", // Font size for options
             height: "60px", // Height of each option
@@ -110,43 +106,33 @@ export const WordsUpdate = () => {
     }
 
     const onFinish = (values) => {
-        const newWord = values.word !== wordsIdData?.word ? values.email : undefined;
+        const newWord = values.word != wordsIdData?.word ? values.word : undefined;
         const newTranslate = values?.transcription !== wordsIdData?.transcription ? values?.transcription : undefined;
         formData.append("id", wordsIdData?._id)
-        newWord != undefined &&  formData.append("word", newWord)
-        newTranslate != undefined && formData.append("transcription",newTranslate)
+        newWord &&  formData.append("word", newWord)
+        newTranslate != undefined && formData.append("transcription", newTranslate)
         selectedLevel && formData.append("level", selectedLevel)
-        formData.append("language", wordsIdData?.language?._id && !learningLanguageWordSelectedValue ? wordsIdData?.language?._id : learningLanguageWordSelectedValue?.value)
-        selectedCategory && formData.append("category", selectedCategory )
+        learningLanguageWordSelectedValue && formData.append("language", learningLanguageWordSelectedValue?.value)
+        selectedCategory && formData.append("category", selectedCategory)
         selectedImage && formData.append("image", selectedImage);
         fileListVoice && formData.append("audio", fileListVoice)
-
-        Object.keys(values).map((date, index) => {
+        
+        Object.keys(values).filter((date, index) => {
             if (date.includes("translate")) {
                 array.push(values[date])
             }
         })
 
-        array?.map((values, ind) => {
-            values != undefined &&    formData.append(`translates[${ind}].text[${0}]`, values);
+         array?.map((values, ind) => {
+           formData.append(`translates[${ind}].text[${0}]`, values);
         })
 
-        Object.keys(values).map((date, index) => {
-            if (date.includes("nativeInpust")) {
-                array.push(values[date])
-            }
+        !learningLanguageWordSelectedValue?.nativeLanguages && wordsIdData?.translates?.map((item, ind) => {
+            formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
         })
-
-        array?.map((values, ind) => {
-            values != undefined &&    formData.append(`translates[${ind}].text[${0}]`, values);
-        })
-
-        // !learningLanguageWordSelectedValue && wordsIdData?.translates?.map((item, ind) => {
-        //     formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
-        // })
 
         learningLanguageWordSelectedValue?.nativeLanguages.map((item, ind) => {
-            formData.append(`translates[${ind}].nativeLanguage`, item?._id);
+             formData.append(`translates[${ind}].nativeLanguage`, item?._id);
         });
 
         dispatch(wordsUpdateThunk(formData))
@@ -230,40 +216,37 @@ export const WordsUpdate = () => {
             console.log(error);
         }
     };
-    
 
     const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
-    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page,name }, learningLanguageUrl,learningLanguageWordSelectedValue,);
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page, name }, learningLanguageUrl, learningLanguageWordSelectedValue,);
         return {
-          options: options,
-          hasMore: hasMore,
-          additional: {
-            page: page + 1,
-          },
+            options: options,
+            hasMore: hasMore,
+            additional: {
+                page: page + 1,
+            },
         };
-      };
-   
-      
-      const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
-        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page,categoryName}, categoryUrl,);
-        return {
-          options: options,
-          hasMore: hasMore,
-      
-          additional: {
-            page: page + 1,
-          },
-        };
-      };
+    };
 
-      const handleLoadOptionsLevel = async (inputValue, loadedOptions) => {
-        const { options } = await loadOptions(inputValue, loadedOptions,{levelName});
+    const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
+        const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page, categoryName }, categoryUrl,);
         return {
-          options: wordlevel,
+            options: options,
+            hasMore: hasMore,
+
+            additional: {
+                page: page + 1,
+            },
         };
-      };
-    
-    
+    };
+
+    const handleLoadOptionsLevel = async (inputValue, loadedOptions) => {
+        const { options } = await loadOptions(inputValue, loadedOptions, { levelName });
+        return {
+            options: wordlevel,
+        };
+    };
+
 
     const onChange = (value) => {
         setLearningLanguageWordSelectedValue(value)
@@ -278,11 +261,11 @@ export const WordsUpdate = () => {
 
     const handleRemoveError = () => {
         // dispatch(clearNativeCreateResponse());
-      };
+    };
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
-                  {/* {errorMessage && <CustomErrorSection error={errorMessage} onTab={handleRemoveError} />} */}
+            {/* {errorMessage && <CustomErrorSection error={errorMessage} onTab={handleRemoveError} />} */}
 
             {wordsIdLoad ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
@@ -355,14 +338,13 @@ export const WordsUpdate = () => {
                                                 // Assuming `localData` is an array of local options
                                                 options={wordlevel}
                                             />
-                                                                                {/* <CustomAsyncPaginate 
+                                            {/* <CustomAsyncPaginate 
                                                 defaultInputValue={getLevelTypeLabel(wordsIdData?.level)}
                                                 style={customStylesCategory}
                                                 onChange={onChangeLevel}
                                                 current={current} 
                                                 placeholder="Level"
                                                 loadOptions={handleLoadOptionsLevel} /> */}
-                                           
 
                                             {/* <CustomAntdSelect
                                                 rules={true}
@@ -375,14 +357,13 @@ export const WordsUpdate = () => {
                                         </div>
                                         <div className="categoryLeft">
                                             <p>Category</p>
-                                            <CustomAsyncPaginate 
+                                            <CustomAsyncPaginate
                                                 defaultInputValue={wordsIdData?.category?.name}
                                                 style={customStylesCategory}
                                                 onChange={onChangeCategory}
-                                                current={current} 
+                                                current={current}
                                                 placeholder="Category*"
                                                 loadOptions={handleLoadOptionsCategory} />
-
 
                                             {/* <CustomAntdSelect
                                                 rules={true}
@@ -478,7 +459,7 @@ export const WordsUpdate = () => {
                                                         rules={true}
                                                         className="inputTranslate"
                                                         placeholder="Words*"
-                                                        name={`nativeInpust${index}`}
+                                                        name={`translate${index}`}
                                                         type={"text"}
                                                         min={4}
                                                     />
@@ -525,8 +506,6 @@ export const WordsUpdate = () => {
                             />
                         </div>
                     </div>
-
-
                 </Form>
             </div>}
         </div>

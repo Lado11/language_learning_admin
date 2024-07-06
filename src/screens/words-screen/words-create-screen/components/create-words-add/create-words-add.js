@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import "./create-words-add-style.css";
 import {
   CustomAntdInput,
-  CustomAntdSelect,
   CustomAsyncPaginate,
   CustomUpload,
 } from "../../../../../components";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import { wordlevel } from "../../../../../data";
 import { Waveform } from "./music-player";
 import logo from "../../../../../assets/images/Vector (4).png"
@@ -37,7 +35,6 @@ export const CreateWordsAdd = ({
   setLearningLanguageWordSelectedValue
 }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const [current, setCurrent] = useState(0)
 
 
@@ -71,7 +68,6 @@ export const CreateWordsAdd = ({
     };
   };
 
-
   const onChange = (value) => {
     setLearningLanguageWordSelectedValue(value)
   }
@@ -90,17 +86,21 @@ export const CreateWordsAdd = ({
     setAudio(s)
   }
 
-  // useEffect(() => {
-  //   dispatch(learningLanguagesThunk(skipNative));
-  //   dispatch(categoryGetThunk(skipNative));
-  // }, []);
-
   return (
     <div className="createWordsAdd">
       <p className="nativeLanguageTitle">Add Words</p>
       <div className="addWordsFirstSelect bigSelect">
-        <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English"
-          loadOptions={handleLoadOptions} />
+        <Form.Item
+          name="Leaning Language"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <CustomAsyncPaginate style={customStyles} onChange={onChange} current={current} placeholder="English"
+            loadOptions={handleLoadOptions} />
+        </Form.Item>
         {/* <CustomAntdSelect
           rules={true}
           name={"Learning language"}
@@ -134,18 +134,27 @@ export const CreateWordsAdd = ({
           </div>
         </div>
         <div className="rowInputWords asyncselect">
-          <AsyncPaginate
-            styles={customStylesCategory}
-            placeholder={"Level"}
-            onChange={onChangeLevel}
-            loadOptions={handleLoadOptionsLevel}
-            additional={{
-              page: current, // Initial page
-            }}
-            // Assuming `localData` is an array of local options
-            options={wordlevel}
-          />
-         
+          <Form.Item
+            name="Level"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <AsyncPaginate
+              styles={customStylesCategory}
+              placeholder={"Level"}
+              onChange={onChangeLevel}
+              loadOptions={handleLoadOptionsLevel}
+              additional={{
+                page: current, // Initial page
+              }}
+              // Assuming `localData` is an array of local options
+              options={wordlevel}
+            />
+          </Form.Item>
+
           {/* <CustomAntdSelect
             name={"Level"}
             rules={true}
@@ -155,9 +164,18 @@ export const CreateWordsAdd = ({
             setSelected={setSelectedLevel}
           /> */}
           <div className="categoryLeft">
-          <CustomAsyncPaginate style={customStylesCategory}
-            onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
-
+            <Form.Item
+              name="Category"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              normalize={(value) => value.trimStart()}
+            >
+              <CustomAsyncPaginate style={customStylesCategory}
+                onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
+            </Form.Item>
           </div>
           {/* <CustomAntdSelect
             rules={true}
@@ -202,5 +220,5 @@ export const CreateWordsAdd = ({
         setCategoryShow={setCategoryShow} selectedImage={selectedImage} setSelectedImage={setSelectedImage} setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
     </div>
   );
-  
+
 };
