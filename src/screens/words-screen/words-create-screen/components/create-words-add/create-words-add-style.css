@@ -125,7 +125,10 @@
   width: 100%;
   max-width:420px;
 }
-
+.buttonVoice{
+  border: none;
+  background-color: white;
+}
 .imgae_upload_design_voice{
   display: flex;
   align-items: center;

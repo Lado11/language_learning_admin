@@ -24,6 +24,7 @@ import { loadOptions } from "../../../helper/loadOptions";
 import { customStylesCategory } from "../../../global-styles/loadOptionsStyles";
 import { WordsLevel } from "../words-typing";
 import { AsyncPaginate } from "react-select-async-paginate";
+import _isEqual from 'lodash/isEqual';
 
 export const WordsUpdate = () => {
     const words = useRef(1);
@@ -106,6 +107,7 @@ export const WordsUpdate = () => {
     }
 
     const onFinish = (values) => {
+        console.log(values,"valuessssss");
         const newWord = values.word != wordsIdData?.word ? values.word : undefined;
         const newTranslate = values?.transcription !== wordsIdData?.transcription ? values?.transcription : undefined;
         formData.append("id", wordsIdData?._id)
@@ -124,8 +126,9 @@ export const WordsUpdate = () => {
         })
 
          array?.map((values, ind) => {
-           formData.append(`translates[${ind}].text[${0}]`, values);
+             formData.append(`translates[${ind}].text[${0}]`, values);
         })
+ 
 
         !learningLanguageWordSelectedValue?.nativeLanguages && wordsIdData?.translates?.map((item, ind) => {
             formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
@@ -155,6 +158,7 @@ export const WordsUpdate = () => {
             word: wordsIdData?.word,
         });
     }, [wordsIdData]);
+    
 
     useEffect(() => {
         dispatch(getIdWordsThunk(wordId));
@@ -262,6 +266,7 @@ export const WordsUpdate = () => {
     const handleRemoveError = () => {
         // dispatch(clearNativeCreateResponse());
     };
+
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
@@ -459,7 +464,7 @@ export const WordsUpdate = () => {
                                                         rules={true}
                                                         className="inputTranslate"
                                                         placeholder="Words*"
-                                                        name={`translate${index}`}
+                                                        name={`translate${item._id}`}
                                                         type={"text"}
                                                         min={4}
                                                     />
@@ -479,7 +484,7 @@ export const WordsUpdate = () => {
                                                 // rules={true}
                                                 className="inputTranslate"
                                                 placeholder="Words*"
-                                                name={`translate${index}`}
+                                                name={`translate${item._id}`}
                                                 type={"text"}
                                                 min={4}
                                                 defaultValue={item.text?.map((language) => {

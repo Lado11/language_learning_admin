@@ -1,5 +1,4 @@
 import { Form, Input } from "antd";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const CustomAntdInput = ({rules, disabled,defaultValue,name, placeholder,min,type,message }) => {

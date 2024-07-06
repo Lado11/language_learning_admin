@@ -59,6 +59,18 @@ export const UserScreenUpdate = () => {
         return "User";
     }
   };
+
+  const getUserRoleTypeLabel = (status) => {
+    switch (status) {
+      case UserRole.ADMIN:
+        return 0;
+      case UserRole.OPERATOR:
+        return 1;
+      case UserRole.USER:
+      default:
+        return 2;
+    }
+  };
   
 
     const onFinish = (values) => {
@@ -75,7 +87,7 @@ export const UserScreenUpdate = () => {
             firstName:values?.firstName,
             lastName:values?.lastName,
             password:values?.password,
-            role:values?.role,
+            role:getUserRoleTypeLabel(values?.role),
             id: userList?.id,
             phoneNumberVerified: phone,
             emailVerified:email,
@@ -83,6 +95,7 @@ export const UserScreenUpdate = () => {
             isSubscribed: subscribe,
             subscriptionExpiresDt: calendar,
         }
+
          dispatch(userUpdateThunk(data))  
     };
 
@@ -98,7 +111,7 @@ export const UserScreenUpdate = () => {
         });
     }, [userList]);
 
-
+console.log(userList?.subscriptionExpiresDt,"log user");
     useEffect(() => {
         dispatch(userGetByIdThunk(userId));
     }, []);
@@ -288,7 +301,9 @@ export const UserScreenUpdate = () => {
                             Subscription  Expiry Date
                             </p>
                             <Space direction="vertical" size={12}>
-                           { userList?.subscriptionExpiresDt != null  ? <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionExpiresDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p> }
+                           {  select4 === true ? 
+                           <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} /> : userList?.subscriptionExpiresDt != null  &&  userList?.subscriptionExpiresDt === true ? 
+                            <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} defaultValue={dayjs(userList?.subscriptionExpiresDt, dateFormat)} />  : <p>UnLimit</p>}
                             </Space>
                         </div>
                     </div>
