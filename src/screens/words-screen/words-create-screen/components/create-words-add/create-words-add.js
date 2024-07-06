@@ -76,6 +76,7 @@ export const CreateWordsAdd = ({
     setSelectedCategory(value?.value)
   }
 
+  
   const onChangeLevel = (value) => {
     setSelectedLevel(value?.value)
   }
@@ -150,7 +151,6 @@ export const CreateWordsAdd = ({
               additional={{
                 page: current, // Initial page
               }}
-              // Assuming `localData` is an array of local options
               options={wordlevel}
             />
           </Form.Item>
@@ -171,7 +171,6 @@ export const CreateWordsAdd = ({
                   required: true,
                 },
               ]}
-              normalize={(value) => value.trimStart()}
             >
               <CustomAsyncPaginate style={customStylesCategory}
                 onChange={onChangeCategory} current={current} placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
