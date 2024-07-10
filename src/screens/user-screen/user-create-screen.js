@@ -19,6 +19,9 @@ import {
 } from "../../components";
 import "./user-screen.css";
 import { UserValue } from "../../data/custom-table-columns";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+
 
 export const UserCreateScreen = () => {
   const [form] = Form.useForm();
@@ -30,6 +33,7 @@ export const UserCreateScreen = () => {
   const userLoading = useSelector(getUserCreateLoading);
   const messageError = createUserData?.message;
   const str = messageError?.toString()
+  const [valuePhone, setValuePhone] = useState()
 
   const onRemove = () => {
     dispatch(deleteUserCreateResponse());
@@ -39,7 +43,7 @@ export const UserCreateScreen = () => {
     const onFinshData = {
       firstName: values.firstName,
       lastName: values.lastName,
-      phoneNumber: values.phoneNumber,
+      phoneNumber:valuePhone,
       email: values.email,
       password: values.password,
       role: selected,
@@ -61,14 +65,14 @@ export const UserCreateScreen = () => {
     // dispatch(deleteUserCreateResponse());
   }, [createUserData?.success]);
 
-  
+
 
   return (
     <div
       className="nativeLanguageCreateScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
-        {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
+      {str != null ? <CustomErrorSection error={str} onTab={onRemove} /> : null}
 
       <p className="screensTitleStyle">Add User</p>
       <Form
@@ -82,6 +86,7 @@ export const UserCreateScreen = () => {
       >
         <div className="category_row_input_user">
           <CustomAntdInput
+            rules={true}
             name="firstName"
             placeholder=" First Name*"
             type="text"
@@ -89,6 +94,7 @@ export const UserCreateScreen = () => {
           />
           <div className="left">
             <CustomAntdInput
+              rules={true}
               name="lastName"
               placeholder="Last Name*"
               type="text"
@@ -97,15 +103,32 @@ export const UserCreateScreen = () => {
           </div>
         </div>
         <div className="category_row_input_user">
-          <CustomAntdInput
+        <Form.Item
+      name={"phone number"}
+      rules={[
+        {
+          required:true,
+        },
+      ]}
+    >
+        <PhoneInput
+        className="phoneNumber"
+      placeholder="Enter phone number"
+      value={valuePhone}
+      onChange={setValuePhone}/>
+      </Form.Item>
+          {/* <CustomAntdInput
+            rules={true}
             name="phoneNumber"
             placeholder="Phone*"
             className="dddd"
             type="text"
             min={3}
-          />
+          /> */}
           <div className="left">
             <CustomAntdInput
+              rules={true}
+
               name="email"
               placeholder="Email*"
               type="email"
@@ -115,19 +138,22 @@ export const UserCreateScreen = () => {
         </div>
         <div className="category_row_input_user">
           <CustomAntdInput
+            rules={true}
             name="password"
             placeholder="Password*"
             type="password"
             min={6}
           />
-           <div className="left">
-          <CustomAntdSelect
-            user={true}
-            optinData={UserValue}
-            setSelected={setSelected}
-            selected={selected}
-            defaultValue="Role"
-          />
+          <div className="left">
+            <CustomAntdSelect
+              name="role"
+              rules={true}
+              user={true}
+              optinData={UserValue}
+              setSelected={setSelected}
+              selected={selected}
+              defaultValue="Role"
+            />
           </div>
         </div>
         <Form.Item>

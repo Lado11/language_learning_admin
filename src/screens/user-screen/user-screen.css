@@ -18,7 +18,18 @@
   letter-spacing: -0.15399999916553497px;
   color: black;
 }
-
+.phoneNumber{
+  border: 1px solid #7D8FB326;
+  width: 206px;
+  height: 60px;
+  border-radius: 10px;
+}
+.PhoneInput {
+  padding-left: 15px;
+}
+.PhoneInputInput{
+  border: none;
+}
 .row{
   display: flex;
   flex-direction: row;

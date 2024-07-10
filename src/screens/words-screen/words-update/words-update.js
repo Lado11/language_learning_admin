@@ -49,7 +49,6 @@ export const WordsUpdate = () => {
     const deleteWordLoading = useSelector(wordsDeleteLoading);
     const updateWordsResponse = useSelector(wordsUpdateResponseData);
     const updateWordsLoading = useSelector(wordsUpdateLoading);
-    const array = [];
     const [selectedImage, setSelectedImage] = useState();
     const [previewImgUrl, setPreviewimgUrl] = useState("");
     const voiceResponse = useSelector(getvoiceGetIdResponse)
@@ -59,6 +58,11 @@ export const WordsUpdate = () => {
     const categoryImageResponse = useSelector(getfilesGetIdResponse);
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const [current, setCurrent] = useState(0)
+
+    //
+    //const dynamicArrayForTranslates = Array()
+    const [dynamicArrayForTranslates, setDynamicArrayForTranslates] = useState([]);
+
 
 
     const getLevelTypeLabel = (type) => {
@@ -107,35 +111,49 @@ export const WordsUpdate = () => {
     }
 
     const onFinish = (values) => {
-        console.log(values,"valuessssss");
-        const newWord = values.word != wordsIdData?.word ? values.word : undefined;
-        const newTranslate = values?.transcription !== wordsIdData?.transcription ? values?.transcription : undefined;
+        clearFormData(formData);
         formData.append("id", wordsIdData?._id)
-        newWord &&  formData.append("word", newWord)
-        newTranslate != undefined && formData.append("transcription", newTranslate)
-        selectedLevel && formData.append("level", selectedLevel)
-        learningLanguageWordSelectedValue && formData.append("language", learningLanguageWordSelectedValue?.value)
-        selectedCategory && formData.append("category", selectedCategory)
-        selectedImage && formData.append("image", selectedImage);
-        fileListVoice && formData.append("audio", fileListVoice)
-        
-        Object.keys(values).filter((date, index) => {
-            if (date.includes("translate")) {
-                array.push(values[date])
+
+        console.log(`learningLanguageWordSelectedValue { ${learningLanguageWordSelectedValue?.value} }`);
+        if (learningLanguageWordSelectedValue?.value !== undefined && learningLanguageWordSelectedValue?.value !== wordsIdData.language._id) {
+            formData.append("language", learningLanguageWordSelectedValue?.value)
+        }
+
+        if (values.word !== undefined && values.word !== "" && values.word !== wordsIdData.word) {
+            formData.append("word", values.word);
+        }
+
+        if (values.transcription !== undefined && values.transcription !== "" && values.transcription !== wordsIdData.transcription) {
+            formData.append("transcription", values.transcription);
+        }
+
+        if (selectedLevel !== undefined && selectedLevel !== wordsIdData.level) {
+            formData.append("level", selectedLevel);
+        }
+
+        if (selectedCategory !== undefined && selectedCategory !== wordsIdData.category._id) {
+            formData.append("category", selectedCategory);
+        }
+
+        if (selectedImage) {
+            formData.append("image", selectedImage);
+        } 
+
+        if (fileListVoice) {
+            formData.append("audio", fileListVoice);
+        }
+
+        dynamicArrayForTranslates.forEach((translatesObject, translateIndex) => {
+            const translateValue = values[translatesObject._id];
+            
+            if (translateValue !== undefined && translateValue !== "") {
+                formData.append(`translates[${translateIndex}].nativeLanguage`, translatesObject._id);
+                
+                const textArr = translateValue.split(',').map(item => item.trim());
+                textArr.forEach((translateText, textIndex) => {
+                    formData.append(`translates[${translateIndex}].text[${textIndex}]`, translateText);
+                });
             }
-        })
-
-         array?.map((values, ind) => {
-             formData.append(`translates[${ind}].text[${0}]`, values);
-        })
- 
-
-        !learningLanguageWordSelectedValue?.nativeLanguages && wordsIdData?.translates?.map((item, ind) => {
-            formData.append(`translates[${ind}].nativeLanguage`, item?.nativeLanguage?._id);
-        })
-
-        learningLanguageWordSelectedValue?.nativeLanguages.map((item, ind) => {
-             formData.append(`translates[${ind}].nativeLanguage`, item?._id);
         });
 
         dispatch(wordsUpdateThunk(formData))
@@ -150,13 +168,7 @@ export const WordsUpdate = () => {
     };
 
     useEffect(() => {
-        form.setFieldsValue({
-            language: wordsIdData?.language?.nameEng,
-            category: wordsIdData?.category?.name,
-            transcription: wordsIdData?.transcription,
-            level: getLevelTypeLabel(wordsIdData?.level),
-            word: wordsIdData?.word,
-        });
+        setStaticFieldsValues();
     }, [wordsIdData]);
     
 
@@ -205,6 +217,81 @@ export const WordsUpdate = () => {
     }, [categoryImageResponse]);
 
 
+    const setStaticFieldsValues = () => {
+        form.setFieldsValue({
+            language: wordsIdData?.language?.nameEng,
+            category: wordsIdData?.category?.name,
+            transcription: wordsIdData?.transcription,
+            level: getLevelTypeLabel(wordsIdData?.level),
+            word: wordsIdData?.word,
+        });
+        setDynamicArrayForTranslates(wordsIdData?.language?.nativeLanguages)
+    }
+
+    const createDynamicTranslateFields = () => {
+
+        if (dynamicArrayForTranslates?.length > 0) {
+            return <div>
+            <p className="wordsTitle">Translate</p>
+            {dynamicArrayForTranslates?.map((item, index) => {
+
+                let value = getTranslateValueById(item._id);
+
+                //get name key for CustomAntdInput
+                const name = `${item._id}`; 
+
+                //get translated language name
+                const translatedLanguageName = item.nameEng;
+
+                return (
+                    <div>
+                        <p className="wordsInputTitle">{translatedLanguageName}</p>
+                        <CustomAntdInput
+                            key={item?._id}
+                            rules={true}
+                            className="inputTranslate"
+                            placeholder="Words*"
+                            name={name}
+                            type={"text"}
+                            min={4}
+                            defaultValue = {value}
+                        />
+                    </div>
+                )
+            })}
+
+        </div>
+        } else  {
+            return <p>Some thing went wrong for dynamicArrayForTranslates</p>
+        }   
+    }
+
+    const getTranslateValueById = (nativeLanguageId) => {
+        if (!Array.isArray(wordsIdData.translates)) {
+            return "";
+        }
+    
+        for (const translateObject of wordsIdData.translates) {
+            if (translateObject.nativeLanguage._id === nativeLanguageId) {
+                if (Array.isArray(translateObject.text)) {
+                    return translateObject.text.join(', ');
+                } else {
+                    return translateObject.text;
+                }
+            }
+        }
+    
+        return "";
+    };
+
+    const clearFormData = (formData) => {
+        const keys = Array.from(formData.keys());
+
+        keys.forEach(key => {
+            formData.delete(key);
+        });
+    };
+
     const handleFileChange = async (
         event
     ) => {
@@ -252,8 +339,9 @@ export const WordsUpdate = () => {
     };
 
 
-    const onChange = (value) => {
-        setLearningLanguageWordSelectedValue(value)
+    const onChangeLanguageForWord = (value) => {
+        setLearningLanguageWordSelectedValue(value);
+        setDynamicArrayForTranslates(value.nativeLanguages);
     }
 
     const onChangeCategory = (value) => {
@@ -293,18 +381,7 @@ export const WordsUpdate = () => {
                             <div>
                                 <p className="updateTitle">Update</p>
                                 <div className="addWordsFirstSelect bigSelect">
-                                    <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChange} current={current} placeholder="English" loadOptions={handleLoadOptions} />
-
-                                    {/* <CustomAntdSelect
-                                        rules={true}
-                                        name="language"
-                                        // className="wordsSelectExel"
-                                        optinData={filteredResponse}
-                                        selected={learningLanguageWordSelectedValue}
-                                        setSelected={setLearningLanguageWordSelectedValue}
-                                        defaultValue={t("LEARNING_LANGUAGE")}
-                                        color={Colors.LIGHT_GRAY}
-                                    /> */}
+                                    <CustomAsyncPaginate defaultInputValue={wordsIdData?.language?.name} style={customStyles} onChange={onChangeLanguageForWord} current={current} placeholder="English" loadOptions={handleLoadOptions} />
                                 </div>
                                 <div className="updateWordsAddInputs">
                                     <div className="rowInputWords">
@@ -343,22 +420,7 @@ export const WordsUpdate = () => {
                                                 // Assuming `localData` is an array of local options
                                                 options={wordlevel}
                                             />
-                                            {/* <CustomAsyncPaginate 
-                                                defaultInputValue={getLevelTypeLabel(wordsIdData?.level)}
-                                                style={customStylesCategory}
-                                                onChange={onChangeLevel}
-                                                current={current} 
-                                                placeholder="Level"
-                                                loadOptions={handleLoadOptionsLevel} /> */}
-
-                                            {/* <CustomAntdSelect
-                                                rules={true}
-                                                name="level"
-                                                // width={172}
-                                                defaultValue="Level*"
-                                                optinData={wordlevel}
-                                                setSelected={setSelectedLevel}
-                                            /> */}
+                                           
                                         </div>
                                         <div className="categoryLeft">
                                             <p>Category</p>
@@ -369,15 +431,6 @@ export const WordsUpdate = () => {
                                                 current={current}
                                                 placeholder="Category*"
                                                 loadOptions={handleLoadOptionsCategory} />
-
-                                            {/* <CustomAntdSelect
-                                                rules={true}
-                                                name="category"
-                                                // width={172}
-                                                defaultValue="Category*"
-                                                optinData={filteredResponseCategory}
-                                                setSelected={setSelectedCategory}
-                                            /> */}
                                         </div>
                                     </div>
                                 </div>
@@ -452,49 +505,9 @@ export const WordsUpdate = () => {
                             </div>
 
                             <div className="lerning-language-section">
-                                {learningLanguageWordSelectedValue?.nativeLanguages?.length && <p className="wordsTitle">Translate</p>}
-                                <div>
-                                    {learningLanguageWordSelectedValue?.nativeLanguages?.length ?
-                                        learningLanguageWordSelectedValue?.nativeLanguages.map((item, index) => {
-                                            return (
-                                                <div>
-                                                    <p className="wordsInputTitle">{item?.nameEng}</p>
-                                                    <CustomAntdInput
-                                                        key={item?._id}
-                                                        rules={true}
-                                                        className="inputTranslate"
-                                                        placeholder="Words*"
-                                                        name={`translate${item._id}`}
-                                                        type={"text"}
-                                                        min={4}
-                                                    />
-                                                </div>
-                                            )
-                                        }) : null}
-                                </div>
-
-                                {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && <p className="wordsTitle">Translate</p>}
-
-                                {!learningLanguageWordSelectedValue?.nativeLanguages?.length && wordsIdData?.translates && wordsIdData?.translates?.map((item, index) => {
-                                    return (
-                                        <div>
-                                            <p className="wordsInputTitle">{item?.nativeLanguage?.nameEng}</p>
-                                            <CustomAntdInput
-                                                key={item}
-                                                // rules={true}
-                                                className="inputTranslate"
-                                                placeholder="Words*"
-                                                name={`translate${item._id}`}
-                                                type={"text"}
-                                                min={4}
-                                                defaultValue={item.text?.map((language) => {
-                                                    return `${language}`
-                                                })}
-                                            />
-                                        </div>
-                                    )
-                                })}
+                                {createDynamicTranslateFields()}
                             </div>
+                           
                         </div>
 
                         <CustomAntdButton title="Update"

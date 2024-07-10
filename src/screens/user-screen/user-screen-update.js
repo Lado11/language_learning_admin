@@ -99,7 +99,6 @@ export const UserScreenUpdate = () => {
          dispatch(userUpdateThunk(data))  
     };
 
-
     useEffect(() => {
         form.setFieldsValue({
             firstName: userList?.firstName,
@@ -111,7 +110,6 @@ export const UserScreenUpdate = () => {
         });
     }, [userList]);
 
-console.log(userList?.subscriptionExpiresDt,"log user");
     useEffect(() => {
         dispatch(userGetByIdThunk(userId));
     }, []);
@@ -130,7 +128,6 @@ console.log(userList?.subscriptionExpiresDt,"log user");
         dispatch(deleteUserUpdateResponse())
     }, [userUpdateResponse?.success,]);
 
-
     const onChangeBlockUser = (checked) => {
         setSelect3(checked)
       };
@@ -143,7 +140,6 @@ console.log(userList?.subscriptionExpiresDt,"log user");
           setSelect1(checked)
       };
 
-      
     const onChangeSub = (checked) => {
         setSelect4(checked)
       };
@@ -293,7 +289,7 @@ console.log(userList?.subscriptionExpiresDt,"log user");
                                 Subscription Date
                             </p>
                             <Space direction="vertical" size={12}>
-                           { userList?.subscriptionStartDt != null  ? <DatePicker onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p> }
+                           { userList?.subscriptionStartDt != null  ? <DatePicker disabled onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p> }
                             </Space>
                         </div>
                         <div>
@@ -302,7 +298,7 @@ console.log(userList?.subscriptionExpiresDt,"log user");
                             </p>
                             <Space direction="vertical" size={12}>
                            {  select4 === true ? 
-                           <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} /> : userList?.subscriptionExpiresDt != null  &&  userList?.subscriptionExpiresDt === true ? 
+                           <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} /> : userList?.subscriptionExpiresDt != null  ? 
                             <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} defaultValue={dayjs(userList?.subscriptionExpiresDt, dateFormat)} />  : <p>UnLimit</p>}
                             </Space>
                         </div>
