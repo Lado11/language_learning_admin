@@ -51,18 +51,44 @@ export const WordsUpdate = () => {
     const updateWordsLoading = useSelector(wordsUpdateLoading);
     const [selectedImage, setSelectedImage] = useState();
     const [previewImgUrl, setPreviewimgUrl] = useState("");
+
+    const imageFileResponse = useSelector(getfilesGetIdResponse);
     const voiceResponse = useSelector(getvoiceGetIdResponse)
     const voiceLoading = useSelector(getvoiceGetIdloading)
-    const [imageUrls, setImageUrls] = useState({});
-    const [voiceUrls, setVoiceUrls] = useState({});
-    const categoryImageResponse = useSelector(getfilesGetIdResponse);
+   
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const [current, setCurrent] = useState(0)
-
-    //
-    //const dynamicArrayForTranslates = Array()
     const [dynamicArrayForTranslates, setDynamicArrayForTranslates] = useState([]);
 
+
+    useEffect(() => {
+        dispatch(getIdWordsThunk(wordId));
+    }, [])
+
+    useEffect(() => {
+        setStaticFieldsValues();
+    }, [wordsIdData]);
+
+    useEffect(() => {
+        if (updateWordsResponse?.success === true || wordDeleteData?.success === true) {
+            navigate("/words")
+        }
+        dispatch(deleteWordUpdateResponse())
+        dispatch(deleteWordsDeleteResponse())
+
+    }, [updateWordsResponse?.success, wordDeleteData?.success])
+
+    useEffect(() => {
+        if (wordsIdData) {
+            dispatch(filesGetIdThunk(wordsIdData?.imageFile?._id));
+        }
+    }, [wordsIdData]);
+
+    useEffect(() => {
+        if (wordsIdData) {
+            dispatch(voiceGetIdThunk(wordsIdData?.audioFile?._id));
+        }
+    }, [wordsIdData])
 
 
     const getLevelTypeLabel = (type) => {
@@ -114,7 +140,6 @@ export const WordsUpdate = () => {
         clearFormData(formData);
         formData.append("id", wordsIdData?._id)
 
-        console.log(`learningLanguageWordSelectedValue { ${learningLanguageWordSelectedValue?.value} }`);
         if (learningLanguageWordSelectedValue?.value !== undefined && learningLanguageWordSelectedValue?.value !== wordsIdData.language._id) {
             formData.append("language", learningLanguageWordSelectedValue?.value)
         }
@@ -167,56 +192,6 @@ export const WordsUpdate = () => {
         dispatch(getWordsDeleteThunk(wordId));
     };
 
-    useEffect(() => {
-        setStaticFieldsValues();
-    }, [wordsIdData]);
-    
-
-    useEffect(() => {
-        dispatch(getIdWordsThunk(wordId));
-    }, [])
-
-    useEffect(() => {
-        if (updateWordsResponse?.success === true || wordDeleteData?.success === true) {
-            navigate("/words")
-        }
-        dispatch(deleteWordUpdateResponse())
-        dispatch(deleteWordsDeleteResponse())
-
-    }, [updateWordsResponse?.success, wordDeleteData?.success])
-
-    useEffect(() => {
-        // Preload image URLs
-        if (wordsIdData) {
-            fetchImage(wordsIdData?.imageFile?._id);
-        }
-    }, [wordsIdData]);
-
-    useEffect(() => {
-        dispatch(voiceGetIdThunk(wordsIdData?.audioFile?._id));
-    }, [wordsIdData])
-
-    const fetchImage = (imageFileId) => {
-        if (!imageUrls[imageFileId]) {
-            dispatch(filesGetIdThunk(imageFileId));
-        }
-    };
-
-    useEffect(() => {
-        // Update imageUrls state with fetched image URLs
-        if (categoryImageResponse) {
-            setImageUrls((prevUrls) => ({
-                ...prevUrls,
-                [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
-            }));
-            setVoiceUrls((voice) => ({
-                ...voice,
-                [categoryImageResponse.data?.fileId]: categoryImageResponse.data?.url,
-            }))
-        }
-    }, [categoryImageResponse]);
-
-
     const setStaticFieldsValues = () => {
         form.setFieldsValue({
             language: wordsIdData?.language?.nameEng,
@@ -229,42 +204,42 @@ export const WordsUpdate = () => {
     }
 
     const createDynamicTranslateFields = () => {
-
         if (dynamicArrayForTranslates?.length > 0) {
-            return <div>
-            <p className="wordsTitle">Translate</p>
-            {dynamicArrayForTranslates?.map((item, index) => {
-
+          return (
+            <div>
+              <p className="wordsTitle">Translate</p>
+              {dynamicArrayForTranslates?.map((item) => {
                 let value = getTranslateValueById(item._id);
-
+      
                 //get name key for CustomAntdInput
-                const name = `${item._id}`; 
-
+                const name = `${item._id}`;
+      
                 //get translated language name
                 const translatedLanguageName = item.nameEng;
-
+      
                 return (
-                    <div>
-                        <p className="wordsInputTitle">{translatedLanguageName}</p>
-                        <CustomAntdInput
-                            key={item?._id}
-                            rules={true}
-                            className="inputTranslate"
-                            placeholder="Words*"
-                            name={name}
-                            type={"text"}
-                            min={4}
-                            defaultValue = {value}
-                        />
-                    </div>
-                )
-            })}
-
-        </div>
-        } else  {
-            return <p>Some thing went wrong for dynamicArrayForTranslates</p>
-        }   
-    }
+                  <div key={item._id}>
+                    <p className="wordsInputTitle">{translatedLanguageName}</p>
+                    <CustomAntdInput
+                      rules={true}
+                      className="inputTranslate"
+                      placeholder="Words*"
+                      name={name}
+                      type={"text"}
+                      min={4}
+                      defaultValue={value}
+                      itemId={item._id} // Pass the _id as a different prop
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        } else {
+          return <p>Some thing went wrong for dynamicArrayForTranslates</p>;
+        }
+      };
+      
 
     const getTranslateValueById = (nativeLanguageId) => {
         if (!Array.isArray(wordsIdData.translates)) {
@@ -351,15 +326,9 @@ export const WordsUpdate = () => {
         setSelectedLevel(value?.value)
     }
 
-    const handleRemoveError = () => {
-        // dispatch(clearNativeCreateResponse());
-    };
-
 
     return (
         <div className="nativeLanguageCreateScreenMainDiv">
-            {/* {errorMessage && <CustomErrorSection error={errorMessage} onTab={handleRemoveError} />} */}
-
             {wordsIdLoad ? <div className="loadingDiv nativeLanguageScreenMainDiv">
                 <CustomSpin size={64} color="gray" />
             </div> : <div>
@@ -368,7 +337,6 @@ export const WordsUpdate = () => {
                     setIsModalOpen={setIsModalOpen}
                     onTab={onTab}
                 />
-                {/* {wordsIdLoad  && <div className="CustomSpinUpdate"> <CustomSpin size={120} color={Colors.GRAY_COLOR} /> </div> } */}
                 <Form
                     form={form}
                     onFinish={onFinish}
@@ -420,7 +388,6 @@ export const WordsUpdate = () => {
                                                 // Assuming `localData` is an array of local options
                                                 options={wordlevel}
                                             />
-                                           
                                         </div>
                                         <div className="categoryLeft">
                                             <p>Category</p>
@@ -494,7 +461,7 @@ export const WordsUpdate = () => {
                                                 setCategoryShow(null);
                                             }} />
                                     ) : wordsIdData?.imageFile && !previewImgUrl ? (
-                                        <ShowImage loading={wordsImageLoading} title={wordsIdData?.imageFile?.description} src={imageUrls[wordsIdData?.imageFile?._id]} onClick={() => {
+                                        <ShowImage loading={wordsImageLoading} title={wordsIdData?.imageFile?.description} src={imageFileResponse?.data?.url} onClick={() => {
                                             setPreviewimgUrl(".")
                                             setCategoryShow(null);
                                         }} />
@@ -507,7 +474,7 @@ export const WordsUpdate = () => {
                             <div className="lerning-language-section">
                                 {createDynamicTranslateFields()}
                             </div>
-                           
+
                         </div>
 
                         <CustomAntdButton title="Update"

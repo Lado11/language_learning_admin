@@ -78,7 +78,7 @@ export function Waveform({ url, loading }) {
       {loading ? (
         <CustomSpin size={37} color={Colors.GRAY_COLOR} />
       ) : url && (
-        <button className="buttonVoice" onClick={handlePlayPause}>
+        <button type="button" onClick={handlePlayPause} className="buttonVoice">
           {!playing ? (
             <img src={play} alt="Play" />
           ) : (
