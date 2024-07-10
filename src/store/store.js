@@ -45,6 +45,7 @@ import { voiceGetIdSlice } from "./slices/files/get-id-voice";
 import { filesGetSlice } from "./slices/files/get-files";
 import { filesIdGetSlice } from "./slices/files/get-files-id";
 import { filesDeleteSlice } from "./slices/files/delete-files";
+import { exportGetSlice } from "./slices/words/get-export";
 
 export const store = configureStore({
   reducer: {
@@ -91,6 +92,7 @@ export const store = configureStore({
     voiceGetIdSlice:voiceGetIdSlice.reducer,
     filesGetSlice:filesGetSlice.reducer,
     filesIdGetSlice:filesIdGetSlice.reducer,
-    filesDeleteSlice:filesDeleteSlice.reducer
+    filesDeleteSlice:filesDeleteSlice.reducer,
+    exportGetSlice:exportGetSlice.reducer
   },
 });

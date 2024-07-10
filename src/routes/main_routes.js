@@ -34,6 +34,7 @@ import { UplaodScreen } from "../screens/upload/upload-screen";
 import { UplaodProcessScreen } from "../screens/upload/upload-proccessing";
 import { FeadBackMoreScreen } from "../screens/feedback-screen/feadback-more-screen";
 import { FilesMore } from "../screens/files-screen/files-more";
+import { ExportScreen } from "../screens/export-screen/export-screen";
 
 export const MyRoutes = () => {
   const token = localStorage.getItem("token");
@@ -100,16 +101,14 @@ export const MyRoutes = () => {
                 <Route path="/files/more/:id" element={<FilesMore />} />
                 <Route path="/user/create" element={<UserCreateScreen />} />
                 <Route path="/user/:id" element={<UserScreenUpdate />} />
-               
-
                 <Route path="/upload/:id" element={<UplaodProcessScreen />} />
-
                 <Route path="/words" element={<WordsScreen />} />
                 <Route path="/upload" element={<UplaodScreen />} />
                 <Route path="/words/create" element={<WordsCreateScreen />} />
                 <Route path="/upload/create-words-from-excel" element={<AddWordExel />} />
                 <Route path="/upload/update-words-from-excel" element={<UpdateExelFromWord />} />
                 <Route path="/words/:id" element={<WordsUpdate />} />
+                <Route path="/export" element={<ExportScreen />} />
 
             </Route>
             <Route path="*" element={<Navigate to={"/"} />} />

@@ -16,3 +16,13 @@
 .titleButton {
   margin-left: 15px;
 }
+
+.buttonSectionRow{
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  justify-content: center;
+}
+.iconDirection{
+  margin-left: 11px;
+}

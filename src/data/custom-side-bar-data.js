@@ -10,6 +10,7 @@ import {
   notificationIcon,
   filesIcon,
   uploadIcon,
+  exportIcon,
 } from "./svgs-data";
 
 export const customSideBarData = [
@@ -47,6 +48,13 @@ export const customSideBarData = [
     title: "Upload",
     color: Colors.PURPLE,
     path: "/upload",
+  },
+  {
+    id: 11,
+    icon: exportIcon,
+    title: "Export",
+    color: Colors.ORANGE,
+    path: "/export",
   },
   {
     id: 6,

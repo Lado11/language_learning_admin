@@ -54,7 +54,6 @@ export const CreateWordsAdd = ({
     return {
       options: options,
       hasMore: hasMore,
-
       additional: {
         page: page + 1,
       },

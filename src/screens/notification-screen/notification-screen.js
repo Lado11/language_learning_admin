@@ -1,7 +1,7 @@
 import React from "react";
 import { Colors } from "../../assets/colors/colors";
 import "./notification-screen-style.css";
-import { Form } from "antd";
+import { Checkbox, Form } from "antd";
 import { NotificationScreenInput } from "./components/notification-screen-input";
 import { NotificationScreenTextArea } from "./components";
 import { CustomAntdButton } from "../../components";
@@ -17,6 +17,10 @@ export const NotificationScreen = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+};
+
   return (
     <div
       className="nativeLanguageScreenMainDiv"
@@ -27,7 +31,7 @@ export const NotificationScreen = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-          <p className="notificationScreenSendFieldsTitle">Send Notification</p>
+          <p className="notificationScreenSendFieldsTitle">Push Notification</p>
          <div className="nothSection">
          <SelectNotification data={deviceTpesData} defaultValue={"User Device"} />
           <div className="notificationMiddle">
@@ -39,6 +43,9 @@ export const NotificationScreen = () => {
             placeholder={"Message Here..."}
           />
          </div>
+         <div className="exportCheckBoxSection">
+                    <Checkbox onChange={onChange}>With User ID</Checkbox>
+                </div>
          <CustomAntdButton
             title="Send"
             background={Colors.PURPLE}
