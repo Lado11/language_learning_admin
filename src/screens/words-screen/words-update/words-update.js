@@ -359,7 +359,7 @@ export const WordsUpdate = () => {
                                                 placeholder="Words*"
                                                 name="word"
                                                 type={"text"}
-                                                min={4}
+                                                min={2}
                                                 rules={true}
                                             />
                                         </div>

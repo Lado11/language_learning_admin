@@ -66,29 +66,6 @@ export const LearningLanguageUpdate = () => {
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
   const learnignLanguageImageUpdate = useSelector(getfilesGetIdloading);
 
-  const onFinish = (values) => {
-    formData.append("nameEng", values.nameEng);
-    formData.append("name", values.name);
-    selectedImage && formData.append("image", selectedImage);
-    formData.append("id", learningData.id);
-    formData.append("active", learningData?.active);
-    lerningLangAllData.forEach((item, ind) => {
-      console.log(item,"item");
-      formData.append(`nativeLanguages[${ind}]`, item._id ?  item._id : item.value);
-    });
-    dispatch(learnLanguageUpdateThunk(formData));
-    form.resetFields();
-    setLearningLanguageFile("");
-  };
-
-  const onDeleteLang = () => {
-    dispatch(learnLanguageDeleteThunk(learningData?.id));
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
   useEffect(() => {
     dispatch(learnLanguageByIdThunk(learningId));
   }, [learningId]);
@@ -133,6 +110,52 @@ export const LearningLanguageUpdate = () => {
     }
   }, [categoryImageResponse]);
 
+  const onFinish = (values) => {
+    clearFormData(formData)
+    formData.append("id", learningData?._id)
+
+    if (values.nameEng !== undefined && values.nameEng !== "" && values.nameEng !== learningData.nameEng) {
+      formData.append("nameEng", values.nameEng);
+    }
+
+    if (values.name !== undefined && values.name !== "" && values.name !== learningData.name) {
+      formData.append("name", values.name);
+    }
+
+    if (values.active !== undefined && values.active !== "" && values.active !== learningData.active) {
+      formData.append("active", values.active);
+    }
+
+    if (selectedImage) {
+      formData.append("image", selectedImage);
+    }
+
+    lerningLangAllData.forEach((item, ind) => {
+      console.log(item,"item");
+      formData.append(`nativeLanguages[${ind}]`, item._id ?  item._id : item.value);
+    });
+
+    dispatch(learnLanguageUpdateThunk(formData));
+    form.resetFields();
+    setLearningLanguageFile("");
+  };
+
+  const onDeleteLang = () => {
+    dispatch(learnLanguageDeleteThunk(learningData?.id));
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const clearFormData = (formData) => {
+    const keys = Array.from(formData.keys());
+
+    keys.forEach(key => {
+        formData.delete(key);
+    });
+  };
+
   const handleFileChange = async (
     event
   ) => {
@@ -160,7 +183,6 @@ export const LearningLanguageUpdate = () => {
     };
   };
 
-
   return (
     <div
       className="nativeLanguageScreenMainDiv"
@@ -183,17 +205,22 @@ export const LearningLanguageUpdate = () => {
           <div className="createLearningLangRow">
             <div className="updateSection">
               <div className="update-language-right-section">
-                <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
 
+                <p className="nativeLanguageTitle">{t("UPDATE_LEARNING_LANGUAGE")}</p>
                 <p className="inputTitle">{t("LANGUAGE_ENGLISH_NAME")}</p>
                 <CustomAntdInput
                   rules={true}
+                  min={2}
                   name="nameEng"
                   placeholder=" Language English Name*"
                 />
-                <p className="inputTitle">{t("NATIVE_NAME")}</p>
 
-                <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
+                <p className="inputTitle">{t("NATIVE_NAME")}</p>
+                <CustomAntdInput 
+                  rules={true} 
+                  min={2}
+                  name="name" 
+                  placeholder="Native Name*" />
                 <p className="inputTitle">{t("LANGUAGE_ICON")}</p>
 
                 <Form.Item

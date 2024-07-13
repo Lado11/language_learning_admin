@@ -1,1 +1,1 @@
-export const listItemCountForShow = 6;
+export const listItemCountForShow = 19;
