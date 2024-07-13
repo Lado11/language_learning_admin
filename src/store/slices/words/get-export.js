@@ -6,14 +6,21 @@ const initialState = {
     exportGetResponse: null,
     exportGetError: null,
 };
-
 export const exportGetThunk = createAsyncThunk(
     "exportGet",
     async (data, { rejectWithValue }) => {
         try {
             const response = await getExportService(data);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'filename.xlsx'); // Здесь указываем имя файла, которое вы хотите предложить для скачивания
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
             return response.data;
         } catch (error) {
+            console.error("Error downloading file:", error);
             return rejectWithValue(error.message);
         }
     }

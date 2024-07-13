@@ -101,7 +101,7 @@ export const LearningLanguageScreen = () => {
                             count={lang?.nativeLanguages?.length}
                             loading={imageLoading}
                             icon={imageUrls[lang.imageFile]}
-                            title={lang.name}
+                            title={lang.nameEng}
                           />
                         </div>
                     );

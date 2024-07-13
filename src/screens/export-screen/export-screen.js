@@ -23,7 +23,7 @@ export const ExportScreen = () => {
     const [selectedLevel, setSelectedLevel] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
     const [checkBox, setCheckBox] = useState(false);
-
+console.log(exportResponse,"log");
     const onChangeCheckBox = (e) => {
         setCheckBox(e.target.checked);
     };
@@ -91,21 +91,21 @@ export const ExportScreen = () => {
                     <p className="exportSelectLabel">Language</p>
 
                     <div className="selectFormItemSection">
-                        <Form.Item
+                        {/* <Form.Item
                             name="Leaning Language"
                             rules={[
                                 {
-                                    required: true,
+                                    // required: true,
                                 },
                             ]}
-                        >
+                        > */}
                             <CustomAsyncPaginate
                                 style={customStylesExportSelect}
                                 onChange={onChangeLanguage}
                                 current={current}
                                 placeholder="English"
                                 loadOptions={handleLoadOptions} />
-                        </Form.Item>
+                        {/* </Form.Item> */}
                     </div>
                 </div>
 
@@ -113,21 +113,21 @@ export const ExportScreen = () => {
                     <p className="exportSelectLabel">Category</p>
 
                     <div className="selectFormItemSection">
-                        <Form.Item
+                        {/* <Form.Item
                             name="Category"
                             rules={[
                                 {
-                                    required: true,
+                                    // required: true,
                                 },
                             ]}
-                        >
+                        > */}
                             <CustomAsyncPaginate
                                 style={customStylesExportSelect}
                                 onChange={onChangeCategory}
                                 current={current}
                                 placeholder="Category*"
                                 loadOptions={handleLoadOptionsCategory} />
-                        </Form.Item>
+                        {/* </Form.Item> */}
                     </div>
                 </div>
 
@@ -135,7 +135,7 @@ export const ExportScreen = () => {
                     <p className="exportSelectLabel">Level</p>
 
                     <div className="selectFormItemSection">
-                        <Form.Item
+                        {/* <Form.Item
                             className="formItemSelect"
                             name="Level"
                             rules={[
@@ -143,7 +143,7 @@ export const ExportScreen = () => {
                                     required: true,
                                 },
                             ]}
-                        >
+                        > */}
                             <AsyncPaginate
                                 styles={customStylesExportSelect}
                                 placeholder={"Level"}
@@ -154,7 +154,7 @@ export const ExportScreen = () => {
                                 }}
                                 options={wordlevel}
                             />
-                        </Form.Item>
+                        {/* </Form.Item> */}
                     </div>
                 </div>
                 <div className="exportCheckBoxSection">
