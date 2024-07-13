@@ -118,8 +118,8 @@ export const LearningLanguageCreateScreen = () => {
                 {messageError && <CustomErrorSection error={messageError} onTab={onRemove} />}
                 <p className="nativeLanguageTitle">Add Learning Language</p>
                 <div className="createScreenRowInputs">
-                  <CustomAntdInput rules={true} name="name" placeholder="Language English Name*" />
-                  <CustomAntdInput rules={true} name="nameEng" placeholder=" Native Name*" />
+                  <CustomAntdInput rules={true} min={2} name="name" placeholder="Language English Name*" />
+                  <CustomAntdInput rules={true} min={2} name="nameEng" placeholder=" Native Name*" />
                 </div>
                 <Form.Item
                   name="learningLanguageImage"

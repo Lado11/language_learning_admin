@@ -43,6 +43,6 @@
   "LANGUAGE_ICON": "Language Icon",
   "LEVEL": "Level",
 
-  "INPUT_MIN_LENGTH_ERROR": "The input must be at least 3 characters long.",
+  "INPUT_MIN_LENGTH_ERROR": "The input must be at least 2 characters long.",
   "INVALID_USERNAME_OR_PASSWORD": "Invalid username/password"
 }
