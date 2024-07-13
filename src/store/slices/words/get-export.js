@@ -12,7 +12,7 @@ export const exportGetThunk = createAsyncThunk(
         try {
             const response = await getExportService(data);
             const contentDisposition = response.headers['content-disposition'] || response.headers['Content-Disposition'];
-            let filename = 'download.xlsx'; // Default filename
+            let filename = 'download.xlsx';
 
             if (contentDisposition) {
                 const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
@@ -29,7 +29,7 @@ export const exportGetThunk = createAsyncThunk(
             link.click();
             document.body.removeChild(link);
 
-            return { success: true }; // Return a serializable response
+            return { success: true };
         } catch (error) {
             console.error("Error downloading file:", error);
             return rejectWithValue(error.message);
