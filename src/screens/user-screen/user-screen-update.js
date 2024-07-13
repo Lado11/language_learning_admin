@@ -202,6 +202,7 @@ export const UserScreenUpdate = () => {
                                         placeholder="Last Name*"
                                         type="text"
                                         min={3}
+                                        
                                     />
                                 </div>
                             </div>
