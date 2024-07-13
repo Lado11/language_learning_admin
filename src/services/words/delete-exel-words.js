@@ -29,7 +29,7 @@ export const getWordsExelService = (data) => {
     }
   
     const url =  buildUrl(`api/admin/words/xlsx/words/export/`,params);
-      return api.get(url);
+      return api.get(url, { responseType: 'blob'});
     };
   
   

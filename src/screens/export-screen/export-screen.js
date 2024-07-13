@@ -23,7 +23,7 @@ export const ExportScreen = () => {
     const [selectedLevel, setSelectedLevel] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
     const [checkBox, setCheckBox] = useState(false);
-console.log(exportResponse,"log");
+    
     const onChangeCheckBox = (e) => {
         setCheckBox(e.target.checked);
     };

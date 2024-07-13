@@ -11,14 +11,25 @@ export const exportGetThunk = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         try {
             const response = await getExportService(data);
+            const contentDisposition = response.headers['content-disposition'] || response.headers['Content-Disposition'];
+            let filename = 'download.xlsx'; // Default filename
+
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                if (filenameMatch && filenameMatch[1]) {
+                    filename = filenameMatch[1].replace(/['"]/g, '').trim(); // Remove any quotes and trim whitespace
+                }
+            }
+
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'filename.xlsx'); // Здесь указываем имя файла, которое вы хотите предложить для скачивания
+            link.setAttribute('download', filename);
             document.body.appendChild(link);
             link.click();
-            link.remove();
-            return response.data;
+            document.body.removeChild(link);
+
+            return { success: true }; // Return a serializable response
         } catch (error) {
             console.error("Error downloading file:", error);
             return rejectWithValue(error.message);
