@@ -49,7 +49,7 @@ export const CategoryUpdate = () => {
   const formData = new FormData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryShow, setCategoryShow] = useState();
-  const nativeLanguageData = useSelector(getCategoryGetIdResponse)?.data;
+  const categoryData = useSelector(getCategoryGetIdResponse)?.data;
   const catgeoryUpdateLoading = useSelector(getCategoryDeleteLoading);
   const categoryUpdateLoading = useSelector(getCategoryUpdateLoading);
   const categoryDeleteResponse = useSelector(getCategoryDeleteData);
@@ -61,33 +61,17 @@ export const CategoryUpdate = () => {
   const categoryImageResponse = useSelector(getfilesGetIdResponse);
   const categoryImageLoading = useSelector(getfilesGetIdloading)
 
-
-  const onFinish = (values) => {
-    if (values.image.file != "") {
-      formData.append("localization", values.localization);
-      formData.append("name", values.name);
-      selectedImage && formData.append("image", selectedImage);
-      formData.append("id", nativeLanguageData.id);
-      formData.append("active", nativeLanguageData?.active);
-      dispatch(categoryUpdateThunk(formData));
-      form.resetFields();
-      setCategoryShow("");
-    } else {
-      console.log(values, "values");
-    }
-  };
-
   useEffect(() => {
     dispatch(categoryGetIdThunk(categoryId));
   }, []);
 
   useEffect(() => {
     form.setFieldsValue({
-      localization: nativeLanguageData?.localization,
-      name: nativeLanguageData?.name,
-      image: nativeLanguageData?.imageFile?.path,
+      localization: categoryData?.localization,
+      name: categoryData?.name,
+      image: categoryData?.imageFile?.path,
     });
-  }, [nativeLanguageData]);
+  }, [categoryData]);
 
   useEffect(() => {
     if (categoryUpdateResponse?.success === true || categoryDeleteResponse?.success === true) {
@@ -97,24 +81,12 @@ export const CategoryUpdate = () => {
     }
   }, [categoryUpdateResponse?.success, categoryDeleteResponse?.success]);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const onTab = () => {
-    dispatch(categoryDeleteThunk(categoryId))
-  }
-
-  const onRemove = () => {
-    dispatch(deleteCategoryDeleteResponse());
-  }
-
   useEffect(() => {
     // Preload image URLs
-    if (nativeLanguageData) {
-      fetchImage(nativeLanguageData.imageFile?._id);
+    if (categoryData) {
+      fetchImage(categoryData.imageFile?._id);
     }
-  }, [nativeLanguageData]);
+  }, [categoryData]);
 
   const fetchImage = (imageFileId) => {
     if (!imageUrls[imageFileId]) {
@@ -131,6 +103,52 @@ export const CategoryUpdate = () => {
       }));
     }
   }, [categoryImageResponse]);
+
+  const onFinish = (values) => {
+
+    clearFormData(formData)
+    formData.append("id", categoryData?._id)
+
+    if (values.localization !== undefined && values.localization !== "" && values.localization !== categoryData.localization) {
+      formData.append("localization", values.localization);
+    }
+
+    if (values.name !== undefined && values.name !== "" && values.name !== categoryData.name) {
+      formData.append("name", values.name);
+    }
+
+    if (values.active !== undefined && values.active !== "" && values.active !== categoryData.active) {
+      formData.append("active", values.active);
+    }
+
+    if (selectedImage) {
+      formData.append("image", selectedImage);
+    }
+
+    dispatch(categoryUpdateThunk(formData));
+    setCategoryShow("");
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const onTab = () => {
+    dispatch(categoryDeleteThunk(categoryId))
+  }
+
+  const onRemove = () => {
+    dispatch(deleteCategoryDeleteResponse());
+  }
+
+
+  const clearFormData = (formData) => {
+    const keys = Array.from(formData.keys());
+
+    keys.forEach(key => {
+        formData.delete(key);
+    });
+  };
   
   const handleFileChange = async (
     event
@@ -168,11 +186,11 @@ export const CategoryUpdate = () => {
             <div className="category_row_input_user">
               <div className="update_category_input">
                 <p className="categoryInputTitle">Category Name</p>
-                <CustomAntdInput name="localization" placeholder="Category Name*" min={3} />
+                <CustomAntdInput name="name" placeholder="Category Name*" min={2} />
               </div>
               <div className="update_category_input left">
                 <p className="categoryInputTitle">localication string*</p>
-                <CustomAntdInput min={3} name="name" placeholder="localication string*" />
+                <CustomAntdInput min={2} name="localization" placeholder="localication string*" />
               </div>
             </div>
             <p className="categoryInputTitle">Category Icon</p>
@@ -187,8 +205,8 @@ export const CategoryUpdate = () => {
                     setPreviewimgUrl(".")
                     setCategoryShow(null);
                   }} />
-              ) : nativeLanguageData?.imageFile && !previewImgUrl ? (
-                <ShowImage title={nativeLanguageData?.imageFile?.description} loading={categoryImageLoading} src={imageUrls[nativeLanguageData?.imageFile?._id]} onClick={() => {
+              ) : categoryData?.imageFile && !previewImgUrl ? (
+                <ShowImage title={categoryData?.imageFile?.description} loading={categoryImageLoading} src={imageUrls[categoryData?.imageFile?._id]} onClick={() => {
                   setPreviewimgUrl(".")
                   setCategoryShow(null);
                 }} />

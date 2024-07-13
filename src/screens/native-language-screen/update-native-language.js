@@ -53,49 +53,6 @@ export const UpdateNativeLanguage = () => {
   const messageError = nativeDeleteResponse?.message;
   const messageErrorUpdate = nativeUpdateResponse?.message;
 
-  const onFinish = (values) => {
-    if (values.image.file != "") {
-      formData.append("nameEng", values.nameEng);
-      formData.append("name", values.name);
-      selectedImage && formData.append("image", selectedImage);
-      formData.append("id", nativeLanguageData.id);
-      formData.append("active", nativeLanguageData?.active);
-      dispatch(nativeLanguageUpdateThunk(formData));
-      form.resetFields();
-    } else {
-      console.log(values, "values");
-    }
-  };
-
-  const handleFileChange = async (
-    event
-  ) => {
-    const file = event.target.files;
-    setSelectedImage(file?.[0]);
-    if (!file) {
-      return;
-    }
-    try {
-      const imgUrl = await fileToDataString(file?.[0]);
-      setPreviewimgUrl(imgUrl);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const onTab = () => {
-    dispatch(nativeLanguageDeleteThunk(nativeLanguageData?.id));
-  };
-
-  const fetchImage = (imageFileId) => {
-    if (!imageUrls[imageFileId]) {
-      dispatch(filesGetIdThunk(imageFileId));
-    }
-  };
 
   useEffect(() => {
     dispatch(nativeLanguageGetIdThunk(nativeId));
@@ -143,6 +100,82 @@ export const UpdateNativeLanguage = () => {
     }
   }, [categoryImageResponse]);
 
+  const onFinish = (values) => {
+
+    clearFormData(formData)
+    formData.append("id", nativeLanguageData?._id)
+
+    if (values.nameEng !== undefined && values.nameEng !== "" && values.nameEng !== nativeLanguageData.nameEng) {
+      formData.append("nameEng", values.nameEng);
+    }
+
+    if (values.name !== undefined && values.name !== "" && values.name !== nativeLanguageData.name) {
+      formData.append("name", values.name);
+    }
+
+    if (values.active !== undefined && values.active !== "" && values.active !== nativeLanguageData.active) {
+      formData.append("active", values.active);
+    }
+
+    if (selectedImage) {
+      formData.append("image", selectedImage);
+    }
+
+    dispatch(nativeLanguageUpdateThunk(formData));
+
+
+    // if (values.image.file != "") {
+    //   formData.append("nameEng", values.nameEng);
+    //   formData.append("name", values.name);
+    //   selectedImage && formData.append("image", selectedImage);
+    //   formData.append("id", nativeLanguageData.id);
+    //   formData.append("active", nativeLanguageData?.active);
+    //   form.resetFields();
+    // } else {
+    //   console.log(values, "values");
+    // }
+  };
+
+  const clearFormData = (formData) => {
+    const keys = Array.from(formData.keys());
+
+    keys.forEach(key => {
+        formData.delete(key);
+    });
+  };
+
+  const handleFileChange = async (
+    event
+  ) => {
+    const file = event.target.files;
+    setSelectedImage(file?.[0]);
+    if (!file) {
+      return;
+    }
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewimgUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const onTab = () => {
+    dispatch(nativeLanguageDeleteThunk(nativeLanguageData?.id));
+  };
+
+  const fetchImage = (imageFileId) => {
+    if (!imageUrls[imageFileId]) {
+      dispatch(filesGetIdThunk(imageFileId));
+    }
+  };
+
+
+
 
   return (
     <div className="nativeLanguageCreateScreenMainDiv">
@@ -162,9 +195,9 @@ export const UpdateNativeLanguage = () => {
           className="formAntd"
         >
           <p className="customInputTitle">Language english name</p>
-          <CustomAntdInput rules={true} name="nameEng" placeholder=" Language English Name*" />
+          <CustomAntdInput rules={true} min={2} name="nameEng" placeholder=" Language English Name*" />
           <p className="customInputTitle">Native Name</p>
-          <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
+          <CustomAntdInput rules={true} min={2} name="name" placeholder="Native Name*" />
           <p className="customInputTitle">Language Icon</p>
           <Form.Item
             name="image"

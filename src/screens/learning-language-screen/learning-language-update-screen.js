@@ -136,7 +136,6 @@ export const LearningLanguageUpdate = () => {
     });
 
     dispatch(learnLanguageUpdateThunk(formData));
-    form.resetFields();
     setLearningLanguageFile("");
   };
 
