@@ -210,7 +210,6 @@ export const UserScreen = () => {
       role: filtterRole,
       search:searchValue 
     };
-    console.log(filterData, "filter Data");
     dispatch(userGetAllThunk(filterData));
   }, [dispatch, filtterSubscribe, filtterPhone, filtterEmail, filtterRole, searchValue]);
 

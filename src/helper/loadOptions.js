@@ -19,13 +19,13 @@ export async function loadOptions(_search, loadedOptions, { page ,name,categoryN
             }
         );
 
-        const options = response.data.data.list.map((item) => ({
+        const options = response.data.data.list.map((item) =>               
+            ({
             value: item._id,
-            label: item.name,
-            nameEng: item.nameEng,
+            label: item.nameEng ? item.nameEng : item?.name,
+            name: item.name,
             image: item?.imageFile,
-            nativeLanguages:item?.nativeLanguages
-
+            nativeLanguages:item?.nativeLanguages,
         }));
 
         return {

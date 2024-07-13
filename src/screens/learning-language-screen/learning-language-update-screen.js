@@ -52,7 +52,6 @@ export const LearningLanguageUpdate = () => {
   const deleteLerningLoading = useSelector(learnLanguageDeleteLoading);
   const updateLearningLoading = useSelector(getUpdatedLearnLanguageLoading);
   const learningData = learningLanguageData?.data;
-  console.log(learningData,"log data 8");
   const lerningLangAllData = useSelector(getUpdatedLanguages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();

@@ -86,7 +86,7 @@ export const CategoryScreen = () => {
                   {categoryData?.data?.list?.map((countryItem, index) => (
                     <div className="pointer" key={index + 1} onClick={() => categoryUpdate(countryItem._id)}>
                       <ImageItem
-                        loading={categoryImageLoading} icon={imageUrls[countryItem.imageFile]} title={countryItem.nameEng}
+                        loading={categoryImageLoading} icon={imageUrls[countryItem.imageFile]} title={countryItem.name}
                       />
                     </div>
                   ))}

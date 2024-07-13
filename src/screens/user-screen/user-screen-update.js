@@ -18,10 +18,10 @@ export const UserScreenUpdate = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [select1, setSelect1] = useState();
-    const [select2, setSelect2] = useState();
-    const [select3, setSelect3] = useState();
-    const [select4, setSelect4] = useState();
+    const [phoneState, setphoneState] = useState();
+    const [emailState, setemailState] = useState();
+    const [userDeleteState, setuserDeleteState] = useState();
+    const [subscribeState, setsubscribeState] = useState();
     const [calendar, setCalendar] = useState();
     dayjs.extend(customParseFormat);
     const dateFormat = 'YYYY/MM/DD';
@@ -35,7 +35,13 @@ export const UserScreenUpdate = () => {
     const userDeleteLoading = useSelector(getUserDeleteLoading);
     const userDeleteResponse = useSelector(getUserDeleteData);
     const userLoadingId = useSelector(getUserGetByIdLoading);
-    const userList = userIdData?.data
+    const userList = userIdData?.data;
+    let newEmail = "";
+    let newPhone = "";
+    let phone = false;
+    let email = false;
+    let subscribe = false;
+    let deleteUser = false;
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -47,57 +53,103 @@ export const UserScreenUpdate = () => {
         dispatch(userDeleteThunk(userList?.id,));
     };
 
-    
-  const getUserRoleType = (status) => {
-    switch (status) {
-      case UserRole.ADMIN:
-        return "Admin";
-      case UserRole.OPERATOR:
-        return "Operator";
-      case UserRole.USER:
-      default:
-        return "User";
-    }
-  };
 
-  const getUserRoleTypeLabel = (status) => {
-    switch (status) {
-      case UserRole.ADMIN:
-        return 0;
-      case UserRole.OPERATOR:
-        return 1;
-      case UserRole.USER:
-      default:
-        return 2;
-    }
-  };
-  
+    const getUserRoleType = (status) => {
+        switch (status) {
+            case UserRole.ADMIN:
+                return "Admin";
+            case UserRole.OPERATOR:
+                return "Operator";
+            case UserRole.USER:
+            default:
+                return "User";
+        }
+    };
+
+    const getUserRoleTypeLabel = (status) => {
+        switch (status) {
+            case UserRole.ADMIN:
+                return 0;
+            case UserRole.OPERATOR:
+                return 1;
+            case UserRole.USER:
+            default:
+                return 2;
+        }
+    };
+
 
     const onFinish = (values) => {
-        const newEmail = values.email !== userList.email ? values.email : undefined;
-        const newPhone = values.phoneNumber !== userList.phoneNumber ? values.phoneNumber : undefined;
-        const phone = userList.phoneNumberVerified === true && select1 === true ? true : userList.phoneNumberVerified === false && select1 === true  ? true :userList.phoneNumberVerified === true && select1 === undefined ? true  :  false
-        const email = userList.emailVerified === true && select2 === true ? true : userList.emailVerified === false && select2 === true  ? true :  userList.emailVerified === true && select2 === undefined ? true  :  false
-        const subscribe = userList.isSubscribed === true && select4 === true ? true : userList.isSubscribed === false && select4 === true  ? true :  userList.isSubscribed === true && select4 === undefined ? true :  false
-        const deleteUser =userList.deleted === true && select3 === true ? true : userList.deleted === false && select3 === true  ? true :   userList.deleted === true && select3 === undefined ? true : false
+        if (values.email !== userList.email) {
+            newEmail = values.email;
+        } else {
+            newEmail = undefined;
+        }
+
+        if (values.phoneNumber !== userList.phoneNumber) {
+            newPhone = values.phoneNumber;
+        } else {
+            newPhone = undefined;
+        }
+
+        if (userList.phoneNumberVerified === true && phoneState === true) {
+            phone = true;
+        } else if(userList.phoneNumberVerified === false && phoneState === true ){
+            phone = true;
+        }else if(userList.phoneNumberVerified === true && phoneState === undefined){
+            phone = true;
+        }else{
+            phone = false;
+        }
+
+        if (userList.emailVerified === true && emailState === true ) {
+            email = true;
+        } else if(userList.emailVerified === false && emailState === true ){
+            email = true;
+        }else if(userList.emailVerified === true && emailState === undefined){
+            email = true;
+        }else{
+            email = false;
+        }
+        
+        if (userList.isSubscribed === true && subscribeState === true) {
+            subscribe = true;
+        } else if( userList.isSubscribed === false && subscribeState === true){
+            subscribe = true;
+        }else if(userList.isSubscribed === true && subscribeState === undefined){
+            subscribe = true;
+        }else{
+            subscribe = false;
+        }
+        
+        if (userList.deleted === true && userDeleteState === true) {
+            deleteUser = true;
+        } else if( userList.deleted === false && userDeleteState === true){
+            deleteUser = true;
+        }else if(userList.deleted === true && userDeleteState === undefined){
+            deleteUser = true;
+        }else{
+            deleteUser = false;
+        }
 
         const data = {
-            email: newEmail, 
-            phoneNumber:newPhone,
-            firstName:values?.firstName,
-            lastName:values?.lastName,
-            password:values?.password,
-            role:getUserRoleTypeLabel(values?.role),
+            email: newEmail,
+            phoneNumber: newPhone,
+            firstName: values?.firstName,
+            lastName: values?.lastName,
+            password: values?.password,
+            role: getUserRoleTypeLabel(values?.role),
             id: userList?.id,
             phoneNumberVerified: phone,
-            emailVerified:email,
+            emailVerified: email,
             deleted: deleteUser,
             isSubscribed: subscribe,
             subscriptionExpiresDt: calendar,
         }
 
-         dispatch(userUpdateThunk(data))  
+        dispatch(userUpdateThunk(data))
     };
+    
 
     useEffect(() => {
         form.setFieldsValue({
@@ -106,7 +158,7 @@ export const UserScreenUpdate = () => {
             password: userList?.password,
             phoneNumber: userList?.phoneNumber,
             lastName: userList?.lastName,
-            role:getUserRoleType(userList?.role) ,
+            role: getUserRoleType(userList?.role),
         });
     }, [userList]);
 
@@ -129,20 +181,20 @@ export const UserScreenUpdate = () => {
     }, [userUpdateResponse?.success,]);
 
     const onChangeBlockUser = (checked) => {
-        setSelect3(checked)
-      };
-      
+        setuserDeleteState(checked)
+    };
+
     const onChangeEmail = (checked) => {
-        setSelect2(checked)
-      };
+        setemailState(checked)
+    };
 
     const onChangePhone = (checked) => {
-          setSelect1(checked)
-      };
+        setphoneState(checked)
+    };
 
     const onChangeSub = (checked) => {
-        setSelect4(checked)
-      };
+        setsubscribeState(checked)
+    };
 
 
     return (
@@ -202,7 +254,7 @@ export const UserScreenUpdate = () => {
                                         placeholder="Last Name*"
                                         type="text"
                                         min={3}
-                                        
+
                                     />
                                 </div>
                             </div>
@@ -219,7 +271,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch onChange={onChangePhone}  backSelected={userList?.phoneNumberVerified} check={select1} setCheck={setSelect1} color={Colors.GREEN} />
+                                <CsutomSwitch onChange={onChangePhone} backSelected={userList?.phoneNumberVerified} check={phoneState} setCheck={setphoneState} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div className="category_row_input_user">
@@ -234,7 +286,7 @@ export const UserScreenUpdate = () => {
                             </div>
                             <div className="left switchDiv">
                                 <p className="switchTitle"> Verified</p>
-                                <CsutomSwitch onChange={onChangeEmail} backSelected={userList?.emailVerified}  check={select2} setCheck={setSelect2} color={Colors.GREEN} />
+                                <CsutomSwitch onChange={onChangeEmail} backSelected={userList?.emailVerified} check={emailState} setCheck={setemailState} color={Colors.GREEN} />
                             </div>
                         </div>
                         <div>
@@ -256,7 +308,7 @@ export const UserScreenUpdate = () => {
                             <p className="deleteTitle">
                                 Block User
                             </p>
-                            <CsutomSwitch  onChange={onChangeBlockUser} backSelected={userList?.deleted} check={select3} setCheck={setSelect3} color={Colors.RED} />
+                            <CsutomSwitch onChange={onChangeBlockUser} backSelected={userList?.deleted} check={userDeleteState} setCheck={setuserDeleteState} color={Colors.RED} />
                         </div>
                         <Form.Item>
                             {contextHolder}
@@ -283,24 +335,24 @@ export const UserScreenUpdate = () => {
                             <p className="switchTitle">
                                 Subscribed
                             </p>
-                            <CsutomSwitch  onChange={onChangeSub} check={select4} backSelected={userList?.isSubscribed} setCheck={setSelect4} color={Colors.PURPLE} />
+                            <CsutomSwitch onChange={onChangeSub} check={subscribeState} backSelected={userList?.isSubscribed} setCheck={setsubscribeState} color={Colors.PURPLE} />
                         </div>
                         <div>
                             <p className="subscriptionTitle">
                                 Subscription Date
                             </p>
                             <Space direction="vertical" size={12}>
-                           { userList?.subscriptionStartDt != null  ? <DatePicker disabled onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p> }
+                                {userList?.subscriptionStartDt != null ? <DatePicker disabled onChange={onChange} className="dataPicker" defaultValue={dayjs(userList?.subscriptionStartDt, dateFormat)} format={dateFormat} /> : <p>UnLimit</p>}
                             </Space>
                         </div>
                         <div>
                             <p className="subscriptionTitle">
-                            Subscription  Expiry Date
+                                Subscription  Expiry Date
                             </p>
                             <Space direction="vertical" size={12}>
-                           {  select4 === true ? 
-                           <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} /> : userList?.subscriptionExpiresDt != null  ? 
-                            <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} defaultValue={dayjs(userList?.subscriptionExpiresDt, dateFormat)} />  : <p>UnLimit</p>}
+                                {subscribeState === true ?
+                                    <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} /> : userList?.subscriptionExpiresDt != null ?
+                                        <DatePicker onChange={onChange} className="dataPicker" format={dateFormat} defaultValue={dayjs(userList?.subscriptionExpiresDt, dateFormat)} /> : <p>UnLimit</p>}
                             </Space>
                         </div>
                     </div>

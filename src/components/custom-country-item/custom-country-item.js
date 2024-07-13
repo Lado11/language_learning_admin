@@ -16,7 +16,7 @@ export const ImageItem = ({ icon, title, loading, count }) => {
             className="customCountryItemTitle"
             style={{ color: Colors.LIGHT_GRAY }}
           >
-            {title.length < 15 ? title : title.slice(0, 10)}
+            {title?.length < 15 ? title : title?.slice(0, 10)}
           </p>
           {count && <div className="langaugeCount">
           <p className="languageItem">language count:</p>
