@@ -1,9 +1,56 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap");
-.nothSection{
+
+.nothSection {
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 10px 0;
 }
+
+textarea:where(.css-dev-only-do-not-override-mzwlov).ant-input {
+  border: 1px solid #7D8FB326 !important;
+}
+
+.nothSection .ant-select-selector {
+  border: 1px solid #7D8FB326 !important;
+  border-radius: 10px !important;
+}
+
+.notificationSection {
+  margin-top: 50px;
+}
+.notificationTabs{
+  display: flex;
+  justify-content: center;
+}
+
+.inputBottom{
+margin-bottom: 20px;
+
+}
+.userSubsriptionSection{
+  margin-bottom: 10px;
+}
+.ant-tabs-tab {
+  width: 205px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center;
+  text-align: center;
+  margin-right: 15px !important;
+  background: #29CC3959 !important;
+  border-radius: 10px !important;
+}
+
+.ant-tabs-tab-active {
+  background-color: #29CC39 !important;
+
+}
+
+.ant-tabs-tab-btn {
+  color: white !important;
+}
+
 .notificationScreenSendFieldsDiv {
   display: flex;
   flex-direction: column;
@@ -14,19 +61,22 @@
   box-shadow: 1px 19px 20px 10px #f8f8f8;
   border-radius: 20px;
 }
-.notificationScreenSendFieldsDiv .ant-form-item{
-margin-bottom: 8px !important;
+
+.notificationScreenSendFieldsDiv .ant-form-item {
+  margin-bottom: 8px !important;
 }
 
-.notificationScreenSendFieldsDiv .ant-select-{
+.notificationScreenSendFieldsDiv .ant-select- {
   height: 60px !important;
 }
+
 .notificationScreenSendFieldsTitle {
   font-family: Inter;
   font-size: 28px;
   font-weight: 600;
   line-height: 28px;
 }
-.notificationMiddle{
+
+.notificationMiddle {
   margin: 18px 0;
 }

@@ -47,7 +47,21 @@
   height: 250px;
   /* border: 1px solid red; */
 }
+.wordsInputSearch{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.filterSecond{
+  margin-right: 15px;
+}
 
+.wordsFilterSection{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .ant-radio-group{
   width: 100%;
 }

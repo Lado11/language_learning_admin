@@ -89,7 +89,7 @@ export const SelectLearningLang = ({ dataLanguages, onDelete, rules, name, loadO
                 className="selectLanguageValuesDivItem"
                 style={{ backgroundColor: Colors.BACKGROUND_COLOR }}
               >
-                <p className="title">{lang?.label ? lang?.label : lang?.name}</p>
+                <p className="title">{lang?.label ? lang?.label : lang?.nameEng}</p>
                 {selectedImageLoading ? <CustomSpin size={37} color={Colors.GRAY_COLOR} /> : <img src={imageUrls[lang?.imageFile ? lang?.imageFile : lang?.image]} alt="imgae" className="selectedImage" />}
                 <div
                   className="deleteIcon"

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./words-screen-style.css";
 import { Colors } from "../../assets/colors";
-import { CustomNoData, CustomPagination, CustomSearchInput, CustomSpin } from "../../components";
+import { CustomAsyncPaginate, CustomNoData, CustomPagination, CustomSearchInput, CustomSpin } from "../../components";
 import { useTranslation } from "react-i18next";
 import { WordsScreenAddFields } from "./components";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,16 +19,19 @@ import {
   wordsLoadingData,
   wordsResponseData,
 } from "../../store/slices";
-import { Form, Popover, Radio } from 'antd';
+import { Form } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { getIdWordsThunk } from "../../store/slices/words/getId-words";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
-import filterIcon from "../../assets/images/filterIcon.png"
 import { listItemCountForShow, } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import { WordsLevelData, tableHeaderData } from "./words-data";
+import {  tableHeaderData } from "./words-data";
 import { WordsLevel, WordsStatus } from "./words-typing";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { loadOptions } from "../../helper/loadOptions";
+import { categoryUrl, learningLanguageUrl, nativeGetUrl } from "../learning-language-screen/learning-langauge-constant";
+import { AsyncPaginate } from "react-select-async-paginate";
+import { customStylesCategory } from "../../global-styles/loadOptionsStyles";
+import { wordlevel } from "../../data";
 
 
 // Custom hook to manage three pieces of state dynamically
@@ -115,6 +118,7 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
 
 
 const WordsFilterPopover = ({
+  current,
   nativeLoading,
   categoryData,
   valueLevel,
@@ -136,11 +140,9 @@ const WordsFilterPopover = ({
   setSearchValue
 }) => {
   const { t } = useTranslation();
-  const { learningState, nativeState, categoryState, onChangeState } = useDynamicState('', '', '',);
 
   const dispatch = useDispatch();
   const [skip, setPage] = useState(1);
-  const languageLoading = useSelector(getLearnLanguagesLoading)
 
   const fetchData = () => {
     const data = {
@@ -172,117 +174,193 @@ const WordsFilterPopover = ({
     fetchDataNative()
   }, [skip]); // Вызывать fetchData при изменении page
 
-  const handleNext = () => {
-    setPage(skip + 1); // Увеличиваем номер страницы для следующей загрузки данных
+ 
+
+  const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
+      additional: {
+        page: page + 1,
+      },
+    };
   };
 
+  const handleLoadOptionsCategory = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, categoryUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+
+  const handleLoadOptionsNative = async (inputValue, loadedOptions, { page }) => {
+    const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, nativeGetUrl);
+    return {
+      options: options,
+      hasMore: hasMore,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+  const handleLoadOptionsLevel = async (inputValue, loadedOptions) => {
+    const { wordlevel } = await loadOptions(inputValue, loadedOptions,);
+    return {
+      options: wordlevel,
+    };
+  };
+
+
   return (
-    <Popover
-      placement="bottomLeft"
-      content={<div className="filterSection">
-        <div className="radioRowSection">
+    <div >
+          <div className="wordsFilterSection">
+          <div className="filterSecond">
 
-          <div className="radioItem">
-            <p className="popeverTitle">Learning Language</p>
-            <div className="filterSearch">
-              <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
-            </div>
-            <div className="radioListItem" id="scrollableDiv">
-              <InfiniteScroll
-                scrollableTarget="scrollableDiv"
-                dataLength={learningLanguagesData?.length || 0}
-                next={handleNext}
-                hasMore={languageLoading}
-                loader={languageLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
-              >
-                <Radio.Group key={1} onChange={onChangeLerningLanguage} value={lerningLanguage}>
-                  <div className="statusGroupWords">
-                    {learningLanguagesData?.map((option) => {
-                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
-                    })}
-                  </div>
-                </Radio.Group>
-              </InfiniteScroll>
-            </div>
+<CustomAsyncPaginate style={customStylesCategory}
+          onChange={onChangeNativeLanguage} 
+          current={current}
+           placeholder="Native Language*" loadOptions={handleLoadOptionsNative} />
+           </div>
+<div className="filterSecond">
+<CustomAsyncPaginate style={customStylesCategory}
+          onChange={onChangeLerningLanguage} 
+          current={current}
+           placeholder="Learning Language*" loadOptions={handleLoadOptions} />
+</div>
+<div className="filterSecond">
+<CustomAsyncPaginate style={customStylesCategory}
+          onChange={onChangeCategory} 
+          current={current}
+           placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
+</div>
+
+  <AsyncPaginate
+        styles={customStylesCategory}
+        placeholder={"Level"}
+        onChange={onChangeLevel}
+        loadOptions={handleLoadOptionsLevel}
+        additional={{
+          page: current, // Initial page
+        }}
+        options={wordlevel}
+      />
           </div>
+            <div className="buttonSection">
+            <button onClick={onClearFilter} className="button">Clear</button>
+            <button onClick={onApplyFilter} className="buttonApply">Apply</button>
+         </div>
+    </div>
+    // <Popover
+    //   placement="bottomLeft"
+    //   content={<div className="filterSection">
+    //     <div className="radioRowSection">
 
-          <div className="radioItem">
-            <p className="popeverTitle">Neative Language</p>
-            <div className="filterSearch"   >
-              <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(2, e.target.value)} />
-            </div>
-            <div className="radioListItem" id="scrollableDivNative">
+    //       <div className="radioItem">
+    //         <p className="popeverTitle">Learning Language</p>
+    //         <div className="filterSearch">
+    //           <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(1, e.target.value)} />
+    //         </div>
+    //         <div className="radioListItem" id="scrollableDiv">
+    //           <InfiniteScroll
+    //             scrollableTarget="scrollableDiv"
+    //             dataLength={learningLanguagesData?.length || 0}
+    //             next={handleNext}
+    //             hasMore={languageLoading}
+    //             loader={languageLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
+    //           >
+    //             <Radio.Group key={1} onChange={onChangeLerningLanguage} value={lerningLanguage}>
+    //               <div className="statusGroupWords">
+    //                 {learningLanguagesData?.map((option) => {
+    //                   return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+    //                 })}
+    //               </div>
+    //             </Radio.Group>
+    //           </InfiniteScroll>
+    //         </div>
+    //       </div>
 
-              <InfiniteScroll
-                scrollableTarget="scrollableDivNative"
-                dataLength={nativeLanguageData?.length || 0}
-                next={handleNext}
-                hasMore={nativeLoading}
-                loader={nativeLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
-              >
+    //       <div className="radioItem">
+    //         <p className="popeverTitle">Neative Language</p>
+    //         <div className="filterSearch"   >
+    //           <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(2, e.target.value)} />
+    //         </div>
+    //         <div className="radioListItem" id="scrollableDivNative">
 
-                <Radio.Group key={2} onChange={onChangeNativeLanguage} value={nativeLanguage} >
-                  <div className="statusGroupWords">
-                    {nativeLanguageData?.map((option) => {
-                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
-                    })}
-                  </div>
-                </Radio.Group>
-              </InfiniteScroll>
-            </div>
-          </div>
+    //           <InfiniteScroll
+    //             scrollableTarget="scrollableDivNative"
+    //             dataLength={nativeLanguageData?.length || 0}
+    //             next={handleNext}
+    //             hasMore={nativeLoading}
+    //             loader={nativeLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
+    //           >
+
+    //             <Radio.Group key={2} onChange={onChangeNativeLanguage} value={nativeLanguage} >
+    //               <div className="statusGroupWords">
+    //                 {nativeLanguageData?.map((option) => {
+    //                   return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.name?.length > 10 ? (option?.name)?.slice(0, 10) + "..." : option?.name}</p></Radio>
+    //                 })}
+    //               </div>
+    //             </Radio.Group>
+    //           </InfiniteScroll>
+    //         </div>
+    //       </div>
 
 
 
-          <div className="radioItem">
-            <p className="popeverTitle">Category</p>
-            <div className="filterSearch">
-              <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(3, e.target.value)} />
-            </div>
-            <div className="radioListItem" id="scrollableDivCategory">
-              <InfiniteScroll
-                scrollableTarget="scrollableDivCategory"
-                dataLength={categoryData?.length || 0}
-                next={handleNext}
-                hasMore={categoryLoading}
-                loader={categoryLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
-              >
-                <Radio.Group key={3} onChange={onChangeCategory} value={valueCategory}>
-                  <div className="statusGroupWords">
-                    {categoryData?.map((option) => {
-                      return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
-                    })}
-                  </div>
-                </Radio.Group>
-              </InfiniteScroll>
+    //       <div className="radioItem">
+    //         <p className="popeverTitle">Category</p>
+    //         <div className="filterSearch">
+    //           <CustomSearchInput plaseholder="Search" searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={(e) => onChangeState(3, e.target.value)} />
+    //         </div>
+    //         <div className="radioListItem" id="scrollableDivCategory">
+    //           <InfiniteScroll
+    //             scrollableTarget="scrollableDivCategory"
+    //             dataLength={categoryData?.length || 0}
+    //             next={handleNext}
+    //             hasMore={categoryLoading}
+    //             loader={categoryLoading ? <div><CustomSpin size={14} color={Colors.GRAY_COLOR} /></div> : null}
+    //           >
+    //             <Radio.Group key={3} onChange={onChangeCategory} value={valueCategory}>
+    //               <div className="statusGroupWords">
+    //                 {categoryData?.map((option) => {
+    //                   return <Radio className="radio" key={option?._id} value={option?._id}><p className="optiontitle">{option?.localization?.length > 10 ? (option?.localization)?.slice(0, 10) + "..." : option?.localization}</p></Radio>
+    //                 })}
+    //               </div>
+    //             </Radio.Group>
+    //           </InfiniteScroll>
 
-            </div>
-          </div>
-        </div>
+    //         </div>
+    //       </div>
+    //     </div>
 
-        <hr className="poepverHr" />
-        <p className="popeverTitle">Level</p>
+    //     <hr className="poepverHr" />
+    //     <p className="popeverTitle">Level</p>
 
-        <Radio.Group key={4} onChange={onChangeLevel} value={valueLevel}>
-          <div className="statusGroup">
-            {WordsLevelData?.map((option) => {
-              return <Radio className="radio" key={option?.key} value={option?.key}><p className="optiontitle">{option.title}</p></Radio>
-            })}
-          </div>
-        </Radio.Group>
+    //     <Radio.Group key={4} onChange={onChangeLevel} value={valueLevel}>
+    //       <div className="statusGroup">
+    //         {WordsLevelData?.map((option) => {
+    //           return <Radio className="radio" key={option?.key} value={option?.key}><p className="optiontitle">{option.title}</p></Radio>
+    //         })}
+    //       </div>
+    //     </Radio.Group>
 
-        <div className="buttonSection">
-          <button onClick={onClearFilter} className="button">Clear</button>
-          <button onClick={onApplyFilter} className="buttonApply">Apply</button>
-        </div>
+    //     <div className="buttonSection">
+    //       <button onClick={onClearFilter} className="button">Clear</button>
+    //       <button onClick={onApplyFilter} className="buttonApply">Apply</button>
+    //     </div>
 
-      </div>}
-      trigger="click"
-      open={isPopoverOpen}
-      onOpenChange={handlePopoverOpenChange}
-    >
-      <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
-    </Popover>
+    //   </div>}
+    //   trigger="click"
+    //   open={isPopoverOpen}
+    //   onOpenChange={handlePopoverOpenChange}
+    // >
+    //   <img src={filterIcon} className="popeverOpenImg" alt="Filter Icon" />
+    // </Popover>
   );
 };
 const WordsListItem = ({ count, words, onClick, key }) => {
@@ -342,6 +420,7 @@ export const WordsScreen = () => {
   const categoryData = useSelector(getCategoryGetData)?.data?.list
   const categoryLoading = useSelector(getCategoryGetLoading)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [current, setCurrent] = useState(0)
 
 
   const onChangeSearch = (e) => {
@@ -361,26 +440,26 @@ export const WordsScreen = () => {
 
   const [nativeLanguage, setNativeLanguage] = useState();
   const onChangeNativeLanguage = (e) => {
-    setNativeLanguage(e.target.value);
+    setNativeLanguage(e.value);
   };
 
   const [lerningLanguage, setLerningLanguage] = useState();
   const onChangeLerningLanguage = (e) => {
-    setLerningLanguage(e.target.value);
+    setLerningLanguage(e.value);
   };
 
   const [valueCategory, setValueCategor] = useState();
   const onChangeCategory = (e) => {
-    setValueCategor(e.target.value);
+    setValueCategor(e.value);
   };
 
   const [valueLevel, setValueLevel] = useState();
   const [filterLevel, setFilterLevel] = useState(undefined);
 
   const onChangeLevel = (e) => {
-    setValueLevel(e.target.value);
-    if (e.target.value !== WordsLevel.All) {
-      setFilterLevel(e.target.value)
+    setValueLevel(e.value);
+    if (e.value !== WordsLevel.All) {
+      setFilterLevel(e.value)
     } else {
       setFilterLevel(undefined)
     }
@@ -456,9 +535,18 @@ export const WordsScreen = () => {
         form={form}>
       <div>
         <WordsScreenAddFields />
+        <div className="wordsInputSearch">
         <p className="wordsScreenTitle">{t("WORDS")}</p>
+        <Form.Item
+            name="search"
+          >
+           <CustomSearchInput plaseholder="Search ID, name, device ID, email, phone number"
+            searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
+          </Form.Item>
+        </div>
         <div className="filterDiv">
           <WordsFilterPopover
+            current={current}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             onChangeSearch={onChangeSearch}
@@ -480,12 +568,7 @@ export const WordsScreen = () => {
             isPopoverOpen={isPopoverOpen}
             handlePopoverOpenChange={handlePopoverOpenChange}
           />
-            <Form.Item
-            name="search"
-          >
-           <CustomSearchInput plaseholder="Search ID, name, device ID, email, phone number"
-            searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
-          </Form.Item>
+          
          
         </div>
 

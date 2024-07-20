@@ -130,7 +130,6 @@ export const LearningLanguageUpdate = () => {
     }
 
     lerningLangAllData.forEach((item, ind) => {
-      console.log(item,"item");
       formData.append(`nativeLanguages[${ind}]`, item._id ?  item._id : item.value);
     });
 
