@@ -6,7 +6,7 @@ import { ImageUpload } from "../../screens/category-screen/category-screen-creat
 import { fileToDataString } from "../../helper/file-build";
 
 
-export const CustomUpload = ({ setCategoryShow, setPreviewimgUrl, previewImgUrl, setSelectedImage, selectedImage }) => {
+export const CustomUpload = ({ setCategoryShow, setPreviewimgUrl, previewImgUrl, setSelectedImage, selectedImage , required = true}) => {
 
   const handleFileChange = async (
     event
@@ -27,7 +27,7 @@ export const CustomUpload = ({ setCategoryShow, setPreviewimgUrl, previewImgUrl,
     <div className="custom-upload">
       <Form.Item
         name={"words image"}
-        rules={[{ required: true }]}
+        rules={[{ required: required }]}
       >
         {previewImgUrl?.length ?
           <div className="imgae_upload_design">

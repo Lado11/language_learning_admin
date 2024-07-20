@@ -215,7 +215,15 @@ export const CreateWordsAdd = ({
       <CustomUpload previewImgUrl={previewImgUrl}
         setPreviewimgUrl={setPreviewimgUrl}
         categoryShow={categoryShow}
-        setCategoryShow={setCategoryShow} selectedImage={selectedImage} setSelectedImage={setSelectedImage} setIamge={setIamge} image={image} setFileList={setFileList} fileList={fileList} />
+        setCategoryShow={setCategoryShow}
+        selectedImage={selectedImage} 
+        setSelectedImage={setSelectedImage} 
+        setIamge={setIamge}
+        image={image} 
+        setFileList={setFileList} 
+        fileList={fileList}
+        required={false}
+       />
     </div>
   );
 

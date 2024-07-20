@@ -92,8 +92,8 @@ export const NativeLanguageCreate = () => {
         onFinish={handleFinish}
       >
         <div className="nativeInput">
-          <CustomAntdInput rules={true} name="nameEng" placeholder="Language English Name*" />
-          <CustomAntdInput rules={true} name="name" placeholder="Native Name*" />
+          <CustomAntdInput rules={true} min={2} name="nameEng" placeholder="Language English Name*" />
+          <CustomAntdInput rules={true} min={2} name="name" placeholder="Native Name*" />
         </div>
         <Form.Item name="image" rules={[{ required: true }]}>
           {previewImgUrl ? (
