@@ -9,7 +9,6 @@ import {
   categoryGetThunk,
   getCategoryGetData,
   getCategoryGetLoading,
-  getLearnLanguagesLoading,
   getNativeGetResponse,
   getNativeGetloading,
   getWordsThunk,
@@ -25,7 +24,7 @@ import { getIdWordsThunk } from "../../store/slices/words/getId-words";
 import { TableHeader } from "../../components/custom-table/components/table-header/table-header";
 import { listItemCountForShow, } from "../../constants/constants";
 import { ConstPagiantion } from "../../constants/const-pagination";
-import {  tableHeaderData } from "./words-data";
+import { tableHeaderData } from "./words-data";
 import { WordsLevel, WordsStatus } from "./words-typing";
 import { loadOptions } from "../../helper/loadOptions";
 import { categoryUrl, learningLanguageUrl, nativeGetUrl } from "../learning-language-screen/learning-langauge-constant";
@@ -119,25 +118,16 @@ const useDynamicState = (initialValue1, initialValue2, initialValue3, getDataCal
 
 const WordsFilterPopover = ({
   current,
-  nativeLoading,
-  categoryData,
-  valueLevel,
-  categoryLoading,
-  nativeLanguageData,
-  learningLanguagesData,
   onChangeLevel,
-  nativeLanguage,
-  lerningLanguage,
   onChangeCategory,
   onChangeLerningLanguage,
   onChangeNativeLanguage,
-  valueCategory,
   onClearFilter,
+  valueLevel,
+  lerningLanguage,
+  valueCategory,
   onApplyFilter,
-  isPopoverOpen,
-  handlePopoverOpenChange,
-  searchValue,
-  setSearchValue
+  nativeLanguage,
 }) => {
   const { t } = useTranslation();
 
@@ -174,7 +164,7 @@ const WordsFilterPopover = ({
     fetchDataNative()
   }, [skip]); // Вызывать fetchData при изменении page
 
- 
+
 
   const handleLoadOptions = async (inputValue, loadedOptions, { page }) => {
     const { options, hasMore } = await loadOptions(inputValue, loadedOptions, { page }, learningLanguageUrl);
@@ -215,45 +205,54 @@ const WordsFilterPopover = ({
     };
   };
 
-
   return (
     <div >
-          <div className="wordsFilterSection">
-          <div className="filterSecond">
+      <div className="wordsFilterSection">
+        <div className="filterSecond">
 
-<CustomAsyncPaginate style={customStylesCategory}
-          onChange={onChangeNativeLanguage} 
-          current={current}
-           placeholder="Native Language*" loadOptions={handleLoadOptionsNative} />
-           </div>
-<div className="filterSecond">
-<CustomAsyncPaginate style={customStylesCategory}
-          onChange={onChangeLerningLanguage} 
-          current={current}
-           placeholder="Learning Language*" loadOptions={handleLoadOptions} />
-</div>
-<div className="filterSecond">
-<CustomAsyncPaginate style={customStylesCategory}
-          onChange={onChangeCategory} 
-          current={current}
-           placeholder="Category*" loadOptions={handleLoadOptionsCategory} />
-</div>
+          <CustomAsyncPaginate
+            style={customStylesCategory}
+            onChange={onChangeNativeLanguage}
+            current={current}
+            value={nativeLanguage}
+            placeholder="Native Language*"
+            loadOptions={handleLoadOptionsNative} />
+        </div>
+        <div className="filterSecond">
+          <CustomAsyncPaginate
+            style={customStylesCategory}
+            onChange={onChangeLerningLanguage}
+            current={current}
+            value={lerningLanguage}
+            placeholder="Learning Language*"
+             loadOptions={handleLoadOptions} />
+        </div>
+        <div className="filterSecond">
+          <CustomAsyncPaginate 
+            style={customStylesCategory}
+            onChange={onChangeCategory}
+            current={current}
+            value={valueCategory}
+            placeholder="Category*"
+            loadOptions={handleLoadOptionsCategory} />
+        </div>
 
-  <AsyncPaginate
-        styles={customStylesCategory}
-        placeholder={"Level"}
-        onChange={onChangeLevel}
-        loadOptions={handleLoadOptionsLevel}
-        additional={{
-          page: current, // Initial page
-        }}
-        options={wordlevel}
-      />
-          </div>
-            <div className="buttonSection">
-            <button onClick={onClearFilter} className="button">Clear</button>
-            <button onClick={onApplyFilter} className="buttonApply">Apply</button>
-         </div>
+        <AsyncPaginate
+          styles={customStylesCategory}
+          placeholder={"Level"}
+          onChange={onChangeLevel}
+          loadOptions={handleLoadOptionsLevel}
+          additional={{
+            page: current, // Initial page
+          }}
+          options={wordlevel}
+          value={valueLevel}
+        />
+      </div>
+      <div className="buttonSection">
+        <button onClick={onClearFilter} className="button">Clear</button>
+        <button onClick={onApplyFilter} className="buttonApply">Apply</button>
+      </div>
     </div>
     // <Popover
     //   placement="bottomLeft"
@@ -423,13 +422,32 @@ export const WordsScreen = () => {
   const [current, setCurrent] = useState(0)
 
 
+
   const onChangeSearch = (e) => {
-    if (e.target.value !== " ") {
+    if (e.target.value !== "" ) {
       setSearchValue(e.target.value);
-      fetchFilteredData()
+      const filterData = {
+        skip: 0,
+        limit: listItemCountForShow,
+        language: lerningLanguage?.value,
+        level: filterLevel,
+        category: valueCategory?.value,
+        translateLanguage: nativeLanguage?.value,
+        search: e.target.value
+      };
+      dispatch(getWordsThunk(filterData));
     } else {
       setSearchValue(undefined);
-      fetchFilteredData()
+      const filterData = {
+        skip: 0,
+        limit: listItemCountForShow,
+        language: lerningLanguage?.value,
+        level: filterLevel,
+        category: valueCategory?.value,
+        translateLanguage: nativeLanguage?.value,
+        search: undefined
+      };
+      dispatch(getWordsThunk(filterData));
     }
   }
 
@@ -438,28 +456,29 @@ export const WordsScreen = () => {
     fetchFilteredData(skip);
   };
 
-  const [nativeLanguage, setNativeLanguage] = useState();
+  const [nativeLanguage, setNativeLanguage] = useState(null);
   const onChangeNativeLanguage = (e) => {
-    setNativeLanguage(e.value);
+    setNativeLanguage(e);
   };
 
-  const [lerningLanguage, setLerningLanguage] = useState();
+  const [lerningLanguage, setLerningLanguage] = useState(null);
   const onChangeLerningLanguage = (e) => {
-    setLerningLanguage(e.value);
+    setLerningLanguage(e);
   };
 
-  const [valueCategory, setValueCategor] = useState();
+  const [valueCategory, setValueCategor] = useState(null);
   const onChangeCategory = (e) => {
-    setValueCategor(e.value);
+    setValueCategor(e);
   };
 
-  const [valueLevel, setValueLevel] = useState();
+  const [valueLevel, setValueLevel] = useState(null);
   const [filterLevel, setFilterLevel] = useState(undefined);
 
   const onChangeLevel = (e) => {
-    setValueLevel(e.value);
-    if (e.value !== WordsLevel.All) {
-      setFilterLevel(e.value)
+   
+    setValueLevel(e);
+    if (e?.value !== WordsLevel.All) {
+      setFilterLevel(e?.value)
     } else {
       setFilterLevel(undefined)
     }
@@ -480,10 +499,10 @@ export const WordsScreen = () => {
     const filterData = {
       skip: skip,
       limit: listItemCountForShow,
-      language: lerningLanguage,
+      language: lerningLanguage?.value,
       level: filterLevel,
-      category: valueCategory,
-      translateLanguage: nativeLanguage,
+      category: valueCategory?.value,
+      translateLanguage: nativeLanguage?.value,
       search: searchValue
     };
     dispatch(getWordsThunk(filterData));
@@ -494,15 +513,16 @@ export const WordsScreen = () => {
   };
 
   const handleClearFilter = () => {
-    setLerningLanguage()
-    setValueCategor()
-    setValueLevel()
-    setFilterLevel()
-    setNativeLanguage()
+    // window.location.reload();
+    onChangeLevel(null)
+    setLerningLanguage(null)
+    setValueCategor(null)
+    setValueLevel(null)
+    setFilterLevel(undefined)
+    setNativeLanguage(null)
     setSearchValue(undefined)
     fetchData()
     form.resetFields()
-
   };
 
   const handlePopoverCloseChange = (newOpen) => {
@@ -531,70 +551,71 @@ export const WordsScreen = () => {
       className="screensMainDiv nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
-       <Form  autoComplete="off"
+      <Form autoComplete="off"
         form={form}>
-      <div>
-        <WordsScreenAddFields />
-        <div className="wordsInputSearch">
-        <p className="wordsScreenTitle">{t("WORDS")}</p>
-        <Form.Item
-            name="search"
-          >
-           <CustomSearchInput plaseholder="Search ID, name, device ID, email, phone number"
-            searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
-          </Form.Item>
-        </div>
-        <div className="filterDiv">
-          <WordsFilterPopover
-            current={current}
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-            onChangeSearch={onChangeSearch}
-            valueLevel={valueLevel}
-            nativeLoading={nativeLoading}
-            categoryData={categoryData}
-            categoryLoading={categoryLoading}
-            nativeLanguageData={nativeLanguageData}
-            learningLanguagesData={learningLanguagesData}
-            nativeLanguage={nativeLanguage}
-            lerningLanguage={lerningLanguage}
-            onChangeLerningLanguage={onChangeLerningLanguage}
-            onChangeNativeLanguage={onChangeNativeLanguage}
-            onChangeCategory={onChangeCategory}
-            onChangeLevel={onChangeLevel}
-            valueCategory={valueCategory}
-            onClearFilter={handleClearFilter}
-            onApplyFilter={handleApplyFilter}
-            isPopoverOpen={isPopoverOpen}
-            handlePopoverOpenChange={handlePopoverOpenChange}
-          />
-          
-         
-        </div>
+        <div>
+          <WordsScreenAddFields />
+          <div className="wordsInputSearch">
+            <p className="wordsScreenTitle">{t("WORDS")}</p>
+            <Form.Item
+              name="search"
+            >
+              <CustomSearchInput plaseholder="Search ID, name, device ID, email, phone number"
+                searchValue={searchValue} setSearchValue={setSearchValue} onChangeSearch={onChangeSearch} />
+            </Form.Item>
+          </div>
+          <div className="filterDiv">
+            <WordsFilterPopover
+              current={current}
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              setValueLevel={setValueLevel}
+              // onChangeSearch={onChangeSearch}
+              valueLevel={valueLevel}
+              nativeLoading={nativeLoading}
+              categoryData={categoryData}
+              categoryLoading={categoryLoading}
+              nativeLanguageData={nativeLanguageData}
+              learningLanguagesData={learningLanguagesData}
+              nativeLanguage={nativeLanguage}
+              lerningLanguage={lerningLanguage}
+              onChangeLerningLanguage={onChangeLerningLanguage}
+              onChangeNativeLanguage={onChangeNativeLanguage}
+              onChangeCategory={onChangeCategory}
+              onChangeLevel={onChangeLevel}
+              valueCategory={valueCategory}
+              onClearFilter={handleClearFilter}
+              onApplyFilter={handleApplyFilter}
+              isPopoverOpen={isPopoverOpen}
+              handlePopoverOpenChange={handlePopoverOpenChange}
+            />
 
-        <div className="wordsScreenTable">
-          <div className="container">
-            <ul className="responsive-table">
-              <TableHeader data={tableHeaderData} />
-              {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
-                <CustomSpin size={64} color="gray" />
-              </div> :
-                <>
-                  {!wordsResponse?.data?.list?.length && !wordsLoading ?
-                    <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
-                      return (
-                        <WordsListItem count={words?.translates?.length} words={words} onClick={() => updateWords(words?._id)} key={index} />
-                      )
-                    }
-                    )}
-                </>}
-            </ul>
-            {!wordsResponse?.data?.list?.length && !wordsLoading ? null : <div className="nativeScreenPaginationDiv">
-              <CustomPagination length={wordsResponse?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
-            </div>}
+
+          </div>
+
+          <div className="wordsScreenTable">
+            <div className="container">
+              <ul className="responsive-table">
+                <TableHeader data={tableHeaderData} />
+                {wordsLoading ? <div className="loadingDiv nativeLanguageScreenMainDiv">
+                  <CustomSpin size={64} color="gray" />
+                </div> :
+                  <>
+                    {!wordsResponse?.data?.list?.length && !wordsLoading ?
+                      <CustomNoData /> : wordsResponse?.data?.list?.map((words, index) => {
+                        return (
+                          <WordsListItem count={words?.translates?.length} words={words} onClick={() => updateWords(words?._id)} key={index} />
+                        )
+                      }
+                      )}
+                  </>}
+              </ul>
+              {!wordsResponse?.data?.list?.length && !wordsLoading ? null : <div className="nativeScreenPaginationDiv">
+                <CustomPagination length={wordsResponse?.data?.total} pageLength={listItemCountForShow} onChange={onChangePagination} />
+              </div>}
+            </div>
           </div>
         </div>
-      </div>
       </Form>
     </div>
   );

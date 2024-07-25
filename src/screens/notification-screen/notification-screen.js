@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { sendEmailNotification } from "../../store/slices/notification/send_email_notification";
 import { sendPushNotification } from "../../store/slices/notification/send_push_notification";
 import { UserSubscription } from "./notification-typing";
+import { useForm } from "antd/es/form/Form";
 
 export const NotificationScreen = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export const NotificationScreen = () => {
   const [deviceTypes, setDeviceTypes] = useState()
   const [userSub, setUserSub] = useState()
   const [templete, setTemplete] = useState()
-
+  const [form] = Form.useForm();
   const onChangeTemplete = (e) => {
     setTemplete(e.target.value)
   }
@@ -33,18 +34,23 @@ export const NotificationScreen = () => {
   }
 
   const onFinish = (values) => {
-    console.log(values, "valuse");
+    
     let pushNotificvationData = {
       title: values.title,
       body: values.body,
       userId: values.userId,
-      template:templete
+      // template: templete
     }
 
-    if (userSub !== "" && userSub !== undefined && userSub != UserSubscription.All && values.userId === "") {
+    if (userSub !== UserSubscription.All && !values.userId) {
       pushNotificvationData.isSubscribed = userSub;
-    } else if (deviceTypes !== "" && deviceTypes !== undefined && values.userId === "") {
+    }
+    if (deviceTypes && !values.userId) {
       pushNotificvationData.osType = deviceTypes;
+    }
+
+    if(tabs != 1){
+      pushNotificvationData.templete = templete;
     }
 
     if (tabs === tabsType.TABSFIRST) {
@@ -62,12 +68,13 @@ export const NotificationScreen = () => {
     setTabs(key)
     setDeviceTypes("")
     setChecked(false)
-    setUserSub("")
+    setUserSub()
     setTemplete("")
+    form.resetFields()
   };
 
   const array = [{ label: "Push", id: 1 }, { label: "Email", id: 2 }];
-
+console.log(userSub,"userrr");
   return (
     <div
       className="nativeLanguageScreenMainDiv"
@@ -85,6 +92,7 @@ export const NotificationScreen = () => {
                 label: item.label,
                 key: item.id,
                 children: <Form
+                  form={form}
                   onFinish={onFinish}
                   autoComplete="off"
                 >
@@ -98,12 +106,12 @@ export const NotificationScreen = () => {
                         <div className="inputBottom">
                           <SelectNotification value={deviceTypes} onChange={onChangeDevice} data={deviceTpesData} defaultValue={"Device type"} />  </div> : null}
 
-<div className="userSubsriptionSection">
-<SelectNotification onChange={onChangeUserSub} value={userSub} data={userSubsriptionData} defaultValue={"User Subscription"} />
-  
-  </div>                    </> : null}
+                      <div className="userSubsriptionSection">
+                        <SelectNotification onChange={onChangeUserSub} value={userSub} data={userSubsriptionData} defaultValue={"User Subscription"} />
 
-                 
+                      </div>                    </> : null}
+
+
                   </div>
                   <div className="exportCheckBoxSection">
                     <Checkbox setChecked={checked} onChange={onChangeCheckBox}>With User ID</Checkbox>
