@@ -17,5 +17,5 @@
 }
 
 .notificationScreenTextArea:hover {
-  border: none !important;
+  border:1px solid #7D8FB326  !important;
 }

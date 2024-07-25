@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "../../assets/colors/colors";
 import "./notification-screen-style.css";
-import { Checkbox, Form, Tabs } from "antd";
+import { Checkbox, Form, Tabs, message } from "antd";
 import { NotificationScreenInput } from "./components/notification-screen-input";
 import { NotificationScreenTextArea } from "./components";
-import { CustomAntdButton } from "../../components";
+import { CustomAntdButton, CustomErrorSection, Success } from "../../components";
 import { SelectNotification } from "./components/select-notification";
 import { userSubsriptionData, deviceTpesData, templeteTpesData, tabsType } from "./notification-data";
-import { useDispatch } from "react-redux";
-import { sendEmailNotification } from "../../store/slices/notification/send_email_notification";
-import { sendPushNotification } from "../../store/slices/notification/send_push_notification";
-import { UserSubscription } from "./notification-typing";
+import { useDispatch, useSelector } from "react-redux";
+import { deletesendEmailNotificationResponse, getsendEmailNotificationData, sendEmailNotification } from "../../store/slices/notification/send_email_notification";
+import { deletesendPushNotificationResponse, getsendPushNotificationData, sendPushNotification } from "../../store/slices/notification/send_push_notification";
+import { UserDevice, UserSubscription } from "./notification-typing";
 import { useForm } from "antd/es/form/Form";
 
 export const NotificationScreen = () => {
@@ -21,6 +21,11 @@ export const NotificationScreen = () => {
   const [userSub, setUserSub] = useState()
   const [templete, setTemplete] = useState()
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
+  const sendPushNothRes = useSelector(getsendPushNotificationData);
+  const emailNothRes = useSelector(getsendEmailNotificationData)
+  const errorMessage = sendPushNothRes?.message ? sendPushNothRes?.message : emailNothRes?.message;
+
   const onChangeTemplete = (e) => {
     setTemplete(e.target.value)
   }
@@ -34,23 +39,22 @@ export const NotificationScreen = () => {
   }
 
   const onFinish = (values) => {
-    
+
     let pushNotificvationData = {
       title: values.title,
       body: values.body,
       userId: values.userId,
-      // template: templete
     }
 
     if (userSub !== UserSubscription.All && !values.userId) {
       pushNotificvationData.isSubscribed = userSub;
     }
-    if (deviceTypes && !values.userId) {
+    if (deviceTypes && !values.userId && deviceTypes !== UserDevice.GENERAL) {
       pushNotificvationData.osType = deviceTypes;
     }
 
-    if(tabs != 1){
-      pushNotificvationData.templete = templete;
+    if (tabs != 1) {
+      pushNotificvationData.template = templete;
     }
 
     if (tabs === tabsType.TABSFIRST) {
@@ -64,6 +68,18 @@ export const NotificationScreen = () => {
     setChecked(e.target.checked)
   };
 
+
+  useEffect(() => {
+    if (sendPushNothRes?.success === true) {
+      Success({ messageApi });
+      dispatch(deletesendPushNotificationResponse());
+    }else if(emailNothRes?.success === true){
+      Success({ messageApi });
+      dispatch(deletesendEmailNotificationResponse());
+    }
+  }, [sendPushNothRes,emailNothRes, messageApi, dispatch]);
+
+
   const onChangeTabs = (key) => {
     setTabs(key)
     setDeviceTypes("")
@@ -73,14 +89,21 @@ export const NotificationScreen = () => {
     form.resetFields()
   };
 
+  const handleRemoveError = () => {
+    dispatch(deletesendPushNotificationResponse());
+    dispatch(deletesendEmailNotificationResponse());
+  };
+
   const array = [{ label: "Push", id: 1 }, { label: "Email", id: 2 }];
-console.log(userSub,"userrr");
   return (
     <div
       className="nativeLanguageScreenMainDiv"
       style={{ backgroundColor: Colors.WHITE }}
     >
+
       <div>
+      {errorMessage && <CustomErrorSection error={errorMessage} onTab={handleRemoveError} />}
+
         <p className="notificationScreenSendFieldsTitle"> Notification</p>
         <div className="notificationTabs">
           <Tabs
@@ -108,9 +131,7 @@ console.log(userSub,"userrr");
 
                       <div className="userSubsriptionSection">
                         <SelectNotification onChange={onChangeUserSub} value={userSub} data={userSubsriptionData} defaultValue={"User Subscription"} />
-
-                      </div>                    </> : null}
-
+                      </div>  </> : null}
 
                   </div>
                   <div className="exportCheckBoxSection">
@@ -122,11 +143,15 @@ console.log(userSub,"userrr");
                     name={"body"}
                     placeholder={"Message Here..."}
                   />
-                  <CustomAntdButton
-                    title="Send"
-                    background={Colors.PURPLE}
-                  // loading={nativeUpdateLoading}
-                  />
+                  <Form.Item>
+                    {contextHolder}
+
+                    <CustomAntdButton
+                      title="Send"
+                      background={Colors.PURPLE}
+                    // loading={nativeUpdateLoading}
+                    />
+                  </Form.Item>
                 </Form>,
               };
             })}

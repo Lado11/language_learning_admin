@@ -13,6 +13,7 @@ export const sendEmailNotification = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await sendEmailNotificationService(data);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -33,7 +34,7 @@ export const sendEmailNotificationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase( sendEmailNotification.pending, (state) => {
-      state. sendEmailNotificationloading = true;
+      state.sendEmailNotificationloading = true;
     });
     builder.addCase(
         sendEmailNotification.fulfilled,
@@ -53,17 +54,17 @@ export const sendEmailNotificationSlice = createSlice({
   },
 });
 
-export const { deletesendPushNotificationResponse ,deletesendPushNotificationBool } = sendEmailNotificationSlice.actions;
+export const { deletesendEmailNotificationResponse ,deletesendEmailNotificationBool } = sendEmailNotificationSlice.actions;
 
-export const getsendPushNotificationLoading = (state) => {
-  return state.sendEmailNotificationSlice.sendEmailNotificationloading;
+export const getsendEmailNotificationLoading = (state) => {
+  return state.sendEmailNotification.sendEmailNotificationloading;
 };
-export const getsendPushNotificationBool = (state) => {
-  return state.sendEmailNotificationSlice.sendEmailNotificationBool;
+export const getsendEmailNotificationBool = (state) => {
+  return state.sendEmailNotification.sendEmailNotificationBool;
 };
-export const getsendPushNotificationData = (state) => {
-  return state.sendEmailNotificationSlice.sendEmailNotificationResponse;
+export const getsendEmailNotificationData = (state) => {
+  return state.sendEmailNotification.sendEmailNotificationResponse;
 };
-export const getsendPushNotificationError = (state) => {
-  return state.sendEmailNotificationSlice.sendEmailNotificationErrors;
+export const getsendEmailNotificationError = (state) => {
+  return state.sendEmailNotification.sendEmailNotificationErrors;
 };

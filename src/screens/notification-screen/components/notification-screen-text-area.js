@@ -19,10 +19,11 @@ export const NotificationScreenTextArea = ({ name, placeholder }) => (
       ]}
     >
       <TextArea
+      
         rows={4}
         placeholder={placeholder}
         className="notificationScreenTextArea"
-        style={{ backgroundColor: Colors.WHITE }}
+        style={{ backgroundColor: Colors.WHITE, }}
       />
     </Form.Item>
   </>

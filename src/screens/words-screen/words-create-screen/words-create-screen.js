@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../../assets/colors";
 import { CreateWordsAdd } from "./components";
-import { Form, message } from "antd";
-import { CustomAntdButton, CustomAntdInput,  Error, Success } from "../../../components";
+import { Form, Input, message } from "antd";
+import { CustomAntdButton, CustomAntdInput, Error, Success } from "../../../components";
 import "./words-create.css"
 import { useDispatch, useSelector } from "react-redux";
 import { createWordsLoadingData, createWordsResponseData, createWordsThunk, deleteWordCreateResponse } from "../../../store/slices";
@@ -28,6 +28,17 @@ export const WordsCreateScreen = () => {
   const [categoryShow, setCategoryShow] = useState();
   const [val, setVal] = useState()
   const messageError = createWordData?.message;
+  const [inputs, setInputs] = useState(['']);
+
+  const addInputField = () => {
+    setInputs([...inputs, '']); 
+  };
+  const handleInputChange = (index, value) => {
+    const newInputs = [...inputs];
+    newInputs[index] = value; 
+    setInputs(newInputs);
+  };
+
 
   const onFinish = (values) => {
     formData.append("word", values?.word)
@@ -37,12 +48,14 @@ export const WordsCreateScreen = () => {
     formData.append("category", selectedCategory)
     selectedImage && formData.append("image", selectedImage);
     formData.append("audio", fileListVoice)
-
     Object.keys(values).map((date, index) => {
       if (date.includes("nativeInpust")) {
         array.push(values[date])
       }
     })
+    inputs.forEach((inputValue, index) => {
+      inputValue !== "" && formData.append(`sentences[${index}]`, inputValue);
+    });
     array?.map((values, ind) => {
       formData.append(`translates[${ind}].text[${0}]`, values);
     })
@@ -77,6 +90,7 @@ export const WordsCreateScreen = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
 
   return (
     <div
@@ -133,6 +147,24 @@ export const WordsCreateScreen = () => {
                 )
               }) : null
               }
+              <div>
+                <div className="addSentences">
+                  <p className="itemName">Sentences</p>
+                  <p className="itemName" onClick={addInputField}>
+                    Add +
+                  </p>
+                </div>
+                {inputs.map((inputValue, index) => (
+                  <Form.Item
+                    name={index}
+                  >
+                    <Input key={index}
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(index, e.target.value)} />
+                  </Form.Item>
+
+                ))}
+              </div>
             </div>
           </div>
           <div className="addButtonDiv">

@@ -23,3 +23,7 @@ border-color: #29CC39 !important;
     color: #7D8FB359 !important;
     margin-left: 10px;
 }
+
+.ant-radio-wrapper{
+    width: 100% !important;
+}

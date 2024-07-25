@@ -1,4 +1,4 @@
-import { UserSubscription } from "./notification-typing";
+import { UserDevice, UserSubscription } from "./notification-typing";
 
 export const userSubsriptionData = [
   {
@@ -16,15 +16,15 @@ export const userSubsriptionData = [
 
 export const deviceTpesData = [
   {
-    key: 1,
+    key: UserDevice.ANDROID,
     title: "Android"
   },
   {
-    key: 2,
+    key: UserDevice.IOS,
     title: "IOS"
   },
   {
-    key: 3,
+    key: UserDevice.GENERAL,
     title: "General"
   }]
 

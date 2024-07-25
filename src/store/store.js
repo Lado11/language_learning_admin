@@ -84,7 +84,7 @@ export const store = configureStore({
     wordsExelDeleteSlice:wordsExelDeleteSlice.reducer,
     wordsUpdateSlice:wordsUpdateSlice.reducer,
     sendPushNotificationSlice:sendPushNotificationSlice.reducer,
-    sendEmailNotificationSlice:sendEmailNotificationSlice.reducer,
+    sendEmailNotification:sendEmailNotificationSlice.reducer,
     feedBackGetSlice:feedBackGetSlice.reducer,
     feedBackGetIdSlice:feedBackGetIdSlice.reducer,
     wordsExelGetIdSlice:wordsExelGetIdSlice.reducer,
