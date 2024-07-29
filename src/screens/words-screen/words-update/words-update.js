@@ -55,12 +55,11 @@ export const WordsUpdate = () => {
     const imageFileResponse = useSelector(getfilesGetIdResponse);
     const voiceResponse = useSelector(getvoiceGetIdResponse)
     const voiceLoading = useSelector(getvoiceGetIdloading)
-
+   
     const wordsImageLoading = useSelector(getfilesGetIdloading);
     const [current, setCurrent] = useState(0)
     const [dynamicArrayForTranslates, setDynamicArrayForTranslates] = useState([]);
     const [dynamicArrayForSent, setDynamicArrayForSent] = useState([]);
-
 
 
     useEffect(() => {
@@ -113,19 +112,19 @@ export const WordsUpdate = () => {
         option: (provided, state) => ({
             ...provided,
             window: state.isSelected && "420px",
-            backgroundColor: state.isSelected ? "#fff" : "#fff", // Background color for selected options
-            color: state.isSelected ? Colors.PURPLE : "black", // Text color for selected options
-            padding: "8px 12px", // Padding for options
-            fontSize: "14px", // Font size for options
-            height: "60px", // Height of each option
+            backgroundColor: state.isSelected ? "#fff" : "#fff", 
+            color: state.isSelected ? Colors.PURPLE : "black", 
+            padding: "8px 12px",
+            fontSize: "14px", 
+            height: "60px", 
             borderRadius: "10px",
             border: "none",
         }),
         control: (provided) => ({
             ...provided,
-            border: "none", // Border color
-            minHeight: "60px", // Minimum height of the control
-            boxShadow: "none", // Remove box shadow
+            border: "none", 
+            minHeight: "60px", 
+            boxShadow: "none", 
             borderRadius: "10px",
             backgroundColor: "#F7F8FA"
 
@@ -138,15 +137,25 @@ export const WordsUpdate = () => {
         setAudio(s)
     }
 
-    const [inputs, setInputs] = useState(['']);
+const [inputs, setInputs] = useState(['']);
 
-    const addInputField = () => {
-        setInputs([...inputs, '']);
-    };
-    const handleInputChange = (index, value) => {
-        const newInputs = [...inputs];
-        setInputs(newInputs);
-    };
+
+const addInputField = () => {
+    const newInput = ''; // Default value for the new input field
+    setInputs(prevInputs => [...prevInputs, newInput]);
+    setDynamicArrayForSent(prevInputs => [...prevInputs, newInput]);
+};
+const handleInputChange = (index, value) => {
+    const updatedInputs = [...inputs];
+    updatedInputs[index] = value;
+    setInputs(updatedInputs);
+    // Update dynamicArrayForSent if needed
+    const updatedDynamicArrayForSent = [...dynamicArrayForSent];
+    updatedDynamicArrayForSent[index] = value;
+    setDynamicArrayForSent(updatedDynamicArrayForSent);
+};
+
+
     const onFinish = (values) => {
         clearFormData(formData);
         formData.append("id", wordsIdData?._id)
@@ -173,7 +182,7 @@ export const WordsUpdate = () => {
 
         if (selectedImage) {
             formData.append("image", selectedImage);
-        }
+        } 
 
         if (fileListVoice) {
             formData.append("audio", fileListVoice);
@@ -181,14 +190,14 @@ export const WordsUpdate = () => {
 
         inputs.forEach((inputValue, index) => {
             inputValue !== "" && formData.append(`sentences[${index}]`, inputValue);
-        });
+          });
 
         dynamicArrayForTranslates.forEach((translatesObject, translateIndex) => {
             const translateValue = values[translatesObject._id];
-
+            
             if (translateValue !== undefined && translateValue !== "") {
                 formData.append(`translates[${translateIndex}].nativeLanguage`, translatesObject._id);
-
+                
                 const textArr = translateValue.split(',').map(item => item.trim());
                 textArr.forEach((translateText, textIndex) => {
                     formData.append(`translates[${translateIndex}].text[${textIndex}]`, translateText);
@@ -216,78 +225,78 @@ export const WordsUpdate = () => {
             word: wordsIdData?.word,
         });
         setDynamicArrayForTranslates(wordsIdData?.language?.nativeLanguages)
-        setDynamicArrayForSent(wordsIdData?.sentences)
+        // setDynamicArrayForSent(wordsIdData?.sentences)
     }
+    useEffect(() => {
+        if (wordsIdData) {
+            // Initialize the inputs with values from sentences
+            setDynamicArrayForSent(wordsIdData?.sentences || []);
+            setInputs(wordsIdData?.sentences || ['']);
+        }
+    }, [wordsIdData]);
 
     const createDynamicTranslateFields = () => {
         if (dynamicArrayForTranslates?.length > 0) {
-            return (
-                <div>
-                    <p className="wordsTitle">Translate</p>
-                    {dynamicArrayForTranslates?.map((item) => {
-                        let value = getTranslateValueById(item._id);
-
-                        //get name key for CustomAntdInput
-                        const name = `${item._id}`;
-
-                        //get translated language name
-                        const translatedLanguageName = item.nameEng;
-
-                        return (
-                            <div key={item._id}>
-                                <p className="wordsInputTitle">{translatedLanguageName}</p>
-                                <CustomAntdInput
-                                    rules={true}
-                                    className="inputTranslate"
-                                    placeholder="Words*"
-                                    name={name}
-                                    type={"text"}
-                                    min={4}
-                                    defaultValue={value}
-                                    itemId={item._id} // Pass the _id as a different prop
-                                />
-                            </div>
-                        );
-                    })}
-                    <div>
-                        <div className="addSentences">
-                            <p className="itemName">Sentences</p>
-                            <p className="itemName" onClick={addInputField}>
-                                Add +
-                            </p>
-                        </div>
-                        <>
-                            {dynamicArrayForSent.map((item,i) => {
-                                let defultValue = item
-
-                                return inputs.map((inputValue, index) => (
-                                    <Form.Item
-                                        name={i}
-                                    >
-                                        <Input
-                                            defaultValue={defultValue}
-                                            key={i}
-                                            value={inputValue}
-                                            onChange={(e) => handleInputChange(index, e.target.value)} />
-                                    </Form.Item>
-
-                                ))
-                            })}
-                        </>
-                    </div>
+          return (
+            <div>
+              <p className="wordsTitle">Translate</p>
+              {dynamicArrayForTranslates?.map((item) => {
+                let value = getTranslateValueById(item._id);
+      
+                //get name key for CustomAntdInput
+                const name = `${item._id}`;
+      
+                //get translated language name
+                const translatedLanguageName = item.nameEng;
+      
+                return (
+                  <div key={item._id}>
+                    <p className="wordsInputTitle">{translatedLanguageName}</p>
+                    <CustomAntdInput
+                      rules={true}
+                      className="inputTranslate"
+                      placeholder="Words*"
+                      name={name}
+                      type={"text"}
+                      min={4}
+                      defaultValue={value}
+                      itemId={item._id} // Pass the _id as a different prop
+                    />
+                  </div>
+                );
+              })}
+               <div>
+                <div className="addSentences">
+                  <p className="itemName">Sentences</p>
+                  <p className="itemName" onClick={addInputField}>
+                    Add +
+                  </p>
                 </div>
-            );
+               
+                {inputs.map((inputValue, index) => (
+                        <Form.Item name={index} key={index}>
+                            <Input
+                                defaultValue={inputValue}
+                                value={inputValue}
+                                onChange={(e) => handleInputChange(index, e.target.value)}
+                            />
+                        </Form.Item>
+                    ))}
+               
+              </div>
+            </div>
+          );
         } else {
-            return <p>Some thing went wrong for dynamicArrayForTranslates</p>;
+          return <p>Some thing went wrong for dynamicArrayForTranslates</p>;
         }
-    };
-
+      };
+      
 
     const getTranslateValueById = (nativeLanguageId) => {
         if (!Array.isArray(wordsIdData.translates)) {
             return "";
         }
-
+    
         for (const translateObject of wordsIdData.translates) {
             if (translateObject.nativeLanguage._id === nativeLanguageId) {
                 if (Array.isArray(translateObject.text)) {
@@ -297,7 +306,7 @@ export const WordsUpdate = () => {
                 }
             }
         }
-
+    
         return "";
     };
 

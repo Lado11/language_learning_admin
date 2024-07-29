@@ -159,6 +159,7 @@ export const WordsCreateScreen = () => {
                     name={index}
                   >
                     <Input key={index}
+                    placeholder="Sentences"
                       value={inputValue}
                       onChange={(e) => handleInputChange(index, e.target.value)} />
                   </Form.Item>
