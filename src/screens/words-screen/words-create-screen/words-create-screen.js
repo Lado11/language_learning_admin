@@ -39,7 +39,11 @@ export const WordsCreateScreen = () => {
     setInputs(newInputs);
   };
 
-
+  const handleDeleteInput = (index) => {
+    // Remove the input at the specified index
+    const updatedInputs = inputs.filter((_, i) => i !== index);
+    setInputs(updatedInputs);
+};
   const onFinish = (values) => {
     formData.append("word", values?.word)
     formData.append("transcription", values?.transcription)
@@ -158,10 +162,19 @@ export const WordsCreateScreen = () => {
                   <Form.Item
                     name={index}
                   >
-                    <Input key={index}
-                    placeholder="Sentences"
+                  <div className="delteInput">
+                  
+                  <Input key={index}
+                      placeholder="Sentences"
                       value={inputValue}
-                      onChange={(e) => handleInputChange(index, e.target.value)} />
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                       />
+                      <p  className="itemName deleteItem" onClick={()=>{
+                        handleDeleteInput(index)
+                      }}>
+                        -
+                       </p>
+                  </div>
                   </Form.Item>
 
                 ))}

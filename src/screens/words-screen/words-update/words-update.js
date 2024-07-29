@@ -234,6 +234,12 @@ const handleInputChange = (index, value) => {
             setInputs(wordsIdData?.sentences || ['']);
         }
     }, [wordsIdData]);
+    
+    const handleDeleteInput = (index) => {
+        // Remove the input at the specified index
+        const updatedInputs = inputs.filter((_, i) => i !== index);
+        setInputs(updatedInputs);
+    };
 
     const createDynamicTranslateFields = () => {
         if (dynamicArrayForTranslates?.length > 0) {
@@ -275,11 +281,19 @@ const handleInputChange = (index, value) => {
                
                 {inputs.map((inputValue, index) => (
                         <Form.Item name={index} key={index}>
-                            <Input
-                                defaultValue={inputValue}
-                                value={inputValue}
-                                onChange={(e) => handleInputChange(index, e.target.value)}
-                            />
+                            <div className="delteInput">
+                  
+                  <Input key={index}
+                      placeholder="Sentences"
+                      value={inputValue}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                       />
+                      <p  className="itemName deleteItem" onClick={()=>{
+                        handleDeleteInput(index)
+                      }}>
+                        -
+                       </p>
+                  </div>
                         </Form.Item>
                     ))}
                
