@@ -25,6 +25,7 @@ import { customStylesCategory } from "../../../global-styles/loadOptionsStyles";
 import { WordsLevel } from "../words-typing";
 import { AsyncPaginate } from "react-select-async-paginate";
 import _isEqual from 'lodash/isEqual';
+import TextArea from "antd/es/input/TextArea";
 
 export const WordsUpdate = () => {
     const words = useRef(1);
