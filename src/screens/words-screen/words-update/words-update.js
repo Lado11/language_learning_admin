@@ -234,7 +234,7 @@ const handleInputChange = (index, value) => {
             setInputs(wordsIdData?.sentences || ['']);
         }
     }, [wordsIdData]);
-    
+
     const handleDeleteInput = (index) => {
         // Remove the input at the specified index
         const updatedInputs = inputs.filter((_, i) => i !== index);
@@ -283,7 +283,7 @@ const handleInputChange = (index, value) => {
                         <Form.Item name={index} key={index}>
                             <div className="delteInput">
                   
-                  <Input key={index}
+                  <TextArea key={index}
                       placeholder="Sentences"
                       value={inputValue}
                       onChange={(e) => handleInputChange(index, e.target.value)}

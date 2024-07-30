@@ -6,6 +6,7 @@ import { CustomAntdButton, CustomAntdInput, Error, Success } from "../../../comp
 import "./words-create.css"
 import { useDispatch, useSelector } from "react-redux";
 import { createWordsLoadingData, createWordsResponseData, createWordsThunk, deleteWordCreateResponse } from "../../../store/slices";
+import TextArea from "antd/es/input/TextArea";
 
 export const WordsCreateScreen = () => {
   const [form] = Form.useForm();
@@ -164,7 +165,7 @@ export const WordsCreateScreen = () => {
                   >
                   <div className="delteInput">
                   
-                  <Input key={index}
+                  <TextArea key={index}
                       placeholder="Sentences"
                       value={inputValue}
                       onChange={(e) => handleInputChange(index, e.target.value)}
