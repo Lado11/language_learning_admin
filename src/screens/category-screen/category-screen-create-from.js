@@ -24,7 +24,7 @@ export const ImageUpload = ({ onChange }) => {
   )
 }
 
-export const CategoryCretae = () => {
+export const CategoryCreate = () => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -46,6 +46,15 @@ export const CategoryCretae = () => {
       dispatch(categoryCreateThunk(formData));
     } else {
       console.log(values, "values");
+    }
+  };
+
+  const onValuesChange = (changedValues, allValues) => {
+    if (changedValues.category_name) {
+      const categoryNameLowerCase = changedValues.category_name.toLowerCase();
+      form.setFieldsValue({
+        category_string: `category.${categoryNameLowerCase}`,
+      });
     }
   };
 
@@ -92,6 +101,7 @@ export const CategoryCretae = () => {
         form={form}
         name="category_create"
         onFinish={onFinish}
+        onValuesChange={onValuesChange}
         className="formAntd"
       >
         <div className="category_row_input_user">

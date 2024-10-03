@@ -15,7 +15,7 @@ import {
   DashboardScreen,
   NativeLanguageScreen,
   NativeLanguageCreate,
-  CategoryCretae,
+  CategoryCreate,
   FilesScreen,
   UserCreateScreen,
   UpdateNativeLanguage,
@@ -92,7 +92,7 @@ export const MyRoutes = () => {
                
                 <Route path="/category" element={<CategoryScreen />} />
                 <Route path="/category/:id" element={<CategoryUpdate />} />
-                <Route path="/category/create" element={<CategoryCretae />} />
+                <Route path="/category/create" element={<CategoryCreate />} />
                 <Route path="/user" element={<UserScreen />} />
                 <Route path="/feedback" element={<FeedbackScreen />} />
                 <Route path="/feedback/:id" element={<FeadBackMoreScreen />} />
